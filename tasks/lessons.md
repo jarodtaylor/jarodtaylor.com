@@ -7,3 +7,7 @@
 - **No hero headshot.** Photos belong in About, never dominating the homepage.
 - **Design in code, not comp-first.** Two rounds of image-generated Impeccable comps all missed. Iterate on real HTML/CSS in the browser.
 - **Nord/Catppuccin/Dracula are taste signals, not a brand spec.** Brand colors are to be designed fresh.
+
+## 2026-10-13 — tooling gotchas
+
+- **`astro preview` backgrounds itself when it detects an AI agent** (Astro 7). Playwright then sees an early exit while the old process holds the port. Use `astro preview --ignore-lock` in test servers.

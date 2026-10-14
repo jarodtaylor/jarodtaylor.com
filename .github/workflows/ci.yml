@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Reads the pnpm version from package.json "packageManager"; passing `version` too is an error.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Fast, static checks first.
+      - run: pnpm check:tokens-fresh
+      - run: pnpm check:contrast
+      - run: pnpm check:tokens-only
+      - run: pnpm check:slop
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      - run: pnpm build
+
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm check:markup-invariance
+      - run: pnpm check:a11y
+
+      # Lighthouse reports on every run; budgets in lighthouserc.json are warnings. Only the hard floors
+      # (a11y < 0.9, CLS > 0.1) fail, and a PR labelled `perf-tradeoff` downgrades even those to a report.
+      - name: Lighthouse collect
+        run: pnpm exec lhci collect
+      - name: Lighthouse upload
+        if: ${{ !cancelled() }}
+        run: pnpm exec lhci upload
+      - name: Lighthouse assert
+        continue-on-error: ${{ contains(github.event.pull_request.labels.*.name, 'perf-tradeoff') }}
+        run: pnpm exec lhci assert
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: lighthouse
+          path: .lighthouseci/
+      - uses: actions/upload-artifact@v7
+        if: ${{ failure() }}
+        with:
+          name: playwright-results
+          path: test-results/

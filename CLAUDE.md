@@ -11,7 +11,7 @@ Personal site and portfolio. The signature feature is **Remix**: one set of mark
 | `pnpm tokens` | `scripts/build-tokens.ts` (knobs → `tokens/generated/`), then `tz build` (→ `src/styles/tokens.css`, `public/tokens/<brand>.json`) |
 | `pnpm test` | Vitest (`scripts/derive.test.ts`) |
 | `pnpm typecheck` | `astro check` (covers `.astro`, `.ts`, `.tsx`) |
-| `pnpm check` | Every guardrail below, fast first (builds in the middle). CI runs them as separate steps (`.github/workflows/ci.yml`) |
+| `pnpm check` | Every guardrail below, fast first (builds in the middle, Lighthouse last). CI runs them as separate steps (`.github/workflows/ci.yml`) |
 | `pnpm check:tokens-fresh` | Reruns `pnpm tokens`; fails if `tokens/generated/` changed (content compare, not git) |
 | `pnpm check:contrast` | WCAG 2.2 AA for every brand × `surface.<role>.*` pair (`scripts/contrast.ts`). Needs `pnpm tokens` first |
 | `pnpm check:tokens-only` | Stylelint (`stylelint.config.js` + `scripts/stylelint-plugin-tokens.ts`): no raw values, primitives or brand keys in CSS |
