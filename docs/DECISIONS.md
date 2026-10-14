@@ -9,6 +9,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 
 | # | To-do | Needed by |
 |---|---|---|
+| T0 | **Change nameservers at DreamHost** to `jack.ns.cloudflare.com` + `jessica.ns.cloudflare.com` | Now (finishes Phase 0) |
 | T1 | Generate the Google Workspace DKIM key (Admin → Apps → Google Workspace → Gmail → Authenticate email → Generate) and paste me the TXT value | DNS cutover |
 | T2 | Ask 3–5 former leaders (VP, Exec Director, CTO) for 1–3 sentence testimonials, with permission to use name, title, company | Phase 2 |
 | T3 | Pick 2–4 About photos (candid or working) | Phase 2 |
@@ -59,7 +60,8 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 - [x] Records copied: Google MX ×2. Added SPF + DMARC
 - [x] Route 53 audited: apex, www, MX, plus `preview` subdomain (drop it)
 - [ ] DKIM TXT added (T1)
-- [ ] Deploy Worker, attach apex + www custom domains
+- [x] Worker deployed: `jarodtaylor-com` → jarodtaylor-com.jarodtaylor-com.workers.dev (2026-10-13)
+- [ ] Attach apex + www custom domains (needs the zone active, so this comes after the nameserver change)
 - [ ] Jarod changes nameservers at DreamHost
 - [ ] Verify MX, send/receive a test email, click "Start authentication" for DKIM in Google Admin
 - [ ] After a couple clean weeks: DMARC `p=none` → `quarantine`
