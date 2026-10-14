@@ -19,9 +19,6 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 
 | # | Question | Recommendation |
 |---|---|---|
-| Q1 | `preview.jarodtaylor.com` points to a separate CloudFront site in Route 53. Keep it, or let it go when DNS moves? | Let it go, unless you use it |
-| Q2 | Checkpoint commit of the Phase 0 core on `feat/foundation` (no push)? | Yes |
-| Q3 | Track `.codex/` and `.cursor/` hook folders in git? | No, keep them local |
 | Q4 | Remix UI pattern: panel, drawer, or command palette? | Decide in Phase 3 with a coded prototype |
 | Q5 | Signature "wow" moment(s)? | Decide in Phase 1. Lead candidate: the brand switch itself |
 | Q6 | Newsletter: yes or no? | Later |
@@ -51,13 +48,16 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | 2026-10-13 | Added SPF + DMARC (monitor mode) in Cloudflare. DKIM pending (T1) | They were missing, which hurts deliverability |
 | 2026-10-13 | Token build: Terrazzo emits aliases as `var()` references (spike passed) | Remix v2 works with no workaround |
 | 2026-10-13 | Focus ring color is set per surface role, and contrast-checked at 3:1 | Ring was invisible on accent sections (1.94:1) |
+| 2026-10-13 | Drop `preview.jarodtaylor.com` and anything else unused when DNS moves | Not needed |
+| 2026-10-13 | Agents may commit freely on feature branches (pushes and PRs still go through Jarod) | Keep work checkpointed |
+| 2026-10-13 | `.codex/` and `.cursor/` stay local (gitignored) | Personal tool config |
 | 2026-10-13 | Generated tokens committed. Built CSS/JSON not committed | Reviewable diffs + Figma import |
 
 ## DNS cutover checklist (end of Phase 0)
 
 - [x] Cloudflare zone created (pending). Nameservers: `jack.ns.cloudflare.com`, `jessica.ns.cloudflare.com`
 - [x] Records copied: Google MX ×2. Added SPF + DMARC
-- [x] Route 53 audited: apex, www, MX, plus `preview` subdomain (see Q1)
+- [x] Route 53 audited: apex, www, MX, plus `preview` subdomain (drop it)
 - [ ] DKIM TXT added (T1)
 - [ ] Deploy Worker, attach apex + www custom domains
 - [ ] Jarod changes nameservers at DreamHost
