@@ -1,0 +1,40 @@
+---
+// /lab: token playground (noindex). Proves token consumption and brand switching; not the real design.
+import { getCollection } from 'astro:content';
+import { Button } from '../components/Button/Button';
+import { Card } from '../components/Card/Card';
+import { SectionShell } from '../components/SectionShell/SectionShell';
+import Base from '../layouts/Base.astro';
+import resolver from '../../tokens/resolver.json';
+
+const pillars = await getCollection('pillars');
+const brands = Object.keys(resolver.modifiers.brand.contexts);
+---
+<Base
+  noindex
+  title="Token lab · Jarod Taylor"
+  description="Jarod Taylor is a Frisco, TX engineering leader with 18 years in design systems, frontend platforms, and developer experience at Estée Lauder, JCPenney, and Aetna."
+>
+  <SectionShell title="Jarod Taylor">
+    <p>Placeholder shell. Same markup, different tokens. Pick a brand:</p>
+    <p>
+      {brands.map((name) => <><Button href={`?brand=${name}`}>{name}</Button>{" "}</>)}
+    </p>
+  </SectionShell>
+
+  <SectionShell title="What I write about" surface="raised">
+    {pillars.map((pillar) => (
+      <Card title={pillar.data.title} eyebrow={pillar.data.status}>
+        <p>{pillar.data.description}</p>
+      </Card>
+    ))}
+  </SectionShell>
+
+  <SectionShell title="Inverse surface" surface="inverse">
+    <p>Text, <a href="#main">a link</a>, and a <Button>button</Button> on the inverse role.</p>
+  </SectionShell>
+
+  <SectionShell title="Accent surface" surface="accent">
+    <p>Text and <a href="#main">a link</a> on the accent role.</p>
+  </SectionShell>
+</Base>

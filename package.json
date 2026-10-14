@@ -21,7 +21,8 @@
     "check:slop": "impeccable detect --no-design-system src/",
     "check:markup-invariance": "playwright test markup-invariance",
     "check:a11y": "playwright test a11y",
-    "lighthouse": "lhci collect && lhci assert"
+    "lighthouse": "lhci collect && lhci assert",
+    "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.0.3",
@@ -46,6 +47,7 @@
     "postcss-value-parser": "^4.2.0",
     "stylelint": "^17.16.0",
     "typescript": "^6.0.3",
-    "vitest": "^5.0.4"
+    "vitest": "^5.0.4",
+    "wrangler": "4.150.0"
   }
 }
