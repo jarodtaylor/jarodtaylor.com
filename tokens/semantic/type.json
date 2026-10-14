@@ -1,0 +1,61 @@
+{
+  "type": {
+    "family": {
+      "$type": "fontFamily",
+      "body": {
+        "$value": "{font.family.body}"
+      },
+      "heading": {
+        "$value": "{font.family.display}"
+      },
+      "code": {
+        "$value": "{font.family.mono}"
+      }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "body": {
+        "$value": "{font.weight.body}"
+      },
+      "heading": {
+        "$value": "{font.weight.display}"
+      }
+    },
+    "size": {
+      "$type": "dimension",
+      "small": {
+        "$value": "{font.size.sm}"
+      },
+      "body": {
+        "$value": "{font.size.md}"
+      },
+      "lead": {
+        "$value": "{font.size.lg}"
+      },
+      "h3": {
+        "$value": "{font.size.xl}"
+      },
+      "h2": {
+        "$value": "{font.size.2xl}"
+      },
+      "h1": {
+        "$value": "{font.size.4xl}"
+      },
+      "display": {
+        "$value": "{font.size.5xl}"
+      }
+    },
+    "leading": {
+      "$type": "number",
+      "body": {
+        "$value": "{font.line-height.normal}"
+      },
+      "snug": {
+        "$value": "{font.line-height.snug}"
+      },
+      "heading": {
+        "$value": "{font.line-height.tight}"
+      }
+    }
+  }
+}

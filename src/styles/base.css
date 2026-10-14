@@ -1,0 +1,44 @@
+/* Element defaults. Semantic tokens only; never a raw value, never a brand name. */
+@layer base {
+  body {
+    background: var(--surface-default-bg);
+    color: var(--surface-default-text);
+    font-family: var(--type-family-body);
+    font-size: var(--type-size-body);
+    font-weight: var(--type-weight-body);
+    line-height: var(--type-leading-body);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--type-family-heading);
+    font-weight: var(--type-weight-heading);
+    line-height: var(--type-leading-heading);
+  }
+
+  h1 {
+    font-size: var(--type-size-h1);
+  }
+
+  h2 {
+    font-size: var(--type-size-h2);
+  }
+
+  h3 {
+    font-size: var(--type-size-h3);
+  }
+
+  a {
+    color: var(--surface-default-link);
+  }
+
+  code {
+    font-family: var(--type-family-code);
+  }
+
+  :focus-visible {
+    outline: var(--shape-border-width-strong) solid var(--focus-ring);
+    outline-offset: var(--shape-border-width-strong);
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "$description": "Brand knobs: default. PLACEHOLDER values until the brand is designed in Phase 1. This file is the only thing a brand authors; scripts/derive.ts turns it into tokens/generated/default.json.",
+  "color": {
+    "neutral": {
+      "hue": { "$type": "number", "$value": 250, "$description": "OKLCH hue (degrees) of the neutral ramp" },
+      "chroma": { "$type": "number", "$value": 0.012, "$description": "OKLCH chroma of the neutral ramp" }
+    },
+    "accent": {
+      "hue": { "$type": "number", "$value": 255, "$description": "OKLCH hue (degrees) of the accent ramp" },
+      "chroma": { "$type": "number", "$value": 0.16, "$description": "Peak OKLCH chroma of the accent ramp, before gamut clamping" }
+    }
+  },
+  "type": {
+    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" }, "$description": "Body text size; step 0 of the type scale" },
+    "ratio": { "$type": "number", "$value": 1.2, "$description": "Modular type scale ratio" },
+    "family": {
+      "$type": "fontFamily",
+      "body": { "$value": ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
+      "display": { "$value": ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
+      "mono": { "$value": ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "body": { "$value": 400 },
+      "display": { "$value": 700 }
+    }
+  },
+  "space": {
+    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" }, "$description": "Spacing unit before density" },
+    "density": { "$type": "number", "$value": 1, "$description": "Multiplier on every spacing step. Below 1 is tighter, above 1 is airier" }
+  },
+  "shape": {
+    "radius": { "$type": "dimension", "$value": { "value": 0.25, "unit": "rem" }, "$description": "Base corner radius" },
+    "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" }, "$description": "Base border weight" }
+  },
+  "decoration": {
+    "$type": "string",
+    "$value": "rules",
+    "$description": "Enumerated: rules | none. Component CSS reacts with container style queries.",
+    "$extensions": { "com.jarodtaylor.enum": ["rules", "none"] }
+  }
+}

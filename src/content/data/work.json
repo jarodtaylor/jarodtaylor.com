@@ -1,0 +1,62 @@
+[
+  {
+    "id": "tom-ford-beauty-platform",
+    "title": "Tom Ford Beauty on a new frontend platform",
+    "org": "Estée Lauder",
+    "metric": "29 → 95 Lighthouse performance",
+    "detail": "Accessibility, Best Practices, and SEO to 100. Feature delivery went from about a month to one sprint.",
+    "featured": true
+  },
+  {
+    "id": "elc-design-system",
+    "title": "Enterprise design system, Figma to tokens to components to CLI",
+    "org": "Estée Lauder",
+    "metric": "~7 brands, one design system",
+    "detail": "Three engineers shipped a production Shopify theme in under a month using only existing components.",
+    "featured": true
+  },
+  {
+    "id": "elc-docs-hub",
+    "title": "Docs hub and internal AI assistant",
+    "org": "Estée Lauder",
+    "metric": "1 to 2 days to a new engineer's first PR",
+    "detail": "New engineers went from weeks of onboarding to a first PR in one or two days.",
+    "featured": true
+  },
+  {
+    "id": "jcp-replatform",
+    "title": "Replatforming during Chapter 11",
+    "org": "JCPenney",
+    "metric": "$1.5B business replatformed",
+    "detail": "Led a 40-person global org on a $6M budget, replatforming a $1.5B eCommerce business.",
+    "featured": true
+  },
+  {
+    "id": "jcp-core-ui",
+    "title": "Core UI team and design system",
+    "org": "JCPenney",
+    "detail": "Cut feature time-to-market by 50%.",
+    "featured": false
+  },
+  {
+    "id": "jcp-redesign",
+    "title": "CEO-sponsored redesign",
+    "org": "JCPenney",
+    "detail": "Brought 40+ engineers, PMs, and designers together; conversion rose 25% in three months.",
+    "featured": false
+  },
+  {
+    "id": "aetna-component-library",
+    "title": "React component library and CSS framework",
+    "org": "Aetna",
+    "detail": "The docs portal became the single source of truth for frontend teams.",
+    "featured": false
+  },
+  {
+    "id": "wellmatch",
+    "title": "Building WellMatch from employee #11",
+    "org": "Aetna",
+    "detail": "Grew two remote teams to 14 engineers and broke a Rails monolith into microservices.",
+    "featured": false
+  }
+]

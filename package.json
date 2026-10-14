@@ -1,0 +1,51 @@
+{
+  "name": "jarodtaylor.com",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.13.1",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm tokens && astro dev",
+    "build": "pnpm tokens && astro build",
+    "preview": "astro preview",
+    "tokens": "node scripts/build-tokens.ts && tz build",
+    "test": "vitest run",
+    "typecheck": "astro check",
+    "check": "pnpm check:tokens-fresh && pnpm check:contrast && pnpm check:tokens-only && pnpm check:slop && pnpm build && pnpm check:markup-invariance && pnpm check:a11y",
+    "check:tokens-fresh": "node scripts/check-tokens-fresh.ts",
+    "check:contrast": "node scripts/check-contrast.ts",
+    "check:tokens-only": "stylelint \"src/**/*.css\"",
+    "check:slop": "impeccable detect --no-design-system src/",
+    "check:markup-invariance": "playwright test markup-invariance",
+    "check:a11y": "playwright test a11y",
+    "lighthouse": "lhci collect && lhci assert"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^8.0.3",
+    "@astrojs/react": "^7.0.1",
+    "astro": "^7.3.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.64.0",
+    "@terrazzo/cli": "^2.8.0",
+    "@terrazzo/parser": "^2.8.0",
+    "@terrazzo/plugin-css": "^2.8.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "colorjs.io": "^0.7.1",
+    "impeccable": "^4.5.2",
+    "postcss-value-parser": "^4.2.0",
+    "stylelint": "^17.16.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.4"
+  }
+}

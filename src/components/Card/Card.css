@@ -1,0 +1,16 @@
+@layer components {
+  .card {
+    background: var(--card-bg);
+    border: var(--card-border-width) solid var(--card-border-color);
+    border-radius: var(--card-radius);
+    color: var(--card-text);
+    display: grid;
+    gap: var(--card-gap);
+    padding: var(--card-padding);
+  }
+
+  .card__eyebrow {
+    color: var(--card-text-muted);
+    font-size: var(--type-size-small);
+  }
+}

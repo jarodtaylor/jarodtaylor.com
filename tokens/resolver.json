@@ -1,0 +1,37 @@
+{
+  "name": "jarodtaylor.com",
+  "version": "2025.10",
+  "description": "One set of markup, many brands. The brand modifier swaps the derived primitives; semantic and component tiers are shared aliases.",
+  "sets": {
+    "semantic": {
+      "sources": [
+        { "$ref": "semantic/color.json" },
+        { "$ref": "semantic/space.json" },
+        { "$ref": "semantic/type.json" },
+        { "$ref": "semantic/shape.json" }
+      ]
+    },
+    "component": {
+      "sources": [
+        { "$ref": "component/button.json" },
+        { "$ref": "component/card.json" },
+        { "$ref": "component/section.json" }
+      ]
+    }
+  },
+  "modifiers": {
+    "brand": {
+      "description": "Primitives derived from tokens/knobs/<brand>.json by scripts/derive.ts.",
+      "contexts": {
+        "default": [{ "$ref": "generated/default.json" }],
+        "alt": [{ "$ref": "generated/alt.json" }]
+      },
+      "default": "default"
+    }
+  },
+  "resolutionOrder": [
+    { "$ref": "#/modifiers/brand" },
+    { "$ref": "#/sets/semantic" },
+    { "$ref": "#/sets/component" }
+  ]
+}

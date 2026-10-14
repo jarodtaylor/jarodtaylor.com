@@ -1,0 +1,6 @@
+minimumReleaseAgeExclude:
+  - '@terrazzo/cli@2.8.0'
+  - '@terrazzo/parser@2.8.0'
+  - '@terrazzo/plugin-css@2.8.0'
+  - '@terrazzo/token-tools@2.8.0'
+  - '@terrazzo/token-types@2.8.0'

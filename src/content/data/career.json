@@ -1,0 +1,9 @@
+[
+  { "id": "estee-lauder", "role": "Director of Engineering, Core Commerce Capabilities", "company": "The Estée Lauder Companies", "start": 2022, "end": 2026 },
+  { "id": "jcpenney-director", "role": "Director, Digital Engineering", "company": "JCPenney", "start": 2021, "end": 2022 },
+  { "id": "jcpenney-senior-manager", "role": "Senior Manager, Digital Engineering", "company": "JCPenney", "start": 2018, "end": 2021 },
+  { "id": "aetna-digital", "role": "Senior UI Architect", "company": "Aetna Digital", "start": 2017, "end": 2018 },
+  { "id": "wellmatch", "role": "Engineering Manager", "company": "WellMatch Health (Aetna)", "start": 2013, "end": 2017 },
+  { "id": "teladoc", "role": "Lead Frontend Engineer", "company": "Teladoc", "start": 2010, "end": 2013 },
+  { "id": "dallas-morning-news", "role": "Interface Designer / Frontend Developer", "company": "The Dallas Morning News", "start": 2008, "end": 2010 }
+]

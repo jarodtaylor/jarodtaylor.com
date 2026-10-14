@@ -1,0 +1,22 @@
+@layer utilities {
+  .skip-link {
+    background: var(--surface-inverse-bg);
+    color: var(--surface-inverse-text);
+    left: var(--space-inset-sm);
+    padding: var(--space-inset-sm) var(--space-inset-md);
+    position: absolute;
+    top: var(--space-inset-sm);
+    z-index: 1;
+  }
+
+  /* Hidden until keyboard focus lands on it. */
+  .skip-link:not(:focus) {
+    clip-path: inset(50%);
+    /* stylelint-disable-next-line unit-allowed-list -- visually-hidden idiom: a 1px box, not a design value */
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    /* stylelint-disable-next-line unit-allowed-list -- visually-hidden idiom: a 1px box, not a design value */
+    width: 1px;
+  }
+}

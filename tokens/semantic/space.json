@@ -1,0 +1,39 @@
+{
+  "space": {
+    "$type": "dimension",
+    "inset": {
+      "sm": {
+        "$value": "{size.space.2}"
+      },
+      "md": {
+        "$value": "{size.space.4}"
+      },
+      "lg": {
+        "$value": "{size.space.6}"
+      }
+    },
+    "stack": {
+      "xs": {
+        "$value": "{size.space.1}"
+      },
+      "sm": {
+        "$value": "{size.space.3}"
+      },
+      "md": {
+        "$value": "{size.space.5}"
+      },
+      "lg": {
+        "$value": "{size.space.7}"
+      },
+      "xl": {
+        "$value": "{size.space.8}"
+      }
+    },
+    "gutter": {
+      "$value": "{size.space.5}"
+    },
+    "section": {
+      "$value": "{size.space.9}"
+    }
+  }
+}
