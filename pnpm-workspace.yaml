@@ -1,0 +1,11 @@
+allowBuilds:
+  esbuild: true
+  workerd: true
+minimumReleaseAgeExclude:
+  - '@terrazzo/cli@2.8.0'
+  - '@terrazzo/parser@2.8.0'
+  - '@terrazzo/plugin-css@2.8.0'
+  - '@terrazzo/token-tools@2.8.0'
+  - '@terrazzo/token-types@2.8.0'
+  - miniflare@5.20261006.2-beta
+  - wrangler@4.150.0

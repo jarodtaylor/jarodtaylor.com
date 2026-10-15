@@ -1,0 +1,30 @@
+{
+  "shape": {
+    "radius": {
+      "$type": "dimension",
+      "control": {
+        "$value": "{size.radius.md}"
+      },
+      "container": {
+        "$value": "{size.radius.lg}"
+      },
+      "pill": {
+        "$value": "{size.radius.full}"
+      }
+    },
+    "border-width": {
+      "$type": "dimension",
+      "default": {
+        "$value": "{size.border.thin}"
+      },
+      "strong": {
+        "$value": "{size.border.thick}"
+      }
+    }
+  },
+  "decoration": {
+    "$type": "string",
+    "$value": "{knob.decoration}",
+    "$description": "rules | none. Read by container style queries; never key CSS on a brand name."
+  }
+}

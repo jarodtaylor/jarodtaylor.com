@@ -1,0 +1,44 @@
+{
+  "button": {
+    "bg": {
+      "$type": "color",
+      "$value": "{surface.accent.bg}"
+    },
+    "text": {
+      "$type": "color",
+      "$value": "{surface.accent.text}"
+    },
+    "border-color": {
+      "$type": "color",
+      "$value": "{surface.accent.border}"
+    },
+    "border-width": {
+      "$type": "dimension",
+      "$value": "{shape.border-width.default}"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{shape.radius.control}"
+    },
+    "padding-block": {
+      "$type": "dimension",
+      "$value": "{space.inset.sm}"
+    },
+    "padding-inline": {
+      "$type": "dimension",
+      "$value": "{space.inset.md}"
+    },
+    "font-family": {
+      "$type": "fontFamily",
+      "$value": "{type.family.body}"
+    },
+    "font-weight": {
+      "$type": "fontWeight",
+      "$value": "{type.weight.heading}"
+    },
+    "font-size": {
+      "$type": "dimension",
+      "$value": "{type.size.body}"
+    }
+  }
+}

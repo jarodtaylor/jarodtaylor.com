@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+import layers from '../styles/layers.css?raw';
+import resolver from '../../tokens/resolver.json';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Keep internal pages (e.g. /lab) out of search results. */
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+
+// Person schema on every page: the main signal separating this Jarod Taylor from the others in search.
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jarod Taylor',
+  jobTitle: 'Engineering Leader',
+  url: 'https://jarodtaylor.com/',
+  address: { '@type': 'PostalAddress', addressLocality: 'Frisco', addressRegion: 'TX', addressCountry: 'US' },
+  sameAs: [
+    'https://www.linkedin.com/in/jarodtaylor',
+    'https://x.com/jarodtaylor',
+    'https://github.com/jarodtaylor',
+  ],
+};
+const brand = resolver.modifiers.brand;
+const brands = Object.keys(brand.contexts);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en" data-brand={brand.default}>
+  <head>
+    <meta charset="utf-8" />
+    <style is:inline set:html={layers}></style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    <!-- Brand switch: ?brand=<name> sets data-brand before first paint. Tokens do the rest. -->
+    <script is:inline define:vars={{ brands }}>
+      const requested = new URLSearchParams(location.search).get('brand');
+      if (brands.includes(requested)) document.documentElement.dataset.brand = requested;
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <main id="main">
+      <slot />
+    </main>
+  </body>
+</html>

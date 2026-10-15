@@ -1,0 +1,26 @@
+[
+  {
+    "id": "leading",
+    "title": "Leading engineering orgs",
+    "status": "experience",
+    "description": "Growing leaders, building culture, and keeping teams steady through acquisitions, bankruptcy, and reorgs. The parts of the job that don't show up on the org chart."
+  },
+  {
+    "id": "design-engineering",
+    "title": "Design engineering and frontend systems",
+    "status": "experience",
+    "description": "Design systems, design-to-code pipelines, and frontend performance. What it takes to build a system people actually adopt, and what changes now that AI can generate UI."
+  },
+  {
+    "id": "developer-experience",
+    "title": "Developer experience",
+    "status": "experience",
+    "description": "Docs, tooling, and onboarding that make a whole org faster. Like letting engineers run local changes against real production data instead of mocks, or getting a new hire to a first PR in a day or two."
+  },
+  {
+    "id": "learning-ai",
+    "title": "Learning AI in public",
+    "status": "learning",
+    "description": "What I'm trying with AI agents, what works, and what breaks. A lab notebook, not a playbook."
+  }
+]

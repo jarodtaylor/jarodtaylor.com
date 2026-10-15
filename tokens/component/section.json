@@ -1,0 +1,20 @@
+{
+  "section": {
+    "padding-block": {
+      "$type": "dimension",
+      "$value": "{space.section}"
+    },
+    "gap": {
+      "$type": "dimension",
+      "$value": "{space.stack.lg}"
+    },
+    "rule-width": {
+      "$type": "dimension",
+      "$value": "{shape.border-width.strong}"
+    },
+    "decoration": {
+      "$type": "string",
+      "$value": "{decoration}"
+    }
+  }
+}

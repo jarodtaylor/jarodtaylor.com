@@ -1,0 +1,12 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    // scripts/*.ts run directly under Node's type stripping, which allows only erasable syntax.
+    "erasableSyntaxOnly": true,
+    "noUncheckedIndexedAccess": true
+  }
+}

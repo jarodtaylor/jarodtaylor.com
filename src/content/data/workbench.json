@@ -1,0 +1,37 @@
+[
+  {
+    "id": "cadre",
+    "name": "cadre",
+    "url": "https://github.com/jarodtaylor/cadre",
+    "status": "v0 works and I use it",
+    "description": "A provider-neutral engine for multi-model agent fleets. Hand a task to several specialist agents, each with its own model and tools, then merge what they find."
+  },
+  {
+    "id": "agent-os",
+    "name": "agent-os",
+    "url": "https://github.com/jarodtaylor/agent-os",
+    "status": "In progress",
+    "description": "A local-first control plane and shared brain that lets Claude Code, Codex, Cursor, and my other agents work as one team instead of strangers."
+  },
+  {
+    "id": "agent-brain",
+    "name": "agent-brain",
+    "url": "https://github.com/jarodtaylor/agent-brain",
+    "status": "Early",
+    "description": "Shared memory across agent tools. Raw notes go in; only reviewed knowledge gets promoted to \"truth.\""
+  },
+  {
+    "id": "agent-cost-tracker",
+    "name": "agent-cost-tracker",
+    "url": "https://github.com/jarodtaylor/agent-cost-tracker",
+    "status": "Experiment",
+    "description": "A small app for tracking AI tool subscriptions, built as an experiment: planned in Claude Code, built in Codex, QA'd in Cursor, with every rough edge logged."
+  },
+  {
+    "id": "devils-advocate",
+    "name": "devils-advocate",
+    "url": "https://github.com/jarodtaylor/devils-advocate",
+    "status": "Paused",
+    "description": "A Claude Code plugin that has models from different providers review the same code."
+  }
+]

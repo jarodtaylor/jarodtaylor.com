@@ -1,0 +1,15 @@
+{
+  // Static assets only: no Worker script, so every request is served from ./dist.
+  "name": "jarodtaylor-com",
+  "compatibility_date": "2026-10-13",
+  // Custom domains: Cloudflare creates the DNS records and certificates for both hosts.
+  "routes": [
+    { "pattern": "jarodtaylor.com", "custom_domain": true },
+    { "pattern": "www.jarodtaylor.com", "custom_domain": true }
+  ],
+  "assets": {
+    "directory": "./dist",
+    // Serve the nearest 404.html with a 404 status when no asset matches.
+    "not_found_handling": "404-page"
+  }
+}
