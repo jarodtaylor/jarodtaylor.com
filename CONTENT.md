@@ -6,12 +6,12 @@ This is not set in stone. This was the result of another session with an agent. 
 
 ## Meta
 
-- **Title tag:** Jarod Taylor · Engineering Leader, Design Engineering & Developer Experience
+- **Title tag:** Jarod Taylor · Engineering Leader | Design Engineering, Frontend Systems & Developer Experience
 - **Meta description:** Jarod Taylor is a Frisco, TX engineering leader with 18 years in design systems, frontend platforms, and developer experience at Estée Lauder, JCPenney, and Aetna.
 
 ## Hero
 
-- **Eyebrow:** Engineering leader · Design engineer · Frisco, TX
+- **Eyebrow:** Engineering Leader | Design Engineering, Frontend Systems & Developer Experience · Frisco, TX
 - **Headline:** I build the work behind the work.
 - **Subhead:** Designer turned engineer turned engineering leader. For 18 years I've built design systems, frontend platforms, and developer experience that make whole engineering orgs faster, and led the teams that build them.
 - **Primary action:** Read the writing

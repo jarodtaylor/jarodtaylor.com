@@ -9,7 +9,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 
 | # | To-do | Needed by |
 |---|---|---|
-| T0 | **Change nameservers at DreamHost** to `jack.ns.cloudflare.com` + `jessica.ns.cloudflare.com` | Now (finishes Phase 0) |
+| T0 | Send a test email to contact@ from another account, and reply from contact@ | Now |
 | T1 | Generate the Google Workspace DKIM key (Admin → Apps → Google Workspace → Gmail → Authenticate email → Generate) and paste me the TXT value | DNS cutover |
 | T2 | Ask 3–5 former leaders (VP, Exec Director, CTO) for 1–3 sentence testimonials, with permission to use name, title, company | Phase 2 |
 | T3 | Pick 2–4 About photos (candid or working) | Phase 2 |
@@ -52,6 +52,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | 2026-10-13 | Drop `preview.jarodtaylor.com` and anything else unused when DNS moves | Not needed |
 | 2026-10-13 | Agents may commit freely on feature branches (pushes and PRs still go through Jarod) | Keep work checkpointed |
 | 2026-10-13 | `.codex/` and `.cursor/` stay local (gitignored) | Personal tool config |
+| 2026-10-14 | Role line everywhere: **Engineering Leader \| Design Engineering, Frontend Systems & Developer Experience** (matches LinkedIn, with "Director of Engineering" changed to "Engineering Leader") | Old line undersold frontend/UI architecture/DX |
 | 2026-10-13 | Generated tokens committed. Built CSS/JSON not committed | Reviewable diffs + Figma import |
 
 ## DNS cutover checklist (end of Phase 0)
@@ -61,8 +62,8 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 - [x] Route 53 audited: apex, www, MX, plus `preview` subdomain (drop it)
 - [ ] DKIM TXT added (T1)
 - [x] Worker deployed: `jarodtaylor-com` → jarodtaylor-com.jarodtaylor-com.workers.dev (2026-10-13)
-- [ ] Attach apex + www custom domains (needs the zone active, so this comes after the nameserver change)
-- [ ] Jarod changes nameservers at DreamHost
+- [x] Apex + www attached; www 301s to apex (2026-10-14)
+- [x] Nameservers changed at DreamHost; site live (2026-10-14)
 - [ ] Verify MX, send/receive a test email, click "Start authentication" for DKIM in Google Admin
 - [ ] After a couple clean weeks: DMARC `p=none` → `quarantine`
 - [ ] Optional: delete the Route 53 zone and old CloudFront distributions (~$0.50/mo)
