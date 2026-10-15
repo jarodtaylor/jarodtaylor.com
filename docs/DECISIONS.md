@@ -9,8 +9,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 
 | # | To-do | Needed by |
 |---|---|---|
-| T0 | Send a test email to contact@ from another account, and reply from contact@ | Now |
-| T1 | Generate the Google Workspace DKIM key (Admin → Apps → Google Workspace → Gmail → Authenticate email → Generate) and paste me the TXT value | DNS cutover |
+| T1 | In Google Admin (Gmail → Authenticate email), click **Start authentication** | Now |
 | T2 | Ask 3–5 former leaders (VP, Exec Director, CTO) for 1–3 sentence testimonials, with permission to use name, title, company | Phase 2 |
 | T3 | Pick 2–4 About photos (candid or working) | Phase 2 |
 | T4 | Make a list of the parts you like on each inspiration site (or just narrate during the walk) | Phase 1 |
@@ -60,10 +59,11 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 - [x] Cloudflare zone created (pending). Nameservers: `jack.ns.cloudflare.com`, `jessica.ns.cloudflare.com`
 - [x] Records copied: Google MX ×2. Added SPF + DMARC
 - [x] Route 53 audited: apex, www, MX, plus `preview` subdomain (drop it)
-- [ ] DKIM TXT added (T1)
+- [x] DKIM TXT added (2026-10-14)
 - [x] Worker deployed: `jarodtaylor-com` → jarodtaylor-com.jarodtaylor-com.workers.dev (2026-10-13)
 - [x] Apex + www attached; www 301s to apex (2026-10-14)
 - [x] Nameservers changed at DreamHost; site live (2026-10-14)
-- [ ] Verify MX, send/receive a test email, click "Start authentication" for DKIM in Google Admin
+- [x] MX verified; test email sent and received (2026-10-14)
+- [ ] Click "Start authentication" for DKIM in Google Admin (T1)
 - [ ] After a couple clean weeks: DMARC `p=none` → `quarantine`
 - [ ] Optional: delete the Route 53 zone and old CloudFront distributions (~$0.50/mo)
