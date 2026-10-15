@@ -4,13 +4,15 @@
  *   tokens/tier-vars       every var(--x) and style-query property must be a semantic or component token
  *                          (or a private --_ prop). Primitives and unknown names (typos) are rejected.
  *                          Declaring a custom property is allowed only for private --_ props: redefining
- *                          a token in component CSS would fork it per component.
+ *                          a token in component CSS would fork it per component. A private prop's value must
+ *                          be var() references only (fallbacks included), so it can't smuggle in a literal.
  *   tokens/no-brand-keys   no selector, @container/@scope/@supports condition, or style query keyed on the brand.
  *
  * The allowed names come from the token sources themselves (the semantic and component sets in
  * tokens/resolver.json), so a new token is usable as soon as it exists. No build step needed.
  */
 import { readFileSync } from 'node:fs';
+import valueParser, { type Node } from 'postcss-value-parser';
 import stylelint, { type Rule } from 'stylelint';
 
 const {
@@ -40,9 +42,23 @@ const tierMessages = ruleMessages(tierVars, {
   primitive: (name: string) =>
     `"${name}" is a primitive. Components consume only semantic or component tokens (--surface-*, --space-*, --type-*, --button-*, …).`,
   declared: (name: string) => `Declares "${name}". Component CSS may only declare private --_ props; tokens live in tokens/.`,
+  literal: (name: string) => `Private prop "${name}" must be assigned only from token var() references, with no literal values or fallbacks.`,
   unknown: (name: string) =>
     `"${name}" is not a semantic or component token. Add it to tokens/semantic or tokens/component, or use a private --_ prop.`,
 });
+
+/** True when a value is nothing but var() references, including any fallbacks. */
+function onlyVarRefs(nodes: Node[]): boolean {
+  const parts = nodes.filter((node) => node.type !== 'space' && node.type !== 'comment');
+  return (
+    parts.length > 0 &&
+    parts.every((node) => {
+      if (node.type !== 'function' || node.value !== 'var') return false;
+      const comma = node.nodes.findIndex((child) => child.type === 'div' && child.value === ',');
+      return comma === -1 || onlyVarRefs(node.nodes.slice(comma + 1));
+    })
+  );
+}
 
 const tierVarsRule: Rule = (primary) => (root, result) => {
   if (!validateOptions(result, tierVars, { actual: primary, possible: [true] })) return;
@@ -64,6 +80,8 @@ const tierVarsRule: Rule = (primary) => (root, result) => {
   root.walkDecls((decl) => {
     if (decl.prop.startsWith('--') && !decl.prop.startsWith('--_'))
       report({ result, ruleName: tierVars, node: decl, word: decl.prop, message: tierMessages.declared(decl.prop) });
+    else if (decl.prop.startsWith('--_') && !onlyVarRefs(valueParser(decl.value).nodes))
+      report({ result, ruleName: tierVars, node: decl, word: decl.prop, message: tierMessages.literal(decl.prop) });
     check(decl.value, /var\(\s*(--[\w-]+)/g, decl);
   });
   // Style queries name the property bare: @container style(--section-decoration: rules).

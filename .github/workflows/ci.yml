@@ -2,6 +2,8 @@ name: CI
 
 on:
   pull_request:
+    # labeled/unlabeled re-run the gate when the perf-tradeoff override label changes.
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   push:
     branches: [main]
 
