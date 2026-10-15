@@ -19,6 +19,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 
 | # | Question | Recommendation |
 |---|---|---|
+| Q7 | Default design direction: A Backstage, B Edition, C Threads ([directions.md](design/directions.md))? | Prototype all three, lean A |
 | Q4 | Remix UI pattern: panel, drawer, or command palette? | Decide in Phase 3 with a coded prototype |
 | Q5 | Signature "wow" moment(s)? | Decide in Phase 1. Lead candidate: the brand switch itself |
 | Q6 | Newsletter: yes or no? | Later |
@@ -51,6 +52,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | 2026-10-13 | Drop `preview.jarodtaylor.com` and anything else unused when DNS moves | Not needed |
 | 2026-10-13 | Agents may commit freely on feature branches (pushes and PRs still go through Jarod) | Keep work checkpointed |
 | 2026-10-13 | `.codex/` and `.cursor/` stay local (gitignored) | Personal tool config |
+| 2026-10-14 | Phase 1 prototypes are throwaway HTML in `prototypes/`, outside CI. The winner gets rebuilt on the token pipeline | Fast iteration without loosening guards |
 | 2026-10-14 | Role line everywhere: **Engineering Leader \| Design Engineering, Frontend Systems & Developer Experience** (matches LinkedIn, with "Director of Engineering" changed to "Engineering Leader") | Old line undersold frontend/UI architecture/DX |
 | 2026-10-13 | Generated tokens committed. Built CSS/JSON not committed | Reviewable diffs + Figma import |
 
