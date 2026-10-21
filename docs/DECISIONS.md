@@ -51,6 +51,8 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | 2026-10-13 | Drop `preview.jarodtaylor.com` and anything else unused when DNS moves | Not needed |
 | 2026-10-13 | Agents may commit freely on feature branches (pushes and PRs still go through Jarod) | Keep work checkpointed |
 | 2026-10-13 | `.codex/` and `.cursor/` stay local (gitignored) | Personal tool config |
+| 2026-10-21 | Round 3 feedback: **no boxed/centered sheet** (feels like 960px-grid era); use the full browser width like aarronwalter.com. Type scale too busy, doesn't flow. Drop location/time from the header. Keep the peek transition + monogram construction animation | Jarod's review of round 3 |
+| 2026-10-21 | Next: **above-the-fold only** (round 4) until the hero is loved, then the sections below. Explore a load-in intro (scaffold builds the page, then fades out, like piergorelli.com) and a subtle living hero background | Nail the first impression first; it sets direction for the rest |
 | 2026-10-20 | **Palette B (Chartreuse)** is the favorite: deep slate + acid lime | Jarod's pick from round 2 |
 | 2026-10-20 | Round 2: **Exposed's condensed type**, **dark-first rich color**, wide-screen = extra width becomes backstage. 3 switchable palettes | Round 1 was drab and broke on 4K |
 | 2026-10-14 | **Direction: Backstage.** Prototype 3 intensities (Whisper / Blueprint / Exposed) before locking. Edition + Threads become Remix candidates | Concept settled; execution is the open question |
