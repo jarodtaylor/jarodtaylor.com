@@ -11,3 +11,8 @@
 ## 2026-10-13 — tooling gotchas
 
 - **`astro preview` backgrounds itself when it detects an AI agent** (Astro 7). Playwright then sees an early exit while the old process holds the port. Use `astro preview --ignore-lock` in test servers.
+
+## 2026-10-20 — prototype round 1 feedback
+
+- **Test at wide viewports, not just 390/1440.** Jarod uses a 4K monitor (~2000–2560 CSS px). All three prototypes capped type size but let the grid stretch, leaving dead zones. Always check 390 / 1440 / 1920 / 2560, and every layout needs an explicit wide-screen strategy.
+- **"Restraint" in a brief reads as monochrome to agents.** Jarod found all three drab. Specify a real color strategy (surface roles, color-blocked sections, a brand hue with presence), not "one accent used sparingly."
