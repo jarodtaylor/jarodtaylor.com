@@ -73,3 +73,23 @@ Start from `prototypes/exposed/` (copy, don't modify it). Keep what worked: cond
 
 ### Verify
 Check **390, 1440, 1920 and 2560** px (screenshot each: `shot-390.png`, `shot-1440.png`, `shot-1920.png`, `shot-2560.png`, first viewport + full page for 1440), plus each palette at 1440 (`palette-a.png`, etc.). Reduced motion, keyboard, contrast computed.
+
+---
+
+# Round 3 brief (2026-10-20)
+
+**Feedback on round 2 (Exposed Dark):** "pretty unique," but **too busy**: the backstage is always on (labels, dimension lines, token panels, grid everywhere, scanline). **Palette B (Chartreuse)** is the favorite. Hero is too horizontal.
+
+## Build: `prototypes/round3/` (start from a copy of `prototypes/exposed-dark/`)
+
+1. **Calm by default, backstage on demand.**
+   - Default: no annotation text anywhere (no cap/baseline labels, no dimension lines, no token panels, no `top = …` formulas). The grid is very faint and lives mainly in the backstage margins. Scanline: remove it, or make it nearly subliminal.
+   - **"Peek backstage"** toggle (and hover/focus on a block) turns on the full spec layer: measurements, cap/baseline, margin panels with live token values. The reveal is the wow moment.
+2. **Vertical hero, full viewport.** One tall composition (`min-height: 100svh`), stacked in reading order: **name → role line + location → tagline → bio → CTAs → social links**. No side-by-side bio. The name may be smaller than round 2; it only has to stay the anchor. Must compose well at 1440×900 and at 2560×1440.
+3. **Stats move out of the hero** into the next section, given room to breathe (still the lime accent block is fine).
+4. **Palette B only.** Remove the palette switcher (Remix UI is designed in Phase 3). Keep the palette as custom properties.
+5. **JT monogram** at `src/assets/jt-logo-icon.svg` (two filled paths, viewBox 0 0 575.65 502.31). Use it: (a) small in the header (replacing the "JT" text), color from tokens; (b) one larger, very subtle placement that, in peek mode, **reveals its construction lines** (stroke outline, grid/angle guides) so the mark shows how it was built. Inline it; don't alter its geometry.
+6. Keep: condensed type, pills, sticky numbered pillar sheets with line art, lime color blocks, inverse sheet 04, wide-screen backstage margins (quiet by default).
+
+### Verify
+390, 1440, 1920, 2560 (first viewport + full page at 1440 and 2560), default AND peek-on states (`peek-1440.png`, `peek-2560.png`). Keyboard, reduced motion, contrast (reuse `tools/contrast.mjs`).
