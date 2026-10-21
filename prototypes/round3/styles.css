@@ -1,0 +1,1134 @@
+/* Round 3: calm by default, backstage on demand.
+   The front sheet is quiet; the grid, measurements and token readouts are all still here, one switch away.
+   Every value lives here first; the backstage is drawn from the same tokens the page is built with. */
+
+:root {
+  /* Spacing scale (rem). The baseline grid and the scanline step use --space-7. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Hero rhythm: tight inside a group, a breath between groups. The breath grows with viewport height,
+     so a tall 4K screen spreads the same stack instead of stranding it. */
+  --gap-group: var(--space-4);
+  --gap-break: var(--space-6);
+
+  /* Layout grid. The front sheet stops at --sheet-max; past that, extra width is backstage. */
+  --sheet-max: 100rem;
+  --cols: 4;
+  --margin: var(--space-4);
+  --gutter: var(--space-4);
+  --masthead-h: 3.5rem;
+  --tab-h: 4.75rem;
+
+  /* Line weights: one border knob, three strengths */
+  --line-hair: 1px;
+  --line-rule: 2px;
+  --line-heavy: 6px;
+  --line-art: 1.5px;
+
+  /* Type */
+  --font-display: "Archivo", "Arial Narrow", sans-serif;
+  --font-body: "Schibsted Grotesk", system-ui, sans-serif;
+  --font-mono: "Martian Mono", ui-monospace, monospace;
+
+  /* Display sizes are fractions of the sheet (cqi on .front), so they grow with the sheet and stop with it. */
+  --type-name: 34cqi;
+  --type-tagline: clamp(2.25rem, 10.5cqi, 5rem);
+  --type-section: clamp(1.75rem, 6.4cqi, 3.5rem);
+  --type-sheet: clamp(1.25rem, 5cqi, 2.25rem);
+  --type-num: clamp(1.75rem, 7cqi, 3rem);
+  --type-stat: clamp(3rem, 13cqi, 7.5rem);
+  --type-role: clamp(1.0625rem, 3.6cqi, 1.5rem);
+  --type-body: 1.0625rem;
+  --type-small: 0.9375rem;
+  --type-annot: 0.6875rem;
+
+  /* Motion */
+  --scan-rows: 24;
+  --scan-step: 1.6s;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --reveal: 0.7s;
+}
+
+/* Palette B, Chartreuse: deep slate under acid lime.
+   Roles: backstage < bg < surface (elevation, dark to lighter), accent as a full surface,
+   inverse as the one light sheet. Muted text is tinted from its own surface, never gray. */
+[data-palette="b"] {
+  --color-backstage: oklch(13.5% 0.02 252);
+  --color-bg: oklch(17.5% 0.026 252);
+  --color-surface: oklch(22% 0.03 252);
+  --color-ink: oklch(96% 0.012 240);
+  --color-ink-muted: oklch(76% 0.03 245);
+  --color-accent: oklch(90% 0.19 124);
+  --color-on-accent: oklch(22% 0.045 140);
+  --color-on-accent-muted: oklch(35% 0.07 135);
+  --color-inverse: oklch(94.5% 0.03 118);
+  --color-on-inverse: oklch(20% 0.026 252);
+  --color-on-inverse-muted: oklch(42% 0.03 252);
+  --color-inverse-accent: oklch(44% 0.12 138);
+  --color-guide: oklch(68% 0.09 232);
+  --color-guide-ink: oklch(76% 0.08 232);
+  --color-redline: oklch(71% 0.18 20);
+  --color-on-redline: oklch(17% 0.03 20);
+}
+
+/* Derived roles. */
+:root {
+  --color-accent-ink: var(--color-accent);
+  --color-guide-line: color-mix(in oklch, var(--color-guide) 20%, transparent);
+  --color-rule: color-mix(in oklch, var(--color-ink) 22%, var(--color-bg));
+  --color-shadow: color-mix(in oklch, var(--color-backstage) 80%, black);
+  --color-focus: var(--color-accent);
+  /* The monogram's resting impression: ink pressed barely into the sheet. */
+  --color-impression: color-mix(in oklch, var(--color-ink) 5.5%, var(--color-bg));
+}
+
+/* --peek runs 0 → 1 when the backstage is revealed. Registered so it can tween, which lets every
+   guide color below be written once as a function of it instead of as two states. */
+@property --peek {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --cols: 12;
+    --margin: var(--space-6);
+    --gutter: var(--space-5);
+    --tab-h: 4.5rem;
+    --gap-break: clamp(var(--space-6), 6svh, var(--space-9));
+    /* A vertical hero is bound by height, not width: the name and tagline size from the viewport height,
+       with a width cap so the name never runs into the monogram's columns. */
+    --type-name: min(calc((100cqi - 2 * var(--margin)) * 0.19), 18.5svh);
+    --type-tagline: min(calc((100cqi - 2 * var(--margin)) * 0.056), 8svh);
+    --type-body: 1.1875rem;
+  }
+}
+
+/* Big, tall screens (a 4K monitor at 2560 × 1440): the reading sizes step up with the display sizes,
+   so the bio and role keep their proportion to the name instead of shrinking beside it. */
+@media (min-width: 120rem) and (min-height: 75rem) {
+  :root {
+    --type-role: 1.875rem;
+    --type-body: 1.375rem;
+    --type-small: 1.0625rem;
+  }
+}
+
+/* Base -------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  color-scheme: dark;
+  background: var(--color-backstage);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--color-guide) var(--color-backstage);
+  accent-color: var(--color-accent);
+  caret-color: var(--color-accent);
+  transition: --peek var(--reveal) var(--ease-out);
+}
+html[data-peek-on] { --peek: 1; }
+
+body {
+  margin: 0;
+  font-size: var(--type-body);
+  line-height: 1.55;
+  background: transparent;
+  overflow-x: clip;
+}
+
+::selection { background: var(--color-accent); color: var(--color-on-accent); }
+
+:focus-visible {
+  outline: var(--line-rule) solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+a { color: inherit; text-decoration-thickness: var(--line-hair); text-underline-offset: 0.22em; }
+a:hover { text-decoration-color: var(--color-accent); }
+
+h1, h2, h3, p, ul, ol, dl, dd, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+.defs { position: absolute; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: var(--margin);
+  top: -10rem;
+  z-index: 50;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.skip:focus { top: var(--space-2); }
+
+/* Shared grid: content and guides use the same columns, so the guides are honest. */
+.hero,
+.glance,
+.pillars,
+.masthead,
+.colophon {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--gutter);
+  padding-inline: var(--margin);
+}
+
+/* Backstage ---------------------------------------------------------------- */
+
+/* One column-guide pattern, used twice: across the whole viewport and inside the sheet.
+   A tile is one column plus one gutter; lines sit on both edges of the column. */
+.bs-grid,
+.bs-sheet {
+  --guide-tile: linear-gradient(to right,
+    var(--line-color) 0 var(--line-hair),
+    transparent var(--line-hair) calc(100% - var(--gutter) - var(--line-hair)),
+    var(--line-color) calc(100% - var(--gutter) - var(--line-hair)) calc(100% - var(--gutter)),
+    transparent 0);
+  --row-tile: repeating-linear-gradient(to bottom,
+    var(--line-color) 0 var(--line-hair),
+    transparent var(--line-hair) var(--space-7));
+}
+
+.backstage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  container-type: inline-size;
+  --sheet-w: min(100cqi, var(--sheet-max));
+  --col-pitch: calc((var(--sheet-w) - 2 * var(--margin) + var(--gutter)) / var(--cols));
+  --sheet-x: calc((100cqi - var(--sheet-w)) / 2);
+}
+
+/* Past the sheet edge the same columns keep going. At rest it is a trace; peeking brings it up to full strength. */
+.bs-grid {
+  --line-color: color-mix(in oklch, var(--color-guide) calc(7% + 15% * var(--peek)), transparent);
+  position: absolute;
+  inset: 0;
+  background-image: var(--guide-tile), var(--row-tile);
+  background-size: var(--col-pitch) 100%, 100% 100%;
+  background-position: calc(var(--sheet-x) + var(--margin)) 0, 0 0;
+  background-repeat: repeat-x, no-repeat;
+}
+
+/* The front sheet's footprint: solid and lifted. Its own copy of the grid only exists while peeking. */
+.bs-sheet {
+  --line-color: color-mix(in oklch, var(--color-guide) calc(10% * var(--peek)), transparent);
+  position: absolute;
+  inset: 0 auto 0 var(--sheet-x);
+  width: var(--sheet-w);
+  background-color: var(--color-bg);
+  background-image: var(--guide-tile), var(--row-tile);
+  background-size: var(--col-pitch) 100%, 100% 100%;
+  background-position: var(--margin) 0, 0 0;
+  background-repeat: repeat-x, no-repeat;
+  background-origin: border-box;
+  box-shadow: 0 0 0 var(--line-hair) color-mix(in oklch, var(--color-guide) calc(10% + 10% * var(--peek)), transparent), 0 2rem 4rem -1rem var(--color-shadow);
+}
+
+/* Measurement rules down both sheet edges: a tick every --space-3, a long tick every --space-7 row. Peek only. */
+.bs-sheet::before,
+.bs-sheet::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--space-3);
+  opacity: var(--peek);
+  background:
+    repeating-linear-gradient(to bottom, var(--color-guide) 0 var(--line-hair), transparent var(--line-hair) var(--space-7)) no-repeat,
+    repeating-linear-gradient(to bottom, var(--color-guide-line) 0 var(--line-hair), transparent var(--line-hair) var(--space-3)) no-repeat;
+  background-size: 100% 100%, 50% 100%;
+}
+.bs-sheet::before { right: calc(100% + var(--space-1)); background-position: 0 0, 100% 0; }
+.bs-sheet::after { left: calc(100% + var(--space-1)); background-position: 0 0, 0 0; }
+
+.rows {
+  position: absolute;
+  inset: 0 0 auto;
+  height: calc(var(--scan-rows) * var(--space-7));
+}
+
+/* The scanline steps one grid row at a time: the spacing scale, measured out loud.
+   At rest it only moves in the margins, barely; peeking lets it cross the sheet with its label. */
+.scan {
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--line-hair);
+  background: linear-gradient(to right,
+    color-mix(in oklch, var(--color-guide) calc(22% + 78% * var(--peek)), transparent) 0 var(--sheet-x),
+    color-mix(in oklch, var(--color-guide) calc(45% * var(--peek)), transparent) var(--sheet-x) calc(var(--sheet-x) + var(--sheet-w)),
+    color-mix(in oklch, var(--color-guide) calc(22% + 78% * var(--peek)), transparent) 0);
+  animation: scan calc(var(--scan-rows) * var(--scan-step)) steps(var(--scan-rows), jump-none) infinite;
+}
+.scan b {
+  position: absolute;
+  right: calc(var(--sheet-x) + var(--margin));
+  top: var(--space-1);
+  font: 500 var(--type-annot) / 1 var(--font-mono);
+  color: var(--color-guide-ink);
+  letter-spacing: 0.02em;
+  opacity: var(--peek);
+}
+
+@keyframes scan {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc((var(--scan-rows) - 1) * var(--space-7))); }
+}
+
+/* Front sheet ------------------------------------------------------------- */
+
+.front {
+  position: relative;
+  z-index: 1;
+  max-width: var(--sheet-max);
+  margin-inline: auto;
+  container-type: inline-size;
+}
+
+main { position: relative; }
+
+/* Crop / registration marks at section corners: the one piece of scaffolding that stays at rest. */
+.crop {
+  position: absolute;
+  top: calc(var(--space-3) * -1);
+  width: var(--space-5);
+  height: var(--space-5);
+  fill: none;
+  stroke: color-mix(in oklch, var(--color-guide) calc(55% + 45% * var(--peek)), transparent);
+  stroke-width: var(--line-hair);
+}
+.crop--tl, .crop--bl { left: calc(var(--margin) - var(--space-3)); }
+.crop--tr, .crop--br { right: calc(var(--margin) - var(--space-3)); }
+.crop--bl, .crop--br { top: auto; bottom: calc(var(--space-3) * -1); }
+.crop * { vector-effect: non-scaling-stroke; }
+
+/* Masthead ------------------------------------------------------------------ */
+
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: var(--masthead-h);
+  align-items: center;
+  background: var(--color-bg);
+  border-bottom: var(--line-hair) solid var(--color-rule);
+}
+
+.mark {
+  grid-column: 1;
+  justify-self: start;
+  display: inline-flex;
+  padding: var(--space-2) var(--space-2) var(--space-2) 0;
+  color: var(--color-ink);
+  transition: color 0.25s var(--ease-out);
+}
+.mark svg { display: block; width: auto; height: 1.375rem; fill: currentColor; }
+.mark:hover { color: var(--color-accent); }
+
+.clock {
+  display: none;
+  font: 450 var(--type-annot) / 1 var(--font-mono);
+  color: var(--color-ink-muted);
+  letter-spacing: 0.02em;
+}
+.clock span { color: var(--color-ink); }
+
+.peek-toggle {
+  grid-column: 2 / -1;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.25rem;
+  padding: 0 var(--space-3);
+  border: var(--line-hair) solid color-mix(in oklch, var(--color-ink) 55%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink);
+  font: 600 var(--type-small) / 1 var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+.peek-toggle:hover { border-color: var(--color-ink); }
+.peek-more { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.peek-toggle svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--line-rule);
+  transition: transform 0.6s var(--ease-out);
+}
+.peek-toggle:hover svg { transform: rotate(90deg); }
+.peek-toggle[aria-pressed="true"] {
+  background: var(--color-redline);
+  border-color: var(--color-redline);
+  color: var(--color-on-redline);
+}
+.peek-toggle[aria-pressed="true"] svg { transform: rotate(45deg); }
+
+@media (min-width: 48rem) {
+  .clock { display: block; grid-column: 6 / 8; justify-self: center; }
+  .peek-toggle { grid-column: 10 / -1; }
+  .peek-more { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
+}
+
+/* Hero: one tall composition, read top to bottom ------------------------- */
+
+.hero {
+  position: relative;
+  min-height: calc(100svh - var(--masthead-h));
+  padding-block: clamp(var(--space-6), 6svh, var(--space-8));
+  align-content: center;
+}
+
+.stack {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.name-block { position: relative; width: 100%; }
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 820;
+  font-stretch: 62%;
+  font-size: var(--type-name);
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  margin-left: -0.035em;
+  white-space: nowrap;
+}
+.name span { display: block; }
+
+/* Dimension annotations on the name: real metrics of the display face, in em of its own size. Peek only. */
+.dims {
+  position: absolute;
+  inset: 0;
+  font-size: var(--type-name);
+  pointer-events: none;
+}
+.dim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: var(--line-hair) solid color-mix(in oklch, var(--color-guide) 70%, transparent);
+}
+.dim b,
+.span-dim b,
+.sd b,
+.slug,
+[data-peek]::after {
+  font: 500 var(--type-annot) / 1.3 var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.dim b {
+  position: absolute;
+  right: 0;
+  bottom: var(--space-1);
+  color: var(--color-guide-ink);
+  background: var(--color-bg);
+  padding-left: var(--space-2);
+}
+.dim--cap { top: 0.058em; }
+.dim--base { top: 1.55em; }
+.dim--base b { bottom: auto; top: var(--space-1); }
+.dim--size {
+  top: 0;
+  right: auto;
+  height: 1.64em;
+  border-top: 0;
+  border-left: var(--line-hair) solid var(--color-redline);
+  left: calc(var(--margin) * -0.3);
+}
+.dim--size::before,
+.dim--size::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  width: 7px;
+  border-top: var(--line-hair) solid var(--color-redline);
+}
+.dim--size::before { top: 0; }
+.dim--size::after { bottom: 0; }
+.dim--size b { display: none; }
+
+.ident {
+  display: grid;
+  gap: var(--space-1);
+  width: 100%;
+  /* Clear the descender of the y: the name's line box is tighter than its glyphs. */
+  margin-top: calc(var(--type-name) * 0.16);
+  padding-top: var(--space-4);
+  border-top: var(--line-rule) solid var(--color-ink);
+}
+.role {
+  font: 600 var(--type-role) / 1.3 var(--font-body);
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.role .sep { color: var(--color-accent-ink); font-weight: 400; padding-inline: 0.15em; }
+.loc { font-weight: 500; color: var(--color-ink-muted); }
+
+.tagline {
+  margin-top: var(--gap-break);
+  font-family: var(--font-display);
+  font-weight: 760;
+  font-stretch: 78%;
+  font-size: var(--type-tagline);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.tagline .hl { color: var(--color-accent-ink); }
+
+.bio { margin-top: var(--space-5); max-width: 58ch; text-wrap: pretty; }
+
+.pill {
+  display: inline-block;
+  padding: 0 0.55em;
+  border: var(--line-hair) solid color-mix(in oklch, var(--color-accent) 70%, transparent);
+  border-radius: 999px;
+  line-height: 1.45;
+  white-space: nowrap;
+  font-weight: 560;
+}
+
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--gap-break); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 3rem;
+  padding: 0 var(--space-5);
+  border: var(--line-rule) solid var(--color-ink);
+  font: 650 var(--type-body) / 1 var(--font-body);
+  text-decoration: none;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+.btn svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--line-rule);
+  transition: transform 0.35s var(--ease-out);
+}
+.btn--primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+.btn--primary:hover { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
+.btn--primary:hover svg { transform: translateX(4px); }
+.btn--ghost:hover { background: var(--color-ink); color: var(--color-bg); }
+
+.social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-5);
+  font-size: var(--type-small);
+  font-weight: 560;
+  color: var(--color-ink-muted);
+}
+.social a:hover { color: var(--color-ink); }
+
+@media (min-width: 48rem) {
+  /* The name may run the full sheet; everything you read under it holds a seven-column measure. */
+  .stack {
+    --read-w: calc((100cqi - 2 * var(--margin) - 11 * var(--gutter)) / 12 * 7 + 6 * var(--gutter));
+  }
+  .stack > :not(.name-block, .bio) { max-width: min(var(--read-w), 100%); }
+  .ident { width: var(--read-w); }
+  .name span { display: inline; }
+  .dim--base { top: 0.73em; }
+  .dim--size { height: 0.82em; }
+  /* The readout runs up the dimension line, in the sheet margin, clear of every other label. */
+  .dim--size b {
+    display: block;
+    right: calc(100% + var(--space-1));
+    left: auto;
+    top: auto;
+    bottom: 0;
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    white-space: nowrap;
+    background: none;
+    padding: 0;
+    color: var(--color-redline);
+  }
+}
+
+/* The monogram at figure scale -------------------------------------------- */
+
+/* Phone: the mark closes the hero as its own figure, below the links, so its construction never runs under text. */
+.figure {
+  grid-column: 2 / -1;
+  grid-row: 2;
+  justify-self: end;
+  width: 100%;
+  margin-top: var(--space-8);
+  pointer-events: none;
+}
+.mono { display: block; width: 100%; height: auto; overflow: visible; }
+.mono * { vector-effect: non-scaling-stroke; }
+
+.mono-fill {
+  fill: var(--color-impression);
+  transition: fill var(--reveal) var(--ease-out);
+}
+
+/* Construction: every stroke is drawn with pathLength="1", so one dash value draws any line. */
+.mono-guides,
+.mono-line { fill: none; }
+.mono-guides path,
+.mono-line path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.9s var(--ease-out);
+}
+.mono-guides { stroke: color-mix(in oklch, var(--color-guide) 60%, transparent); stroke-width: var(--line-hair); }
+.mono-guides .g-tri { stroke: var(--color-guide); }
+.mono-guides .g-axis { stroke: var(--color-redline); stroke-opacity: 0.7; }
+.mono-line { stroke: var(--color-accent); stroke-width: var(--line-art); stroke-linejoin: miter; }
+
+.mono-marks {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+  fill: var(--color-guide-ink);
+  font: 500 15px var(--font-mono);
+}
+.mono-marks .g-arc { fill: none; stroke: var(--color-redline); stroke-width: var(--line-hair); }
+.mono-marks text:first-of-type { fill: var(--color-redline); }
+.g-pts circle { fill: var(--color-bg); stroke: var(--color-guide-ink); stroke-width: var(--line-hair); }
+
+@media (min-width: 48rem) {
+  .figure {
+    margin-top: 0;
+    grid-column: 8 / -1;
+    grid-row: 1;
+    /* Bottom-aligned with the socials: the mark and the stack share a floor. */
+    align-self: end;
+    width: 100%;
+    max-width: calc(70svh * 655.65 / 582.31);
+    justify-self: end;
+  }
+  /* The viewBox overruns the mark by 40 units so the guides can extend past it; drop by that much so the
+     visible floor of the mark, not its box, lines up with the socials. */
+  .mono { translate: 0 calc(100% * 40 / 582.31); }
+}
+
+/* At a glance: the stats, given a section of their own --------------------- */
+
+.glance { padding-block: var(--space-8) 0; }
+
+.stats-wrap {
+  grid-column: 1 / -1;
+  position: relative;
+  padding-top: var(--space-6);
+}
+.span-dim {
+  position: absolute;
+  top: var(--space-2);
+  left: 0;
+  right: 0;
+  height: var(--space-3);
+  border-inline: var(--line-hair) solid var(--color-guide);
+}
+.span-dim::before {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto;
+  border-top: var(--line-hair) solid var(--color-guide);
+}
+.span-dim b {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  padding-inline: var(--space-2);
+  background: var(--color-bg);
+  color: var(--color-guide-ink);
+  white-space: nowrap;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  margin-inline: calc(var(--margin) * -1);
+  padding-inline: var(--margin);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.stats li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  padding-block: var(--space-6) var(--space-6);
+}
+.stats li:nth-child(n + 3) { border-top: var(--line-hair) solid var(--color-on-accent-muted); }
+.stats strong {
+  font-family: var(--font-display);
+  font-weight: 760;
+  font-stretch: 70%;
+  font-size: var(--type-stat);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.stats span { font-size: var(--type-small); font-weight: 560; line-height: 1.35; max-width: 24ch; color: var(--color-on-accent-muted); }
+
+@media (min-width: 48rem) {
+  .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .stats li { padding-block: var(--space-8) var(--space-7); }
+  .stats li:nth-child(n + 3) { border-top: 0; }
+  .stats li + li { border-left: var(--line-hair) solid var(--color-on-accent-muted); padding-left: var(--space-5); margin-left: calc(var(--gutter) * -0.5); }
+  .stats span { font-size: 1.0625rem; }
+}
+
+/* Pillars: stacked, numbered sheets --------------------------------------- */
+
+.pillars {
+  position: relative;
+  padding-top: var(--space-9);
+  padding-bottom: var(--space-7);
+}
+
+.pillars-title {
+  grid-column: 1 / -1;
+  font-family: var(--font-display);
+  font-weight: 760;
+  font-stretch: 78%;
+  font-size: var(--type-section);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  padding-bottom: var(--space-7);
+}
+.pillars-title .fill { color: var(--color-ink-muted); }
+@media (min-width: 48rem) { .pillars-title { grid-column: 1 / 10; } }
+
+/* The one local scroll effect: the rest of the heading fills with ink as it crosses the viewport.
+   A hard stop moving through the words, not a decorative gradient. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .pillars-title .fill {
+      color: transparent;
+      background: linear-gradient(90deg, var(--color-ink) 0 50%, var(--color-ink-muted) 50% 100%);
+      background-size: 200% 100%;
+      background-position: 100% 0;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: ink-fill linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 55%;
+    }
+  }
+}
+@keyframes ink-fill { to { background-position: 0 0; } }
+
+.sheets {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: var(--space-8);
+  padding-bottom: calc(3 * var(--tab-h));
+  position: relative;
+}
+
+/* The empty runway under 04 is load-bearing (it lets the last sheet reach its slot). Peek measures it. */
+.sheets::after {
+  content: "runway: 3 × --tab-h, so sheet 04 can reach its slot";
+  position: absolute;
+  bottom: var(--space-4);
+  left: 0;
+  height: calc(3 * var(--tab-h) - var(--space-8));
+  display: flex;
+  align-items: center;
+  padding-left: var(--space-3);
+  border-left: var(--line-hair) solid var(--color-guide);
+  font: 500 var(--type-annot) / 1.3 var(--font-mono);
+  letter-spacing: 0.02em;
+  color: var(--color-guide-ink);
+}
+
+/* Each sheet sets its surface and its own inks; children only ever read --s-*. */
+.sheet {
+  --s-bg: var(--color-surface);
+  --s-ink: var(--color-ink);
+  --s-muted: var(--color-ink-muted);
+  --s-rule: var(--color-accent);
+  --s-line: color-mix(in oklch, var(--color-ink) 22%, var(--color-surface));
+  --s-hi: var(--color-redline);
+  --s-construct: var(--color-guide);
+  --s-annot: var(--color-guide-ink);
+  position: sticky;
+  top: calc(var(--masthead-h) + var(--i) * var(--tab-h));
+  min-height: min(26rem, calc(100svh - var(--masthead-h) - 3 * var(--tab-h)));
+  background: var(--s-bg);
+  color: var(--s-ink);
+  border-top: var(--line-heavy) solid var(--s-rule);
+  box-shadow: 0 -12px 28px -14px var(--color-shadow);
+}
+.sheet--accent {
+  --s-bg: var(--color-accent);
+  --s-ink: var(--color-on-accent);
+  --s-muted: var(--color-on-accent-muted);
+  --s-rule: var(--color-on-accent);
+  --s-line: var(--color-on-accent-muted);
+  --s-hi: var(--color-on-accent);
+  --s-construct: var(--color-on-accent-muted);
+  --s-annot: var(--color-on-accent-muted);
+}
+.sheet--inverse {
+  --s-bg: var(--color-inverse);
+  --s-ink: var(--color-on-inverse);
+  --s-muted: var(--color-on-inverse-muted);
+  --s-rule: var(--color-on-inverse);
+  --s-line: color-mix(in oklch, var(--color-on-inverse) 30%, var(--color-inverse));
+  --s-hi: var(--color-inverse-accent);
+  --s-construct: var(--color-on-inverse-muted);
+  --s-annot: var(--color-on-inverse-muted);
+}
+
+.sheet-tab {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--space-3);
+  min-height: var(--tab-h);
+  padding-inline: var(--space-4);
+  border-bottom: var(--line-hair) solid var(--s-line);
+}
+.num {
+  font: 850 var(--type-num) / 1 var(--font-display);
+  font-stretch: 62%;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.sheet h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-stretch: 82%;
+  font-size: var(--type-sheet);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.math { display: none; }
+
+.tag {
+  justify-self: start;
+  padding: var(--space-1) var(--space-3);
+  border: var(--line-hair) solid currentColor;
+  border-radius: 999px;
+  font-size: var(--type-small);
+  font-weight: 560;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.tag--open { color: var(--s-hi); }
+
+.sheet-body {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4) var(--space-6);
+}
+.sheet-body p { max-width: 46ch; text-wrap: pretty; font-size: var(--type-body); }
+
+.art {
+  width: 100%;
+  max-height: 11rem;
+  fill: none;
+  stroke: var(--s-ink);
+  stroke-width: var(--line-art);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.art * { vector-effect: non-scaling-stroke; }
+.art .construct { stroke: var(--s-construct); stroke-dasharray: 3 4; }
+.art .hi { stroke: var(--s-hi); stroke-width: var(--line-rule); }
+.art .edge { stroke-dasharray: none; }
+
+@media (min-width: 48rem) {
+  .sheet-tab {
+    grid-template-columns: subgrid;
+    padding-inline: 0;
+  }
+  .sheet { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-content: start; }
+  .sheet-tab { grid-column: 1 / -1; }
+  .num { grid-column: 1 / 3; padding-left: var(--space-5); }
+  .sheet h3 { grid-column: 3 / 10; }
+  .math {
+    display: block;
+    grid-column: 10 / -1;
+    justify-self: end;
+    padding-right: var(--space-5);
+    font: 450 var(--type-annot) / 1.3 var(--font-mono);
+    color: var(--s-annot);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .sheet-body {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    padding: var(--space-6) 0 var(--space-7);
+    align-items: start;
+    row-gap: var(--space-5);
+    align-content: start;
+  }
+  .sheet-body p { grid-column: 3 / 8; font-size: 1.3125rem; line-height: 1.5; }
+  .tag { grid-column: 3 / 8; grid-row: 2; }
+  .art { grid-column: 8 / 12; grid-row: 1 / span 3; max-height: 17rem; }
+}
+
+/* Footer -------------------------------------------------------------------- */
+
+.colophon {
+  padding-block: var(--space-6) var(--space-7);
+  border-top: var(--line-hair) solid var(--color-rule);
+  font-size: var(--type-small);
+  color: var(--color-ink-muted);
+}
+.colophon p { grid-column: 1 / -1; max-width: 70ch; }
+.colophon strong { color: var(--color-ink); font-weight: 600; }
+.colophon code { white-space: nowrap; font: 500 0.8125rem / 1 var(--font-mono); color: var(--color-guide-ink); }
+
+/* Wide screens: the backstage margins --------------------------------------
+   Only once there is real room outside the sheet. Everything here hugs the sheet edge, never the screen edge. */
+
+.margins,
+.sheet-dim { display: none; }
+
+@media (min-width: 130rem) {
+  .margins {
+    display: block;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .margin {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: min(14rem, (100vw - 100cqi) / 2 - var(--space-6) - var(--space-4));
+  }
+  .margin--l { right: calc(100% + var(--space-6)); text-align: right; }
+  .margin--r { left: calc(100% + var(--space-6)); }
+
+  .slug {
+    position: sticky;
+    top: calc(var(--masthead-h) + var(--space-8));
+    display: grid;
+    gap: var(--space-4);
+    padding-top: var(--space-9);
+    color: var(--color-guide-ink);
+  }
+  .slug-head {
+    padding-bottom: var(--space-2);
+    border-bottom: var(--line-hair) solid var(--color-guide);
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .slug-head span { color: var(--color-accent-ink); }
+  .slug dl { display: grid; gap: var(--space-1); }
+  .slug dl div { display: flex; justify-content: flex-end; gap: var(--space-3); }
+  .slug dt { color: var(--color-ink-muted); }
+  .slug dd { min-width: 4.5rem; color: var(--color-guide-ink); }
+  .slug-note { max-width: 24ch; color: var(--color-ink-muted); text-wrap: pretty; }
+  .margin--l .slug-note { justify-self: end; }
+
+  .tokens { display: grid; gap: var(--space-2); }
+  .tokens li {
+    display: grid;
+    grid-template-columns: 0.875rem 1fr;
+    column-gap: var(--space-2);
+    align-items: center;
+  }
+  .tokens li::before {
+    content: "";
+    height: 0.875rem;
+    background: var(--sw);
+    box-shadow: inset 0 0 0 var(--line-hair) color-mix(in oklch, var(--color-ink) 25%, transparent);
+  }
+  .tokens b { font-weight: 500; color: var(--color-ink); }
+  .tokens span { grid-column: 1 / -1; color: var(--color-guide-ink); white-space: nowrap; }
+
+  /* A dimension line across the top: backstage | sheet | backstage, each with its live width. */
+  .sheet-dim {
+    display: block;
+    position: absolute;
+    top: var(--space-3);
+    left: 0;
+    right: 0;
+    height: var(--space-3);
+  }
+  .sd {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-inline: var(--line-hair) solid var(--color-guide);
+  }
+  .sd::before {
+    content: "";
+    position: absolute;
+    inset: 50% 0 auto;
+    border-top: var(--line-hair) dashed var(--color-guide);
+  }
+  .sd--c { left: 0; right: 0; }
+  .sd--c::before { border-top-style: solid; }
+  .sd--l { right: 100%; width: calc((100vw - 100cqi) / 2); border-left: 0; }
+  .sd--r { left: 100%; width: calc((100vw - 100cqi) / 2); border-right: 0; }
+  .sd b {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    padding-inline: var(--space-2);
+    background: var(--color-backstage);
+    color: var(--color-guide-ink);
+    white-space: nowrap;
+  }
+  .sd--c b { background: var(--color-bg); }
+  .sd--l b::before { content: "backstage "; }
+  .sd--r b::after { content: " backstage"; }
+}
+
+/* The spec layer: hidden at rest, revealed by Peek ------------------------
+   Each piece draws in from the left with clip-path. Delays only apply on the way in, so closing is immediate. */
+
+.dims,
+.math,
+.span-dim,
+.sheets::after,
+.sheet-dim,
+.margin {
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: opacity 0.2s var(--ease-out), clip-path 0.2s var(--ease-out);
+}
+.margin--l { clip-path: inset(0 0 0 100%); }
+
+[data-peek-on] :is(.dims, .math, .span-dim, .sheet-dim, .margin),
+[data-peek-on] .sheets::after {
+  opacity: 1;
+  clip-path: inset(-4rem);
+  transition: opacity 0.4s var(--ease-out) var(--in, 0s), clip-path var(--reveal) var(--ease-out) var(--in, 0s);
+}
+[data-peek-on] .sheet-dim { --in: 0.1s; }
+[data-peek-on] .dims { --in: 0.2s; }
+[data-peek-on] .margin { --in: 0.35s; }
+
+/* Hovering the name is a small peek of its own. */
+.name-block:hover .dims {
+  opacity: 1;
+  clip-path: inset(-4rem);
+  transition: opacity 0.3s var(--ease-out), clip-path 0.5s var(--ease-out);
+}
+
+/* The monogram shows how it was built: the lattice draws first, then the outline is traced over it. */
+[data-peek-on] .mono-fill { fill: color-mix(in oklch, var(--color-ink) 2%, var(--color-bg)); }
+[data-peek-on] .mono-guides path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.1s var(--ease-out) calc(0.15s + var(--d, 0) * 0.07s);
+}
+[data-peek-on] .mono-line path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.6s var(--ease-out) 0.55s;
+}
+[data-peek-on] .mono-marks { opacity: 1; transition: opacity 0.5s var(--ease-out) 1.1s; }
+
+/* Peek backstage: redlines show what a block is made of ------------------- */
+
+:where([data-peek]) { position: relative; }
+
+[data-peek]::before,
+[data-peek]::after {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out), clip-path 0.45s var(--ease-out);
+  z-index: 6;
+}
+
+[data-peek]::before {
+  content: "";
+  inset: 0;
+  outline: var(--line-hair) dashed var(--color-redline);
+  outline-offset: -1px;
+  clip-path: inset(0 100% 0 0);
+}
+
+[data-peek]::after {
+  content: attr(data-spec);
+  left: 0;
+  bottom: calc(100% + var(--space-1));
+  max-width: 100%;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-redline);
+  color: var(--color-on-redline);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sheet[data-peek]::after { bottom: auto; top: calc(var(--space-2) * -1); translate: 0 -100%; }
+/* Narrow blocks in the hero stack (the buttons, the links) have open sheet to their right, so their labels may run into it. */
+@media (min-width: 48rem) { .stack [data-peek]::after { max-width: none; } }
+/* In the hero stack, these two hang below their block, where the gap is, so no label sits on a glyph. */
+.ident[data-peek]::after,
+.social[data-peek]::after { bottom: auto; top: calc(100% + var(--space-1)); }
+
+[data-peek]:hover::before,
+[data-peek]:focus-within::before,
+[data-peek-on] [data-peek]::before {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+[data-peek]:hover::after,
+[data-peek]:focus-within::after,
+[data-peek-on] [data-peek]::after { opacity: 1; }
+
+@media (hover: none) {
+  [data-peek]:hover::before,
+  [data-peek]:hover::after { opacity: 0; }
+  [data-peek-on] [data-peek]::before,
+  [data-peek-on] [data-peek]::after { opacity: 1; }
+}
+
+/* Reduced motion: everything holds still, and the reveal is a cut instead of a draw. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .scan { display: none; }
+}
