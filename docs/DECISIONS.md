@@ -51,6 +51,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | 2026-10-13 | Drop `preview.jarodtaylor.com` and anything else unused when DNS moves | Not needed |
 | 2026-10-13 | Agents may commit freely on feature branches (pushes and PRs still go through Jarod) | Keep work checkpointed |
 | 2026-10-13 | `.codex/` and `.cursor/` stay local (gitignored) | Personal tool config |
+| 2026-10-20 | Round 2: **Exposed's condensed type**, **dark-first rich color**, wide-screen = extra width becomes backstage. 3 switchable palettes | Round 1 was drab and broke on 4K |
 | 2026-10-14 | **Direction: Backstage.** Prototype 3 intensities (Whisper / Blueprint / Exposed) before locking. Edition + Threads become Remix candidates | Concept settled; execution is the open question |
 | 2026-10-14 | Phase 1 prototypes are throwaway HTML in `prototypes/`, outside CI. The winner gets rebuilt on the token pipeline | Fast iteration without loosening guards |
 | 2026-10-14 | Role line everywhere: **Engineering Leader \| Design Engineering, Frontend Systems & Developer Experience** (matches LinkedIn, with "Director of Engineering" changed to "Engineering Leader") | Old line undersold frontend/UI architecture/DX |

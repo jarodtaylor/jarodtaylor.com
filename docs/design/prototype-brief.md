@@ -51,3 +51,25 @@ They must differ in **layout/topology and type**, not only in how visible the gr
 - **No image generation, no comps, no mock images.** Design in code only.
 - Don't touch anything outside your variant folder.
 - Produce screenshots: `prototypes/<variant>/shot-390.png` and `shot-1440.png` (full page).
+
+---
+
+# Round 2 brief (2026-10-20)
+
+**Feedback on round 1:** didn't love any, didn't hate any. All three were **too drab** (near-monochrome) and **broke on wide screens** (4K: type capped while the grid stretched, leaving dead zones).
+
+**Jarod's picks:** **Exposed's condensed type** · **Dark-first, rich color.**
+
+## Build: `prototypes/exposed-dark/`
+
+Start from `prototypes/exposed/` (copy, don't modify it). Keep what worked: condensed heavy name, structural rules, cap/baseline annotations, pill keywords, stats strip, sticky numbered sheets, line-art, peek backstage, stepped scanline.
+
+### Must change
+1. **Dark-first, rich color.** A deep background (not pure black) with a saturated brand hue that has real presence, in the spirit of aarronwalter.com's dark + lime and the editor themes Jarod likes (Catppuccin/Dracula/Nord as taste, never copied). Use **surface roles**: at least one full-color `surface-accent` block (e.g. the stats strip or one sheet) and a lighter/inverse surface somewhere, so the page has rhythm, not one flat field.
+2. **Three palette options, switchable** via a small "Palette A/B/C" control that swaps only CSS custom properties on `<html>` (a mini Remix; zero markup changes). Make them meaningfully different hue families (e.g. warm, cool, one surprising). All must pass AA (compute it).
+3. **Wide-screen strategy (the on-concept one):** content lives on a front "sheet" with a sensible max width; **the extra width on big monitors becomes backstage**: the grid, measurement rules and annotations extend into it, so a wider screen shows more scaffolding, never dead space. Type stays fluid up to the sheet max. Nothing stranded at the far edges.
+4. Hero must work as one composition at every width: bio stays near the headline, stats in or near the first viewport at 1440×900.
+5. Fix the stat wording: "40" + "person global org" without a dangling hyphen.
+
+### Verify
+Check **390, 1440, 1920 and 2560** px (screenshot each: `shot-390.png`, `shot-1440.png`, `shot-1920.png`, `shot-2560.png`, first viewport + full page for 1440), plus each palette at 1440 (`palette-a.png`, etc.). Reduced motion, keyboard, contrast computed.
