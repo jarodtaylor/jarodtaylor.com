@@ -93,3 +93,33 @@ Check **390, 1440, 1920 and 2560** px (screenshot each: `shot-390.png`, `shot-14
 
 ### Verify
 390, 1440, 1920, 2560 (first viewport + full page at 1440 and 2560), default AND peek-on states (`peek-1440.png`, `peek-2560.png`). Keyboard, reduced motion, contrast (reuse `tools/contrast.mjs`).
+
+---
+
+# Round 4 brief (2026-10-21): above the fold only
+
+**Feedback on round 3:** liked the calm default and *loved* the peek transition, especially the monogram drawing its construction lines. Disliked: the **boxed, centered sheet** with dead side gutters (dated, "960px grid days"); **type sizes** (too much on screen, doesn't flow); location/time in the header.
+
+**Scope:** the first viewport only (header + hero, `100svh`). Nothing below the fold. We nail this, then it sets the language for every other section.
+
+## Build: `prototypes/round4/` (start from a copy of `prototypes/round3/`; keep palette B, Archivo condensed, the inline monogram + its construction geometry)
+
+1. **Full browser width.** No max-width sheet, no backstage side gutters. The composition spans the viewport like aarronwalter.com: gutters scale with the viewport (e.g. `clamp()` on vw), the name scales with viewport width, and only *text blocks* get a max line length (`ch`). Must feel intentional at 390, 1440, 1920 and 2560 (Jarod is on 4K). No dead zones: the open area is where the background lives.
+2. **Strict hero type scale: 3 steps + 1 label.** Display (name) → lead (tagline "I build the work behind the work.", "behind the work." in lime) → body (bio). Plus one small label style (mono or caps) for the role line and "Frisco, TX". Nothing else. Clear reading rhythm with generous, consistent vertical spacing.
+3. **Less on screen.** Hero = name, role line + Frisco, TX (label), tagline, bio (keep the pills), 2 CTAs. Social links move to the header (compact) or out of the hero entirely. Header: monogram left, socials + "Peek backstage" right. **No location/time in the header.**
+4. **Load-in intro ("the build").** On first load the page constructs itself from the monogram's 60° geometry, then the scaffolding fades out, leaving the calm page + living background. Ours must grow from **Jarod's mark and lattice**, not generic labeled layout boxes (piergorelli.com does those; we must not look like a copy). Suggested beat: lattice lines draw out from the mark → monogram constructs (guides → outline → fill) → hairline guides snap to the hero blocks → text settles → guides fade. About 2 s total. Rules:
+   - The name is visible at first paint (it's the LCP). Other blocks may reveal, all visible by ~1.2 s.
+   - Skippable (any key, click, scroll, or a "Skip" control). Plays once per session (`sessionStorage` in try/catch).
+   - `prefers-reduced-motion`: no intro, content immediately. No JS: full content, no intro.
+   - It's the same visual language as "Peek backstage," which stays (reworked for full width) as the on-demand version.
+5. **Living hero background: 3 options, switchable** via a small dev control (`A / B / C` + "Replay intro"), swapping only which background runs. Each must come from something real, not decoration:
+   - **A. Lattice field:** the 60° triangular lattice the monogram is built on, very faint, drifting slowly; lines near the cursor bend or brighten subtly.
+   - **B. Construction drift:** the monogram's own construction lines extended across the viewport, slowly sliding; now and then a segment traces in lime along the mark's real edges.
+   - **C. Your pick, from the system:** something derived from the tokens (e.g. spacing/type-scale rhythm as a receding field). Explain the source in a comment.
+   - All three: subtle (never compete with the text; text contrast must still pass AA over it), confined to the hero, paused when offscreen or the tab is hidden, DPR capped at 2, static frame under reduced motion.
+6. **Motion and JS budget (Pier's discipline).** **No three.js, no GSAP, no libraries.** Hand-written WebGL fragment shader or canvas 2D, ~2–4 KB per background; intro is CSS/SVG first with minimal JS. Total hero JS target ≤ 15 KB gzip. Every effect earns its place; drop anything that costs without meaning.
+
+## Verify
+- Screenshots (settled state): background A at 390, 1440, 1920, 2560; B and C at 1440 and 2560 (`bg-a-1440.png` …). Intro mid-sequence frames at 1440 (`intro-1.png`, `intro-2.png`, `intro-3.png`). Peek at 2560.
+- Reduced motion, keyboard, skip works, no horizontal scroll, contrast computed (reuse `tools/contrast.mjs`, including text over the brightest background frame).
+- Report gzip size of each JS file.
