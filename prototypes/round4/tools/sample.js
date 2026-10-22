@@ -1,5 +1,6 @@
-// Live contrast check: reads the background canvas under every text block, for a few seconds, with the cursor
-// parked on the bio, and reports the worst ratio per text color. Paste into the console, or:
+// Live contrast check: reads the background canvas under every text block for a few seconds, with the cursor parked
+// first on the bio, then just past the end of the label row (where A's glow is closest to text), and reports the
+// worst ratio per text color. Paste into the console, or:
 //   agent-browser eval --stdin < tools/sample.js
 (async () => {
   const hero = document.querySelector('.hero');
@@ -23,12 +24,15 @@
   const colors = Object.fromEntries(Object.keys(texts).map((k) => [k, probe(`--color-${k}`)]));
 
   const bio = document.querySelector('.bio').getBoundingClientRect();
-  hero.dispatchEvent(new PointerEvent('pointermove', { clientX: bio.left + bio.width * 0.4, clientY: bio.top + bio.height / 2, bubbles: true }));
+  const loc = document.querySelector('.loc').getBoundingClientRect();
+  const spots = [[bio.left + bio.width * 0.4, bio.top + bio.height / 2], [loc.right + 120, loc.top + loc.height / 2]];
 
   const hr = hero.getBoundingClientRect();
   const dpr = canvas.width / hr.width;
   const worst = {};
   for (let n = 0; n < 24; n++) {
+    const [cx, cy] = spots[n < 12 ? 0 : 1];
+    hero.dispatchEvent(new PointerEvent('pointermove', { clientX: cx, clientY: cy, bubbles: true }));
     await new Promise((r) => setTimeout(r, 250));
     for (const [k, sels] of Object.entries(texts)) {
       for (const sel of sels) {

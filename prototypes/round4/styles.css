@@ -82,7 +82,7 @@
   /* Background inks, alpha included, because the canvases take colors as strings.
      Contrast is checked against the brightest of these composited over --color-bg (tools/contrast.mjs). */
   --field-line: oklch(68% 0.09 232 / 0.26);
-  --field-hot: oklch(90% 0.19 124 / 0.2);
+  --field-hot: oklch(90% 0.19 124 / 0.45);
   --field-trace: oklch(90% 0.19 124 / 0.75);
 }
 

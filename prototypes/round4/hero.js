@@ -89,7 +89,7 @@
     ctx.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 1;
     ctx.clearRect(0, 0, scene.w, scene.h);
-    if (!fn) return;
+    if (!fn || !scene.mark) return; // nothing to draw until the first layout
     // The pointer eases in and out, so bends grow and relax instead of popping.
     aim.on += ((scene.target ? 1 : 0) - aim.on) * 0.08;
     if (scene.target) { aim.x += (scene.target.x - aim.x) * 0.12; aim.y += (scene.target.y - aim.y) * 0.12; }

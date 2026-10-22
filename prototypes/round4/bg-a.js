@@ -1,7 +1,7 @@
 // Background A, lattice field: the 60° triangular lattice the monogram is drawn on.
 // Anchored to the mark: the outer triangle of the JT is exactly --field-pitch cells per side, so the lattice
 // runs through the mark's real corners. The diagonals drift sideways one cell every --field-drift seconds
-// (back into register each cycle); near the cursor, lines bend away and warm toward lime.
+// (back into register each cycle); near the cursor, lines bend away and, in the open area, warm toward lime.
 (window.JT_BG ||= {}).a = (ctx, s, env) => {
   const { w, h, t, mark: m, p } = s;
   const step = (575.65 * m.k) / env.num('--field-pitch');
@@ -39,11 +39,18 @@
   }
 
   ctx.lineWidth = 1;
-  if (p) {
+  ctx.strokeStyle = env.v('--field-line');
+  ctx.stroke();
+  // The warm glow lives in the open area only: it fades out as the cursor crosses into the reading column,
+  // so lime never sits under text (the bend still follows you there).
+  const warm = p ? p.a * Math.min(1, Math.max(0, (p.x - s.readX) / reach)) : 0;
+  if (warm > 0) {
     const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, reach);
     g.addColorStop(0, env.v('--field-hot'));
-    g.addColorStop(1, env.v('--field-line'));
+    g.addColorStop(1, 'transparent');
+    ctx.globalAlpha = warm;
     ctx.strokeStyle = g;
-  } else ctx.strokeStyle = env.v('--field-line');
-  ctx.stroke();
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
 };

@@ -1,8 +1,9 @@
 // Contrast check for every text/surface pair in Palette B, round 4 hero.
 // Text over the living background is checked against the brightest pixel any background can put under it:
 // every field ink composited over --color-bg at the strength it can reach under the reading column
-// (its own alpha × --field-read, the mask hero.js applies under the text). B's lime trace is not here: it only
-// ever runs along the monogram's edges, outside the reading column, and is skipped on phones where there is no figure.
+// (its own alpha × --field-read, the mask hero.js applies under the text). Two lime inks never reach the text and are
+// not paired: A's cursor glow (gated to the open area in bg-a.js) and B's trace (only on the monogram's own edges,
+// outside the reading column, and skipped on phones where there is no figure).
 // tools/sample.js checks the live canvas under every text block as well.
 // Parses the real [data-palette] block in styles.css, so it can never drift from the CSS.
 // Usage: node tools/contrast.mjs
@@ -43,10 +44,10 @@ const pairs = [
   ['redline', 'bg', 4.5, 'type-size readout, 60° label (peek)'],
   ['on-redline', 'redline', 4.5, 'peek labels, peek toggle on'],
   ['ink', 'field-line', 4.5, 'body text over a lattice line'],
-  ['ink', 'field-hot', 4.5, 'body text over the cursor glow (brightest A)'],
-  ['ink-muted', 'field-hot', 4.5, 'location over the cursor glow, or B\'s lit construction line'],
+  ['ink', 'field-lit', 4.5, 'body text over B\'s lit construction line'],
+  ['ink-muted', 'field-lit', 4.5, 'location over B\'s lit construction line'],
   ['accent', 'field-line', 4.5, 'tagline accent over a lattice line'],
-  ['accent', 'field-hot', 3, 'tagline accent (large text) over the cursor glow'],
+  ['accent', 'field-lit', 3, 'tagline accent (large text) over B\'s lit construction line'],
   ['accent', 'bg', 3, 'focus ring, monogram outline (non-text)'],
 ];
 
@@ -68,14 +69,16 @@ for (const [, id, body] of css.matchAll(/\[data-palette="([abc])"\]\s*\{([^}]*)\
   const mix = ink.map((v, i) => v * 0.055 + bg[i] * 0.945);
   tokens.impression = toLinear(mix[0] / 100, mix[1], mix[2]);
   // Field inks carry alpha: composite them over --color-bg in linear light, as the canvas does.
-  for (const f of ['field-line', 'field-hot']) {
-    const [l, c, h, a] = ok3(f, body);
+  // field-lit: B lights the construction line through a traced edge with --field-hot at half strength.
+  for (const [f, src, x] of [['field-line', 'field-line', 1], ['field-lit', 'field-hot', 0.5]]) {
+    const [l, c, h, a0] = ok3(src, body);
+    const a = a0 * x;
     const fg = toLinear(l / 100, c, h);
     const k = a * read;
     tokens[f] = fg.map((v, i) => v * k + tokens.bg[i] * (1 - k));
   }
   console.log(`\nPalette ${id.toUpperCase()}`);
-  console.log('  ' + ['bg', 'surface', 'accent', 'ink', 'field-line', 'field-hot'].map((t) => `${t} ${hex(tokens[t])}`).join('  '));
+  console.log('  ' + ['bg', 'surface', 'accent', 'ink', 'field-line', 'field-lit'].map((t) => `${t} ${hex(tokens[t])}`).join('  '));
   for (const [fg, bg, min, where] of pairs) {
     const r = ratio(tokens[fg], tokens[bg]);
     const ok = r >= min;
