@@ -27,3 +27,8 @@
 - **Guide lines grow along their length, never rotate in.** Jarod disliked rotating guides; linear draw (dashoffset / scale from an origin) reads as "being built."
 - **Spec labels never fade through their own background;** retract them into the box edge (half-faded red labels look muddy).
 - **When Jarod loves an on-demand effect, consider making it the first impression.** The peek reveal became the load intro in round 5.
+
+## 2026-10-24 — hero content diet
+
+- **Every round inherited the round-1 hero content lock** (name, role, location, tagline, bio, pills, 2 CTAs, socials). That lock, not the visual direction, made each hero feel crammed. Re-check content scope before re-briefing visuals: the hero only needs the wow + who he is; the homepage and header carry the rest.
+- **Design the header/nav system with the hero**, not after. Utility info (role, location, Let's talk, socials) can live in small footprints around the header (piergorelli.com pattern).
