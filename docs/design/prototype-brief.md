@@ -123,3 +123,19 @@ Check **390, 1440, 1920 and 2560** px (screenshot each: `shot-390.png`, `shot-14
 - Screenshots (settled state): background A at 390, 1440, 1920, 2560; B and C at 1440 and 2560 (`bg-a-1440.png` …). Intro mid-sequence frames at 1440 (`intro-1.png`, `intro-2.png`, `intro-3.png`). Peek at 2560.
 - Reduced motion, keyboard, skip works, no horizontal scroll, contrast computed (reuse `tools/contrast.mjs`, including text over the brightest background frame).
 - Report gzip size of each JS file.
+
+---
+
+# Round 5 brief (2026-10-24): the intro IS the peek
+
+**Feedback on round 4:** okay, but could be much better. The intro's guide lines **rotate in**; they should **grow linearly** (draw from a point along their length). The small set of horizontal + vertical guides is weaker than the **full "Peek backstage" layer**, which Jarod loves (redline boxes, token labels, cap/baseline, 12-col grid, hero-scale card, monogram construction with vertices, 60° and 575.65 × 502.31).
+
+## Build: `prototypes/round5/` (copy of round4)
+1. **The load intro = the peek layer animating in, then out.** Lines draw linearly (stroke-dashoffset / scaleX from an origin, never rotation). Choreograph it: grid columns draw → monogram construction lines draw → monogram outline traces + vertices pop → redline boxes and token labels appear on each text block → hero-scale card types in → hold briefly → **everything fades out except the JT monogram**.
+2. **The monogram is the resting state.** Remove the A/B/C background options and the canvas backgrounds. Prototype control offers two resting states to compare: (1) monogram as lime/blue **line drawing** (construction kept faint), (2) monogram as the faint **filled** mark with a very faint lattice. Plus Replay.
+3. Peek backstage button replays the same layer on demand (the same code path, so intro and peek are one system).
+4. Keep all round 4 rules: name visible at first paint, skippable, once per session, reduced motion = no intro, no JS = full content, no libraries, JS small. Keep total intro under ~3 s including the hold.
+5. Polish bar: this should feel like a precise, cinematic reveal, not a busy one. Easing and stagger matter more than quantity. Make the label/box appearance feel engineered (e.g. boxes draw their perimeter, labels slide out of their box edge).
+
+## Verify
+Intro frames at 1440 and 2560 (`intro-1..4.png`), both resting states at 1440/2560/390, peek at 2560. Reduced motion, keyboard, skip, no horizontal scroll, JS gzip sizes.
