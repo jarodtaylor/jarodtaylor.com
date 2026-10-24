@@ -21,3 +21,9 @@
 
 - **No boxed, centered content column on wide screens.** A max-width sheet with dead side gutters reads as dated (960px-grid era) to Jarod. Content and composition should span the browser width (aarronwalter.com as reference); constrain line length per text block, not the page.
 - **Fewer type sizes in the hero.** Too many competing steps = "too much on screen." Brief a strict hero type scale (about 3 steps) and a clear reading rhythm.
+
+## 2026-10-24 — round 4/5 motion feedback
+
+- **Guide lines grow along their length, never rotate in.** Jarod disliked rotating guides; linear draw (dashoffset / scale from an origin) reads as "being built."
+- **Spec labels never fade through their own background;** retract them into the box edge (half-faded red labels look muddy).
+- **When Jarod loves an on-demand effect, consider making it the first impression.** The peek reveal became the load intro in round 5.
