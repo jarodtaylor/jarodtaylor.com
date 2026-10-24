@@ -1,0 +1,10 @@
+/* The only file that knows a font name. Swap the pairing here; nothing else changes.
+   Provisional pairing: Funnel Display for the name (flat-cut terminals, squared bowls:
+   engineered, with a little mischief), Funnel Sans for reading and labels. */
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:wght@300..800&display=swap");
+
+:root {
+  --font-display: "Funnel Display", ui-sans-serif, system-ui, sans-serif;
+  --font-text: "Funnel Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-label: "Funnel Sans", ui-sans-serif, system-ui, sans-serif;
+}

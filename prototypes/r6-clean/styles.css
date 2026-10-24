@@ -1,0 +1,293 @@
+/* r6-clean: clean and sharp. One drenched field, one warm accent, the name doing the work.
+   Scene: a hiring manager on a laptop between meetings, or an engineer at night with dev tools
+   open. A deep, saturated pine ground holds in both lights and owns the whole first viewport. */
+
+:root {
+  /* Palette: pine, mist, apricot */
+  --pine: oklch(0.285 0.058 170);
+  --pine-deep: oklch(0.235 0.05 172);
+  --mist: oklch(0.965 0.014 165);
+  --mist-muted: oklch(0.84 0.035 168);
+  --apricot: oklch(0.81 0.125 52);
+
+  /* Roles */
+  --surface: var(--pine);
+  --surface-next: var(--pine-deep);
+  --text: var(--mist);
+  --text-muted: var(--mist-muted);
+  --accent: var(--apricot);
+  --on-accent: var(--pine-deep);
+  --rule: oklch(0.965 0.014 165 / 0.28);
+  --field-line: var(--mist);
+  --field-mark: var(--apricot);
+
+  /* Space */
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 4rem);
+  --gap: clamp(1.25rem, 0.8rem + 1.6vw, 3.5rem);
+  --header-pad: clamp(1rem, 0.6rem + 1.2vw, 2.25rem);
+
+  /* Type: three steps in the hero, plus labels */
+  --size-name: clamp(4.5rem, 0.6rem + 16.4vw, 32rem);
+  --size-tagline: clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem);
+  --size-text: clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem);
+  --size-label: clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem);
+  --leading-name: 0.84;
+  --leading-text: 1.5;
+  --tracking-name: -0.04em;
+  --tracking-tagline: -0.015em;
+  --weight-name: 560;
+  --weight-tagline: 420;
+  --weight-text: 380;
+  --weight-label: 500;
+  --measure: 36em;
+
+  /* Shape and motion */
+  --stroke: 1px;
+  --mark-size: clamp(1.75rem, 1.4rem + 0.6vw, 2.5rem);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 240ms;
+}
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+ul { padding: 0; list-style: none; }
+svg { display: block; }
+
+/* Base */
+html {
+  background: var(--surface);
+  color: var(--text);
+  color-scheme: dark;
+  scrollbar-color: var(--rule) var(--surface);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font-text);
+  font-size: var(--size-text);
+  font-weight: var(--weight-text);
+  line-height: var(--leading-text);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+a {
+  color: inherit;
+  text-decoration-thickness: var(--stroke);
+  text-underline-offset: 0.28em;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 1px;
+}
+
+.skip {
+  position: absolute;
+  inset-block-start: var(--header-pad);
+  inset-inline-start: var(--gutter);
+  z-index: 3;
+  padding: 0.5em 0.9em;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: var(--weight-label) var(--size-label) / 1 var(--font-label);
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--header-pad) - 1rem));
+}
+.skip:focus-visible { transform: none; }
+
+/* The field sits behind the first viewport only */
+.field {
+  position: absolute;
+  inset: 0 0 auto 0;
+  inline-size: 100%;
+  block-size: 100svh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Header: monogram, nav, Let's talk; the info strip rides along as its second line */
+.site {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 2;
+  padding: var(--header-pad) var(--gutter) 0;
+  font-family: var(--font-label);
+  font-size: var(--size-label);
+  font-weight: var(--weight-label);
+  line-height: 1.3;
+}
+.bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  column-gap: var(--gap);
+}
+.mark { inline-size: calc(var(--mark-size) * 1.146); }
+.mark svg { inline-size: 100%; block-size: auto; fill: var(--text); transition: fill var(--dur) var(--ease-out); }
+.mark:hover svg { fill: var(--accent); }
+
+.nav ul { display: flex; gap: clamp(1.25rem, 0.6rem + 1.6vw, 3rem); }
+.nav a,
+.social a,
+.cue {
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out);
+}
+.nav a:hover,
+.social a:hover,
+.cue:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+.talk {
+  display: inline-block;
+  padding: 0.7em 1.2em;
+  border: var(--stroke) solid var(--text);
+  text-decoration: none;
+  transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+.talk:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.info {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap);
+  margin-block-start: clamp(1.25rem, 0.8rem + 1vw, 2.25rem);
+  padding-block-start: 0.85em;
+  border-block-start: var(--stroke) solid var(--rule);
+  color: var(--text-muted);
+  font-weight: var(--weight-text);
+}
+.info-place { white-space: nowrap; }
+
+/* Hero */
+.hero {
+  position: relative;
+  min-block-size: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto auto auto;
+  padding: clamp(10rem, 6rem + 12vh, 16rem) var(--gutter) clamp(1.25rem, 0.8rem + 1.4vw, 2.5rem);
+}
+.name {
+  grid-row: 2;
+  font-family: var(--font-display);
+  font-size: var(--size-name);
+  font-weight: var(--weight-name);
+  line-height: var(--leading-name);
+  letter-spacing: var(--tracking-name);
+  text-wrap: balance;
+  margin-inline-start: -0.05em; /* optical: the J's left side bearing */
+  padding-block-end: 0.12em;
+}
+.details {
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+  row-gap: 1.25rem;
+  align-items: start;
+  margin-block-start: clamp(1rem, 0.5rem + 1vw, 2rem);
+  padding-block-start: clamp(1.25rem, 0.8rem + 1vw, 2.25rem);
+  border-block-start: var(--stroke) solid var(--rule);
+}
+.tagline {
+  grid-column: 1 / 6;
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--size-tagline);
+  font-weight: var(--weight-tagline);
+  line-height: 1.12;
+  letter-spacing: var(--tracking-tagline);
+  text-wrap: balance;
+}
+.bio {
+  grid-column: 6 / 11;
+  max-inline-size: var(--measure);
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+.social {
+  grid-column: 11 / 13;
+  justify-self: end;
+  display: grid;
+  gap: 0.35em;
+  font-family: var(--font-label);
+  font-size: var(--size-label);
+  font-weight: var(--weight-label);
+  line-height: 1.5;
+  text-align: end;
+}
+.cue {
+  grid-row: 4;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  margin-block-start: clamp(2rem, 1rem + 3vh, 4.5rem);
+  color: var(--text-muted);
+  font-family: var(--font-label);
+  font-size: var(--size-label);
+  font-weight: var(--weight-label);
+  text-decoration-line: none;
+}
+.cue svg { inline-size: 0.6em; block-size: 1em; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.cue:hover svg { animation: nudge 1.2s var(--ease-out) infinite; }
+@keyframes nudge { 50% { transform: translateY(0.2em); } }
+
+/* Below the fold: just enough to show the page continues */
+.next {
+  min-block-size: 60vh;
+  padding: clamp(4rem, 2rem + 6vw, 9rem) var(--gutter);
+  background: var(--surface-next);
+}
+.next h2 {
+  font-family: var(--font-display);
+  font-size: var(--size-tagline);
+  font-weight: var(--weight-tagline);
+  letter-spacing: var(--tracking-tagline);
+}
+
+/* Wide screens: the name keeps scaling, the details row keeps its columns, nothing pools */
+@media (min-width: 1800px) {
+  .tagline { grid-column: 1 / 5; }
+  .bio { grid-column: 6 / 10; }
+}
+
+/* Tablet: socials drop under the bio */
+@media (max-width: 1100px) {
+  .tagline { grid-column: 1 / 7; }
+  .bio { grid-column: 7 / 13; }
+  .social {
+    grid-column: 7 / 13;
+    justify-self: start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em 1.5em;
+    text-align: start;
+  }
+}
+
+/* Phones: nav becomes a compact second row; the name breaks onto two lines */
+@media (max-width: 720px) {
+  .bar {
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "mark talk" "nav nav";
+    row-gap: 1.1rem;
+  }
+  .mark { grid-area: mark; }
+  .talk { grid-area: talk; justify-self: end; }
+  .nav { grid-area: nav; }
+  .nav ul { justify-content: space-between; }
+  .info { flex-direction: column; gap: 0.3em; }
+  .hero { padding-block-start: 15.5rem; }
+  .name { font-size: clamp(4.5rem, 25.5vw, 9rem); line-height: 0.88; }
+  .tagline,
+  .bio,
+  .social { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
+}
