@@ -52,6 +52,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | 2026-10-13 | Drop `preview.jarodtaylor.com` and anything else unused when DNS moves | Not needed |
 | 2026-10-13 | Agents may commit freely on feature branches (pushes and PRs still go through Jarod) | Keep work checkpointed |
 | 2026-10-13 | `.codex/` and `.cursor/` stay local (gitignored) | Personal tool config |
+| 2026-10-24 | **Default brand: Backstage-lite** (tweaks from Jarod pending). Remix brands: Building blocks, Clean and sharp. **R1 fonts for the default only**; each Remix brand keeps its own type | Most on-message; type change makes Remix more impressive |
 | 2026-10-24 | **Round 6 = best results. All 3 sketches become brands:** one default + 2 Remix demos (Backstage-lite, Building blocks, Clean and sharp). Same markup, tokens only | Jarod likes all three; it's exactly the Remix proof |
 | 2026-10-24 | Fonts (provisional): **R1 = Archivo condensed + Schibsted Grotesk + Martian Mono** | Jarod's pick from the font study; revisit once seen in more contexts |
 | 2026-10-24 | Feedback on Assembly Manual: the hero is **crammed**; the root cause is the inherited content lock. Proposed next: slim hero content + header/nav system, font pairing research, then 3 sketches on the same slim content (Backstage-lite, Building blocks, clean type + palette + subtle animation) | "Not a résumé"; wow on landing is the goal |
