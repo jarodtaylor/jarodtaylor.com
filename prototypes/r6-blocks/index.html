@@ -50,7 +50,7 @@
 
   <p class="info">
     <span class="info-role">Engineering Leader | Design Engineering, Frontend Systems &amp; Developer Experience</span>
-    <span class="info-place">Frisco, TX</span>
+    <span class="info-place">Frisco, TX<span class="info-sep" aria-hidden="true">·</span> <span class="status"><span class="status-dot" aria-hidden="true"></span>Open to new roles</span></span>
   </p>
 
   <main id="main" class="hero">
@@ -67,7 +67,7 @@
     <!-- The build. Every edge sits on the mark's own 60° lattice: the faces are the two paths of
          jt-logo-icon.svg pushed back half a lattice edge (41.12) along the lattice's 300° axis, so the part is seen
          from above, the way it sits on a table. Drawing order is the hidden-line removal: side faces of both parts,
-         then both fronts. The viewBox is the assembled mark plus its depth; the parts start outside it.
+         then both fronts. Coplanar faces are one path each, so no seam draws an edge across a face. The viewBox is the assembled mark plus its depth; the parts start outside it.
          They slide together along the 60° rail they share (the J's right edge, the T's diagonal),
          three lattice edges of travel (246.72), and lock where the two tips meet. The rail runs the full page. -->
     <figure class="field">
@@ -103,10 +103,8 @@
           </g>
           <g class="part part-j">
             <path class="face face-d" d="M286.85 360.08L210.35 227.53L230.91 191.92L307.41 324.47Z" />
-            <path class="face face-h" d="M78.25 93.14L50.82 93.32L71.38 57.71L98.81 57.53Z" />
-            <path class="face face-d" d="M384.11 333.87L286.3 164.31L306.86 128.7L404.67 298.26Z" />
-            <path class="face face-h" d="M245.2 93.14L78.25 93.14L98.81 57.53L265.76 57.53Z" />
-            <path class="face face-d" d="M286.3 164.31L245.2 93.14L265.76 57.53L306.86 128.7Z" />
+            <path class="face face-h" d="M245.2 93.14L50.82 93.32L71.38 57.71L265.76 57.53Z" />
+            <path class="face face-d" d="M384.11 333.87L245.2 93.14L265.76 57.53L404.67 298.26Z" />
           </g>
           <g class="part part-t">
             <path class="face face-front" d="M230.41 73.72L256.93 73.84L395.59 313.98L436.64 242.87L339.07 73.85L534.09 74.1L575.65 0L0 0L40.31 73.45Z" />

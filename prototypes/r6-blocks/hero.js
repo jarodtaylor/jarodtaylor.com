@@ -5,6 +5,8 @@
   if (!root.classList.contains('intro')) return;
   try { sessionStorage.setItem('jt-r6-blocks', '1'); } catch {}
 
+  // The status dot breathes forever; only the build's own, finite animations count.
+  const build = () => document.getAnimations().filter((a) => a.effect.getComputedTiming().endTime !== Infinity);
   const skipEvents = ['keydown', 'pointerdown', 'wheel', 'touchstart'];
   const done = () => {
     root.classList.remove('intro', 'building');
@@ -12,13 +14,13 @@
   };
   // Skipping jumps every animation to its last frame, which is the assembled page.
   function skip() {
-    document.getAnimations().forEach((a) => a.finish());
+    build().forEach((a) => a.finish());
     done();
   }
   skipEvents.forEach((e) => addEventListener(e, skip, { capture: true, passive: true }));
 
   // When the last stroke lands the classes go and nothing changes on screen.
   addEventListener('load', () => {
-    Promise.all(document.getAnimations().map((a) => a.finished)).then(done, done);
+    Promise.all(build().map((a) => a.finished)).then(done, done);
   });
 })();

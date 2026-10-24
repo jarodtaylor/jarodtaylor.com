@@ -9,6 +9,7 @@
   --color-edge: #071869;
   --color-paper: #f2f5fb;
   --color-on-field-muted: #c2d1f3;
+  --color-on-field-quiet: #a9bcec;   /* 80% .075 266: the small print, still 5.2:1 */
   --color-faint: color-mix(in oklab, var(--color-paper) 22%, transparent);
   --color-paper-h: #c3d1ef;
   --color-paper-d: #93aade;
@@ -24,6 +25,8 @@
   --type-lead: clamp(1.5rem, 0.95rem + 1.5vw, 3.4rem);
   --type-body: clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem);
   --type-label: clamp(0.8125rem, 0.68rem + 0.22vw, 1.0625rem);
+  --type-info: clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem);
+  --weight-info: 400;
   --weight-display: 800;
   --weight-lead: 700;
   --weight-label: 600;
@@ -67,6 +70,8 @@
   --t-click: 1340ms;    --d-settle: 160ms;
   --t-text: 160ms;      --stagger-text: 80ms;   --d-text: 560ms;
   --d-rule: 900ms;
+  --d-pulse: 2400ms;
+  --status-dot: 0.5em;
   --travel-x: 123.36px; /* three lattice edges along the 60° rail */
   --travel-y: 213.67px;
   --pull-x: 10.28px;    /* hover: a quarter edge apart */
@@ -188,9 +193,32 @@ ul { padding: 0; list-style: none; }
   gap: var(--space-2xs) var(--space-m);
   margin-inline: var(--gutter);
   padding-block: var(--space-s);
-  color: var(--color-on-field-muted);
-  font: var(--weight-label) var(--type-label) / 1.35 var(--font-label);
+  color: var(--color-on-field-quiet);
+  font: var(--weight-info) var(--type-info) / 1.35 var(--font-label);
   letter-spacing: var(--tracking-label);
+}
+.info-place { margin-inline-start: auto; text-align: end; }
+
+/* Availability: a persimmon dot that breathes; under reduced motion it simply sits there. */
+.info-sep { margin-inline: 0.5em 0.25em; }
+.status { white-space: nowrap; }
+.status-dot {
+  position: relative;
+  display: inline-block;
+  inline-size: var(--status-dot); block-size: var(--status-dot);
+  margin-inline-end: 0.5em;
+  vertical-align: 0.08em;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .status-dot::after {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: var(--color-accent);
+    animation: pulse var(--d-pulse) var(--ease-out) infinite;
+  }
 }
 .info::before {
   content: "";
@@ -375,6 +403,7 @@ ul { padding: 0; list-style: none; }
 @keyframes retract { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1; } }
 @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes pulse { from { transform: scale(1); opacity: 0.7; } 70%, to { transform: scale(2.6); opacity: 0; } }
 @keyframes rule { from { transform: scaleX(0); } to { transform: none; } }
 @keyframes rise { from { opacity: 0; transform: translateY(0.6em); } to { opacity: 1; transform: none; } }
 @keyframes rail-rest { from { stroke-opacity: var(--rail-live); } to { stroke-opacity: var(--rail-rest); } }
