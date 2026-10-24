@@ -139,3 +139,24 @@ Check **390, 1440, 1920 and 2560** px (screenshot each: `shot-390.png`, `shot-14
 
 ## Verify
 Intro frames at 1440 and 2560 (`intro-1..4.png`), both resting states at 1440/2560/390, peek at 2560. Reduced motion, keyboard, skip, no horizontal scroll, JS gzip sizes.
+
+---
+
+# Round 6 brief (2026-10-24): slim hero + header, fonts, 3 sketches
+
+**Why:** every round inherited the round-1 content list and felt crammed. "This isn't a résumé." The homepage below and the header carry the details; the first viewport's job is **wow + who he is**. References: aarronwalter.com (name, rule, short bio, small socials, subtle animated field), piergorelli.com (info moved into small footprints around the header, full-screen use).
+
+## Shared content (identical in every sketch; same DOM order)
+1. **Header:** JT monogram (links home) · nav: **Work, Writing, About, Colophon** (links can be `#`) · **Let's talk** button (mailto:contact@jarodtaylor.com). Phones: nav collapses (menu button or a compact row; pick what fits the sketch, keyboard accessible).
+2. **Info strip** (small label type, near the header, Pier-style): `Engineering Leader | Design Engineering, Frontend Systems & Developer Experience` · `Frisco, TX`.
+3. **Hero:** name **Jarod Taylor** (display) · tagline **I build the work behind the work.** · bio (one or two sentences, use exactly): "Designer turned engineer turned engineering leader. For 18 years I've built design systems, frontend platforms, and developer experience, and led the teams that build them." · small social links: LinkedIn, GitHub, X, Email.
+4. **Not in the hero:** stats, 18+ badge, pills, parts boxes, "Read the writing" / "Let's talk" buttons (Let's talk lives in the header).
+5. A hint of the next section below the fold is fine (e.g. a scroll cue), nothing more.
+
+## Shared rules
+Full width (no boxed column); excellent at 390 / 1440 / 2560; WCAG AA; no headshot; no em-dashes; no libraries (canvas/WebGL/SVG/CSS hand-written), hero JS ≤ ~15 KB gzip; reduced motion and no-JS show full content; all values as custom properties. **Fonts are two custom properties, `--font-display` and `--font-text`** (plus optional `--font-label`), loaded from one `fonts.css` so the chosen pairing can be swapped in later without touching anything else.
+
+## The three sketches (`prototypes/r6-<name>/`)
+- **r6-backstage** (Backstage-lite): round 5's language (palette B dark slate + lime, monogram construction). Load intro = the peek layer drawing in linearly, then fading to the monogram line drawing at rest. Peek toggle stays, small, in the header.
+- **r6-blocks** (Building blocks): the Assembly Manual idea distilled: the isometric JT parts sliding together and clicking (reuse prototypes/assembly geometry), cobalt/paper world, but no step numbers, badges or parts box. Sophisticated, not toy-like.
+- **r6-clean** (Clean and sharp): no gimmick. Exceptional typography, a sharp committed palette (designer's choice, not Backstage's lime/slate, not cream), and one subtle, meaningful background animation (from his monogram's 60° lattice or another real source). The Aarron Walter bar, done our way.
