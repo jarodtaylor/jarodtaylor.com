@@ -48,6 +48,7 @@
   --font-text: "Atkinson Hyperlegible Next", "Helvetica Neue", sans-serif;
   --type-display: min(9.4vw, 17svh);
   --type-display-min: 4.25rem;
+  --type-step: calc(max(var(--type-display-min), var(--type-display)) * 0.56);   /* the display face, set at the name's x-height */
   --type-lead: clamp(1.625rem, 0.9rem + 1.45vw, 3.5rem);
   --type-body: clamp(1.0625rem, 0.72rem + 0.5vw, 1.5rem);
   --type-label: clamp(0.875rem, 0.66rem + 0.3vw, 1.1875rem);
@@ -163,18 +164,17 @@ ul { padding: 0; list-style: none; }
 
 /* The step numeral hangs beside the set title, the way a booklet numbers its steps. */
 .step-number {
-  align-self: start;
-  padding-block-start: 0.1em;
+  align-self: baseline;
   min-inline-size: 1.1em;
   font-family: var(--font-display);
-  font-size: var(--type-lead);
+  font-size: var(--type-step);
   font-weight: 800;
-  font-variation-settings: "wdth" 85, "opsz" 96;
-  line-height: 1;
-  margin-block-start: 0.05em;
+  font-variation-settings: "wdth" 88, "opsz" 96;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
 }
 
-.set-title { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-s) var(--space-m); }
+.set-title { align-self: baseline; display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-s) var(--space-m); }
 
 .name {
   font-family: var(--font-display);
@@ -227,7 +227,7 @@ ul { padding: 0; list-style: none; }
 
 .build {
   position: absolute; inset-block-start: 50%; inset-inline-start: 50%;
-  inline-size: min(94cqw, 96cqh * 767 / 1013);
+  inline-size: min(94cqw, 96cqh * 891 / 1013.4);
   block-size: auto;
   overflow: visible;
   translate: -50% -50%;
@@ -377,7 +377,7 @@ ul { padding: 0; list-style: none; }
   .set { padding-block: calc(var(--header-h) + var(--space-m)) 0; }
   .callout { margin-block: var(--space-l); }
   .field { block-size: auto; min-block-size: 100%; }
-  .build { inline-size: min(90cqw, 88cqh * 767 / 1013); }
+  .build { inline-size: min(90cqw, 88cqh * 891 / 1013.4); }
 
   .masthead { grid-template-columns: minmax(0, 1fr) var(--field-share); padding-inline: 0; }
   .masthead-mark { margin-inline-start: var(--gutter); }
