@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jarod Taylor</title>
+  <meta name="description" content="Jarod Taylor, engineering leader in design engineering, frontend systems and developer experience. Frisco, TX.">
+  <!-- Before first paint: decide whether step 1 is shown being built.
+       The intro plays once per session, never under reduced motion, never without JS:
+       with no .intro class the page is simply assembled. ?intro forces a replay. -->
+  <script>
+    (() => {
+      let seen = false;
+      try { seen = sessionStorage.getItem('jt-assembly') === '1'; } catch {}
+      if (new URLSearchParams(location.search).has('intro')) seen = false;
+      if (!seen && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        document.documentElement.classList.add('intro');
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="hero.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+    <!-- The JT monogram, exactly as drawn in src/assets/jt-logo-icon.svg. Two filled paths on a 60° lattice. -->
+    <symbol id="jt" viewBox="0 0 575.65 502.31">
+      <path d="M286.22 164.31h.08l-41.1-71.17H78.25l-27.43.18 41 70.99 112.27-.08 97.9 169.64-15.14 26.21-76.5-132.55-41.06 71.09 117.56 203.69 97.26-168.44z" />
+      <path d="m230.41 73.72 26.52.12 138.66 240.14 41.05-71.11-97.57-169.02 195.02.25L575.65 0H0l40.31 73.45z" />
+    </symbol>
+  </svg>
+
+  <header class="masthead">
+    <a class="masthead-mark" href="#main" aria-label="Jarod Taylor, home">
+      <svg viewBox="0 0 575.65 502.31" aria-hidden="true"><use href="#jt" /></svg>
+    </a>
+    <ul class="elsewhere" aria-label="Elsewhere">
+      <li><a href="https://linkedin.com/in/jarodtaylor">LinkedIn</a></li>
+      <li><a href="https://github.com/jarodtaylor">GitHub</a></li>
+      <li><a href="https://x.com/jarodtaylor">X</a></li>
+      <li><a href="mailto:contact@jarodtaylor.com">Email</a></li>
+    </ul>
+  </header>
+
+  <main id="main" class="step">
+    <!-- Step 1 of the booklet: the set title, the build, the parts it took, and the next step. -->
+    <div class="set">
+      <span class="step-number" aria-hidden="true">1</span>
+      <div class="set-title">
+        <h1 class="name">Jarod Taylor</h1>
+        <p class="badge"><span class="badge-age">18+</span> <span class="badge-unit">years</span></p>
+      </div>
+      <p class="ident">
+        <span class="role">Engineering Leader | Design Engineering, Frontend Systems &amp; Developer Experience</span>
+        <span class="place">Frisco, TX</span>
+      </p>
+    </div>
+
+    <!-- The build. Every edge sits on the mark's own 60° lattice: the faces are the two paths of
+         jt-logo-icon.svg pushed back half a lattice edge (41.12) along the lattice's 120° axis.
+         Drawing order is the hidden-line removal: side faces of both parts first, then both fronts.
+         The parts slide together along the 60° rail they share (the J's right edge, the T's diagonal),
+         three lattice edges of travel (246.72), and lock where the two tips meet. -->
+    <figure class="field">
+      <svg class="build" viewBox="-60 -40 700 600" role="img" aria-labelledby="build-title">
+        <title id="build-title">The JT monogram, built from two parts that lock together</title>
+        <defs>
+          <pattern id="lattice" width="41.12" height="71.22" patternUnits="userSpaceOnUse">
+            <circle cx="0" cy="0" r="2.4" /><circle cx="41.12" cy="0" r="2.4" />
+            <circle cx="20.56" cy="35.61" r="2.4" />
+            <circle cx="0" cy="71.22" r="2.4" /><circle cx="41.12" cy="71.22" r="2.4" />
+          </pattern>
+          <mask id="rail-reveal" maskUnits="userSpaceOnUse" x="-3000" y="-3000" width="6000" height="6000">
+            <path class="rail-draw" pathLength="1" d="M339.85 237.32L-560.15 -1321.52" />
+            <path class="rail-draw" pathLength="1" d="M339.85 237.32L1239.85 1796.17" />
+          </mask>
+        </defs>
+
+        <rect class="lattice" x="-3000" y="-3000" width="6000" height="6000" fill="url(#lattice)" />
+        <path class="rail" mask="url(#rail-reveal)" d="M-560.15 -1321.52L1239.85 1796.17" />
+
+        <g class="assembly">
+          <g class="part part-t">
+            <g class="sides">
+              <path class="face face-h" d="M339.07 73.85L534.09 74.1L513.53 109.71L318.51 109.46Z" />
+              <path class="face face-h" d="M230.41 73.72L256.93 73.84L236.37 109.45L209.85 109.33Z" />
+              <path class="face face-h" d="M40.31 73.45L230.41 73.72L209.85 109.33L19.75 109.06Z" />
+              <path class="face face-d" d="M256.93 73.84L395.59 313.98L375.03 349.59L236.37 109.45Z" />
+              <path class="face face-d" d="M0 0L40.31 73.45L19.75 109.06L-20.56 35.61Z" />
+            </g>
+          </g>
+          <g class="part part-j">
+            <g class="sides">
+              <path class="face face-h" d="M91.82 164.31L204.09 164.23L183.53 199.84L71.26 199.92Z" />
+              <path class="face face-d" d="M50.82 93.32L91.82 164.31L71.26 199.92L30.26 128.93Z" />
+              <path class="face face-d" d="M204.09 164.23L301.99 333.87L281.43 369.48L183.53 199.84Z" />
+              <path class="face face-d" d="M169.29 298.62L286.85 502.31L266.29 537.92L148.73 334.23Z" />
+            </g>
+          </g>
+          <g class="part part-t">
+            <path class="face face-front" d="M230.41 73.72L256.93 73.84L395.59 313.98L436.64 242.87L339.07 73.85L534.09 74.1L575.65 0L0 0L40.31 73.45Z" />
+          </g>
+          <g class="part part-j">
+            <path class="face face-front" d="M286.3 164.31L245.2 93.14L78.25 93.14L50.82 93.32L91.82 164.31L204.09 164.23L301.99 333.87L286.85 360.08L210.35 227.53L169.29 298.62L286.85 502.31L384.11 333.87Z" />
+          </g>
+        </g>
+
+        <!-- Assembly arrows (intro only): each starts at its part and points along the rail to the joint. -->
+        <g class="arrow arrow-t">
+          <path class="arrow-shaft" pathLength="1" d="M269.85 116.08L316.85 197.49" />
+          <path class="arrow-head" d="M329.85 220L303.59 200.52L326.11 187.52Z" />
+        </g>
+        <g class="arrow arrow-j">
+          <path class="arrow-shaft" pathLength="1" d="M412.35 362.9L365.35 281.49" />
+          <path class="arrow-head" d="M352.35 258.97L356.09 291.45L378.61 278.45Z" />
+        </g>
+
+        <!-- The click: three strokes on the lattice's dual axes, from the joint outward. -->
+        <g class="click">
+          <path pathLength="1" d="M415.83 308.93L447.01 290.93" />
+          <path pathLength="1" d="M415.83 338.93L447.01 356.93" />
+          <path pathLength="1" d="M389.85 353.93L389.85 389.93" />
+        </g>
+      </svg>
+      <button class="skip-intro" type="button">Skip intro</button>
+    </figure>
+
+    <!-- The parts callout: the same module every step of the booklet repeats. -->
+    <section class="callout" aria-label="About">
+     <div class="callout-body">
+      <div class="callout-copy">
+        <p class="tagline">I build the work <em>behind the work.</em></p>
+        <p class="bio">Designer turned engineer turned engineering leader. For 18 years I've built design systems, frontend platforms, and developer experience that make whole engineering orgs faster, and led the teams that build them.</p>
+      </div>
+      <ul class="parts" aria-label="Parts">
+        <li class="part-item">
+          <svg class="tile" viewBox="-30 -8 120 122" aria-hidden="true">
+            <path class="face face-d" d="M41.12 71.22L0 0L-20.56 35.61L20.56 106.83Z" />
+            <path class="face face-front" d="M0 0L82.24 0L41.12 71.22Z" />
+          </svg>
+          <span class="part-count">1x</span>
+          <span class="part-name">design systems</span>
+        </li>
+        <li class="part-item">
+          <svg class="tile" viewBox="-30 -8 162 122" aria-hidden="true">
+            <path class="face face-d" d="M41.12 71.22L0 0L-20.56 35.61L20.56 106.83Z" />
+            <path class="face face-h" d="M123.36 71.22L41.12 71.22L20.56 106.83L102.8 106.83Z" />
+            <path class="face face-front" d="M0 0L82.24 0L123.36 71.22L41.12 71.22Z" />
+          </svg>
+          <span class="part-count">1x</span>
+          <span class="part-name">frontend platforms</span>
+        </li>
+        <li class="part-item">
+          <svg class="tile" viewBox="-30 -8 204 194" aria-hidden="true">
+            <path class="face face-d" d="M41.12 142.44L0 71.22L-20.56 106.83L20.56 178.05Z" />
+            <path class="face face-h" d="M123.36 142.44L41.12 142.44L20.56 178.05L102.8 178.05Z" />
+            <path class="face face-front" d="M41.12 0L123.36 0L164.48 71.22L123.36 142.44L41.12 142.44L0 71.22Z" />
+          </svg>
+          <span class="part-count">1x</span>
+          <span class="part-name">developer experience</span>
+        </li>
+      </ul>
+     </div>
+    </section>
+
+    <nav class="next" aria-label="Next step">
+      <a class="btn btn-primary" href="/writing">Read the writing
+        <svg class="btn-arrow" viewBox="0 0 40 16" aria-hidden="true">
+          <path class="btn-arrow-shaft" pathLength="1" d="M1 8H31" />
+          <path class="btn-arrow-head" d="M39 8L29 2.2V13.8Z" />
+        </svg>
+      </a>
+      <a class="btn btn-secondary" href="mailto:contact@jarodtaylor.com">Let's talk</a>
+    </nav>
+  </main>
+</body>
+</html>

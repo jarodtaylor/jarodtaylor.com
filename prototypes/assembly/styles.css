@@ -1,0 +1,424 @@
+/* Assembly Manual: step 1 of Jarod's instruction booklet.
+   Every value is a custom property so the page ports to the token pipeline unchanged. */
+
+:root {
+  /* Color: cool white page, ink line art, a cobalt field; yellow and red are part colors
+     and arrive only at the click. */
+  --color-paper: #f4f7fb;
+  --color-ink: #0e1630;
+  --color-ink-muted: #46526b;
+  --color-cobalt: #2347d6;
+  --color-cobalt-deep: #1b37a8;
+  --color-cobalt-tint: #dfe6fa;
+  --color-on-cobalt: #ffffff;
+  --color-on-cobalt-muted: #d3dcfb;
+  --color-yellow: #ffc21a;
+  --color-yellow-h: #e3a200;
+  --color-yellow-d: #c58800;
+  --color-red: #e2231a;
+  --color-red-h: #b91a13;
+  --color-red-d: #93140e;
+  --color-face-line: #f8faff;   /* a part before it is colored: a line drawing on paper */
+  --color-face-line-h: #c9d3f0;
+  --color-face-line-d: #a9b8e6;
+  --color-focus: var(--color-cobalt);
+  --color-focus-on-cobalt: var(--color-yellow);
+
+  /* Type: three steps and one label. */
+  --font-display: "Bricolage Grotesque", "Arial Narrow", sans-serif;
+  --font-text: "Atkinson Hyperlegible Next", "Helvetica Neue", sans-serif;
+  --type-display: min(9.4vw, 17svh);
+  --type-display-min: 4.25rem;
+  --type-lead: clamp(1.625rem, 0.9rem + 1.45vw, 3.5rem);
+  --type-body: clamp(1.0625rem, 0.72rem + 0.5vw, 1.5rem);
+  --type-label: clamp(0.875rem, 0.66rem + 0.3vw, 1.1875rem);
+  --leading-display: 0.9;
+  --leading-lead: 1.05;
+  --leading-body: 1.5;
+  --tracking-display: -0.03em;
+  --measure-body: 58ch;
+
+  /* Line: one stroke for every drawn edge, arrows a step heavier. */
+  --line: clamp(1.25px, 0.08vw + 0.6px, 2.6px);
+  --line-arrow: calc(var(--line) * 2);
+  --rail-dash: 7 6;
+
+  /* Space and shape. */
+  --gutter: clamp(1.25rem, 4.2vw, 8.5rem);
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-s: clamp(0.75rem, 0.5rem + 0.4vw, 1.25rem);
+  --space-m: clamp(1.25rem, 0.8rem + 0.8vw, 2.25rem);
+  --space-l: clamp(1.75rem, 1rem + 1.6vw, 3.75rem);
+  --header-h: clamp(3.75rem, 2.8rem + 1.6vw, 6rem);
+  --radius-box: clamp(0.75rem, 0.5rem + 0.5vw, 1.375rem);
+  --radius-button: 999px;
+  --field-share: 40%;
+  --tile-scale: clamp(0.22px, 0.1px + 0.012vw, 0.42px);
+
+  /* Motion: linear travel, one click, a small settle. */
+  --ease-draw: cubic-bezier(0.22, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-rail: 150ms;        --d-rail: 650ms;
+  --t-arrow: 420ms;       --d-arrow: 300ms;
+  --t-travel-t: 720ms;    --t-travel-j: 860ms;
+  --t-click: 1400ms;      --d-settle: 140ms;
+  --t-parts: 1520ms;      --stagger-parts: 90ms;   --d-parts: 420ms;
+  --t-cta: 1880ms;        --d-cta: 360ms;
+  --travel-x: 123.36px;   /* three lattice edges along the 60° rail */
+  --travel-y: 213.67px;
+}
+
+/* ---------- base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--color-ink) var(--color-paper);
+}
+
+body { margin: 0; min-height: 100svh; }
+
+::selection { background: var(--color-yellow); color: var(--color-ink); }
+
+a { color: inherit; text-underline-offset: 0.2em; text-decoration-thickness: var(--line); }
+
+:focus-visible { outline: calc(var(--line) * 1.5 + 1px) solid var(--color-focus); outline-offset: 3px; border-radius: 4px; }
+
+p, h1, ul, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+.defs { position: absolute; }
+
+.skip-link {
+  position: absolute; left: var(--gutter); top: var(--space-xs); z-index: 10;
+  padding: var(--space-xs) var(--space-s);
+  background: var(--color-ink); color: var(--color-paper);
+  font-size: var(--type-label); font-weight: 700;
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: none; }
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  position: absolute; inset: 0 0 auto 0; z-index: 2;
+  display: grid; grid-template-columns: 1fr auto; align-items: center;
+  height: var(--header-h);
+  padding-inline: var(--gutter);
+}
+
+.masthead-mark { display: block; inline-size: calc(var(--header-h) * 0.5); line-height: 0; color: var(--color-ink); }
+.masthead-mark svg { inline-size: 100%; block-size: auto; fill: currentColor; }
+
+.elsewhere { display: flex; gap: var(--space-m); font-size: var(--type-label); font-weight: 700; }
+.elsewhere a { text-decoration: none; padding-block: var(--space-xs); }
+.elsewhere a:hover { text-decoration: underline; }
+
+/* ---------- the step ---------- */
+
+.step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "set" "field" "callout" "next";
+  padding-block-start: var(--header-h);
+}
+
+.set, .callout, .next { margin-inline: var(--gutter); }
+
+.set {
+  grid-area: set;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--space-s);
+  row-gap: var(--space-s);
+  padding-block: var(--space-m) var(--space-l);
+}
+
+/* The step numeral hangs beside the set title, the way a booklet numbers its steps. */
+.step-number {
+  display: grid; place-items: center;
+  inline-size: 1.5em; block-size: 1.5em;
+  border: var(--line) solid var(--color-ink);
+  border-radius: calc(var(--radius-box) * 0.75);
+  font-family: var(--font-display);
+  font-size: var(--type-lead);
+  font-weight: 800;
+  font-variation-settings: "wdth" 85, "opsz" 48;
+  line-height: 1;
+  margin-block-start: 0.12em;
+}
+
+.set-title { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-s) var(--space-m); }
+
+.name {
+  font-family: var(--font-display);
+  font-size: max(var(--type-display-min), var(--type-display));
+  font-weight: 800;
+  font-variation-settings: "wdth" 88, "opsz" 96;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+/* The set-box badge: years in the hobby, printed the way a box prints its age. */
+.badge {
+  display: grid; justify-items: center;
+  padding: 0.3em 0.45em 0.35em;
+  border: var(--line) solid var(--color-ink);
+  border-radius: calc(var(--radius-box) * 0.6);
+  line-height: 1;
+  margin-block-start: 0.35em;
+}
+.badge-age {
+  font-family: var(--font-display);
+  font-size: var(--type-lead);
+  font-weight: 800;
+  font-variation-settings: "wdth" 85, "opsz" 48;
+  font-variant-numeric: tabular-nums;
+}
+.badge-unit { font-size: var(--type-label); font-weight: 700; letter-spacing: 0.06em; }
+
+.ident {
+  grid-column: 2;
+  display: grid; gap: var(--space-2xs);
+  max-inline-size: 46ch;
+  font-size: var(--type-label);
+  font-weight: 700;
+  line-height: 1.35;
+}
+.place { color: var(--color-ink-muted); font-weight: 600; }
+
+/* ---------- the field: the build ---------- */
+
+.field {
+  grid-area: field;
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+  block-size: clamp(20rem, 62vw + 6rem, 34rem);
+  background: var(--color-cobalt);
+  color: var(--color-on-cobalt);
+}
+
+.build {
+  position: absolute; inset-block-start: 50%; inset-inline-start: 50%;
+  inline-size: min(84cqw, 80cqh * 7 / 6);
+  block-size: auto;
+  overflow: visible;
+  translate: -50% -52%;
+}
+
+.build * { vector-effect: non-scaling-stroke; }
+
+#lattice circle { fill: var(--color-on-cobalt); opacity: 0.16; }
+
+.rail {
+  fill: none;
+  stroke: var(--color-on-cobalt);
+  stroke-opacity: 0.55;
+  stroke-width: var(--line);
+  stroke-dasharray: var(--rail-dash);
+}
+.rail-draw { fill: none; stroke: #fff; stroke-width: 40; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+.face { stroke: var(--color-ink); stroke-width: var(--line); stroke-linejoin: round; }
+.part-t { --front: var(--color-yellow); --side-h: var(--color-yellow-h); --side-d: var(--color-yellow-d); }
+.part-j { --front: var(--color-red); --side-h: var(--color-red-h); --side-d: var(--color-red-d); }
+.face-front { fill: var(--front); }
+.face-h { fill: var(--side-h); }
+.face-d { fill: var(--side-d); }
+
+.assembly { transform-box: view-box; transform-origin: 389.85px 323.93px; }
+
+.arrow, .click { display: none; }
+.arrow-shaft { fill: none; stroke: var(--color-on-cobalt); stroke-width: var(--line-arrow); stroke-dasharray: 1; }
+.arrow-head { fill: var(--color-on-cobalt); }
+.click path { fill: none; stroke: var(--color-yellow); stroke-width: var(--line-arrow); stroke-linecap: round; stroke-dasharray: 1; }
+
+.skip-intro { display: none; }
+
+/* ---------- the parts callout ---------- */
+
+.callout {
+  grid-area: callout;
+  container-type: inline-size;
+  margin-block: var(--space-l) var(--space-m);
+  padding: var(--space-m);
+  background: var(--color-cobalt-tint);
+  border-radius: var(--radius-box);
+  max-inline-size: 64rem;
+}
+.callout-body { display: grid; gap: var(--space-m); }
+
+.tagline {
+  font-family: var(--font-display);
+  font-size: var(--type-lead);
+  font-weight: 700;
+  font-variation-settings: "wdth" 85, "opsz" 48;
+  line-height: var(--leading-lead);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.tagline em { font-style: normal; color: var(--color-cobalt-deep); }
+
+.bio {
+  margin-block-start: var(--space-s);
+  max-inline-size: var(--measure-body);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  text-wrap: pretty;
+}
+
+.parts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-s);
+  align-items: end;
+  padding-block-start: var(--space-s);
+  border-block-start: var(--line) dashed color-mix(in oklab, var(--color-ink) 45%, transparent);
+}
+.part-item { display: grid; justify-items: start; gap: var(--space-2xs); font-size: var(--type-label); line-height: 1.2; }
+.part-count { font-weight: 700; font-variant-numeric: tabular-nums; }
+.part-name { font-weight: 600; }
+
+.tile { display: block; block-size: auto; margin-block-end: var(--space-xs); }
+.part-item:nth-child(1) .tile { inline-size: calc(120 * var(--tile-scale)); }
+.part-item:nth-child(2) .tile { inline-size: calc(162 * var(--tile-scale)); }
+.part-item:nth-child(3) .tile { inline-size: calc(204 * var(--tile-scale)); }
+.tile * { vector-effect: non-scaling-stroke; }
+.tile .face-front { fill: var(--color-paper); }
+.tile .face-h { fill: var(--color-face-line-h); }
+.tile .face-d { fill: var(--color-face-line-d); }
+
+/* Wide callout: copy left, the parts column right, as a booklet lays out its parts box. */
+@container (min-width: 40rem) {
+  .callout-body { grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-l); align-items: start; }
+  .parts {
+    grid-template-columns: auto;
+    align-items: start;
+    gap: var(--space-s);
+    padding-block-start: 0;
+    padding-inline-start: var(--space-l);
+    border-block-start: 0;
+    border-inline-start: var(--line) dashed color-mix(in oklab, var(--color-ink) 45%, transparent);
+  }
+  .part-item { grid-template-columns: calc(204 * var(--tile-scale)) auto; column-gap: var(--space-s); align-items: center; }
+  .part-item .tile { grid-row: span 2; margin: 0; }
+  .part-count { align-self: end; }
+  .part-name { align-self: start; }
+}
+
+/* ---------- next step ---------- */
+
+.next {
+  grid-area: next;
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-s) var(--space-m);
+  padding-block-end: var(--space-l);
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  min-block-size: 3em;
+  padding: 0.7em 1.35em;
+  border: var(--line) solid var(--color-ink);
+  border-radius: var(--radius-button);
+  font-size: var(--type-body);
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+.btn-primary { background: var(--color-ink); color: var(--color-paper); }
+.btn-primary:hover { background: var(--color-cobalt-deep); border-color: var(--color-cobalt-deep); }
+.btn-secondary { color: var(--color-ink); }
+.btn-secondary:hover { background: var(--color-cobalt-tint); }
+
+.btn-arrow { inline-size: 2em; block-size: auto; overflow: visible; }
+.btn-arrow-shaft { fill: none; stroke: currentColor; stroke-width: 2.2; stroke-dasharray: 1; }
+.btn-arrow-head { fill: currentColor; }
+.btn-primary:hover .btn-arrow { translate: 0.2em 0; }
+.btn-arrow { transition: translate 200ms var(--ease-out); }
+
+/* ---------- wide: the step page splits, the field runs full height to the browser edge ---------- */
+
+@media (min-width: 56rem) {
+  .step {
+    grid-template-columns: minmax(0, 1fr) var(--field-share);
+    grid-template-rows: 1fr auto auto auto 1fr;
+    grid-template-areas: ". field" "set field" "callout field" "next field" ". field";
+    min-block-size: 100svh;
+    padding-block-start: 0;
+  }
+  .set { padding-block: calc(var(--header-h) + var(--space-m)) 0; }
+  .callout { margin-block: var(--space-l); }
+  .field { block-size: auto; min-block-size: 100%; }
+  .build { inline-size: min(82cqw, 66cqh * 7 / 6); }
+
+  .masthead { grid-template-columns: minmax(0, 1fr) var(--field-share); padding-inline: 0; }
+  .masthead-mark { margin-inline-start: var(--gutter); }
+  .elsewhere { justify-content: flex-end; padding-inline-end: var(--gutter); color: var(--color-on-cobalt); }
+  .elsewhere :focus-visible { outline-color: var(--color-focus-on-cobalt); }
+}
+
+.field :focus-visible { outline-color: var(--color-focus-on-cobalt); }
+
+/* ---------- the intro: step 1 being built (only with JS, only once, never under reduced motion) ---------- */
+
+.intro .skip-intro {
+  display: block;
+  position: absolute; inset: auto var(--gutter) var(--space-m) auto;
+  padding: var(--space-xs) var(--space-s);
+  border: var(--line) solid var(--color-on-cobalt-muted);
+  border-radius: var(--radius-button);
+  background: transparent;
+  color: var(--color-on-cobalt);
+  font: 700 var(--type-label) / 1 var(--font-text);
+  cursor: pointer;
+}
+
+.intro .rail-draw { animation: draw var(--d-rail) var(--ease-draw) var(--t-rail) both; }
+
+.intro .arrow { display: inline; animation: fade-out 200ms linear calc(var(--t-travel-t) + 180ms) both; }
+.intro .arrow-shaft { animation: draw var(--d-arrow) var(--ease-draw) var(--t-arrow) both, retract 260ms linear var(--t-travel-t) forwards; }
+.intro .arrow-head { animation: appear 120ms linear calc(var(--t-arrow) + var(--d-arrow) - 60ms) both; }
+
+/* Travel: straight along the rail at constant speed, both parts arriving on the same frame. */
+.intro .part-t { animation: travel-t calc(var(--t-click) - var(--t-travel-t)) linear var(--t-travel-t) both; }
+.intro .part-j { animation: travel-j calc(var(--t-click) - var(--t-travel-j)) linear var(--t-travel-j) both; }
+
+/* Until the click the parts are line drawings; the click is the one moment of full color. */
+.intro .build .face-front { animation: color-front var(--t-click) step-end both; }
+.intro .build .face-h { animation: color-h var(--t-click) step-end both; }
+.intro .build .face-d { animation: color-d var(--t-click) step-end both; }
+.intro .assembly { animation: settle var(--d-settle) var(--ease-out) var(--t-click) both; }
+
+.intro .click { display: inline; animation: fade-out 260ms linear calc(var(--t-click) + 220ms) both; }
+.intro .click path { animation: draw 180ms var(--ease-out) var(--t-click) both; }
+
+/* Parts-box pieces drop into the callout on their step. */
+.intro .part-item { animation: drop var(--d-parts) var(--ease-out) both; }
+.intro .part-item:nth-child(1) { animation-delay: var(--t-parts); }
+.intro .part-item:nth-child(2) { animation-delay: calc(var(--t-parts) + var(--stagger-parts)); }
+.intro .part-item:nth-child(3) { animation-delay: calc(var(--t-parts) + var(--stagger-parts) * 2); }
+
+.intro .btn-arrow-shaft { animation: draw var(--d-cta) var(--ease-draw) var(--t-cta) both; }
+.intro .btn-arrow-head { animation: appear 100ms linear calc(var(--t-cta) + var(--d-cta) - 80ms) both; }
+
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes retract { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1; } }
+@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes travel-t { from { transform: translate(calc(var(--travel-x) * -1), calc(var(--travel-y) * -1)); } to { transform: none; } }
+@keyframes travel-j { from { transform: translate(var(--travel-x), var(--travel-y)); } to { transform: none; } }
+@keyframes color-front { from { fill: var(--color-face-line); } to { fill: var(--front); } }
+@keyframes color-h { from { fill: var(--color-face-line-h); } to { fill: var(--side-h); } }
+@keyframes color-d { from { fill: var(--color-face-line-d); } to { fill: var(--side-d); } }
+@keyframes settle { 0% { transform: scale(1); } 35% { transform: scale(1.018); } 100% { transform: scale(1); } }
+@keyframes drop { from { opacity: 0; transform: translateY(-0.9em); } to { opacity: 1; transform: none; } }
