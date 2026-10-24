@@ -68,8 +68,8 @@
   --peek-card-at: 1.02s;     /* 5. the hero-scale card types in, row by row */
   --peek-card-step: 0.055s;
   --peek-card-dur: 0.3s;
-  --peek-settled: 1.78s;     /* everything above has landed */
-  --peek-hold: 0.62s;        /* intro only: the layer holds, fully drawn */
+  --peek-settled: 1.85s;     /* everything above has landed */
+  --peek-hold: 0.6s;         /* intro only: the layer holds, fully drawn */
   --peek-leave: 0.5s;        /* the layer fades; the monogram eases into its resting state */
 }
 

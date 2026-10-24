@@ -71,7 +71,8 @@
   };
   const setPeek = (on) => {
     toggle.setAttribute('aria-pressed', String(on));
-    if (on) show(); else hide();
+    // Pressed while the intro is still leaving: this is Peek now, not the intro, so drop the intro's text gating.
+    if (on) { listen(false); seen(); root.classList.remove('intro'); show(); } else hide();
   };
   toggle.addEventListener('click', () => setPeek(toggle.getAttribute('aria-pressed') !== 'true'));
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && toggle.getAttribute('aria-pressed') === 'true') setPeek(false); });
