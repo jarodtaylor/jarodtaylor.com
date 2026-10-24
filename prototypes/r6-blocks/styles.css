@@ -1,0 +1,387 @@
+/* Building blocks, distilled: one cobalt field, the name, and the mark built from its two parts.
+   Every value is a custom property so the page ports to the token pipeline unchanged. Fonts come from fonts.css. */
+
+:root {
+  /* Color. A deep cobalt field owns the whole viewport; the mark is paper and persimmon, and persimmon is the one
+     saturated note, arriving only at the click. Sources (OKLCH): field 40% .20 266, edge 27% .14 266, paper 97% .008 266,
+     muted 86% .05 266, persimmon 68% .19 38 (sides 60% .18 36 / 51% .16 34), persimmon text 78% .13 42. */
+  --color-field: #1633b1;
+  --color-edge: #071869;
+  --color-paper: #f2f5fb;
+  --color-on-field-muted: #c2d1f3;
+  --color-faint: color-mix(in oklab, var(--color-paper) 22%, transparent);
+  --color-paper-h: #c3d1ef;
+  --color-paper-d: #93aade;
+  --color-accent: #f56333;
+  --color-accent-h: #d54c25;
+  --color-accent-d: #af371c;
+  --color-accent-text: #fd9a73;
+  --color-focus: var(--color-accent-text);
+  --color-focus-on-paper: var(--color-field);
+
+  /* Type: three steps and one label. The name scales with the viewport, capped by its height on short screens. */
+  --type-display: max(3.5rem, min(9.6vw, 19svh));
+  --type-lead: clamp(1.5rem, 0.95rem + 1.5vw, 3.4rem);
+  --type-body: clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem);
+  --type-label: clamp(0.8125rem, 0.68rem + 0.22vw, 1.0625rem);
+  --weight-display: 800;
+  --weight-lead: 700;
+  --weight-label: 600;
+  --leading-display: 0.88;
+  --leading-lead: 1.08;
+  --leading-body: 1.5;
+  --tracking-display: -0.035em;
+  --tracking-lead: -0.015em;
+  --tracking-label: 0.02em;
+  --measure-body: 46ch;
+
+  /* Line. */
+  --line: clamp(1px, 0.06vw + 0.5px, 2px);
+  --line-arrow: calc(var(--line) * 2);
+  --rail-dash: 6 7;
+  --rail-rest: 0.34;
+  --rail-live: 0.8;
+  --lattice-dot: 0.2;
+
+  /* Space and shape. */
+  --gutter: clamp(1.25rem, 4vw, 7rem);
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-s: clamp(0.75rem, 0.55rem + 0.35vw, 1.25rem);
+  --space-m: clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem);
+  --space-l: clamp(2rem, 1.2rem + 2vw, 4.5rem);
+  --header-h: clamp(3.75rem, 3rem + 1.4vw, 5.5rem);
+  --mark-header: clamp(1.625rem, 1.3rem + 0.6vw, 2.5rem);
+  --radius: 0.375rem;
+  --mark-aspect: 1.1045;   /* the build viewBox, 616.21 / 557.92 */
+  --mark-share: 54vw;      /* the mark's reach on wide screens: grand, never a column */
+  --shadow-menu: 0 0.75rem 2rem -0.5rem color-mix(in oklab, var(--color-edge) 60%, transparent);
+
+  /* Motion: linear travel, one click, a small settle. */
+  --ease-draw: cubic-bezier(0.22, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  --t-rail: 100ms;      --d-rail: 760ms;
+  --t-arrow: 380ms;     --d-arrow: 300ms;
+  --t-travel-t: 640ms;  --t-travel-j: 760ms;
+  --t-click: 1340ms;    --d-settle: 160ms;
+  --t-text: 160ms;      --stagger-text: 80ms;   --d-text: 560ms;
+  --d-rule: 900ms;
+  --travel-x: 123.36px; /* three lattice edges along the 60° rail */
+  --travel-y: 213.67px;
+  --pull-x: 10.28px;    /* hover: a quarter edge apart */
+  --pull-y: 17.8px;
+}
+
+/* ---------- base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--color-field);
+  color: var(--color-paper);
+  font-family: var(--font-text);
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--color-on-field-muted) var(--color-field);
+}
+
+body { margin: 0; overflow-x: clip; }
+
+::selection { background: var(--color-accent-text); color: var(--color-edge); }
+
+a { color: inherit; text-underline-offset: 0.22em; text-decoration-thickness: var(--line); }
+
+:focus-visible { outline: calc(var(--line) + 1.5px) solid var(--color-focus); outline-offset: 3px; border-radius: 2px; }
+
+p, h1, ul, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+.skip-link {
+  position: absolute; left: var(--gutter); top: var(--space-xs); z-index: 10;
+  padding: var(--space-xs) var(--space-s);
+  background: var(--color-paper); color: var(--color-field);
+  font: var(--weight-label) var(--type-label) / 1.2 var(--font-label);
+  border-radius: var(--radius);
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: none; outline-color: var(--color-focus-on-paper); }
+
+/* ---------- first viewport ---------- */
+
+.first {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  min-block-size: 100svh;
+  overflow: clip;   /* the parts start outside the mark and the rail runs past every edge */
+}
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  position: relative; z-index: 3;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center;
+  column-gap: var(--space-m);
+  block-size: var(--header-h);
+  padding-inline: var(--gutter);
+}
+
+.masthead-mark { display: block; inline-size: var(--mark-header); line-height: 0; }
+.masthead-mark svg { inline-size: 100%; block-size: auto; fill: currentColor; }
+
+.nav { justify-self: end; font-size: var(--type-body); }
+
+/* The list is a popover so the phone menu works from the keyboard with no JS; wide screens show it inline. */
+.nav-list {
+  position: static; inset: auto;
+  display: flex; gap: var(--space-m);
+  margin: 0; padding: 0; border: 0;
+  background: none; color: inherit; overflow: visible;
+}
+.nav-list a { display: block; padding-block: var(--space-xs); text-decoration: none; }
+.nav-list a:hover { text-decoration: underline; }
+
+.nav-toggle { display: none; }
+
+.talk {
+  display: inline-flex; align-items: center;
+  min-block-size: 2.75em;
+  padding: 0.55em 1.1em;
+  border: var(--line) solid var(--color-paper);
+  border-radius: var(--radius);
+  font-size: var(--type-body); font-weight: 700; line-height: 1;
+  text-decoration: none;
+  transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+.talk:hover { background: var(--color-paper); color: var(--color-field); }
+
+@media (max-width: 47.99rem) {
+  .masthead { grid-template-columns: auto minmax(0, 1fr) auto auto; column-gap: var(--space-s); }
+  .nav { grid-column: 3; }
+  .talk { grid-column: 4; grid-row: 1; }
+  .nav-toggle {
+    display: grid; place-items: center;
+    inline-size: 2.75rem; block-size: 2.75rem;
+    padding: 0; border: 0; background: none; color: inherit; cursor: pointer;
+    border-radius: var(--radius);
+  }
+  .nav-toggle svg { inline-size: 1.5rem; fill: none; stroke: currentColor; stroke-width: 2; }
+  .nav-list:not(:popover-open) { display: none; }
+  .nav-list:popover-open {
+    position: fixed; inset: calc(var(--header-h) - var(--space-xs)) var(--gutter) auto auto;
+    display: grid; gap: 0;
+    min-inline-size: 12rem;
+    padding: var(--space-xs) 0;
+    background: var(--color-paper); color: var(--color-field);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-menu);
+  }
+  .nav-list:popover-open a { padding: var(--space-xs) var(--space-m); font-weight: 700; }
+  .nav-list:popover-open :focus-visible { outline-color: var(--color-focus-on-paper); outline-offset: -3px; }
+}
+
+/* ---------- info strip: the small print under the header ---------- */
+
+.info {
+  position: relative; z-index: 2;
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  gap: var(--space-2xs) var(--space-m);
+  margin-inline: var(--gutter);
+  padding-block: var(--space-s);
+  color: var(--color-on-field-muted);
+  font: var(--weight-label) var(--type-label) / 1.35 var(--font-label);
+  letter-spacing: var(--tracking-label);
+}
+.info::before {
+  content: "";
+  position: absolute; inset: 0 0 auto 0;
+  block-size: var(--line);
+  background: var(--color-faint);
+  transform-origin: left;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "field" "name" "tagline" "bio" "social";
+  align-content: end;
+  padding-inline: var(--gutter);
+  padding-block-end: var(--space-l);
+}
+
+.name, .tagline, .bio, .social { position: relative; z-index: 1; justify-self: start; }
+
+.name {
+  grid-area: name;
+  font-family: var(--font-display);
+  font-size: var(--type-display);
+  font-weight: var(--weight-display);
+  font-variation-settings: var(--font-display-axes);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  margin-inline-start: -0.04em;   /* optical: the J's stem lines up with the gutter */
+}
+
+.tagline {
+  grid-area: tagline;
+  margin-block-start: var(--space-m);
+  font-family: var(--font-display);
+  font-size: var(--type-lead);
+  font-weight: var(--weight-lead);
+  font-variation-settings: var(--font-display-axes);
+  line-height: var(--leading-lead);
+  letter-spacing: var(--tracking-lead);
+  text-wrap: balance;
+}
+.tagline em { font-style: normal; color: var(--color-accent-text); }
+
+.bio {
+  grid-area: bio;
+  margin-block-start: var(--space-s);
+  max-inline-size: var(--measure-body);
+  color: var(--color-on-field-muted);
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  text-wrap: pretty;
+}
+
+.social {
+  grid-area: social;
+  display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-m);
+  margin-block-start: var(--space-m);
+  font: var(--weight-label) var(--type-label) / 1.2 var(--font-label);
+  letter-spacing: var(--tracking-label);
+}
+.social a { display: block; padding-block: var(--space-xs); text-decoration-color: var(--color-faint); }
+.social a:hover { text-decoration-color: currentColor; }
+
+/* ---------- the mark ---------- */
+
+.field {
+  grid-area: field;
+  position: relative;
+  container-type: size;
+  block-size: min(calc((100vw - var(--gutter) * 2) / var(--mark-aspect)), 40svh);
+  margin-block: var(--space-m) var(--space-l);
+}
+
+.build {
+  position: absolute; inset-block-start: 50%; inset-inline-start: 50%;
+  inline-size: min(100cqw, 100cqh * var(--mark-aspect));
+  block-size: auto;
+  overflow: visible;
+  translate: -50% -50%;
+}
+.build * { vector-effect: non-scaling-stroke; }
+
+#lattice circle { fill: var(--color-paper); opacity: var(--lattice-dot); }
+
+.rail {
+  fill: none;
+  stroke: var(--color-paper);
+  stroke-opacity: var(--rail-rest);
+  stroke-width: var(--line);
+  stroke-dasharray: var(--rail-dash);
+}
+.rail-draw { fill: none; stroke: #fff; stroke-width: 40; stroke-dasharray: 1; stroke-dashoffset: 0; }
+
+.face { stroke: var(--color-edge); stroke-width: var(--line); stroke-linejoin: round; }
+.part-t { --front: var(--color-paper); --side-h: var(--color-paper-h); --side-d: var(--color-paper-d); }
+.part-j { --front: var(--color-accent); --side-h: var(--color-accent-h); --side-d: var(--color-accent-d); }
+.face-front { fill: var(--front); }
+.face-h { fill: var(--side-h); }
+.face-d { fill: var(--side-d); }
+
+.assembly { transform-box: view-box; transform-origin: 339.85px 237.32px; }
+
+.arrow, .click { display: none; }
+.arrow-shaft { fill: none; stroke: var(--color-paper); stroke-width: var(--line-arrow); stroke-dasharray: 1; }
+.arrow-head { fill: var(--color-paper); }
+.click path { fill: none; stroke: var(--color-accent-text); stroke-width: var(--line-arrow); stroke-linecap: round; }
+
+/* Hover: the parts ease a quarter edge apart along their rail, and snap back home. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .part { transition: transform 240ms var(--ease-in); }
+  .field:hover .part { transition: transform 700ms var(--ease-out); }
+  .field:hover .part-t { transform: translate(calc(var(--pull-x) * -1), calc(var(--pull-y) * -1)); }
+  .field:hover .part-j { transform: translate(var(--pull-x), var(--pull-y)); }
+}
+
+.cue { display: none; }
+
+/* ---------- wide: the name holds the lower left, the mark fills the rest of the field ---------- */
+
+@media (min-width: 60rem) {
+  .hero { grid-template-areas: "name" "tagline" "bio" "social"; }
+  .field {
+    position: absolute; inset-block: var(--space-m); inset-inline-end: var(--gutter);
+    inline-size: var(--mark-share);
+    block-size: auto;
+    margin: 0;
+  }
+  .build { inline-size: min(100cqw, 92cqh * var(--mark-aspect)); }
+
+  .cue {
+    display: block;
+    position: absolute; inset: auto var(--gutter) var(--space-l) auto; z-index: 1;
+    inline-size: 1rem; padding-block: var(--space-xs);
+    line-height: 0;
+  }
+  .cue svg { inline-size: 100%; block-size: auto; overflow: visible; }
+  .cue-shaft { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-dasharray: 1; }
+  .cue-head { fill: currentColor; }
+}
+
+.next { block-size: 40svh; background: var(--color-paper); }
+
+/* ---------- the build (only with JS, once per session, never under reduced motion) ---------- */
+
+.building .rail-draw { animation: draw var(--d-rail) var(--ease-draw) var(--t-rail) both; }
+.building .rail { animation: rail-rest 600ms linear var(--t-click) both; }
+
+.building .arrow { display: inline; animation: fade-out 200ms linear calc(var(--t-travel-t) + 180ms) both; }
+.building .arrow-shaft { animation: draw var(--d-arrow) var(--ease-draw) var(--t-arrow) both, retract 260ms linear var(--t-travel-t) forwards; }
+.building .arrow-head { animation: appear 120ms linear calc(var(--t-arrow) + var(--d-arrow) - 60ms) both; }
+
+/* Travel: straight along the rail at constant speed, both parts arriving on the same frame. */
+.building .part-t { animation: travel-t calc(var(--t-click) - var(--t-travel-t)) linear var(--t-travel-t) both; }
+.building .part-j { animation: travel-j calc(var(--t-click) - var(--t-travel-j)) linear var(--t-travel-j) both; }
+
+/* Until the click the parts are paper line drawings on the field; the click is the one moment of color. */
+.building .face { animation: line-stroke var(--t-click) step-end both; }
+.building .face-front { animation: line-stroke var(--t-click) step-end both, color-front var(--t-click) step-end both; }
+.building .face-h { animation: line-stroke var(--t-click) step-end both, color-h var(--t-click) step-end both; }
+.building .face-d { animation: line-stroke var(--t-click) step-end both, color-d var(--t-click) step-end both; }
+.building .assembly { animation: settle var(--d-settle) var(--ease-out) var(--t-click) both; }
+
+.building .click { display: inline; animation: fade-out 260ms linear calc(var(--t-click) + 220ms) both; }
+/* Opacity, not a dash draw: non-scaling strokes measure dashes in screen units, so a pathLength dash can't hide them. */
+.building .click path { animation: appear 60ms linear var(--t-click) both; }
+
+/* The small print arrives while the parts travel; the name never moves (it is the first paint). */
+.intro .info::before { animation: rule var(--d-rule) var(--ease-draw) both; }
+.intro .info > * { animation: rise var(--d-text) var(--ease-out) var(--t-text) both; }
+.intro .tagline { animation: rise var(--d-text) var(--ease-out) calc(var(--t-text) + var(--stagger-text)) both; }
+.intro .bio { animation: rise var(--d-text) var(--ease-out) calc(var(--t-text) + var(--stagger-text) * 2) both; }
+.intro .social { animation: rise var(--d-text) var(--ease-out) calc(var(--t-text) + var(--stagger-text) * 3) both; }
+.intro .cue-shaft { animation: draw 420ms var(--ease-draw) calc(var(--t-click) + 200ms) both; }
+.intro .cue-head { animation: appear 100ms linear calc(var(--t-click) + 560ms) both; }
+
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes retract { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -1; } }
+@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes rule { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes rise { from { opacity: 0; transform: translateY(0.6em); } to { opacity: 1; transform: none; } }
+@keyframes rail-rest { from { stroke-opacity: var(--rail-live); } to { stroke-opacity: var(--rail-rest); } }
+@keyframes travel-t { from { transform: translate(calc(var(--travel-x) * -1), calc(var(--travel-y) * -1)); } to { transform: none; } }
+@keyframes travel-j { from { transform: translate(var(--travel-x), var(--travel-y)); } to { transform: none; } }
+@keyframes line-stroke { from { stroke: var(--color-paper); } to { stroke: var(--color-edge); } }
+@keyframes color-front { from { fill: var(--color-field); } to { fill: var(--front); } }
+@keyframes color-h { from { fill: var(--color-field); } to { fill: var(--side-h); } }
+@keyframes color-d { from { fill: var(--color-field); } to { fill: var(--side-d); } }
+@keyframes settle { 0% { transform: scale(1); } 35% { transform: scale(1.022); } 100% { transform: scale(1); } }

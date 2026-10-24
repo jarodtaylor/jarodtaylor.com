@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jarod Taylor</title>
+  <meta name="description" content="Jarod Taylor, engineering leader in design engineering, frontend systems and developer experience. Frisco, TX.">
+  <meta name="theme-color" content="#1633b1">
+  <!-- Before first paint: decide whether the mark is shown being built.
+       Once per session, never under reduced motion, never without JS (no .intro = already assembled). ?intro forces it. -->
+  <script>
+    (() => {
+      const root = document.documentElement;
+      root.classList.add('js');
+      let seen = false;
+      try { seen = sessionStorage.getItem('jt-r6-blocks') === '1'; } catch {}
+      if (new URLSearchParams(location.search).has('intro')) seen = false;
+      if (!seen && matchMedia('(prefers-reduced-motion: no-preference)').matches) root.classList.add('intro', 'building');
+    })();
+  </script>
+  <link rel="preload" href="fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="hero.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="first">
+  <header class="masthead">
+    <a class="masthead-mark" href="/" aria-label="Jarod Taylor, home">
+      <svg viewBox="0 0 575.65 502.31" aria-hidden="true">
+        <path d="M286.22 164.31h.08l-41.1-71.17H78.25l-27.43.18 41 70.99 112.27-.08 97.9 169.64-15.14 26.21-76.5-132.55-41.06 71.09 117.56 203.69 97.26-168.44z" />
+        <path d="m230.41 73.72 26.52.12 138.66 240.14 41.05-71.11-97.57-169.02 195.02.25L575.65 0H0l40.31 73.45z" />
+      </svg>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <button class="nav-toggle" type="button" popovertarget="nav-list" aria-label="Menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h18M3 16h18" /></svg>
+      </button>
+      <ul class="nav-list" id="nav-list" popover>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#writing">Writing</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#colophon">Colophon</a></li>
+      </ul>
+    </nav>
+    <a class="talk" href="mailto:contact@jarodtaylor.com">Let's talk</a>
+  </header>
+
+  <p class="info">
+    <span class="info-role">Engineering Leader | Design Engineering, Frontend Systems &amp; Developer Experience</span>
+    <span class="info-place">Frisco, TX</span>
+  </p>
+
+  <main id="main" class="hero">
+    <h1 class="name">Jarod Taylor</h1>
+    <p class="tagline">I build the work <em>behind the work.</em></p>
+    <p class="bio">Designer turned engineer turned engineering leader. For 18 years I've built design systems, frontend platforms, and developer experience, and led the teams that build them.</p>
+    <ul class="social" aria-label="Elsewhere">
+      <li><a href="https://linkedin.com/in/jarodtaylor">LinkedIn</a></li>
+      <li><a href="https://github.com/jarodtaylor">GitHub</a></li>
+      <li><a href="https://x.com/jarodtaylor">X</a></li>
+      <li><a href="mailto:contact@jarodtaylor.com">Email</a></li>
+    </ul>
+
+    <!-- The build. Every edge sits on the mark's own 60° lattice: the faces are the two paths of
+         jt-logo-icon.svg pushed back half a lattice edge (41.12) along the lattice's 300° axis, so the part is seen
+         from above, the way it sits on a table. Drawing order is the hidden-line removal: side faces of both parts,
+         then both fronts. The viewBox is the assembled mark plus its depth; the parts start outside it.
+         They slide together along the 60° rail they share (the J's right edge, the T's diagonal),
+         three lattice edges of travel (246.72), and lock where the two tips meet. The rail runs the full page. -->
+    <figure class="field">
+      <svg class="build" viewBox="-10 -45.61 616.21 557.92" role="img" aria-labelledby="build-title">
+        <title id="build-title">The JT monogram, two parts locked together</title>
+        <defs>
+          <pattern id="lattice" width="41.12" height="71.22" patternUnits="userSpaceOnUse">
+            <circle cx="0" cy="0" r="2" /><circle cx="41.12" cy="0" r="2" />
+            <circle cx="20.56" cy="35.61" r="2" />
+            <circle cx="0" cy="71.22" r="2" /><circle cx="41.12" cy="71.22" r="2" />
+          </pattern>
+          <!-- The lattice is the drafting surface under the mark, so it fades out from the joint rather than papering the page. -->
+          <radialGradient id="lattice-fade" gradientUnits="userSpaceOnUse" cx="339.85" cy="237.32" r="900">
+            <stop offset="0" stop-color="#fff" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </radialGradient>
+          <mask id="lattice-mask" maskUnits="userSpaceOnUse" x="-3000" y="-3000" width="6000" height="6000">
+            <rect x="-3000" y="-3000" width="6000" height="6000" fill="url(#lattice-fade)" />
+          </mask>
+          <mask id="rail-reveal" maskUnits="userSpaceOnUse" x="-3000" y="-3000" width="6000" height="6000">
+            <path class="rail-draw" pathLength="1" d="M339.85 237.32L-1160.15 -2360.76" />
+            <path class="rail-draw" pathLength="1" d="M339.85 237.32L1839.85 2835.4" />
+          </mask>
+        </defs>
+
+        <rect class="lattice" x="-3000" y="-3000" width="6000" height="6000" fill="url(#lattice)" mask="url(#lattice-mask)" />
+        <path class="rail" mask="url(#rail-reveal)" d="M-1160.15 -2360.76L1839.85 2835.4" />
+
+        <g class="assembly">
+          <g class="part part-t">
+            <path class="face face-d" d="M436.64 242.87L339.07 73.85L359.63 38.24L457.2 207.26Z" />
+            <path class="face face-h" d="M575.65 0L0 0L20.56 -35.61L596.21 -35.61Z" />
+          </g>
+          <g class="part part-j">
+            <path class="face face-d" d="M286.85 360.08L210.35 227.53L230.91 191.92L307.41 324.47Z" />
+            <path class="face face-h" d="M78.25 93.14L50.82 93.32L71.38 57.71L98.81 57.53Z" />
+            <path class="face face-d" d="M384.11 333.87L286.3 164.31L306.86 128.7L404.67 298.26Z" />
+            <path class="face face-h" d="M245.2 93.14L78.25 93.14L98.81 57.53L265.76 57.53Z" />
+            <path class="face face-d" d="M286.3 164.31L245.2 93.14L265.76 57.53L306.86 128.7Z" />
+          </g>
+          <g class="part part-t">
+            <path class="face face-front" d="M230.41 73.72L256.93 73.84L395.59 313.98L436.64 242.87L339.07 73.85L534.09 74.1L575.65 0L0 0L40.31 73.45Z" />
+          </g>
+          <g class="part part-j">
+            <path class="face face-front" d="M286.3 164.31L245.2 93.14L78.25 93.14L50.82 93.32L91.82 164.31L204.09 164.23L301.99 333.87L286.85 360.08L210.35 227.53L169.29 298.62L286.85 502.31L384.11 333.87Z" />
+          </g>
+        </g>
+
+        <!-- Assembly arrows (while building): each starts at its part and points along the rail to the joint. -->
+        <g class="arrow">
+          <path class="arrow-shaft" pathLength="1" d="M269.85 116.08L316.85 197.49" />
+          <path class="arrow-head" d="M329.85 220L303.59 200.52L326.11 187.52Z" />
+        </g>
+        <g class="arrow">
+          <path class="arrow-shaft" pathLength="1" d="M412.35 362.9L365.35 281.49" />
+          <path class="arrow-head" d="M352.35 258.97L356.09 291.45L378.61 278.45Z" />
+        </g>
+
+        <!-- The click: three strokes on the lattice's dual axes, from the joint outward. -->
+        <g class="click">
+          <path pathLength="1" d="M415.83 308.93L447.01 290.93" />
+          <path pathLength="1" d="M415.83 338.93L447.01 356.93" />
+          <path pathLength="1" d="M389.85 353.93L389.85 389.93" />
+        </g>
+      </svg>
+    </figure>
+
+    <a class="cue" href="#work" aria-label="Scroll to work">
+      <svg viewBox="0 0 16 40" aria-hidden="true"><path class="cue-shaft" pathLength="1" d="M8 1V31" /><path class="cue-head" d="M8 39L2.2 29H13.8Z" /></svg>
+    </a>
+  </main>
+  </div>
+
+  <!-- The next section, so the cue has somewhere to go. Out of scope for this sketch. -->
+  <section id="work" class="next" aria-label="Work"></section>
+</body>
+</html>
