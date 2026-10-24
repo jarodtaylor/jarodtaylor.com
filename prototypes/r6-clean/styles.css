@@ -31,6 +31,7 @@
   --size-tagline: clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem);
   --size-text: clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem);
   --size-label: clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem);
+  --size-meta: clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem);
   --leading-name: 0.84;
   --leading-text: 1.5;
   --tracking-name: -0.04em;
@@ -158,9 +159,24 @@ a {
   padding-block-start: 0.85em;
   border-block-start: var(--stroke) solid var(--rule);
   color: var(--text-muted);
+  font-size: var(--size-meta);
   font-weight: var(--weight-text);
 }
 .info-place { white-space: nowrap; }
+/* Availability: a small apricot dot that breathes */
+.status::before {
+  content: "";
+  display: inline-block;
+  inline-size: 0.5em;
+  block-size: 0.5em;
+  margin-inline-end: 0.5em;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: 0.08em;
+  box-shadow: 0 0 0 0 oklch(0.81 0.125 52 / 0.5);
+  animation: breathe 2.4s var(--ease-out) infinite;
+}
+@keyframes breathe { 70%, 100% { box-shadow: 0 0 0 0.45em oklch(0.81 0.125 52 / 0); } }
 
 /* Hero */
 .hero {
