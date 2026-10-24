@@ -22,7 +22,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | Q4 | Remix UI pattern: panel, drawer, or command palette? | Decide in Phase 3 with a coded prototype |
 | Q5 | Signature "wow" moment(s)? | Decide in Phase 1. Lead candidate: the brand switch itself |
 | Q6 | Newsletter: yes or no? | Later |
-| Q7 | If round 5 falls short: switch to Impeccable `/impeccable` new-work flow, **code-led** (`buildPath: code`, direction picker, Bolder hand), not comp-led | Decide after Jarod reviews round 5 |
+| Q7 | ✅ Doing it (2026-10-24). Was: if round 5 falls short, switch to Impeccable `/impeccable` new-work flow, **code-led** (`buildPath: code`, direction picker, Bolder hand), not comp-led | Decide after Jarod reviews round 5 |
 
 ## ✅ Decisions
 
@@ -52,6 +52,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | 2026-10-13 | Drop `preview.jarodtaylor.com` and anything else unused when DNS moves | Not needed |
 | 2026-10-13 | Agents may commit freely on feature branches (pushes and PRs still go through Jarod) | Keep work checkpointed |
 | 2026-10-13 | `.codex/` and `.cursor/` stay local (gitignored) | Personal tool config |
+| 2026-10-24 | **Round 5 tabled as the benchmark** (best so far). Run Impeccable new-work, code-led, to test directions beyond Backstage before locking | "Better, for sure," but Jarod wants to see what else catches his eye |
 | 2026-10-24 | Round 5: **the load intro is the peek layer** (lines grow linearly, never rotate), then everything fades except the **JT monogram**, which becomes the hero's resting visual. Canvas background options dropped. Design subagents stay on Opus | Jarod loved the peek reveal; one system for intro + peek |
 | 2026-10-21 | **No three.js / GSAP.** Hand-written WebGL or canvas, ~2–4 KB per effect; motion only where it shows the work (Pier's discipline). Round 4 explores 3 hero backgrounds side by side (lattice, construction drift, token-derived) | Wow without the weight |
 | 2026-10-21 | Round 3 feedback: **no boxed/centered sheet** (feels like 960px-grid era); use the full browser width like aarronwalter.com. Type scale too busy, doesn't flow. Drop location/time from the header. Keep the peek transition + monogram construction animation | Jarod's review of round 3 |
