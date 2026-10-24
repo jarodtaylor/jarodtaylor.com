@@ -1,0 +1,782 @@
+/* Round 5: the intro is the peek.
+   Full width, three type steps and a label (from round 4). On arrival the whole backstage layer draws in over the
+   page, holds, and leaves only the JT monogram, which is the hero's resting visual. Peek backstage plays the same
+   layer on demand: one state machine (data-peek-state on <html>), one set of rules below.
+   Every value lives here first, including the choreography. */
+
+:root {
+  /* Spacing scale (rem) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+
+  /* Page frame. Gutters are a share of the viewport, so a 4K screen gets proportionally more air, never dead bands. */
+  --page-x: clamp(var(--space-4), 3.2vw, var(--space-9));
+  --cols: 4;
+  --col-gap: clamp(var(--space-4), 1.6vw, var(--space-7));
+  --header-h: clamp(3.5rem, 2.75rem + 1.2vw, 5rem);
+  --control-h: clamp(3rem, 2.5rem + 0.9vw, 3.75rem);
+
+  /* Hero rhythm: one loose step between groups, half of it inside a group. Grows with viewport height,
+     so a tall screen spreads the same stack instead of stranding it. */
+  --rhythm: clamp(var(--space-6), 4.6svh, 4.5rem);
+  --rhythm-tight: calc(var(--rhythm) * 0.5);
+
+  /* Line weights */
+  --line-hair: 1px;
+  --line-rule: 2px;
+  --line-art: 1.5px;
+
+  /* Type: exactly three steps and one label. */
+  --font-display: "Archivo", "Arial Narrow", sans-serif;
+  --font-body: "Schibsted Grotesk", system-ui, sans-serif;
+  --font-mono: "Martian Mono", ui-monospace, monospace;
+
+  --type-display: 35vw;
+  --type-lead: clamp(2.25rem, 9.5vw, 3.25rem);
+  --type-body: clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem);
+  --type-label: clamp(0.75rem, 0.62rem + 0.22vw, 1rem);
+  --type-annot: clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem); /* backstage only: the Peek layer's measurements */
+  --measure: 54ch;
+  --mark-phone: 0.3;  /* the monogram's strength behind the name on a phone (tools/contrast.mjs checks it) */
+
+  /* Motion: one decisive in-out for anything that draws, an expo-out for anything that arrives. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-draw: cubic-bezier(0.65, 0, 0.25, 1);
+  --ease-pop: cubic-bezier(0.3, 1.5, 0.6, 1);
+
+  /* The peek choreography, in seconds from the moment it starts. The intro is this plus a hold and a leave.
+     Each beat starts while the one before is still finishing, so it reads as one gesture, not a list. */
+  --peek-cols-at: 0s;        /* 1. grid columns draw down, left to right */
+  --peek-cols-step: 0.035s;
+  --peek-cols-dur: 0.7s;
+  --peek-build-at: 0.18s;    /* 2. the monogram's construction lines draw */
+  --peek-build-step: 0.055s;
+  --peek-build-dur: 0.75s;
+  --peek-trace-at: 0.6s;     /* 3. outline traced at constant speed; vertices pop as the pen passes */
+  --peek-trace-dur: 0.8s;
+  --peek-box-at: 0.4s;       /* 4. redline boxes draw their perimeter, top to bottom; labels slide out of the edge */
+  --peek-box-step: 0.09s;
+  --peek-box-dur: 0.46s;
+  --peek-label-dur: 0.38s;
+  --peek-card-at: 1.02s;     /* 5. the hero-scale card types in, row by row */
+  --peek-card-step: 0.055s;
+  --peek-card-dur: 0.3s;
+  --peek-settled: 1.78s;     /* everything above has landed */
+  --peek-hold: 0.62s;        /* intro only: the layer holds, fully drawn */
+  --peek-leave: 0.5s;        /* the layer fades; the monogram eases into its resting state */
+}
+
+/* Palette B, Chartreuse: deep slate under acid lime. */
+[data-palette="b"] {
+  --color-bg: oklch(17.5% 0.026 252);
+  --color-surface: oklch(22% 0.03 252);
+  --color-ink: oklch(96% 0.012 240);
+  --color-ink-muted: oklch(76% 0.03 245);
+  --color-accent: oklch(90% 0.19 124);
+  --color-on-accent: oklch(22% 0.045 140);
+  --color-guide: oklch(68% 0.09 232);
+  --color-guide-ink: oklch(76% 0.08 232);
+  --color-redline: oklch(71% 0.18 20);
+  --color-on-redline: oklch(17% 0.03 20);
+}
+
+/* Derived roles. */
+:root {
+  --color-rule: color-mix(in oklch, var(--color-ink) 18%, var(--color-bg));
+  --color-guide-line: color-mix(in oklch, var(--color-guide) 22%, transparent);
+  --color-focus: var(--color-accent);
+  /* The monogram's resting impression: ink pressed barely into the page. */
+  --color-impression: color-mix(in oklch, var(--color-ink) 5.5%, var(--color-bg));
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --cols: 12;
+    /* One line of name, sized by whichever runs out first: width or height. */
+    --type-display: min(13.5vw, 23svh);
+    --type-lead: min(3.9vw, 6.4svh);
+  }
+}
+
+/* Base -------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  color-scheme: dark;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: var(--color-guide) var(--color-bg);
+  accent-color: var(--color-accent);
+  caret-color: var(--color-accent);
+}
+
+body {
+  margin: 0;
+  font-size: var(--type-body);
+  line-height: 1.55;
+  background: var(--color-bg);
+  overflow-x: clip;
+}
+
+::selection { background: var(--color-accent); color: var(--color-on-accent); }
+
+:focus-visible {
+  outline: var(--line-rule) solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+a { color: inherit; text-decoration-thickness: var(--line-hair); text-underline-offset: 0.22em; }
+a:hover { text-decoration-color: var(--color-accent); }
+
+h1, p, ul, dl, dd, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+
+.defs { position: absolute; }
+
+.skip {
+  position: absolute;
+  left: var(--page-x);
+  top: -10rem;
+  z-index: 50;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.skip:focus { top: var(--space-2); }
+
+/* The one small style that isn't a step of the scale: every label on the page is this. */
+.label,
+.elsewhere,
+.ident,
+.peek-toggle,
+.skip-intro,
+.dev {
+  font-family: var(--font-body);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Header ------------------------------------------------------------------- */
+
+.masthead {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--space-4), 2vw, var(--space-7));
+  height: var(--header-h);
+  padding-inline: var(--page-x);
+}
+
+.mark {
+  display: inline-flex;
+  margin-right: auto;
+  padding-block: var(--space-2);
+  color: var(--color-ink);
+  transition: color 0.25s var(--ease-out);
+}
+.mark svg { display: block; width: auto; height: clamp(1.25rem, 0.9rem + 0.7vw, 1.875rem); fill: currentColor; }
+.mark:hover { color: var(--color-accent); }
+
+.elsewhere { display: flex; gap: clamp(var(--space-3), 1.6vw, var(--space-6)); color: var(--color-ink-muted); }
+.elsewhere a { display: inline-block; padding-block: var(--space-2); text-decoration: none; }
+.elsewhere a:hover { color: var(--color-ink); text-decoration: underline; text-decoration-color: var(--color-accent); }
+
+.peek-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.25rem;
+  padding: 0 var(--space-3);
+  border: var(--line-hair) solid color-mix(in oklch, var(--color-ink) 45%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease-out), color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+}
+.peek-toggle:hover { border-color: var(--color-ink); }
+.peek-more { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.peek-toggle svg {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--line-rule);
+  transition: transform 0.6s var(--ease-out);
+}
+.peek-toggle:hover svg { transform: rotate(90deg); }
+.peek-toggle[aria-pressed="true"] {
+  background: var(--color-redline);
+  border-color: var(--color-redline);
+  color: var(--color-on-redline);
+}
+.peek-toggle[aria-pressed="true"] svg { transform: rotate(45deg); }
+
+@media (min-width: 48rem) {
+  .peek-more { position: static; width: auto; height: auto; overflow: visible; clip-path: none; }
+}
+
+/* Hero ---------------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  align-content: center;
+  min-height: calc(100svh - var(--header-h));
+  padding: var(--rhythm-tight) var(--page-x) calc(var(--rhythm) * 1.25);
+  isolation: isolate;
+  /* The phone mark hangs off the right edge on purpose; clip it here so it never widens the page. */
+  overflow-x: clip;
+}
+
+.stack {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.name-block { position: relative; }
+
+.name {
+  font-family: var(--font-display);
+  font-weight: 820;
+  font-stretch: 62%;
+  font-size: var(--type-display);
+  line-height: 0.82;
+  letter-spacing: -0.02em;
+  margin-left: -0.035em;
+  white-space: nowrap;
+}
+.name span { display: block; }
+
+/* The label row sits on a hairline that runs the whole width of the hero: the one guide that stays after the intro.
+   Drawn as an outset border image, so it bleeds to both screen edges without spending a pseudo-element. */
+.ident {
+  position: relative;
+  border-top: var(--line-hair) solid;
+  border-image: conic-gradient(var(--color-rule) 0 0) 1 / var(--line-hair) 0 0 0 / 0 100vw;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-6);
+  /* Clear the descender of the y: the name's line box is tighter than its glyphs. */
+  margin-top: calc(var(--type-display) * 0.17);
+  padding-top: var(--rhythm-tight);
+}
+.role { text-wrap: balance; }
+@media (min-width: 48rem) { .role { text-wrap: wrap; } }
+.role .sep { color: var(--color-accent); padding-inline: 0.3em; }
+.loc { color: var(--color-ink-muted); }
+
+.tagline {
+  margin-top: var(--rhythm);
+  font-family: var(--font-display);
+  font-weight: 760;
+  font-stretch: 78%;
+  font-size: var(--type-lead);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+}
+.tagline .hl { display: block; color: var(--color-accent); }
+
+.bio { margin-top: var(--rhythm-tight); max-width: var(--measure); text-wrap: pretty; }
+
+.pill {
+  display: inline-block;
+  padding: 0 0.5em;
+  border: var(--line-hair) solid color-mix(in oklch, var(--color-accent) 70%, transparent);
+  border-radius: 999px;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-weight: 560;
+}
+
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--rhythm); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-h);
+  padding: 0 1.25em;
+  border: var(--line-rule) solid var(--color-ink);
+  font: 650 var(--type-body) / 1 var(--font-body);
+  text-decoration: none;
+  transition: background-color 0.25s var(--ease-out), color 0.25s var(--ease-out), border-color 0.25s var(--ease-out);
+}
+.btn svg {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--line-rule);
+  transition: transform 0.35s var(--ease-out);
+}
+.btn--primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+.btn--primary:hover { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-bg); }
+.btn--primary:hover svg { transform: translateX(4px); }
+.btn--ghost { background: var(--color-bg); }
+.btn--ghost:hover { background: var(--color-ink); color: var(--color-bg); }
+
+@media (min-width: 48rem) {
+  .name span { display: inline; }
+}
+
+/* The monogram: the hero's resting visual ------------------------------------- */
+
+/* The two resting states the prototype compares. Every monogram layer reads its resting strength from here. */
+:root[data-rest="line"] { --rest-guides: 0.3; --rest-line: 1; --rest-fill: 0; --rest-lattice: 0; --rest-dash: 0; }
+:root[data-rest="fill"] { --rest-guides: 0; --rest-line: 0; --rest-fill: 1; --rest-lattice: 1; --rest-dash: 1; }
+
+/* Phone: the mark sits behind the name, off the right edge, at reduced strength, so it never runs under small text. */
+.figure {
+  position: absolute;
+  top: var(--rhythm-tight);
+  right: calc(-0.3 * 78vw);
+  z-index: 0;
+  width: 78vw;
+  opacity: var(--mark-phone);
+  pointer-events: none;
+}
+.mono { display: block; width: 100%; height: auto; overflow: visible; }
+.mono * { vector-effect: non-scaling-stroke; }
+/* Dashed draws need real path lengths: non-scaling strokes break pathLength-based dashes once the mark is drawn
+   larger than its viewBox (a 4K screen), leaving half-drawn lines. These strokes scale with the mark instead. */
+.mono-guides path,
+.mono-line path,
+.mono-marks .g-arc { vector-effect: none; }
+
+@media (min-width: 48rem) {
+  .figure {
+    position: static;
+    grid-column: 8 / -1;
+    grid-row: 1;
+    align-self: end;
+    justify-self: end;
+    width: 100%;
+    max-width: calc(62svh * 655.65 / 582.31);
+    opacity: 1;
+  }
+  /* The viewBox overruns the mark by 40 units so its guides can extend past it; drop by that much so the
+     visible floor of the mark, not its box, shares a floor with the buttons. */
+  .mono { translate: 0 calc(100% * 40 / 582.31); }
+}
+
+.mono-lattice { opacity: calc(var(--rest-lattice) * 0.55); transition: opacity var(--reveal) var(--ease-out); }
+#lat-h path, #lat-r path, #lat-l path { stroke: color-mix(in oklch, var(--color-guide) 32%, transparent); stroke-width: 1; }
+
+.mono-fill {
+  fill: color-mix(in oklch, var(--color-ink) 7%, var(--color-bg));
+  opacity: var(--rest-fill);
+  transition: opacity var(--reveal) var(--ease-out);
+}
+
+/* Construction: every stroke is drawn with pathLength="1", so one dash value draws any line. */
+.mono-guides,
+.mono-line { fill: none; }
+.mono-guides path,
+.mono-line path { stroke-dasharray: 1; }
+.mono-guides {
+  opacity: var(--rest-guides);
+  stroke: color-mix(in oklch, var(--color-guide) 60%, transparent);
+  stroke-width: var(--line-hair);
+  transition: opacity var(--reveal) var(--ease-out);
+}
+.mono-guides path { stroke-dashoffset: var(--rest-dash); }
+.mono-guides .g-tri { stroke: var(--color-guide); }
+.mono-guides .g-axis { stroke: var(--color-redline); stroke-opacity: 0.7; opacity: 0; }
+/* The axis is a measurement, not construction: it belongs to the peek layer and never rests with the mark. */
+:root[data-peek-state] .mono-guides .g-axis { opacity: var(--layer); }
+.mono-line {
+  opacity: var(--rest-line);
+  stroke: var(--color-accent);
+  stroke-width: var(--line-art);
+  stroke-linejoin: miter;
+  transition: opacity var(--reveal) var(--ease-out);
+}
+.mono-line path { stroke-dashoffset: 0; }
+
+.mono-marks {
+  opacity: var(--layer);
+  fill: var(--color-guide-ink);
+  font: 500 15px var(--font-mono);
+}
+.mono-marks .g-arc { fill: none; stroke: var(--color-redline); stroke-width: var(--line-hair); stroke-dasharray: 1; stroke-dashoffset: 1; }
+.mono-marks .g-deg { fill: var(--color-redline); }
+.mono-marks text { opacity: 0; translate: 0 6px; }
+.g-pts circle {
+  fill: var(--color-bg);
+  stroke: var(--color-guide-ink);
+  stroke-width: var(--line-hair);
+  transform-box: fill-box;
+  transform-origin: center;
+  scale: 0;
+}
+
+/* Peek backstage: one layer, four states ------------------------------------
+   data-peek-state on <html>:
+     arm      reset: everything undrawn, no transitions (the intro starts here, before first paint)
+     on       everything draws in on the choreography at the top of this file
+     leaving  drawn, while --layer fades the whole layer out and the monogram eases into its resting state
+     (none)   rest: only the monogram, in the chosen resting state
+   The intro is arm, on, a hold, leaving. The Peek button is arm, on; pressing it again is leaving. */
+
+@property --layer { syntax: "<number>"; inherits: true; initial-value: 1; }
+@property --box { syntax: "<number>"; inherits: false; initial-value: 0; }
+@property --lab { syntax: "<number>"; inherits: false; initial-value: 0; }
+
+:root[data-peek-state="leaving"] { --layer: 0; transition: --layer var(--peek-leave) cubic-bezier(0.4, 0, 0.2, 1) 0.06s; }
+
+/* Arm: the monogram's own lines reset too, so the construction can draw from nothing. */
+:root[data-peek-state="arm"] :is(.mono-guides, .mono-line) { opacity: 1; transition: none; }
+:root[data-peek-state="arm"] :is(.mono-guides path, .mono-line path) { stroke-dashoffset: 1; }
+:root:is([data-peek-state="arm"], [data-peek-state="on"]) .mono-lattice { opacity: 0; }
+:root:is([data-peek-state="arm"], [data-peek-state="on"]) .mono-fill { opacity: calc(var(--rest-fill) * 0.35); }
+.intro:is([data-peek-state="arm"], [data-peek-state="on"]) .mono-fill { opacity: 0; transition: none; }
+
+/* 1. Columns: each one's edges draw down, left to right. */
+.cols {
+  position: absolute;
+  inset: 0 var(--page-x);
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  opacity: var(--layer);
+  pointer-events: none;
+}
+.cols i {
+  position: relative;
+  border-inline: var(--line-hair) solid var(--color-guide-line);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+}
+/* The column tint only comes up once its edges have landed: drawn as it grows, it reads as a loading bar. */
+.cols i::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklch, var(--color-guide) 4%, transparent);
+  opacity: 0;
+}
+.cols i:nth-child(n + 5) { display: none; }
+@media (min-width: 48rem) { .cols i:nth-child(n + 5) { display: block; } }
+
+/* 2 and 3. The monogram builds: lattice, then the outline at constant speed (a pen, not an ease), vertices on the beat. */
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .mono-guides path,
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .mono-line path,
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .g-arc { stroke-dashoffset: 0; }
+:root[data-peek-state="on"] :is(.mono-guides, .mono-line) { opacity: 1; transition: none; }
+:root[data-peek-state="on"] .mono-guides path {
+  transition: stroke-dashoffset var(--peek-build-dur) var(--ease-draw) calc(var(--peek-build-at) + var(--d, 0) * var(--peek-build-step));
+}
+:root[data-peek-state="on"] .mono-line path { transition: stroke-dashoffset var(--peek-trace-dur) linear var(--peek-trace-at); }
+:root[data-peek-state="on"] .g-arc { transition: stroke-dashoffset 0.4s var(--ease-draw) calc(var(--peek-trace-at) + var(--peek-trace-dur) - 0.15s); }
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .mono-marks text { opacity: 1; translate: 0 0; }
+:root[data-peek-state="on"] .mono-marks text {
+  transition: opacity 0.3s var(--ease-out) calc(var(--peek-trace-at) + var(--peek-trace-dur)), translate 0.45s var(--ease-out) calc(var(--peek-trace-at) + var(--peek-trace-dur));
+}
+:root[data-peek-state="on"] .mono-marks .g-size { transition-delay: calc(var(--peek-build-at) + var(--peek-build-dur)); }
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .g-pts circle { scale: 1; }
+:root[data-peek-state="on"] .g-pts circle { transition: scale 0.32s var(--ease-pop) var(--at, var(--peek-trace-at)); }
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .cols i { transform: none; }
+:root[data-peek-state="on"] .cols i {
+  transition: transform var(--peek-cols-dur) var(--ease-draw) calc(var(--peek-cols-at) + var(--i) * var(--peek-cols-step));
+}
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .cols i::before { opacity: 1; }
+:root[data-peek-state="on"] .cols i::before {
+  transition: opacity 0.5s var(--ease-out) calc(var(--peek-cols-at) + var(--peek-cols-dur) * 0.85 + var(--i) * var(--peek-cols-step));
+}
+
+/* Leaving: the layer fades as one; the monogram eases to rest on the same clock. */
+:root[data-peek-state="leaving"] .mono-guides { transition-duration: var(--peek-leave); }
+:root[data-peek-state="leaving"] .mono-line { transition-duration: var(--peek-leave); }
+:root[data-peek-state="leaving"] .mono-fill { transition: opacity calc(var(--peek-leave) * 1.6) var(--ease-out); }
+:root[data-peek-state="leaving"] .mono-lattice { transition: opacity calc(var(--peek-leave) * 2) var(--ease-out) calc(var(--peek-leave) * 0.4); }
+
+/* 4. Redline boxes. Each block's box draws its perimeter as two pens from the top-left corner, meeting at the
+   bottom-right (--box runs 0 to 2: first the top and left edges, then the right and bottom). Then its spec label
+   slides out of the box edge, clipped at that edge, so it reads as coming from the box rather than appearing. */
+.name-block { --b: 0; }
+.ident { --b: 1; }
+.tagline { --b: 2; }
+.bio { --b: 3; }
+.actions { --b: 4; }
+[data-peek] { --at: calc(var(--peek-box-at) + var(--b, 0) * var(--peek-box-step)); }
+:where([data-peek]) { position: relative; }
+
+[data-peek]::before,
+[data-peek]::after {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  opacity: var(--layer);
+}
+[data-peek]::before {
+  --e1: calc(clamp(0, var(--box), 1) * 100%);
+  --e2: calc(clamp(0, var(--box) - 1, 1) * 100%);
+  --dash-x: repeating-linear-gradient(90deg, var(--color-redline) 0 5px, transparent 5px 9px);
+  --dash-y: repeating-linear-gradient(180deg, var(--color-redline) 0 5px, transparent 5px 9px);
+  content: "";
+  inset: 0;
+  background:
+    var(--dash-x) left top / var(--e1) var(--line-hair) no-repeat,
+    var(--dash-y) left top / var(--line-hair) var(--e1) no-repeat,
+    var(--dash-y) right top / var(--line-hair) var(--e2) no-repeat,
+    var(--dash-x) left bottom / var(--e2) var(--line-hair) no-repeat;
+}
+[data-peek]::after {
+  content: attr(data-spec);
+  left: 0;
+  bottom: calc(100% + var(--space-1));
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-redline);
+  color: var(--color-on-redline);
+  white-space: nowrap;
+  text-transform: none;
+  translate: 0 calc((1 - var(--lab)) * 100%);
+  clip-path: inset(0 0 calc((1 - var(--lab)) * 100%) 0);
+}
+/* The tagline is short, so its label sits off its right edge, in open space, and slides out sideways. */
+@media (min-width: 48rem) {
+  .tagline[data-peek]::after {
+    left: calc(100% + var(--space-2));
+    bottom: auto;
+    top: 0;
+    translate: calc((var(--lab) - 1) * 100%) 0;
+    clip-path: inset(0 0 0 calc((1 - var(--lab)) * 100%));
+  }
+}
+@media (max-width: 47.99rem) {
+  [data-peek]::after { max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+}
+/* Two labels hang below their block, in the gap, so no label sits on a glyph. They slide down out of the edge. */
+.ident[data-peek]::after,
+.actions[data-peek]::after {
+  bottom: auto;
+  top: calc(100% + var(--space-1));
+  translate: 0 calc((var(--lab) - 1) * 100%);
+  clip-path: inset(calc((1 - var(--lab)) * 100%) 0 0 0);
+}
+
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) [data-peek]::before { --box: 2; }
+:root[data-peek-state="on"] [data-peek]::after { --lab: 1; }
+/* Leaving, the labels retract into their box edges first (an ease-in, quick), then the lines fade. Text never
+   fades through its own background: a half-transparent label reads as mud. */
+:root[data-peek-state="leaving"] [data-peek]::after { transition: --lab calc(var(--peek-leave) * 0.5) cubic-bezier(0.55, 0, 0.75, 0); }
+:root[data-peek-state="on"] [data-peek]::before { transition: --box var(--peek-box-dur) var(--ease-draw) var(--at); }
+:root[data-peek-state="on"] [data-peek]::after {
+  transition: --lab var(--peek-label-dur) var(--ease-out) calc(var(--at) + var(--peek-box-dur) * 0.6);
+}
+
+/* Intro only: the blocks under the name arrive with their boxes. The name is there from first paint. */
+.intro[data-peek-state="arm"] [data-build] { opacity: 0; }
+.intro[data-peek-state="on"] [data-build] { transition: opacity 0.5s var(--ease-out) calc(var(--at) + 0.1s); }
+
+/* Hovering or focusing a block outside Peek is a small peek of its own. */
+@media (hover: hover) {
+  :root:not([data-peek-state]) [data-peek]:hover::before { --box: 2; transition: --box 0.4s var(--ease-draw); }
+  :root:not([data-peek-state]) [data-peek]:hover::after { --lab: 1; transition: --lab 0.3s var(--ease-out) 0.22s; }
+}
+:root:not([data-peek-state]) [data-peek]:focus-within::before { --box: 2; transition: --box 0.4s var(--ease-draw); }
+:root:not([data-peek-state]) [data-peek]:focus-within::after { --lab: 1; transition: --lab 0.3s var(--ease-out) 0.22s; }
+
+/* The name's own measurements: cap height and baseline rules draw across, the size bar draws down beside it. */
+.dims {
+  position: absolute;
+  inset: 0;
+  font-size: var(--type-display);
+  pointer-events: none;
+  opacity: var(--layer);
+}
+.dim {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: var(--line-hair) solid color-mix(in oklch, var(--color-guide) 70%, transparent);
+  transform: scaleX(0);
+  transform-origin: 0 0;
+}
+.dim b,
+.spec,
+[data-peek]::after {
+  font: 500 var(--type-annot) / 1.3 var(--font-mono);
+  letter-spacing: 0.02em;
+}
+.dim b {
+  position: absolute;
+  right: 0;
+  bottom: var(--space-1);
+  padding-left: var(--space-2);
+  background: var(--color-bg);
+  color: var(--color-guide-ink);
+  opacity: 0;
+}
+.dim--cap { top: 0.058em; }
+.dim--base { top: 1.55em; }
+.dim--base b { bottom: auto; top: var(--space-1); }
+.dim--size {
+  top: 0;
+  right: auto;
+  left: calc(var(--page-x) * -0.4);
+  height: 1.64em;
+  border-top: 0;
+  border-left: var(--line-hair) solid var(--color-redline);
+  transform: scaleY(0);
+}
+.dim--size::before,
+.dim--size::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  width: 7px;
+  border-top: var(--line-hair) solid var(--color-redline);
+}
+.dim--size::before { top: 0; }
+.dim--size::after { bottom: 0; }
+.dim--size b { display: none; }
+
+@media (min-width: 48rem) {
+  .dim--base { top: 0.73em; }
+  .dim--size { height: 0.82em; }
+  .dim--size b {
+    display: block;
+    right: calc(100% + var(--space-1));
+    left: auto;
+    top: auto;
+    bottom: 0;
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    white-space: nowrap;
+    background: none;
+    padding: 0;
+    color: var(--color-redline);
+  }
+}
+
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .dim { transform: none; }
+:root:is([data-peek-state="on"], [data-peek-state="leaving"]) .dim b { opacity: 1; }
+:root[data-peek-state="on"] .dim { transition: transform 0.7s var(--ease-draw) calc(var(--peek-box-at) + 0.12s); }
+:root[data-peek-state="on"] .dim--base { transition-delay: calc(var(--peek-box-at) + 0.2s); }
+:root[data-peek-state="on"] .dim b { transition: opacity 0.3s var(--ease-out) calc(var(--peek-box-at) + 0.75s); }
+@media (hover: hover) {
+  :root:not([data-peek-state]) .name-block:hover .dim { transform: none; transition: transform 0.5s var(--ease-draw); }
+  :root:not([data-peek-state]) .name-block:hover .dim b { opacity: 1; transition: opacity 0.3s var(--ease-out) 0.3s; }
+}
+
+/* 5. The hero-scale card: top right, in the open area, typed in one row at a time. Wide screens only. */
+.spec { display: none; }
+@media (min-width: 64rem) {
+  .spec {
+    display: grid;
+    gap: var(--space-1);
+    position: absolute;
+    top: var(--rhythm-tight);
+    right: var(--page-x);
+    z-index: 3;
+    min-width: 15rem;
+    color: var(--color-guide-ink);
+    opacity: var(--layer);
+  }
+  .spec div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-5);
+    clip-path: inset(0 100% 0 0);
+  }
+  .spec dt { color: var(--color-ink-muted); }
+  .spec .spec-head {
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-1);
+    border-bottom: var(--line-hair) solid var(--color-guide);
+  }
+  .spec .spec-head dt { color: var(--color-ink); font-weight: 600; }
+  .spec .spec-head dd { color: var(--color-accent); }
+}
+:root[data-peek-state="on"] .spec div { clip-path: inset(0); }
+:root[data-peek-state="leaving"] .spec div { transition: clip-path calc(var(--peek-leave) * 0.5) steps(10, end); }
+:root[data-peek-state="on"] .spec div {
+  transition: clip-path var(--peek-card-dur) steps(18, end) calc(var(--peek-card-at) + var(--r, 0) * var(--peek-card-step));
+}
+
+/* Intro controls ------------------------------------------------------------ */
+
+.skip-intro {
+  position: fixed;
+  left: var(--page-x);
+  bottom: var(--space-4);
+  z-index: 40;
+  display: none;
+  min-height: 2.25rem;
+  padding: 0 var(--space-3);
+  border: var(--line-hair) solid color-mix(in oklch, var(--color-ink) 35%, transparent);
+  border-radius: 999px;
+  background: var(--color-bg);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+}
+.skip-intro:hover { color: var(--color-ink); border-color: var(--color-ink); }
+.intro .skip-intro { display: block; }
+
+/* One frame without transitions, so a skip lands on the resting state instead of animating to it. */
+.settling *, .settling *::before, .settling *::after { transition: none !important; }
+
+/* Prototype controls (not part of the design) ------------------------------ */
+
+.dev {
+  position: fixed;
+  right: var(--page-x);
+  bottom: var(--space-4);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: var(--line-hair) solid var(--color-rule);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-ink-muted);
+}
+.dev-label { padding-inline: var(--space-2); }
+.dev button {
+  min-height: 2rem;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+.dev button:hover { background: var(--color-bg); }
+.dev button[aria-pressed="true"] { background: var(--color-accent); color: var(--color-on-accent); }
+@media (max-width: 47.99rem) { .dev-label { display: none; } }
+
+/* Reduced motion: nothing moves. The intro never starts, and Peek is a cut instead of a draw. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
