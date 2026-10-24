@@ -18,11 +18,9 @@
       }
     })();
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,600..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="hero.js" defer></script>
+  <link rel="preload" href="fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=3">
+  <script src="hero.js?v=3" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -62,12 +60,14 @@
     </div>
 
     <!-- The build. Every edge sits on the mark's own 60° lattice: the faces are the two paths of
-         jt-logo-icon.svg pushed back half a lattice edge (41.12) along the lattice's 120° axis.
-         Drawing order is the hidden-line removal: side faces of both parts first, then both fronts.
+         jt-logo-icon.svg pushed back half a lattice edge (41.12) along the lattice's 300° axis, so the part is seen from
+         above, the way it sits on a table. A heavier contour (an ink underlay) outlines each part's silhouette.
+         Drawing order is the hidden-line removal: contours, then side faces of both parts, then both fronts.
+         The viewBox is the exploded and resting extent together, so both parts start wholly in the field.
          The parts slide together along the 60° rail they share (the J's right edge, the T's diagonal),
          three lattice edges of travel (246.72), and lock where the two tips meet. -->
     <figure class="field">
-      <svg class="build" viewBox="-60 -40 700 600" role="img" aria-labelledby="build-title">
+      <svg class="build" viewBox="-147 -273 767 1013" role="img" aria-labelledby="build-title">
         <title id="build-title">The JT monogram, built from two parts that lock together</title>
         <defs>
           <pattern id="lattice" width="41.12" height="71.22" patternUnits="userSpaceOnUse">
@@ -85,21 +85,34 @@
         <path class="rail" mask="url(#rail-reveal)" d="M-560.15 -1321.52L1239.85 1796.17" />
 
         <g class="assembly">
+          <g class="contour">
+            <g class="part part-t">
+              <path d="M230.41 73.72L256.93 73.84L395.59 313.98L436.64 242.87L339.07 73.85L534.09 74.1L575.65 0L0 0L40.31 73.45Z" />
+              <path d="M436.64 242.87L339.07 73.85L359.63 38.24L457.2 207.26Z" />
+              <path d="M575.65 0L0 0L20.56 -35.61L596.21 -35.61Z" />
+            </g>
+            <g class="part part-j">
+              <path d="M286.3 164.31L245.2 93.14L78.25 93.14L50.82 93.32L91.82 164.31L204.09 164.23L301.99 333.87L286.85 360.08L210.35 227.53L169.29 298.62L286.85 502.31L384.11 333.87Z" />
+              <path d="M286.85 360.08L210.35 227.53L230.91 191.92L307.41 324.47Z" />
+              <path d="M78.25 93.14L50.82 93.32L71.38 57.71L98.81 57.53Z" />
+              <path d="M384.11 333.87L286.3 164.31L306.86 128.7L404.67 298.26Z" />
+              <path d="M245.2 93.14L78.25 93.14L98.81 57.53L265.76 57.53Z" />
+              <path d="M286.3 164.31L245.2 93.14L265.76 57.53L306.86 128.7Z" />
+            </g>
+          </g>
           <g class="part part-t">
             <g class="sides">
-              <path class="face face-h" d="M339.07 73.85L534.09 74.1L513.53 109.71L318.51 109.46Z" />
-              <path class="face face-h" d="M230.41 73.72L256.93 73.84L236.37 109.45L209.85 109.33Z" />
-              <path class="face face-h" d="M40.31 73.45L230.41 73.72L209.85 109.33L19.75 109.06Z" />
-              <path class="face face-d" d="M256.93 73.84L395.59 313.98L375.03 349.59L236.37 109.45Z" />
-              <path class="face face-d" d="M0 0L40.31 73.45L19.75 109.06L-20.56 35.61Z" />
+              <path class="face face-d" d="M436.64 242.87L339.07 73.85L359.63 38.24L457.2 207.26Z" />
+              <path class="face face-h" d="M575.65 0L0 0L20.56 -35.61L596.21 -35.61Z" />
             </g>
           </g>
           <g class="part part-j">
             <g class="sides">
-              <path class="face face-h" d="M91.82 164.31L204.09 164.23L183.53 199.84L71.26 199.92Z" />
-              <path class="face face-d" d="M50.82 93.32L91.82 164.31L71.26 199.92L30.26 128.93Z" />
-              <path class="face face-d" d="M204.09 164.23L301.99 333.87L281.43 369.48L183.53 199.84Z" />
-              <path class="face face-d" d="M169.29 298.62L286.85 502.31L266.29 537.92L148.73 334.23Z" />
+              <path class="face face-d" d="M286.85 360.08L210.35 227.53L230.91 191.92L307.41 324.47Z" />
+              <path class="face face-h" d="M78.25 93.14L50.82 93.32L71.38 57.71L98.81 57.53Z" />
+              <path class="face face-d" d="M384.11 333.87L286.3 164.31L306.86 128.7L404.67 298.26Z" />
+              <path class="face face-h" d="M245.2 93.14L78.25 93.14L98.81 57.53L265.76 57.53Z" />
+              <path class="face face-d" d="M286.3 164.31L245.2 93.14L265.76 57.53L306.86 128.7Z" />
             </g>
           </g>
           <g class="part part-t">
@@ -139,26 +152,40 @@
       </div>
       <ul class="parts" aria-label="Parts">
         <li class="part-item">
-          <svg class="tile" viewBox="-30 -8 120 122" aria-hidden="true">
-            <path class="face face-d" d="M41.12 71.22L0 0L-20.56 35.61L20.56 106.83Z" />
+          <svg class="tile tile-yellow" viewBox="-10 -45.61 122.8 126.83" style="--w: 122.8" aria-hidden="true">
+            <g class="contour">
+              <path d="M0 0L82.24 0L41.12 71.22Z" />
+              <path d="M0 0L82.24 0L102.8 -35.61L20.56 -35.61Z" />
+            </g>
+            <path class="face face-h" d="M0 0L82.24 0L102.8 -35.61L20.56 -35.61Z" />
             <path class="face face-front" d="M0 0L82.24 0L41.12 71.22Z" />
           </svg>
-          <span class="part-count">1x</span>
+          <span class="part-count">3x</span>
           <span class="part-name">design systems</span>
         </li>
         <li class="part-item">
-          <svg class="tile" viewBox="-30 -8 162 122" aria-hidden="true">
-            <path class="face face-d" d="M41.12 71.22L0 0L-20.56 35.61L20.56 106.83Z" />
-            <path class="face face-h" d="M123.36 71.22L41.12 71.22L20.56 106.83L102.8 106.83Z" />
+          <svg class="tile tile-red" viewBox="-10 -45.61 163.92 126.83" style="--w: 163.92" aria-hidden="true">
+            <g class="contour">
+              <path d="M0 0L82.24 0L123.36 71.22L41.12 71.22Z" />
+              <path d="M0 0L82.24 0L102.8 -35.61L20.56 -35.61Z" />
+              <path d="M82.24 0L123.36 71.22L143.92 35.61L102.8 -35.61Z" />
+            </g>
+            <path class="face face-h" d="M0 0L82.24 0L102.8 -35.61L20.56 -35.61Z" />
+            <path class="face face-d" d="M82.24 0L123.36 71.22L143.92 35.61L102.8 -35.61Z" />
             <path class="face face-front" d="M0 0L82.24 0L123.36 71.22L41.12 71.22Z" />
           </svg>
           <span class="part-count">1x</span>
           <span class="part-name">frontend platforms</span>
         </li>
         <li class="part-item">
-          <svg class="tile" viewBox="-30 -8 204 194" aria-hidden="true">
-            <path class="face face-d" d="M41.12 142.44L0 71.22L-20.56 106.83L20.56 178.05Z" />
-            <path class="face face-h" d="M123.36 142.44L41.12 142.44L20.56 178.05L102.8 178.05Z" />
+          <svg class="tile tile-cobalt" viewBox="-10 -45.61 205.04 198.05" style="--w: 205.04" aria-hidden="true">
+            <g class="contour">
+              <path d="M41.12 0L123.36 0L164.48 71.22L123.36 142.44L41.12 142.44L0 71.22Z" />
+              <path d="M41.12 0L123.36 0L143.92 -35.61L61.68 -35.61Z" />
+              <path d="M123.36 0L164.48 71.22L185.04 35.61L143.92 -35.61Z" />
+            </g>
+            <path class="face face-h" d="M41.12 0L123.36 0L143.92 -35.61L61.68 -35.61Z" />
+            <path class="face face-d" d="M123.36 0L164.48 71.22L185.04 35.61L143.92 -35.61Z" />
             <path class="face face-front" d="M41.12 0L123.36 0L164.48 71.22L123.36 142.44L41.12 142.44L0 71.22Z" />
           </svg>
           <span class="part-count">1x</span>

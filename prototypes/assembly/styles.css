@@ -1,6 +1,23 @@
 /* Assembly Manual: step 1 of Jarod's instruction booklet.
    Every value is a custom property so the page ports to the token pipeline unchanged. */
 
+/* Self-hosted latin subsets (variable): Bricolage Grotesque 600-800, wdth 75-100; Atkinson Hyperlegible Next 400-700. */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 600 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("fonts/bricolage-grotesque-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("fonts/atkinson-hyperlegible-next-latin.woff2") format("woff2");
+}
+
 :root {
   /* Color: cool white page, ink line art, a cobalt field; yellow and red are part colors
      and arrive only at the click. */
@@ -18,6 +35,8 @@
   --color-red: #e2231a;
   --color-red-h: #b91a13;
   --color-red-d: #93140e;
+  --color-cobalt-h: #1b37a8;
+  --color-cobalt-d: #142a82;
   --color-face-line: #f8faff;   /* a part before it is colored: a line drawing on paper */
   --color-face-line-h: #c9d3f0;
   --color-face-line-d: #a9b8e6;
@@ -41,6 +60,8 @@
   /* Line: one stroke for every drawn edge, arrows a step heavier. */
   --line: clamp(1.25px, 0.08vw + 0.6px, 2.6px);
   --line-arrow: calc(var(--line) * 2);
+  --line-contour: calc(var(--line) * 4);   /* centered on the edge, so the silhouette reads at 2x the interior line */
+  --line-contour-tile: calc(var(--line) * 3);
   --rail-dash: 7 6;
 
   /* Space and shape. */
@@ -52,9 +73,9 @@
   --space-l: clamp(1.75rem, 1rem + 1.6vw, 3.75rem);
   --header-h: clamp(3.75rem, 2.8rem + 1.6vw, 6rem);
   --radius-box: clamp(0.75rem, 0.5rem + 0.5vw, 1.375rem);
-  --radius-button: 999px;
+  --radius-button: calc(var(--radius-box) * 0.6);
   --field-share: 40%;
-  --tile-scale: clamp(0.22px, 0.1px + 0.012vw, 0.42px);
+  --tile-scale: clamp(0.3px, 0.16px + 0.017vw, 0.62px);
 
   /* Motion: linear travel, one click, a small settle. */
   --ease-draw: cubic-bezier(0.22, 0.7, 0.2, 1);
@@ -142,16 +163,15 @@ ul { padding: 0; list-style: none; }
 
 /* The step numeral hangs beside the set title, the way a booklet numbers its steps. */
 .step-number {
-  display: grid; place-items: center;
-  inline-size: 1.5em; block-size: 1.5em;
-  border: var(--line) solid var(--color-ink);
-  border-radius: calc(var(--radius-box) * 0.75);
+  align-self: start;
+  padding-block-start: 0.1em;
+  min-inline-size: 1.1em;
   font-family: var(--font-display);
   font-size: var(--type-lead);
   font-weight: 800;
-  font-variation-settings: "wdth" 85, "opsz" 48;
+  font-variation-settings: "wdth" 85, "opsz" 96;
   line-height: 1;
-  margin-block-start: 0.12em;
+  margin-block-start: 0.05em;
 }
 
 .set-title { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-s) var(--space-m); }
@@ -187,12 +207,11 @@ ul { padding: 0; list-style: none; }
 .ident {
   grid-column: 2;
   display: grid; gap: var(--space-2xs);
-  max-inline-size: 46ch;
-  font-size: var(--type-label);
-  font-weight: 700;
+  max-inline-size: 52ch;
   line-height: 1.35;
 }
-.place { color: var(--color-ink-muted); font-weight: 600; }
+.role { font-size: var(--type-body); font-weight: 700; }
+.place { font-size: var(--type-label); color: var(--color-ink-muted); font-weight: 600; }
 
 /* ---------- the field: the build ---------- */
 
@@ -201,17 +220,17 @@ ul { padding: 0; list-style: none; }
   position: relative;
   overflow: hidden;
   container-type: size;
-  block-size: clamp(20rem, 62vw + 6rem, 34rem);
+  block-size: clamp(24rem, 90vw + 4rem, 40rem);
   background: var(--color-cobalt);
   color: var(--color-on-cobalt);
 }
 
 .build {
   position: absolute; inset-block-start: 50%; inset-inline-start: 50%;
-  inline-size: min(84cqw, 80cqh * 7 / 6);
+  inline-size: min(94cqw, 96cqh * 767 / 1013);
   block-size: auto;
   overflow: visible;
-  translate: -50% -52%;
+  translate: -50% -50%;
 }
 
 .build * { vector-effect: non-scaling-stroke; }
@@ -233,6 +252,7 @@ ul { padding: 0; list-style: none; }
 .face-front { fill: var(--front); }
 .face-h { fill: var(--side-h); }
 .face-d { fill: var(--side-d); }
+.contour path { fill: var(--color-ink); stroke: var(--color-ink); stroke-width: var(--line-contour); stroke-linejoin: round; }
 
 .assembly { transform-box: view-box; transform-origin: 389.85px 323.93px; }
 
@@ -252,7 +272,7 @@ ul { padding: 0; list-style: none; }
   padding: var(--space-m);
   background: var(--color-cobalt-tint);
   border-radius: var(--radius-box);
-  max-inline-size: 64rem;
+  contain: inline-size;   /* never widens its column: the set title's measured extent sets the width */
 }
 .callout-body { display: grid; gap: var(--space-m); }
 
@@ -287,14 +307,12 @@ ul { padding: 0; list-style: none; }
 .part-count { font-weight: 700; font-variant-numeric: tabular-nums; }
 .part-name { font-weight: 600; }
 
-.tile { display: block; block-size: auto; margin-block-end: var(--space-xs); }
-.part-item:nth-child(1) .tile { inline-size: calc(120 * var(--tile-scale)); }
-.part-item:nth-child(2) .tile { inline-size: calc(162 * var(--tile-scale)); }
-.part-item:nth-child(3) .tile { inline-size: calc(204 * var(--tile-scale)); }
+.tile { display: block; inline-size: calc(var(--w) * var(--tile-scale)); block-size: auto; margin-block-end: var(--space-xs); overflow: visible; }
 .tile * { vector-effect: non-scaling-stroke; }
-.tile .face-front { fill: var(--color-paper); }
-.tile .face-h { fill: var(--color-face-line-h); }
-.tile .face-d { fill: var(--color-face-line-d); }
+.tile .contour path { stroke-width: var(--line-contour-tile); }
+.tile-yellow { --front: var(--color-yellow); --side-h: var(--color-yellow-h); --side-d: var(--color-yellow-d); }
+.tile-red { --front: var(--color-red); --side-h: var(--color-red-h); --side-d: var(--color-red-d); }
+.tile-cobalt { --front: var(--color-cobalt); --side-h: var(--color-cobalt-h); --side-d: var(--color-cobalt-d); }
 
 /* Wide callout: copy left, the parts column right, as a booklet lays out its parts box. */
 @container (min-width: 40rem) {
@@ -308,7 +326,7 @@ ul { padding: 0; list-style: none; }
     border-block-start: 0;
     border-inline-start: var(--line) dashed color-mix(in oklab, var(--color-ink) 45%, transparent);
   }
-  .part-item { grid-template-columns: calc(204 * var(--tile-scale)) auto; column-gap: var(--space-s); align-items: center; }
+  .part-item { grid-template-columns: calc(205.04 * var(--tile-scale)) auto; column-gap: var(--space-s); align-items: center; }
   .part-item .tile { grid-row: span 2; margin: 0; }
   .part-count { align-self: end; }
   .part-name { align-self: start; }
@@ -350,16 +368,16 @@ ul { padding: 0; list-style: none; }
 
 @media (min-width: 56rem) {
   .step {
-    grid-template-columns: minmax(0, 1fr) var(--field-share);
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr) var(--field-share);
     grid-template-rows: 1fr auto auto auto 1fr;
-    grid-template-areas: ". field" "set field" "callout field" "next field" ". field";
+    grid-template-areas: ". . field" "set . field" "callout . field" "next . field" ". . field";
     min-block-size: 100svh;
     padding-block-start: 0;
   }
   .set { padding-block: calc(var(--header-h) + var(--space-m)) 0; }
   .callout { margin-block: var(--space-l); }
   .field { block-size: auto; min-block-size: 100%; }
-  .build { inline-size: min(82cqw, 66cqh * 7 / 6); }
+  .build { inline-size: min(90cqw, 88cqh * 767 / 1013); }
 
   .masthead { grid-template-columns: minmax(0, 1fr) var(--field-share); padding-inline: 0; }
   .masthead-mark { margin-inline-start: var(--gutter); }
@@ -407,6 +425,13 @@ ul { padding: 0; list-style: none; }
 .intro .part-item:nth-child(1) { animation-delay: var(--t-parts); }
 .intro .part-item:nth-child(2) { animation-delay: calc(var(--t-parts) + var(--stagger-parts)); }
 .intro .part-item:nth-child(3) { animation-delay: calc(var(--t-parts) + var(--stagger-parts) * 2); }
+
+.intro .tile .face-front { animation: color-front var(--_land) step-end both; }
+.intro .tile .face-h { animation: color-h var(--_land) step-end both; }
+.intro .tile .face-d { animation: color-d var(--_land) step-end both; }
+.part-item:nth-child(1) { --_land: calc(var(--t-parts) + var(--d-parts) * 0.5); }
+.part-item:nth-child(2) { --_land: calc(var(--t-parts) + var(--stagger-parts) + var(--d-parts) * 0.5); }
+.part-item:nth-child(3) { --_land: calc(var(--t-parts) + var(--stagger-parts) * 2 + var(--d-parts) * 0.5); }
 
 .intro .btn-arrow-shaft { animation: draw var(--d-cta) var(--ease-draw) var(--t-cta) both; }
 .intro .btn-arrow-head { animation: appear 100ms linear calc(var(--t-cta) + var(--d-cta) - 80ms) both; }
