@@ -22,6 +22,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | Q4 | Remix UI pattern: panel, drawer, or command palette? | Decide in Phase 3 with a coded prototype |
 | Q5 | Signature "wow" moment(s)? | Decide in Phase 1. Lead candidate: the brand switch itself |
 | Q6 | Newsletter: yes or no? | Later |
+| Q7 | If round 5 falls short: switch to Impeccable `/impeccable` new-work flow, **code-led** (`buildPath: code`, direction picker, Bolder hand), not comp-led | Decide after Jarod reviews round 5 |
 
 ## ✅ Decisions
 
