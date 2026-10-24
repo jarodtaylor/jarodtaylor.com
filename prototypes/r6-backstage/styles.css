@@ -35,7 +35,7 @@
 
   /* Type: exactly three steps and one label. */
   --type-display: 35vw;
-  --type-lead: clamp(2rem, 8.6vw, 3rem);
+  --type-lead: clamp(1.625rem, 7vw, 2.25rem);
   --type-body: clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem);
   --type-label: clamp(0.75rem, 0.62rem + 0.22vw, 1rem);
   --type-annot: clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem); /* backstage only: the Peek layer's measurements */
@@ -97,7 +97,7 @@
     --cols: 12;
     /* One line of name, sized by whichever runs out first: width or height. */
     --type-display: min(12.5vw, 21svh);
-    --type-lead: min(3.5vw, 5.8svh);
+    --type-lead: min(2.6vw, 4.4svh);
   }
 }
 
@@ -381,14 +381,25 @@ main { display: grid; }
 .tagline {
   /* Clear the descender of the y: the name's line box is tighter than its glyphs. */
   margin-top: calc(var(--type-display) * 0.17 + var(--rhythm-tight));
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-weight: var(--font-lead-wght);
-  font-stretch: var(--font-lead-wdth);
   font-size: var(--type-lead);
-  line-height: 0.95;
-  letter-spacing: -0.015em;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
-.tagline .hl { display: block; color: var(--color-accent); }
+.tagline .hl { color: var(--color-accent); }
+@media (min-width: 48rem) { .tagline { white-space: nowrap; } }
+
+/* Info strip and socials speak in the mono, sentence case: small, quiet, measured. */
+.info,
+.social {
+  font-family: var(--font-label);
+  font-weight: var(--font-label-wght);
+  font-stretch: var(--font-label-wdth);
+  letter-spacing: 0;
+  text-transform: none;
+}
 
 /* One rhythm down the block: the whole stack sits on the hero's floor, bottom left. */
 .bio { margin-top: var(--rhythm-tight); max-width: var(--measure); text-wrap: pretty; }

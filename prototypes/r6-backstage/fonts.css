@@ -1,6 +1,6 @@
 /* The type pairing, and nothing else. Swap this file to change faces; styles.css only reads these properties.
-   Provisional pairing (round 5): Archivo (variable width) for display, Schibsted Grotesk for text,
-   Martian Mono for the Peek layer's measurements. The weight/width knobs are part of the pairing because they
+   Pairing R1 (font study): Archivo condensed for the name only, Schibsted Grotesk for text and the tagline,
+   Martian Mono for the info strip, socials and the Peek layer's measurements. The weight/width knobs are part of the pairing because they
    only mean something for these faces (a face without a wdth axis ignores the stretch). */
 @import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Martian+Mono:wdth,wght@75..112.5,300..600&family=Schibsted+Grotesk:ital,wght@0,400..800;1,400..800&display=swap");
 
@@ -11,6 +11,7 @@
 
   --font-display-wght: 820;   /* the name */
   --font-display-wdth: 62%;
-  --font-lead-wght: 760;      /* the tagline: same face, a step wider and lighter */
-  --font-lead-wdth: 78%;
+  --font-lead-wght: 500;      /* the tagline, in the text face */
+  --font-label-wght: 400;     /* info strip and socials, in the mono */
+  --font-label-wdth: 87.5%;
 }
