@@ -1,0 +1,144 @@
+/*
+  Font pairings for the Round 6 sketches.
+
+  Contract (same as prototypes/r6-*): every pairing sets only these custom
+  properties. To adopt one, copy its block onto :root in that sketch's fonts.css.
+
+    --font-display  --font-display-weight  --font-display-stretch  --font-display-settings  --font-display-tracking
+    --font-text     --font-text-weight     --font-text-settings
+    --font-label    --font-label-weight    --font-label-stretch    --font-label-settings
+    --font-label-case  --font-label-tracking
+
+  Hosted Google Fonts are fine for this specimen. Production self-hosts every
+  face (all eight rows are SIL OFL 1.1).
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,100..800&family=Mona+Sans:wdth,wght@75..125,200..900&family=Geologica:slnt,wght,CRSV,SHRP@-12..0,100..900,0..1,0..100&family=Spline+Sans+Mono:wght@300..700&family=Commissioner:slnt,wght,FLAR,VOLM@-12..0,100..900,0..100,0..100&family=Literata:opsz,wght@7..72,200..900&family=Hanken+Grotesk:wght@100..900&family=Fragment+Mono&family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&family=Archivo:wdth,wght@62..125,100..900&family=Schibsted+Grotesk:wght@400..900&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Atkinson+Hyperlegible+Next:wght@200..800&family=Atkinson+Hyperlegible+Mono:wght@200..800&display=swap");
+
+/* Not on Google Fonts. github.com/evilmartians/grotesk v1.0.0, OFL (files/MartianGrotesk-OFL.txt). */
+@font-face {
+  font-family: "Martian Grotesk";
+  src: url("files/MartianGrotesk-VF.woff2") format("woff2");
+  font-weight: 100 1000;
+  font-stretch: 75% 200%;
+  font-style: normal;
+  font-display: swap;
+}
+
+[data-pairing] {
+  --font-display-stretch: 100%;
+  --font-display-settings: normal;
+  --font-display-tracking: -0.03em;
+  --font-text-settings: normal;
+  --font-label-stretch: 100%;
+  --font-label-settings: normal;
+  --font-label-case: none;
+  --font-label-tracking: 0.02em;
+}
+
+/* 1. Martian Grotesk + Martian Mono (recommended) */
+[data-pairing="1"] {
+  --font-display: "Martian Grotesk", system-ui, sans-serif;
+  --font-display-weight: 780;
+  --font-display-stretch: 100%;
+  --font-display-tracking: -0.045em;
+  --font-text: "Martian Grotesk", system-ui, sans-serif;
+  --font-text-weight: 400;
+  --font-label: "Martian Mono", ui-monospace, monospace;
+  --font-label-weight: 400;
+  --font-label-stretch: 87.5%;
+}
+
+/* 2. Mona Sans Expanded + Mona Sans */
+[data-pairing="2"] {
+  --font-display: "Mona Sans", system-ui, sans-serif;
+  --font-display-weight: 860;
+  --font-display-stretch: 125%;
+  --font-display-tracking: -0.035em;
+  --font-text: "Mona Sans", system-ui, sans-serif;
+  --font-text-weight: 400;
+  --font-label: "Mona Sans", system-ui, sans-serif;
+  --font-label-weight: 600;
+  --font-label-stretch: 112.5%;
+  --font-label-case: uppercase;
+  --font-label-tracking: 0.08em;
+}
+
+/* 3. Geologica (sharp) + Geologica + Spline Sans Mono */
+[data-pairing="3"] {
+  --font-display: "Geologica", system-ui, sans-serif;
+  --font-display-weight: 720;
+  --font-display-settings: "SHRP" 100, "CRSV" 0;
+  --font-display-tracking: -0.05em;
+  --font-text: "Geologica", system-ui, sans-serif;
+  --font-text-weight: 350;
+  --font-text-settings: "SHRP" 0, "CRSV" 0;
+  --font-label: "Spline Sans Mono", ui-monospace, monospace;
+  --font-label-weight: 450;
+}
+
+/* 4. Commissioner (flared) + Commissioner */
+[data-pairing="4"] {
+  --font-display: "Commissioner", system-ui, sans-serif;
+  --font-display-weight: 680;
+  --font-display-settings: "FLAR" 100, "VOLM" 70;
+  --font-display-tracking: -0.04em;
+  --font-text: "Commissioner", system-ui, sans-serif;
+  --font-text-weight: 400;
+  --font-text-settings: "FLAR" 0, "VOLM" 0;
+  --font-label: "Commissioner", system-ui, sans-serif;
+  --font-label-weight: 600;
+  --font-label-settings: "FLAR" 0, "VOLM" 0;
+  --font-label-case: uppercase;
+  --font-label-tracking: 0.1em;
+}
+
+/* 5. Literata Display + Hanken Grotesk + Fragment Mono */
+[data-pairing="5"] {
+  --font-display: "Literata", Georgia, serif;
+  --font-display-weight: 560;
+  --font-display-settings: "opsz" 72;
+  --font-display-tracking: -0.035em;
+  --font-text: "Hanken Grotesk", system-ui, sans-serif;
+  --font-text-weight: 400;
+  --font-label: "Fragment Mono", ui-monospace, monospace;
+  --font-label-weight: 400;
+}
+
+/* 6. Recursive: Casual display, Linear text, Mono labels (one file) */
+[data-pairing="6"] {
+  --font-display: "Recursive", system-ui, sans-serif;
+  --font-display-weight: 820;
+  --font-display-settings: "CASL" 1, "MONO" 0, "CRSV" 0.5, "slnt" 0;
+  --font-display-tracking: -0.04em;
+  --font-text: "Recursive", system-ui, sans-serif;
+  --font-text-weight: 400;
+  --font-text-settings: "CASL" 0, "MONO" 0, "CRSV" 0.5, "slnt" 0;
+  --font-label: "Recursive", ui-monospace, monospace;
+  --font-label-weight: 450;
+  --font-label-settings: "CASL" 0, "MONO" 1, "CRSV" 0, "slnt" 0;
+}
+
+/* R1. Tried in rounds 1 to 5: Archivo condensed + Schibsted Grotesk + Martian Mono */
+[data-pairing="R1"] {
+  --font-display: "Archivo", system-ui, sans-serif;
+  --font-display-weight: 800;
+  --font-display-stretch: 62%;
+  --font-display-tracking: -0.02em;
+  --font-text: "Schibsted Grotesk", system-ui, sans-serif;
+  --font-text-weight: 400;
+  --font-label: "Martian Mono", ui-monospace, monospace;
+  --font-label-weight: 400;
+  --font-label-stretch: 87.5%;
+}
+
+/* R2. Tried: Bricolage Grotesque + Atkinson Hyperlegible Next */
+[data-pairing="R2"] {
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-display-weight: 760;
+  --font-display-tracking: -0.04em;
+  --font-text: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --font-text-weight: 400;
+  --font-label: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+  --font-label-weight: 400;
+}
