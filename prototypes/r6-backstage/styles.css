@@ -41,7 +41,9 @@
   --type-annot: clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem); /* backstage only: the Peek layer's measurements */
   --measure: 44ch;
   --mark-phone: 0.3;   /* the monogram's strength behind the name on a phone (tools/contrast.mjs checks it) */
-  --mark-h: 64svh;     /* the monogram's tallest size on wide screens; its column width caps it first */
+  /* The monogram's tallest size on wide screens: the whole hero, header and info strip taken out.
+     Its column width caps it first on anything narrower than about 16:10. */
+  --mark-h: calc(100svh - var(--header-h) - 2 * var(--rhythm) - 4rem);
 
   /* Motion: one decisive in-out for anything that draws, an expo-out for anything that arrives. */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -94,7 +96,7 @@
   :root {
     --cols: 12;
     /* One line of name, sized by whichever runs out first: width or height. */
-    --type-display: min(14.5vw, 24svh);
+    --type-display: min(12.5vw, 21svh);
     --type-lead: min(3.5vw, 5.8svh);
   }
 }
@@ -154,8 +156,7 @@ ul { padding: 0; list-style: none; }
 .talk,
 .info,
 .social,
-.skip-intro,
-.dev {
+.skip-intro {
   font-family: var(--font-text);
   font-size: var(--type-label);
   font-weight: 600;
@@ -295,29 +296,23 @@ main { display: grid; }
 }
 .talk:hover { background: var(--color-ink); color: var(--color-bg); }
 
-/* Wide screens: the header shares the hero's 12 columns. The nav starts on column 8, the same line as the
-   location below it and the monogram below that, so the right side of the page reads as one column. */
+/* Wide screens: three zones. Mark left, nav on the page's centre line, Peek and Let's talk right. */
 @media (min-width: 64rem) {
-  .masthead {
-    display: grid;
-    grid-template-columns:
-      calc((100% - 11 * var(--col-gap)) * 7 / 12 + 7 * var(--col-gap) - var(--space-3))
-      1fr auto auto;
-    column-gap: var(--space-3);
-  }
-  .mark { justify-self: start; }
+  .nav { position: absolute; left: 50%; translate: -50% 0; }
   .peek-toggle { padding: 0 var(--space-3) 0 var(--space-2); }
   .peek-word { display: inline; }
 }
 
-/* Info strip: role and location in the label style, on a hairline that bleeds to both screen edges
-   (an outset border image, so it costs no pseudo-element). */
+/* Info strip: role, location and status, a step under the label and muted, on a hairline that bleeds to both
+   screen edges (an outset border image, so it costs no pseudo-element). */
 .info {
   position: relative;
   z-index: 5;
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  font-size: var(--type-annot);
+  color: var(--color-ink-muted);
   margin-inline: var(--page-x);
   padding-block: var(--space-3);
   border-top: var(--line-hair) solid;
@@ -325,16 +320,26 @@ main { display: grid; }
 }
 .role { text-wrap: balance; }
 .role .sep { color: var(--color-accent); padding-inline: 0.3em; }
-.loc { color: var(--color-ink-muted); }
+.dot { padding-inline: 0.5em; }
+
+/* Open to new roles: a small lime dot with a slow ring breathing out of it. Static under reduced motion. */
+.status { display: inline-flex; align-items: center; gap: 0.6em; }
+.status::before {
+  content: "";
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: status 2.4s var(--ease-out) infinite;
+}
+@keyframes status {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklch, var(--color-accent) 55%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 0.55em transparent; }
+}
 
 @media (min-width: 64rem) {
-  .info {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--col-gap);
-  }
-  .role { grid-column: 1 / 8; text-wrap: wrap; }
-  .loc { grid-column: 8 / -1; }
+  .info { flex-direction: row; justify-content: space-between; gap: var(--space-6); }
+  .role { text-wrap: wrap; }
 }
 
 /* Hero ---------------------------------------------------------------------- */
@@ -354,6 +359,7 @@ main { display: grid; }
   z-index: 1;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: flex-start;
 }
 
@@ -384,9 +390,8 @@ main { display: grid; }
 }
 .tagline .hl { display: block; color: var(--color-accent); }
 
-/* Bio and socials sit on the hero's floor, level with the foot of the monogram. */
-.tagline { margin-bottom: var(--rhythm); }
-.bio { margin-top: auto; max-width: var(--measure); text-wrap: pretty; }
+/* One rhythm down the block: the whole stack sits on the hero's floor, bottom left. */
+.bio { margin-top: var(--rhythm-tight); max-width: var(--measure); text-wrap: pretty; }
 
 .social { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-6); margin-top: var(--rhythm-tight); }
 .social a {
@@ -421,17 +426,14 @@ main { display: grid; }
 @media (min-width: 48rem) {
   .figure {
     position: static;
-    grid-column: 8 / -1;
+    grid-column: 6 / -1;
     grid-row: 1;
-    align-self: end;
-    justify-self: end;
+    align-self: center;
+    justify-self: center;
     width: 100%;
     max-width: calc(var(--mark-h) * 655.65 / 582.31);
     opacity: 1;
   }
-  /* The viewBox overruns the mark by 40 units so its guides can extend past it; drop by that much so the
-     visible floor of the mark, not its box, shares a floor with the social links. */
-  .mono { translate: 0 calc(100% * 40 / 582.31); }
 }
 
 /* Construction: every stroke is drawn with pathLength="1", so one dash value draws any line. */
@@ -605,11 +607,11 @@ main { display: grid; }
   translate: 0 calc((1 - var(--lab)) * 100%);
   clip-path: inset(0 0 calc((1 - var(--lab)) * 100%) 0);
 }
-/* The tagline and socials are short, so their labels sit off their right edge, in open space, and slide out sideways.
+/* The tagline, bio and socials leave open space on their right, so their labels sit off that edge and slide out sideways.
    The info strip's label hangs from its right end, clear of the name's label on the left. */
 @media (min-width: 48rem) {
   .info[data-peek]::after { left: auto; right: 0; }
-  :is(.tagline, .social)[data-peek]::after {
+  :is(.tagline, .bio, .social)[data-peek]::after {
     left: calc(100% + var(--space-2));
     bottom: auto;
     top: 0;
@@ -739,14 +741,14 @@ main { display: grid; }
   :root:not([data-peek-state]) .name-block:hover .dim b { opacity: 1; transition: opacity 0.3s var(--ease-out) 0.3s; }
 }
 
-/* 5. The hero-scale card: top right, above the mark, typed in one row at a time. Wide screens only. */
+/* 5. The hero-scale card: bottom right, beside the mark's narrow foot, typed in one row at a time. Wide screens only. */
 .spec { display: none; }
 @media (min-width: 64rem) {
   .spec {
     display: grid;
     gap: var(--space-1);
     position: absolute;
-    top: var(--rhythm);
+    bottom: var(--rhythm);
     right: var(--page-x);
     z-index: 3;
     min-width: 15rem;
@@ -776,8 +778,7 @@ main { display: grid; }
 
 /* Intro controls ------------------------------------------------------------ */
 
-.skip-intro,
-.dev {
+.skip-intro {
   position: fixed;
   bottom: var(--space-4);
   z-index: 40;
@@ -790,15 +791,11 @@ main { display: grid; }
   cursor: pointer;
 }
 .skip-intro { left: var(--page-x); display: none; }
-.skip-intro:hover,
-.dev:hover { color: var(--color-ink); border-color: var(--color-ink); }
+.skip-intro:hover { color: var(--color-ink); border-color: var(--color-ink); }
 .intro .skip-intro { display: block; }
 
 /* One frame without transitions, so a skip lands on the resting state instead of animating to it. */
 .settling *, .settling *::before, .settling *::after { transition: none !important; }
-
-/* Prototype control (not part of the design): bottom right, out of the composition. */
-.dev { right: var(--page-x); background: var(--color-surface); }
 
 /* Reduced motion: nothing moves. The intro never starts, Peek is a cut instead of a draw, the pen rests. */
 @media (prefers-reduced-motion: reduce) {

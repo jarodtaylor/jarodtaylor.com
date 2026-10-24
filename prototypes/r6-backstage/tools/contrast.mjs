@@ -29,11 +29,10 @@ const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
 // [foreground, background, minimum, where]
 const pairs = [
   ['ink', 'bg', 4.5, 'name, role, bio, menu'],
-  ['ink-muted', 'bg', 4.5, 'location, nav, social links, Peek toggle, skip intro'],
+  ['ink-muted', 'bg', 4.5, 'info strip, nav, social links, Peek toggle, skip intro'],
   ['accent', 'bg', 4.5, 'tagline accent, role separator'],
   ['on-accent', 'accent', 4.5, "Let's talk"],
   ['bg', 'ink', 4.5, "Let's talk hover"],
-  ['ink-muted', 'surface', 4.5, 'prototype control'],
   ['guide-ink', 'bg', 4.5, 'Peek scale card, cap/baseline, monogram dimensions'],
   ['redline', 'bg', 4.5, 'type-size readout, 60° label'],
   ['on-redline', 'redline', 4.5, 'Peek spec labels, Peek toggle on'],

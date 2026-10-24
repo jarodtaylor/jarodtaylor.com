@@ -50,7 +50,7 @@
       display: px(cs('.name').fontSize),
       lead: px(cs('.tagline').fontSize),
       body: px(cs('.bio').fontSize),
-      label: px(cs('.info').fontSize),
+      label: px(cs('.social').fontSize),
       'page-x': px(hero.paddingLeft),
       cols: `${hero.getPropertyValue('--cols').trim()} × gap ${px(hero.columnGap)}`,
     };
@@ -157,15 +157,4 @@
   addEventListener('resize', readouts);
   document.fonts.ready.then(readouts);
   if (root.dataset.peekState === 'arm') intro();
-
-  // Prototype control: replay the intro.
-  $('[data-replay]').addEventListener('click', () => {
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    settle();
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      root.classList.add('intro');
-      setState('arm');
-      intro();
-    }));
-  });
 })();
