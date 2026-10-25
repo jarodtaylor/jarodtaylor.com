@@ -266,9 +266,11 @@
     }
   }
 
+  /* The empty figure leaves the flow rather than hiding: Chromium doesn't re-run a style query inside an element
+     that was display: none when the token changed, so after a brand switch its SVGs would keep the old answer. */
   @container style(--hero-figure: lattice) {
     .figure {
-      display: none;
+      position: absolute;
     }
 
     .field {
@@ -617,6 +619,160 @@
   .arrow,
   .click {
     display: none;
+  }
+
+  .arrow-shaft {
+    fill: none;
+    stroke: var(--figure-line);
+    stroke-dasharray: 1;
+    stroke-width: calc(var(--figure-stroke-width) * 2);
+  }
+
+  .arrow-head {
+    fill: var(--figure-line);
+  }
+
+  .click path {
+    fill: none;
+    stroke: var(--hero-lead-accent);
+    stroke-linecap: round;
+    stroke-width: calc(var(--figure-stroke-width) * 2);
+  }
+
+  /* Hover: the parts ease a quarter edge apart along their rail (--_pull, set on each part), and snap back home. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .part {
+      transition: translate calc(var(--_beat) * 2.4) var(--motion-easing-in);
+    }
+
+    .figure:hover .part {
+      transition: translate calc(var(--_beat) * 7) var(--motion-easing-out);
+      translate: var(--_pull);
+    }
+  }
+
+  /* The assemble intro (assemble brands only, once per session, never under reduced motion). In beats from first
+     paint: the rail draws, arrows point the parts home, both travel at constant speed along the rail (--_from, set
+     on each part) and arrive on the same frame, the click colours them, and the small print rises meanwhile. */
+  @container style(--hero-intro: assemble) {
+    :root.building .rail-draw {
+      animation: draw calc(var(--_beat) * 7.6) var(--figure-draw-easing) var(--_beat) both;
+    }
+
+    :root.building .arrow {
+      animation: fade-out calc(var(--_beat) * 2) linear calc(var(--_beat) * 8.2) both;
+      display: inline;
+    }
+
+    :root.building .arrow-shaft {
+      animation:
+        draw calc(var(--_beat) * 3) var(--figure-draw-easing) calc(var(--_beat) * 3.8) both,
+        retract calc(var(--_beat) * 2.6) linear calc(var(--_beat) * 6.4) forwards;
+    }
+
+    :root.building .arrow-head {
+      animation: appear calc(var(--_beat) * 1.2) linear calc(var(--_beat) * 6.2) both;
+    }
+
+    :root.building .part-t {
+      animation: travel calc(var(--_beat) * 7) linear calc(var(--_beat) * 6.4) both;
+    }
+
+    :root.building .part-j {
+      animation: travel calc(var(--_beat) * 5.8) linear calc(var(--_beat) * 7.6) both;
+    }
+
+    /* Until the click the parts are line drawings on the field; the click is the one moment of colour. */
+    :root.building .face {
+      animation:
+        line-stroke calc(var(--_beat) * 13.4) step-end both,
+        line-fill calc(var(--_beat) * 13.4) step-end both;
+    }
+
+    :root.building .assembly {
+      animation: settle calc(var(--_beat) * 1.6) var(--motion-easing-out) calc(var(--_beat) * 13.4) both;
+    }
+
+    :root.building .click {
+      animation: fade-out calc(var(--_beat) * 2.6) linear calc(var(--_beat) * 15.6) both;
+      display: inline;
+    }
+
+    :root.building .click path {
+      animation: appear calc(var(--_beat) * 0.6) linear calc(var(--_beat) * 13.4) both;
+    }
+
+    :root.intro .info > *,
+    :root.intro :is(.tagline, .bio, .social) {
+      animation: rise calc(var(--_beat) * 5.6) var(--motion-easing-out) calc(var(--_beat) * (1.6 + var(--_b) * 0.8)) both;
+    }
+
+    :root.intro .cue-shaft {
+      animation: draw calc(var(--_beat) * 4.2) var(--figure-draw-easing) calc(var(--_beat) * 15.4) both;
+    }
+  }
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes retract {
+    from {
+      stroke-dashoffset: 0;
+    }
+
+    to {
+      stroke-dashoffset: -1;
+    }
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes travel {
+    from {
+      translate: var(--_from);
+    }
+  }
+
+  @keyframes line-stroke {
+    from {
+      stroke: var(--figure-line);
+    }
+  }
+
+  @keyframes line-fill {
+    from {
+      fill: var(--hero-bg);
+    }
+  }
+
+  @keyframes settle {
+    35% {
+      scale: 1.022;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(calc(var(--_small) * 0.6));
+    }
   }
 
   /* Lattice: the monogram's own 60° lattice at page scale, painted on the canvas by runtime.ts --------------------- */

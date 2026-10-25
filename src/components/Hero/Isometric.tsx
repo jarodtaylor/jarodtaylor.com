@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { PATHS } from '../../lib/monogram';
 
 type Point = [number, number];
@@ -23,6 +24,10 @@ const J_SIDES: [face: string, a: Point, b: Point][] = [
   ['d', [384.11, 333.87], [245.2, 93.14]],
 ];
 const [J, T] = PATHS as [string, string];
+
+/** Where each part starts (three lattice edges up or down the rail) and how far hover pulls it (a quarter edge). */
+const T_MOTION = { '--_from': '-123.36px -213.67px', '--_pull': '-10.28px -17.8px' } as CSSProperties;
+const J_MOTION = { '--_from': '123.36px 213.67px', '--_pull': '10.28px 17.8px' } as CSSProperties;
 
 /**
  * The monogram built from its two parts, seen in isometric on the mark's own 60° lattice. The front faces are the mark's
@@ -60,20 +65,20 @@ export function Isometric() {
 
       {/* The click settles around the joint, where the two tips meet. */}
       <g className="assembly" style={{ transformBox: 'view-box', transformOrigin: '339.85px 237.32px' }}>
-        <g className="part part-t">
+        <g className="part part-t" style={T_MOTION}>
           {T_SIDES.map(([face, a, b]) => (
             <path key={a.join()} className={`face face-${face}`} d={side(a, b)} />
           ))}
         </g>
-        <g className="part part-j">
+        <g className="part part-j" style={J_MOTION}>
           {J_SIDES.map(([face, a, b]) => (
             <path key={a.join()} className={`face face-${face}`} d={side(a, b)} />
           ))}
         </g>
-        <g className="part part-t">
+        <g className="part part-t" style={T_MOTION}>
           <path className="face face-front" d={T} />
         </g>
-        <g className="part part-j">
+        <g className="part part-j" style={J_MOTION}>
           <path className="face face-front" d={J} />
         </g>
       </g>
