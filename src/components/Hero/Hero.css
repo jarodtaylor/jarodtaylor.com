@@ -1,9 +1,9 @@
 @layer components {
   /* Fluid sizes come in two bands; each is picked once here and read below. */
   .hero {
-    --_x: var(--layout-page-x-phone);
-    --_gap: var(--layout-col-gap-phone);
-    --_rhythm: var(--layout-rhythm-phone);
+    --_x: var(--space-page-x-phone);
+    --_gap: var(--space-col-gap-phone);
+    --_rhythm: var(--space-rhythm-phone);
     --_display: var(--hero-name-size-phone);
     --_lead: var(--hero-lead-size-phone);
     --_body: var(--hero-body-size);
@@ -21,9 +21,9 @@
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 48rem) {
     .hero {
-      --_x: var(--layout-page-x-wide);
-      --_gap: var(--layout-col-gap-wide);
-      --_rhythm: var(--layout-rhythm-wide);
+      --_x: var(--space-page-x-wide);
+      --_gap: var(--space-col-gap-wide);
+      --_rhythm: var(--space-rhythm-wide);
       --_display: var(--hero-name-size-wide);
       --_lead: var(--hero-lead-size-wide);
       --_body: var(--hero-body-size-wide);

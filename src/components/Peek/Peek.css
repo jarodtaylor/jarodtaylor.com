@@ -32,14 +32,14 @@
     --_peek-hold: calc(var(--_beat) * 6); /* intro only: the layer holds, fully drawn */
     --_peek-leave: calc(var(--_beat) * 5.5); /* the construction folds back; the rest of the layer fades */
     --_annot: var(--spec-font-size);
-    --_x: var(--layout-page-x-phone);
+    --_x: var(--space-page-x-phone);
   }
 
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 48rem) {
     :root {
       --_annot: var(--spec-font-size-wide);
-      --_x: var(--layout-page-x-wide);
+      --_x: var(--space-page-x-wide);
     }
   }
 
@@ -69,7 +69,7 @@
 
   /* 1. Columns: each one's edges draw down the whole stage, left to right. */
   .cols {
-    column-gap: var(--layout-col-gap-phone);
+    column-gap: var(--space-col-gap-phone);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     inset: 0 var(--_x);
@@ -334,7 +334,7 @@
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 48rem) {
     .cols {
-      column-gap: var(--layout-col-gap-wide);
+      column-gap: var(--space-col-gap-wide);
       grid-template-columns: repeat(12, minmax(0, 1fr));
     }
 
@@ -410,7 +410,7 @@
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 64rem) {
     .spec {
-      bottom: var(--layout-rhythm-wide);
+      bottom: var(--space-rhythm-wide);
       color: var(--spec-guide-ink);
       display: grid;
       gap: var(--space-stack-xs);

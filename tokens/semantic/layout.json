@@ -2,18 +2,6 @@
   "layout": {
     "$type": "string",
     "$description": "The page frame and figure sizes, fluid: phone below 48rem, wide above. Components pick the band in a media query.",
-    "page-x-phone": {
-      "$value": "{fluid.page-x.phone}"
-    },
-    "page-x-wide": {
-      "$value": "{fluid.page-x.wide}"
-    },
-    "col-gap-phone": {
-      "$value": "{fluid.col-gap.phone}"
-    },
-    "col-gap-wide": {
-      "$value": "{fluid.col-gap.wide}"
-    },
     "header-h-phone": {
       "$value": "{fluid.header-h.phone}"
     },
@@ -25,12 +13,6 @@
     },
     "control-h-wide": {
       "$value": "{fluid.control-h.wide}"
-    },
-    "rhythm-phone": {
-      "$value": "{fluid.rhythm.phone}"
-    },
-    "rhythm-wide": {
-      "$value": "{fluid.rhythm.wide}"
     },
     "stage-h-phone": {
       "$value": "{fluid.stage-h.phone}"

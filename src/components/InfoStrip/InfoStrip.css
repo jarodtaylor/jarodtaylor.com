@@ -2,7 +2,7 @@
   /* A step under the control labels and muted, on a hairline that runs out to both screen edges
      (an outset border image the width of the gutter, so it costs no pseudo-element). */
   .info {
-    --_x: var(--layout-page-x-phone);
+    --_x: var(--space-page-x-phone);
     --_size: var(--header-info-font-size);
 
     border-block-start: var(--shape-border-width-default) solid;
@@ -76,7 +76,7 @@
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 48rem) {
     .info {
-      --_x: var(--layout-page-x-wide);
+      --_x: var(--space-page-x-wide);
       --_size: var(--header-info-font-size-wide);
     }
   }

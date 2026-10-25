@@ -2,8 +2,8 @@
   /* Fluid sizes come in two bands; each is picked once here and read below. */
   .masthead {
     --_h: var(--layout-header-h-phone);
-    --_x: var(--layout-page-x-phone);
-    --_gap: var(--layout-col-gap-phone);
+    --_x: var(--space-page-x-phone);
+    --_gap: var(--space-col-gap-phone);
     --_control-h: var(--layout-control-h-phone);
     --_control-size: var(--header-control-font-size);
     --_talk-size: var(--talk-font-size);
@@ -23,8 +23,8 @@
   @media (min-width: 48rem) {
     .masthead {
       --_h: var(--layout-header-h-wide);
-      --_x: var(--layout-page-x-wide);
-      --_gap: var(--layout-col-gap-wide);
+      --_x: var(--space-page-x-wide);
+      --_gap: var(--space-col-gap-wide);
       --_control-h: var(--layout-control-h-wide);
       --_control-size: var(--header-control-font-size-wide);
       --_talk-size: var(--talk-font-size-wide);

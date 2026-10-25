@@ -34,6 +34,31 @@
     },
     "section": {
       "$value": "{size.space.9}"
-    }
+    },
+    "page-x-phone": {
+      "$type": "string",
+      "$value": "{fluid.page-x.phone}"
+    },
+    "page-x-wide": {
+      "$type": "string",
+      "$value": "{fluid.page-x.wide}"
+    },
+    "col-gap-phone": {
+      "$type": "string",
+      "$value": "{fluid.col-gap.phone}"
+    },
+    "col-gap-wide": {
+      "$type": "string",
+      "$value": "{fluid.col-gap.wide}"
+    },
+    "rhythm-phone": {
+      "$type": "string",
+      "$value": "{fluid.rhythm.phone}"
+    },
+    "rhythm-wide": {
+      "$type": "string",
+      "$value": "{fluid.rhythm.wide}"
+    },
+    "$description": "Spacing. page-x (page gutter), col-gap and rhythm (vertical step between hero groups) are fluid: phone below 48rem, wide above."
   }
 }
