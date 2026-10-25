@@ -1,0 +1,132 @@
+{
+  "$description": "Brand knobs: clean (Clean and sharp, prototypes/r6-clean). Step 1 fixture: colors fitted to the prototype (see prototype-colors.json); type, fluid and motion values are first drafts for Step 2.",
+  "color": {
+    "ramp": {
+      "$type": "number",
+      "neutral": {
+        "hue": { "$value": 172.4 },
+        "hue-shift": { "$value": -8.7 },
+        "chroma": { "$value": 0.198 },
+        "peak": { "$value": 0.053 },
+        "taper": { "$value": 0.92 }
+      },
+      "accent": {
+        "hue": { "$value": 53.2 },
+        "hue-shift": { "$value": 13.3 },
+        "chroma": { "$value": 0.123 },
+        "peak": { "$value": 0.85 },
+        "taper": { "$value": 0 }
+      },
+      "guide": {
+        "hue": { "$value": 232 },
+        "hue-shift": { "$value": 0 },
+        "chroma": { "$value": 0.1 },
+        "peak": { "$value": 0.6 },
+        "taper": { "$value": 1 }
+      },
+      "redline": {
+        "hue": { "$value": 20 },
+        "hue-shift": { "$value": 0 },
+        "chroma": { "$value": 0.2 },
+        "peak": { "$value": 0.75 },
+        "taper": { "$value": 1.2 }
+      }
+    },
+    "role": {
+      "$type": "color",
+      "bg": { "$value": "{color.neutral.275}" },
+      "bg-next": { "$value": "{color.neutral.250}" },
+      "text": { "$value": "{color.neutral.950}" },
+      "text-muted": { "$value": "{color.neutral.850}" },
+      "text-quiet": { "$value": "{color.neutral.850}" },
+      "rule": { "$value": "{color.neutral.475}" },
+      "accent": { "$value": "{color.accent.800}" },
+      "on-accent": { "$value": "{color.neutral.250}" },
+      "accent-text": { "$value": "{color.accent.800}" },
+      "focus": { "$value": "{color.accent.800}" },
+      "figure-line": { "$value": "{color.neutral.950}" },
+      "figure-mark": { "$value": "{color.accent.800}" },
+      "figure-mark-h": { "$value": "{color.accent.700}" },
+      "figure-mark-d": { "$value": "{color.accent.600}" },
+      "figure-face": { "$value": "{color.neutral.950}" },
+      "figure-face-h": { "$value": "{color.neutral.850}" },
+      "figure-face-d": { "$value": "{color.neutral.750}" },
+      "figure-edge": { "$value": "{color.neutral.200}" },
+      "figure-guide": { "$value": "{color.guide.675}" },
+      "figure-guide-ink": { "$value": "{color.guide.750}" },
+      "figure-redline": { "$value": "{color.redline.700}" },
+      "figure-on-redline": { "$value": "{color.redline.175}" }
+    }
+  },
+  "type": {
+    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "ratio": { "$type": "number", "$value": 1.25 },
+    "family": {
+      "$type": "fontFamily",
+      "display": { "$value": ["Funnel Display", "ui-sans-serif", "system-ui", "sans-serif"] },
+      "text": { "$value": ["Funnel Sans", "ui-sans-serif", "system-ui", "sans-serif"] },
+      "label": { "$value": ["Funnel Sans", "ui-sans-serif", "system-ui", "sans-serif"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "display": { "$value": 560 },
+      "text": { "$value": 380 },
+      "label": { "$value": 500 }
+    },
+    "variation": {
+      "$type": "string",
+      "display": { "$value": "normal" },
+      "text": { "$value": "normal" },
+      "label": { "$value": "normal" }
+    }
+  },
+  "space": {
+    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "density": { "$type": "number", "$value": 1 }
+  },
+  "shape": {
+    "radius": { "$type": "dimension", "$value": { "value": 0, "unit": "rem" } },
+    "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" } }
+  },
+  "fluid": {
+    "$type": "string",
+    "hero-display": {
+      "phone": { "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" },
+      "wide": { "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" }
+    },
+    "hero-lead": {
+      "phone": { "$value": "clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem)" },
+      "wide": { "$value": "clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem)" }
+    },
+    "hero-figure": {
+      "phone": { "$value": "100vw" },
+      "wide": { "$value": "100vw" }
+    }
+  },
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "fast": { "$value": { "value": 160, "unit": "ms" } },
+      "base": { "$value": { "value": 240, "unit": "ms" } },
+      "slow": { "$value": { "value": 480, "unit": "ms" } }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "out": { "$value": [0.16, 1, 0.3, 1] },
+      "in": { "$value": [0.55, 0, 0.75, 0] },
+      "draw": { "$value": [0.65, 0, 0.25, 1] },
+      "pop": { "$value": [0.3, 1.5, 0.6, 1] }
+    }
+  },
+  "enum": {
+    "$type": "string",
+    "decoration": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["rules", "none"] } },
+    "hero-figure": { "$value": "lattice", "$extensions": { "com.jarodtaylor.enum": ["construction", "isometric", "lattice"] } },
+    "hero-layout": { "$value": "name-over-details", "$extensions": { "com.jarodtaylor.enum": ["stack", "name-over-details"] } },
+    "hero-intro": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["peek", "assemble", "none"] } },
+    "nav-mode": { "$value": "wrap", "$extensions": { "com.jarodtaylor.enum": ["toggle", "wrap"] } },
+    "hero-cue": { "$value": "labelled", "$extensions": { "com.jarodtaylor.enum": ["none", "icon", "labelled"] } },
+    "talk-style": { "$value": "outline", "$extensions": { "com.jarodtaylor.enum": ["pill-fill", "outline"] } },
+    "label-case": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["upper", "none"] } }
+  }
+}

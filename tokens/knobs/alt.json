@@ -1,13 +1,47 @@
 {
   "$description": "Brand knobs: alt. PLACEHOLDER brand that exists to prove Remix differs in more than color (type, scale, density, shape, decoration).",
   "color": {
-    "neutral": {
-      "hue": { "$type": "number", "$value": 70, "$description": "OKLCH hue (degrees) of the neutral ramp" },
-      "chroma": { "$type": "number", "$value": 0.02, "$description": "OKLCH chroma of the neutral ramp" }
+    "ramp": {
+      "$type": "number",
+      "$description": "OKLCH ramps on the shared lightness ladder (steps 150…975 = L × 1000). hue in degrees; hue-shift in degrees per unit L away from peak; chroma is the peak chroma before sRGB clamping; peak is the L of peak chroma; taper is the falloff exponent (0 flat, 1 linear).",
+      "neutral": {
+        "$description": "Neutral ramp",
+        "hue": { "$value": 70 },
+        "hue-shift": { "$value": 0 },
+        "chroma": { "$value": 0.02 },
+        "peak": { "$value": 0.6 },
+        "taper": { "$value": 1 }
+      },
+      "accent": {
+        "$description": "Accent ramp",
+        "hue": { "$value": 30 },
+        "hue-shift": { "$value": 0 },
+        "chroma": { "$value": 0.14 },
+        "peak": { "$value": 0.6 },
+        "taper": { "$value": 1 }
+      },
+      "guide": {
+        "$description": "Figure guide lines (PLACEHOLDER)",
+        "hue": { "$value": 232 },
+        "hue-shift": { "$value": 0 },
+        "chroma": { "$value": 0.1 },
+        "peak": { "$value": 0.6 },
+        "taper": { "$value": 1 }
+      },
+      "redline": {
+        "$description": "Figure redlines (PLACEHOLDER)",
+        "hue": { "$value": 20 },
+        "hue-shift": { "$value": 0 },
+        "chroma": { "$value": 0.2 },
+        "peak": { "$value": 0.6 },
+        "taper": { "$value": 1 }
+      }
     },
-    "accent": {
-      "hue": { "$type": "number", "$value": 30, "$description": "OKLCH hue (degrees) of the accent ramp" },
-      "chroma": { "$type": "number", "$value": 0.14, "$description": "Peak OKLCH chroma of the accent ramp, before gamut clamping" }
+    "role": {
+      "$type": "color",
+      "$description": "Which ramp step plays each color role. The semantic tier aliases these, so every brand defines the same role names.",
+      "bg": { "$value": "{color.neutral.950}" },
+      "text": { "$value": "{color.neutral.300}" }
     }
   },
   "type": {

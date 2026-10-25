@@ -1,0 +1,49 @@
+{
+  "$description": "The approved prototypes' colors, by color role, from prototypes/r6-*/styles.css (Backstage rule is its color-mix(in oklch, ink 16%, bg), precomputed). derive.test.ts checks each brand fixture reproduces them within ΔE00 2.",
+  "default": {
+    "bg": "oklch(17.5% 0.026 252)",
+    "text": "oklch(96% 0.012 240)",
+    "text-muted": "oklch(76% 0.03 245)",
+    "text-quiet": "oklch(76% 0.03 245)",
+    "rule": "oklch(0.3006 0.0238 250.08)",
+    "accent": "oklch(90% 0.19 124)",
+    "on-accent": "oklch(22% 0.045 140)",
+    "accent-text": "oklch(90% 0.19 124)",
+    "focus": "oklch(90% 0.19 124)",
+    "figure-guide": "oklch(68% 0.09 232)",
+    "figure-guide-ink": "oklch(76% 0.08 232)",
+    "figure-redline": "oklch(71% 0.18 20)",
+    "figure-on-redline": "oklch(17% 0.03 20)"
+  },
+  "blocks": {
+    "bg": "#1633b1",
+    "text": "#f2f5fb",
+    "text-muted": "#c2d1f3",
+    "text-quiet": "#a9bcec",
+    "accent": "#f56333",
+    "on-accent": "#071869",
+    "accent-text": "#fd9a73",
+    "focus": "#fd9a73",
+    "figure-line": "#f2f5fb",
+    "figure-mark": "#f56333",
+    "figure-mark-h": "#d54c25",
+    "figure-mark-d": "#af371c",
+    "figure-face": "#f2f5fb",
+    "figure-face-h": "#c3d1ef",
+    "figure-face-d": "#93aade",
+    "figure-edge": "#071869"
+  },
+  "clean": {
+    "bg": "oklch(0.285 0.058 170)",
+    "bg-next": "oklch(0.235 0.05 172)",
+    "text": "oklch(0.965 0.014 165)",
+    "text-muted": "oklch(0.84 0.035 168)",
+    "text-quiet": "oklch(0.84 0.035 168)",
+    "accent": "oklch(0.81 0.125 52)",
+    "on-accent": "oklch(0.235 0.05 172)",
+    "accent-text": "oklch(0.81 0.125 52)",
+    "focus": "oklch(0.81 0.125 52)",
+    "figure-line": "oklch(0.965 0.014 165)",
+    "figure-mark": "oklch(0.81 0.125 52)"
+  }
+}

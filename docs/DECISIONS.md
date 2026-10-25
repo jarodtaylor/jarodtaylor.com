@@ -28,6 +28,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-24 | **Colour model (merge Step 1):** ramps on a fixed lightness ladder, with steps named L×1000 (`neutral.750` = L .75), 150–975 every .025. Four required ramps (neutral, accent, guide, redline), each with knobs hue, hue-shift, chroma, peak and taper. **Colour roles live in the knobs**: `color.role.<name>` is an alias to a ramp step, and the semantic tier aliases roles. Every brand defines the same role names | The prototypes put shared roles (muted text, on-accent) at different lightness and on different ramps in each brand, so one shared alias to a ramp step can't match all three. Fitted fixtures reproduce every prototype colour within ΔE00 1.11 |
 | 2026-10-13 | Ship in phases: Foundation → Design → v0 launch → Remix v1 → Storybook + Figma | Get off "coming soon" fast |
 | 2026-10-13 | No calendar estimates. Phases are sized by scope and exit criteria | Agents work faster than human timelines |
 | 2026-10-13 | Remix v1 changes tokens/CSS only. DOM order never changes | Keeps "0 lines of markup changed" literally true |

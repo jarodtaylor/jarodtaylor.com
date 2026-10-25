@@ -1,12 +1,16 @@
 import { readFileSync } from 'node:fs';
 import Color from 'colorjs.io';
 import { describe, expect, it } from 'vitest';
-import { derive, toSrgbGamut, ENUMS, RAMP, type EnumKnob, type Knobs, type OklchColor } from './derive.ts';
+import { derive, toSrgbGamut, ENUMS, RAMP, RAMPS, type EnumKnob, type Knobs, type OklchColor } from './derive.ts';
 
 const load = (brand: string): Knobs =>
   JSON.parse(readFileSync(new URL(`../tokens/knobs/${brand}.json`, import.meta.url), 'utf8'));
 
+const loadFixture = (brand: string): Knobs =>
+  JSON.parse(readFileSync(new URL(`./fixtures/${brand}.knobs.json`, import.meta.url), 'utf8'));
+
 const brands = ['default', 'alt'] as const;
+const fixtures = ['default', 'blocks', 'clean'] as const;
 
 /** Leaf $values of a token group, in key order, excluding $-prefixed group metadata. */
 const values = <T>(group: object): T[] =>
@@ -18,8 +22,9 @@ const values = <T>(group: object): T[] =>
 const oracleInSrgb = ({ components }: OklchColor) =>
   new Color('oklch', components).inGamut('srgb', { epsilon: 0 });
 
-describe.each(brands)('derive(%s knobs)', (brand) => {
-  const knobs = load(brand);
+const knobSets = [...brands.map((b) => [b, load(b)] as const), ...fixtures.map((f) => [`fixture ${f}`, loadFixture(f)] as const)];
+
+describe.each(knobSets)('derive(%s knobs)', (_, knobs) => {
   const tokens = derive(knobs);
 
   it('is deterministic and does not mutate its input', () => {
@@ -47,14 +52,14 @@ describe.each(brands)('derive(%s knobs)', (brand) => {
     expect(tokens.size.border.thin.$value.value).toBeLessThanOrEqual(tokens.size.border.thick.$value.value);
   });
 
-  it.each(['neutral', 'accent'] as const)('%s ramp gets darker at every step, at the knob hue', (name) => {
+  it.each(RAMPS)('%s ramp gets lighter at every step, at the lightness its step names', (name) => {
     const colors = values<OklchColor>(tokens.color[name]);
-    expect(colors).toHaveLength(Object.keys(RAMP).length);
-    colors.slice(1).forEach((c, i) => expect(c.components[0]).toBeLessThan(colors[i]!.components[0]));
-    colors.forEach((c) => expect(c.components[2]).toBe(knobs.color[name].hue.$value));
+    expect(Object.keys(tokens.color[name])).toEqual(Object.keys(RAMP));
+    colors.slice(1).forEach((c, i) => expect(c.components[0]).toBeGreaterThan(colors[i]!.components[0]));
+    Object.entries(tokens.color[name]).forEach(([step, { $value }]) => expect($value.components[0]).toBe(Number(step) / 1000));
   });
 
-  it.each(['neutral', 'accent'] as const)('every %s color is inside sRGB, with a matching hex fallback', (name) => {
+  it.each(RAMPS)('every %s color is inside sRGB, with a matching hex fallback', (name) => {
     for (const color of values<OklchColor>(tokens.color[name])) {
       expect(oracleInSrgb(color), JSON.stringify(color)).toBe(true);
       const oracleHex = new Color('oklch', color.components).to('srgb').toString({ format: 'hex', collapse: false });
@@ -73,6 +78,32 @@ describe.each(brands)('derive(%s knobs)', (brand) => {
     expect(tokens.fluid.$extensions).toEqual({ 'com.jarodtaylor.export': { figma: false } });
     expect(tokens.duration.base.$value).toEqual(knobs.motion.duration.base.$value);
     expect(tokens.easing.out.$value).toEqual(knobs.motion.easing.out.$value);
+  });
+});
+
+describe.each(fixtures)('%s fixture reproduces its prototype', (brand) => {
+  const knobs = loadFixture(brand);
+  const tokens = derive(knobs);
+  const expected = JSON.parse(readFileSync(new URL('./fixtures/prototype-colors.json', import.meta.url), 'utf8'))[brand] as Record<
+    string,
+    string
+  >;
+
+  it('defines the same color roles as every other fixture', () => {
+    expect(Object.keys(knobs.color.role).filter((k) => !k.startsWith('$'))).toEqual(
+      Object.keys(loadFixture('default').color.role).filter((k) => !k.startsWith('$')),
+    );
+  });
+
+  /**
+   * Pine, pine-deep and apricot (Clean) are outside sRGB, so no derived color can equal them. The
+   * reference is what the prototype rendered on an sRGB screen: CSS Color 4 gamut mapping.
+   */
+  it.each(Object.keys(expected))('role %s is within ΔE00 2 of the prototype', (role) => {
+    const [, ramp, step] = /^\{color\.([\w-]+)\.(\d+)\}$/.exec(tokens.color.role[role]!.$value)!;
+    const derived = (tokens.color as unknown as Record<string, Record<string, { $value: OklchColor }>>)[ramp!]![step!]!.$value;
+    const reference = new Color(expected[role]!).toGamut({ space: 'srgb', method: 'css' });
+    expect(new Color('oklch', derived.components).deltaE2000(reference)).toBeLessThanOrEqual(2);
   });
 });
 
@@ -151,6 +182,16 @@ describe('validation', () => {
 
   it('rejects a type ratio that would not grow', () => {
     expect(broken((k) => (k.type.ratio.$value = 1))).toThrow(/type\.ratio/);
+  });
+
+  it('rejects a role that aliases anything but a ramp step', () => {
+    for (const bad of ['{color.neutral.760}', '{color.mauve.500}', '#fff', '{surface.default.bg}'])
+      expect(broken((k) => (k.color.role.bg = { $value: bad }))).toThrow(/color\.role\.bg must alias a ramp step/);
+  });
+
+  it('rejects a missing ramp and an out-of-range peak', () => {
+    expect(broken((k) => delete (k.color.ramp as Partial<Knobs['color']['ramp']>).guide)).toThrow(/color\.ramp\.guide\.hue/);
+    expect(broken((k) => (k.color.ramp.neutral.peak.$value = 1))).toThrow(/color\.ramp\.neutral\.peak/);
   });
 
   it('rejects non-positive density', () => {

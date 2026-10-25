@@ -4,89 +4,89 @@
     "$description": "Surface roles. Each role declares the foregrounds used on it, so every pair a contrast check needs sits side by side. focus is the focus indicator on that surface (3:1, SC 1.4.11).",
     "default": {
       "bg": {
-        "$value": "{color.neutral.50}"
+        "$value": "{color.role.bg}"
       },
       "text": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.role.text}"
       },
       "text-muted": {
-        "$value": "{color.neutral.600}"
+        "$value": "{color.neutral.525}"
       },
       "border": {
-        "$value": "{color.neutral.200}"
+        "$value": "{color.neutral.875}"
       },
       "link": {
-        "$value": "{color.accent.700}"
+        "$value": "{color.accent.450}"
       },
       "focus": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.accent.625}"
       }
     },
     "raised": {
       "bg": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.neutral.975}"
       },
       "text": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.neutral.300}"
       },
       "text-muted": {
-        "$value": "{color.neutral.600}"
+        "$value": "{color.neutral.525}"
       },
       "border": {
-        "$value": "{color.neutral.200}"
+        "$value": "{color.neutral.875}"
       },
       "link": {
-        "$value": "{color.accent.700}"
+        "$value": "{color.accent.450}"
       },
       "focus": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.accent.625}"
       }
     },
     "inverse": {
       "bg": {
-        "$value": "{color.neutral.900}"
-      },
-      "text": {
-        "$value": "{color.neutral.50}"
-      },
-      "text-muted": {
         "$value": "{color.neutral.300}"
       },
+      "text": {
+        "$value": "{color.neutral.950}"
+      },
+      "text-muted": {
+        "$value": "{color.neutral.800}"
+      },
       "border": {
-        "$value": "{color.neutral.700}"
+        "$value": "{color.neutral.450}"
       },
       "link": {
-        "$value": "{color.accent.300}"
+        "$value": "{color.accent.800}"
       },
       "focus": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.accent.625}"
       }
     },
     "accent": {
       "bg": {
-        "$value": "{color.accent.700}"
+        "$value": "{color.accent.450}"
       },
       "text": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.neutral.975}"
       },
       "text-muted": {
-        "$value": "{color.accent.100}"
+        "$value": "{color.accent.925}"
       },
       "border": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.accent.625}"
       },
       "link": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.neutral.975}"
       },
       "focus": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.neutral.975}"
       }
     }
   },
   "focus": {
     "$type": "color",
     "ring": {
-      "$value": "{color.accent.500}"
+      "$value": "{color.accent.625}"
     }
   }
 }

@@ -43,6 +43,20 @@ export const ENUMS = {
 } as const;
 export type EnumKnob = keyof typeof ENUMS;
 
+export const RAMPS = ['neutral', 'accent', 'guide', 'redline'] as const;
+export type RampName = (typeof RAMPS)[number];
+
+/** One OKLCH ramp. Chroma peaks at `peak` lightness and falls to zero at black and white. */
+interface RampKnobs {
+  hue: Token<number>;
+  /** Degrees of hue per unit of lightness away from `peak`, so a ramp can warm or cool as it lightens. */
+  'hue-shift': Token<number>;
+  chroma: Token<number>;
+  peak: Token<number>;
+  /** Exponent on the chroma falloff: 0 keeps chroma flat, 1 is linear, above 1 drains it faster. */
+  taper: Token<number>;
+}
+
 export const FONT_ROLES = ['display', 'text', 'label'] as const;
 type FontRole = (typeof FONT_ROLES)[number];
 
@@ -67,8 +81,13 @@ type CubicBezier = [number, number, number, number];
 /** Shape of tokens/knobs/<brand>.json. Group-level $type/$description are allowed and ignored. */
 export interface Knobs {
   color: {
-    neutral: { hue: Token<number>; chroma: Token<number> };
-    accent: { hue: Token<number>; chroma: Token<number> };
+    ramp: Record<RampName, RampKnobs>;
+    /**
+     * Color roles: each brand picks the ramp step that plays a role, as an alias like {color.neutral.750}.
+     * The semantic tier aliases roles, so it stays shared even though brands put muted text (say) at
+     * different lightness or source it from different ramps. Every brand must define the same role names.
+     */
+    role: Record<string, Token<string>>;
   };
   type: {
     base: Token<Dimension>;
@@ -97,11 +116,7 @@ export interface OklchColor {
 type Leaf<T> = { $value: T };
 
 export interface Primitives {
-  color: {
-    $type: 'color';
-    neutral: Record<RampStep, Leaf<OklchColor>>;
-    accent: Record<RampStep, Leaf<OklchColor>>;
-  };
+  color: { $type: 'color'; role: Record<string, Leaf<string>> } & Record<RampName, Record<RampStep, Leaf<OklchColor>>>;
   font: {
     family: { $type: 'fontFamily' } & Record<FontRole, Leaf<FontFamily>>;
     weight: { $type: 'fontWeight' } & Record<FontRole, Leaf<number>>;
@@ -127,22 +142,14 @@ const NOT_FOR_FIGMA = { 'com.jarodtaylor.export': { figma: false } } as const;
 // Scales
 // ---------------------------------------------------------------------------
 
-/** Ramp step → OKLCH lightness. Strictly decreasing; 0 is the lightest. */
-export const RAMP = {
-  '0': 0.995,
-  '50': 0.97,
-  '100': 0.935,
-  '200': 0.88,
-  '300': 0.8,
-  '400': 0.71,
-  '500': 0.62,
-  '600': 0.54,
-  '700': 0.46,
-  '800': 0.38,
-  '900': 0.29,
-  '950': 0.22,
-} as const;
-export type RampStep = keyof typeof RAMP;
+/**
+ * Ramp step → OKLCH lightness. Steps are named by lightness × 1000 (`neutral.760` is L 0.76), every
+ * 0.025 from 0.15 to 0.975: fine enough that any color a brand designs is within ΔE00 2 of a step.
+ */
+export const RAMP: Record<string, number> = Object.fromEntries(
+  Array.from({ length: 34 }, (_, i) => [String(150 + 25 * i), round(0.15 + 0.025 * i, 3)]),
+);
+export type RampStep = string;
 
 /** Type step → exponent on the modular scale. */
 export const TYPE_SCALE = { xs: -2, sm: -1, md: 0, lg: 1, xl: 2, '2xl': 3, '3xl': 4, '4xl': 5, '5xl': 6 } as const;
@@ -181,8 +188,12 @@ export function derive(knobs: Knobs): Primitives {
   return {
     color: {
       $type: 'color',
-      neutral: ramp(color.neutral.hue.$value, color.neutral.chroma.$value),
-      accent: ramp(color.accent.hue.$value, color.accent.chroma.$value),
+      ...(Object.fromEntries(RAMPS.map((name) => [name, ramp(color.ramp[name])])) as Record<RampName, Record<RampStep, Leaf<OklchColor>>>),
+      role: Object.fromEntries(
+        Object.entries(color.role)
+          .filter(([name]) => !name.startsWith('$'))
+          .map(([name, t]) => [name, { $value: t.$value }]),
+      ),
     },
     font: {
       family: { $type: 'fontFamily', ...pick(FONT_ROLES, (r) => type.family[r].$value) },
@@ -237,9 +248,20 @@ function validate(k: Knobs): void {
   };
   const positive = (n: number) => n > 0;
 
-  for (const ramp of ['neutral', 'accent'] as const) {
-    num(`color.${ramp}.hue`, k.color?.[ramp]?.hue?.$value, (n) => n >= 0 && n < 360, 'in [0, 360)');
-    num(`color.${ramp}.chroma`, k.color?.[ramp]?.chroma?.$value, (n) => n >= 0 && n <= 0.4, 'in [0, 0.4]');
+  for (const name of RAMPS) {
+    const r = k.color?.ramp?.[name];
+    num(`color.ramp.${name}.hue`, r?.hue?.$value, (n) => n >= 0 && n < 360, 'in [0, 360)');
+    num(`color.ramp.${name}.hue-shift`, r?.['hue-shift']?.$value, (n) => Math.abs(n) <= 180, 'in [-180, 180]');
+    num(`color.ramp.${name}.chroma`, r?.chroma?.$value, (n) => n >= 0 && n <= 0.4, 'in [0, 0.4]');
+    num(`color.ramp.${name}.peak`, r?.peak?.$value, (n) => n > 0 && n < 1, 'in (0, 1)');
+    num(`color.ramp.${name}.taper`, r?.taper?.$value, (n) => n >= 0 && n <= 4, 'in [0, 4]');
+  }
+  if (!k.color?.role || typeof k.color.role !== 'object') errors.push('color.role must be a group of role aliases');
+  for (const [name, t] of Object.entries(k.color?.role ?? {})) {
+    if (name.startsWith('$')) continue;
+    const [, rampName, step] = /^\{color\.([\w-]+)\.(\d+)\}$/.exec(String(t?.$value)) ?? [];
+    if (!RAMPS.includes(rampName as RampName) || !(step! in RAMP))
+      errors.push(`color.role.${name} must alias a ramp step like {color.neutral.750} (got ${JSON.stringify(t?.$value)})`);
   }
   dim('type.base', k.type?.base?.$value, positive, '> 0');
   num('type.ratio', k.type?.ratio?.$value, (n) => n > 1, '> 1');
@@ -330,17 +352,20 @@ function round(n: number, places: number): number {
 // ---------------------------------------------------------------------------
 
 /**
- * Chroma tapers toward the light and dark ends, where sRGB has little room
- * anyway, so ramps stay smooth instead of hitting the gamut wall abruptly.
+ * Chroma falls off linearly (to the power `taper`) from `peak` to zero at black and white, where sRGB
+ * has no room for it anyway; the hue drifts by `hue-shift` per unit of lightness away from `peak`.
  */
-function taper(l: number): number {
-  return Math.max(0.25, 1 - ((l - 0.6) / 0.45) ** 2);
-}
-
-function ramp(hue: number, chroma: number): Record<RampStep, Leaf<OklchColor>> {
+function ramp(knobs: RampKnobs): Record<RampStep, Leaf<OklchColor>> {
+  const hue = knobs.hue.$value;
+  const shift = knobs['hue-shift'].$value;
+  const chroma = knobs.chroma.$value;
+  const peak = knobs.peak.$value;
+  const taper = knobs.taper.$value;
   const out = {} as Record<RampStep, Leaf<OklchColor>>;
-  for (const step of Object.keys(RAMP) as RampStep[]) {
-    out[step] = { $value: toSrgbGamut(RAMP[step], chroma * taper(RAMP[step]), hue) };
+  for (const [step, l] of Object.entries(RAMP)) {
+    const falloff = l > peak ? (1 - l) / (1 - peak) : l / peak;
+    const h = (((hue + shift * (l - peak)) % 360) + 360) % 360;
+    out[step] = { $value: toSrgbGamut(l, chroma * falloff ** taper, h) };
   }
   return out;
 }

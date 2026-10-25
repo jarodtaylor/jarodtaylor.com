@@ -40,6 +40,7 @@ terrazzo.config.ts             → src/styles/tokens.css + public/tokens/<brand>
 ```
 
 - **Add a brand**: create `tokens/knobs/<name>.json` and add a `<name>` context to the `brand` modifier in `tokens/resolver.json`. The build fails if the two lists disagree.
+- **Colour roles**: each brand picks the ramp step for every role in `color.role` (e.g. `"text-muted": { "$value": "{color.neutral.750}" }`). The semantic tier aliases `{color.role.*}`, not ramp steps, so it stays shared (the placeholder `surface.*` aliases move to roles in merge Step 3). Every brand must define the same role names (`pnpm tokens` fails otherwise). `scripts/fixtures/` holds the three brands' fitted knobs and the prototype colours they must match.
 - Aliases compile to `var(--…)` references, not flattened values, so setting a primitive at runtime cascades through the semantic and component tiers. Remix v2 depends on this.
 - `derive()` clamps every color into sRGB. That keeps Terrazzo from emitting wide-gamut `@media` duplicates and makes the `hex` fallback exact.
 - **Resolved per-brand JSON** for checkers, exports and the "{n} tokens changed" readout: `public/tokens/<brand>.json` (shipped at `dist/tokens/<brand>.json`). It's a flat map of `token.id → { $type, $value, aliasOf? }`. Colors carry `components` (OKLCH) and `hex`. For contrast, each `surface.<role>` group (`default | raised | inverse | accent`) holds `bg` plus the foregrounds used on it (`text`, `text-muted`, `link`, `border`, `focus`). `check:contrast` derives its pairs from this naming: every sibling of `bg` is text at 4.5:1, except `border` (decorative, skipped) and `focus` (3:1).
@@ -48,7 +49,7 @@ terrazzo.config.ts             → src/styles/tokens.css + public/tokens/<brand>
 ## Token rules (non-negotiable)
 
 - Components consume **only** semantic or component custom properties (`--surface-*`, `--space-*`, `--type-*`, `--shape-*`, `--button-*`, `--card-*`, `--section-*`, …). Never primitives (`--color-*`, `--size-*`, `--font-*`, `--knob-*`), never raw colors, lengths or font names.
-- Private per-component props use the `--_` prefix (e.g. `--_bg`) and may only be assigned from token vars.
+- Private per-component props use the `--_` prefix (e.g. `--_bg`) and may only be assigned from token vars, or `calc`/`clamp`/`min`/`max` math over token vars and unitless numbers (e.g. `calc(var(--motion-duration-base) * 0.15)`).
 - **Never key CSS on a brand name.** No `[data-brand="…"]` selectors outside the generated `tokens.css`. Brands differ only through tokens.
 - Brands author knobs only. Semantic and component files are aliases only: no literal values.
 - Discrete layout and decoration choices are enumerated knobs (e.g. `--section-decoration: rules | none`) that component CSS reads with `@container style(...)`. A style query only styles descendants of the element carrying the property.
