@@ -9,6 +9,8 @@
  *   - <html data-brand>: the switch itself. Only <body> is snapshotted.
  *   - lazily injected font <link>s: they live in <head>, which isn't snapshotted.
  *   - the Remix control's own open/closed state: REMIX_UI_STATE attributes on [data-remix-ui] and its descendants.
+ *   - values JS reads from each brand's computed styles: the text of [data-readout] (Peek's measurements), the
+ *     data-spec/data-tpl labels filled from them, and the canvas bitmap size (width/height attributes).
  */
 import { expect, test, type Page } from '@playwright/test';
 import { brands, builtPages } from './site.ts';
@@ -24,6 +26,9 @@ async function snapshot(page: Page) {
       const body = document.body.cloneNode(true) as HTMLElement;
       for (const el of body.querySelectorAll('[data-remix-ui], [data-remix-ui] *'))
         for (const attr of remixUiState) el.removeAttribute(attr);
+      for (const el of body.querySelectorAll('[data-readout]')) el.textContent = '';
+      for (const [selector, attrs] of [['[data-spec], [data-tpl]', ['data-spec', 'data-tpl']], ['canvas', ['width', 'height']]] as const)
+        for (const el of body.querySelectorAll(selector)) for (const attr of attrs) el.removeAttribute(attr);
       const styles = [document.body, ...document.body.querySelectorAll('*')].map((el) => {
         const computed = getComputedStyle(el);
         return styleProps.map((prop) => computed.getPropertyValue(prop)).join('|');

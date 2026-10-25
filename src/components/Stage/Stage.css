@@ -1,0 +1,21 @@
+@layer components {
+  .stage {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    isolation: isolate;
+    min-block-size: var(--layout-stage-h-phone);
+    overflow: clip;
+    position: relative;
+  }
+
+  .stage > main {
+    display: grid;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .stage {
+      min-block-size: var(--layout-stage-h-wide);
+    }
+  }
+}

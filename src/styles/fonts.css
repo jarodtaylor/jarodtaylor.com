@@ -1,0 +1,122 @@
+/*
+ * Every face the brands use, self-hosted: latin-subset variable woff2 in public/fonts/, all SIL OFL 1.1.
+ * A browser downloads only the faces the active brand's --type-family-* tokens name, so the Remix brands cost
+ * nothing until they're switched on. Base.astro preloads the default brand's three.
+ *
+ * Each face that sets a lot of text has a metric-matched fallback ("<Face> Fallback", listed right after it in the
+ * family token): a local Arial scaled to the face's width (size-adjust, measured on the hero's own copy at the
+ * weight and axes the brand uses) with the face's ascent and descent, so swapping in the real face barely moves a line.
+ * Not linted (stylelint ignoreFiles): font names, file URLs and metric overrides are the point of this file.
+ */
+
+/* default: Archivo (the name, condensed), Schibsted Grotesk (text), Martian Mono (small print) */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 500 900;
+  font-stretch: 62% 100%;
+  font-display: swap;
+  src: url("/fonts/archivo.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Archivo Fallback";
+  font-weight: 100 900;
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  size-adjust: 69.87%;
+  ascent-override: 125.66%;
+  descent-override: 30.06%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Schibsted Grotesk";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("/fonts/schibsted-grotesk.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Schibsted Grotesk Fallback";
+  font-weight: 100 900;
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 106.06%;
+  ascent-override: 92.08%;
+  descent-override: 24.31%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Martian Mono";
+  font-style: normal;
+  font-weight: 300 600;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("/fonts/martian-mono.woff2") format("woff2");
+}
+
+/* blocks: Bricolage Grotesque (display), Atkinson Hyperlegible Next (text and labels) */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("/fonts/bricolage-grotesque.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Bricolage Grotesque Fallback";
+  font-weight: 100 900;
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  size-adjust: 79.12%;
+  ascent-override: 117.54%;
+  descent-override: 34.13%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("/fonts/atkinson-hyperlegible-next.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next Fallback";
+  font-weight: 100 900;
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 99.88%;
+  ascent-override: 98.52%;
+  descent-override: 31.64%;
+  line-gap-override: 0%;
+}
+
+/* clean: Funnel Display (the name and tagline), Funnel Sans (text and labels) */
+@font-face {
+  font-family: "Funnel Display";
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url("/fonts/funnel-display.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Funnel Display Fallback";
+  font-weight: 100 900;
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 108.72%;
+  ascent-override: 91.98%;
+  descent-override: 22.99%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Funnel Sans";
+  font-style: normal;
+  font-weight: 300 800;
+  font-display: swap;
+  src: url("/fonts/funnel-sans.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Funnel Sans Fallback";
+  font-weight: 100 900;
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 101.41%;
+  ascent-override: 98.61%;
+  descent-override: 24.65%;
+  line-gap-override: 0%;
+}

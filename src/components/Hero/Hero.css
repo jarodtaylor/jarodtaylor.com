@@ -1,0 +1,644 @@
+@layer components {
+  /* Fluid sizes come in two bands; each is picked once here and read below. */
+  .hero {
+    --_x: var(--layout-page-x-phone);
+    --_gap: var(--layout-col-gap-phone);
+    --_rhythm: var(--layout-rhythm-phone);
+    --_display: var(--hero-name-size-phone);
+    --_lead: var(--hero-lead-size-phone);
+    --_body: var(--hero-body-size);
+    --_small: var(--hero-small-font-size);
+    --_measure: var(--hero-body-measure);
+    --_fig: var(--hero-figure-size-phone);
+
+    column-gap: var(--_gap);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: var(--_rhythm) var(--_x);
+    position: relative;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .hero {
+      --_x: var(--layout-page-x-wide);
+      --_gap: var(--layout-col-gap-wide);
+      --_rhythm: var(--layout-rhythm-wide);
+      --_display: var(--hero-name-size-wide);
+      --_lead: var(--hero-lead-size-wide);
+      --_body: var(--hero-body-size-wide);
+      --_small: var(--hero-small-font-size-wide);
+      --_measure: var(--hero-body-measure-wide);
+      /* The figure's tallest size: its height budget less the header and the hero's own rhythm. */
+      --_fig: calc(var(--hero-figure-size-wide) - var(--layout-header-h-wide) - var(--_rhythm) * 2);
+
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+  }
+
+  /* The text: one block sitting on the hero's floor, bottom left. */
+  .stack {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  .name-block {
+    position: relative;
+  }
+
+  .name {
+    color: var(--hero-name-color);
+    font-family: var(--hero-name-font-family);
+    font-size: var(--_display);
+    font-variation-settings: var(--hero-name-font-variation);
+    font-weight: var(--hero-name-font-weight);
+    letter-spacing: var(--hero-name-tracking);
+    line-height: var(--hero-name-leading);
+    margin-inline-start: calc(var(--_display) * -0.035);
+    white-space: nowrap;
+  }
+
+  .name span {
+    display: block;
+  }
+
+  .tagline {
+    color: var(--hero-lead-color);
+    font-family: var(--hero-lead-font-family);
+    font-size: var(--_lead);
+    font-variation-settings: var(--hero-lead-font-variation);
+    font-weight: var(--hero-lead-font-weight);
+    letter-spacing: var(--hero-lead-tracking);
+    line-height: var(--hero-lead-leading);
+    text-wrap: balance;
+  }
+
+  .tagline-accent {
+    color: var(--hero-lead-accent);
+  }
+
+  .bio {
+    color: var(--hero-body-color);
+    font-family: var(--hero-body-font-family);
+    font-size: var(--_body);
+    font-weight: var(--hero-body-font-weight);
+    line-height: var(--hero-body-leading);
+    max-inline-size: var(--_measure);
+    text-wrap: pretty;
+  }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    font-family: var(--hero-small-font-family);
+    font-size: var(--_small);
+    font-variation-settings: var(--hero-small-font-variation);
+    font-weight: var(--hero-small-font-weight);
+    gap: var(--space-stack-xs) var(--space-inset-lg);
+    letter-spacing: var(--hero-small-tracking);
+    margin: 0;
+    padding: 0;
+  }
+
+  .social li {
+    list-style: none;
+  }
+
+  .social a {
+    color: var(--hero-small-color);
+    display: inline-block;
+    padding-block: var(--space-inset-sm);
+    text-decoration: underline;
+    text-decoration-color: var(--surface-default-border);
+    text-decoration-thickness: var(--shape-border-width-default);
+    text-underline-offset: calc(var(--_small) * 0.22);
+    transition:
+      color var(--motion-duration-fast) var(--motion-easing-out),
+      text-decoration-color var(--motion-duration-fast) var(--motion-easing-out);
+  }
+
+  .social a:hover {
+    color: var(--surface-default-text);
+    text-decoration-color: var(--surface-default-accent);
+  }
+
+  /* stack: the details run straight on under the name, one rhythm apart. */
+  @container style(--hero-layout: stack) {
+    .details {
+      display: contents;
+    }
+
+    .tagline {
+      /* Clear the descender of the y: the name's line box is tighter than its glyphs. */
+      margin-block-start: calc(var(--_display) * 0.17 + var(--_rhythm) * 0.5);
+    }
+
+    .bio,
+    .social {
+      margin-block-start: calc(var(--_rhythm) * 0.5);
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .name span {
+        display: inline;
+      }
+
+      .tagline {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  /* name-over-details: the name owns its row; the details sit below it on a rule, in columns. */
+  @container style(--hero-layout: name-over-details) {
+    .details {
+      align-items: start;
+      border-block-start: var(--shape-border-width-default) solid var(--surface-default-border);
+      column-gap: var(--_gap);
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      margin-block-start: var(--_rhythm);
+      padding-block-start: var(--_rhythm);
+      row-gap: var(--space-stack-md);
+      width: 100%;
+    }
+
+    .tagline,
+    .bio,
+    .social {
+      grid-column: 1 / -1;
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 64rem) {
+      .tagline {
+        grid-column: 1 / 6;
+      }
+
+      .bio {
+        grid-column: 6 / 11;
+      }
+
+      .social {
+        flex-direction: column;
+        grid-column: 11 / 13;
+        justify-self: end;
+      }
+    }
+  }
+
+  /* The scroll cue: off, an arrow, or an arrow with its words. */
+  .cue {
+    align-items: center;
+    color: var(--hero-cue-color);
+    display: none;
+    font-family: var(--hero-small-font-family);
+    font-size: var(--_small);
+    gap: var(--space-inset-sm);
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-block-start: var(--_rhythm);
+    text-decoration: none;
+  }
+
+  .cue svg {
+    block-size: calc(var(--_small) * 2.5);
+    fill: currentcolor;
+    inline-size: var(--_small);
+    overflow: visible;
+  }
+
+  .cue-shaft {
+    fill: none;
+    stroke: currentcolor;
+    stroke-dasharray: 1;
+    stroke-width: calc(var(--figure-stroke-width) * 1.5);
+  }
+
+  @container style(--hero-cue: icon) {
+    .cue {
+      display: inline-flex;
+    }
+
+    /* Visually hidden: the words stay the link's name. */
+    .cue-label {
+      clip-path: inset(50%);
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+    }
+  }
+
+  @container style(--hero-cue: labelled) {
+    .cue {
+      display: inline-flex;
+    }
+  }
+
+  /* The figures: all three are always in the page; --hero-figure shows one. ------------------------------ */
+
+  .figure {
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .figure > svg,
+  .field {
+    display: none;
+  }
+
+  @container style(--hero-figure: construction) {
+    .figure > .mono {
+      display: block;
+    }
+  }
+
+  @container style(--hero-figure: isometric) {
+    .figure > .build {
+      display: block;
+    }
+  }
+
+  @container style(--hero-figure: lattice) {
+    .figure {
+      display: none;
+    }
+
+    .field {
+      display: block;
+    }
+  }
+
+  /* Construction: the monogram as a line drawing over faint construction ------------------------------------ */
+
+  /* Phone: the mark sits behind the name, off the right edge, at reduced strength, so it never runs under small text. */
+  @container style(--hero-figure: construction) {
+    .figure {
+      inline-size: var(--_fig);
+      opacity: 0.3;
+      position: absolute;
+      right: calc(var(--_fig) * -0.3);
+      top: calc(var(--_rhythm) * 0.5);
+      z-index: 0;
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .figure {
+        align-self: center;
+        grid-column: 6 / -1;
+        grid-row: 1;
+        inline-size: 100%;
+        justify-self: center;
+        max-inline-size: calc(var(--_fig) * 1.1259);
+        opacity: 1;
+        position: static;
+      }
+    }
+  }
+
+  .mono {
+    block-size: auto;
+    inline-size: 100%;
+    overflow: visible;
+  }
+
+  .mono * {
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* Dashed draws need real path lengths: non-scaling strokes break pathLength-based dashes once the mark is drawn
+     larger than its viewBox (a 4K screen), leaving half-drawn lines. These strokes scale with the mark instead. */
+  .mono :is(.mono-bleed, .mono-guides, .mono-line, .mono-pen) path,
+  .mono .g-arc {
+    vector-effect: none;
+  }
+
+  /* Every stroke is drawn with pathLength="1", so one dash value draws any line. */
+  .mono-bleed,
+  .mono-guides,
+  .mono-line,
+  .mono-pen {
+    fill: none;
+  }
+
+  .mono-bleed path,
+  .mono-guides path,
+  .mono-line path {
+    stroke-dasharray: 1;
+  }
+
+  .mono-guides {
+    opacity: 0.3;
+    stroke: var(--figure-guide);
+    stroke-opacity: 0.6;
+    stroke-width: var(--figure-stroke-width);
+    transition: opacity var(--_peek-leave) var(--motion-easing-out);
+  }
+
+  .mono-guides path {
+    stroke-dashoffset: 0;
+  }
+
+  .mono-guides .g-tri {
+    stroke-opacity: 1;
+  }
+
+  /* The axis is a measurement, not construction: it belongs to the Peek layer and never rests with the mark. */
+  .mono-guides .g-axis {
+    opacity: 0;
+    stroke: var(--spec-line);
+    stroke-opacity: 0.7;
+  }
+
+  :root[data-peek-state] .mono-guides .g-axis {
+    opacity: var(--_layer);
+  }
+
+  .mono-line {
+    stroke: var(--figure-mark);
+    stroke-linejoin: miter;
+    stroke-width: calc(var(--figure-stroke-width) * 1.5);
+  }
+
+  .mono-line path {
+    stroke-dashoffset: 0;
+  }
+
+  /* The bleed: Peek's construction carried past the mark. Each path starts where its guide ends and runs outward,
+     so drawing grows away from the mark and retracting folds back into it. */
+  .mono-bleed {
+    stroke: var(--figure-guide);
+    stroke-opacity: 0.34;
+    stroke-width: var(--figure-stroke-width);
+  }
+
+  .mono-bleed path {
+    stroke-dashoffset: 1;
+  }
+
+  /* At rest the mark is still being drawn: a short pen of ink laps the outline, slowly. */
+  .mono-pen {
+    opacity: 0;
+    stroke: var(--figure-line);
+    stroke-linecap: round;
+    stroke-width: calc(var(--figure-stroke-width) * 2.4);
+  }
+
+  .mono-pen path {
+    animation: pen calc(var(--_beat) * 160) linear infinite;
+    stroke-dasharray: 0.03 0.97;
+  }
+
+  .mono-pen path + path {
+    animation-delay: calc(var(--_beat) * -80);
+  }
+
+  @keyframes pen {
+    to {
+      stroke-dashoffset: -1;
+    }
+  }
+
+  :root:not([data-peek-state]) .mono-pen {
+    opacity: 0.85;
+    transition: opacity calc(var(--_beat) * 12) var(--motion-easing-out) calc(var(--_beat) * 6);
+  }
+
+  .mono-marks {
+    fill: var(--figure-guide-ink);
+    font-family: var(--spec-font-family);
+    font-weight: var(--type-weight-label);
+    opacity: var(--_layer);
+  }
+
+  .mono-marks .g-arc {
+    fill: none;
+    stroke: var(--spec-line);
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    stroke-width: var(--figure-stroke-width);
+  }
+
+  .mono-marks .g-deg {
+    fill: var(--spec-line);
+  }
+
+  .mono-marks text {
+    opacity: 0;
+    translate: 0 calc(var(--figure-stroke-width) * 6);
+  }
+
+  .g-pts circle {
+    fill: var(--surface-default-bg);
+    scale: 0;
+    stroke: var(--figure-guide-ink);
+    stroke-width: var(--figure-stroke-width);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* Peek, on the construction (the choreography's beats are in Peek.css). Arm resets the mark's own lines too,
+     so the construction can draw from nothing. */
+  :root[data-peek-state="arm"] :is(.mono-guides, .mono-line) {
+    opacity: 1;
+    transition: none;
+  }
+
+  :root[data-peek-state="arm"] :is(.mono-guides path, .mono-line path) {
+    stroke-dashoffset: 1;
+  }
+
+  :root[data-peek-state="arm"] :is(.mono-bleed path, .mono-line path, .mono-guides path, .g-arc, .mono-marks text, .g-pts circle) {
+    transition: none;
+  }
+
+  :root:is([data-peek-state="on"], [data-peek-state="leaving"]) :is(.mono-guides path, .mono-line path, .g-arc) {
+    stroke-dashoffset: 0;
+  }
+
+  :root[data-peek-state="on"] :is(.mono-guides, .mono-line) {
+    opacity: 1;
+    transition: none;
+  }
+
+  :root[data-peek-state="on"] .mono-guides path {
+    transition: stroke-dashoffset var(--_peek-build-dur) var(--figure-draw-easing) calc(var(--_peek-build-at) + var(--_d) * var(--_peek-build-step));
+  }
+
+  /* Each construction line keeps going once it leaves the mark, decelerating as it runs off-screen. */
+  :root[data-peek-state="on"] .mono-bleed path {
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset var(--_peek-bleed-dur) var(--motion-easing-out)
+      calc(var(--_peek-build-at) + var(--_d) * var(--_peek-build-step) + var(--_peek-build-dur) * 0.8);
+  }
+
+  /* The outline at constant speed: a pen, not an ease. */
+  :root[data-peek-state="on"] .mono-line path {
+    transition: stroke-dashoffset var(--_peek-trace-dur) linear var(--_peek-trace-at);
+  }
+
+  :root[data-peek-state="on"] .g-arc {
+    transition: stroke-dashoffset calc(var(--_beat) * 4) var(--figure-draw-easing) calc(var(--_peek-trace-at) + var(--_peek-trace-dur) - var(--_beat) * 1.5);
+  }
+
+  :root:is([data-peek-state="on"], [data-peek-state="leaving"]) .mono-marks text {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  :root[data-peek-state="on"] .mono-marks text {
+    transition:
+      opacity calc(var(--_beat) * 3) var(--motion-easing-out) calc(var(--_peek-trace-at) + var(--_peek-trace-dur)),
+      translate calc(var(--_beat) * 4.5) var(--motion-easing-out) calc(var(--_peek-trace-at) + var(--_peek-trace-dur));
+  }
+
+  :root[data-peek-state="on"] .mono-marks .g-size {
+    transition-delay: calc(var(--_peek-build-at) + var(--_peek-build-dur));
+  }
+
+  /* Corners pop on the beat: each one's --_f is where the pen reaches it along the outline. */
+  :root:is([data-peek-state="on"], [data-peek-state="leaving"]) .g-pts circle {
+    scale: 1;
+  }
+
+  :root[data-peek-state="on"] .g-pts circle {
+    transition: scale calc(var(--_beat) * 3.2) var(--figure-pop-easing) calc(var(--_peek-trace-at) + var(--_f) * var(--_peek-trace-dur));
+  }
+
+  /* Leaving: the construction that ran off-screen is pulled back into the mark (an ease-in, so it accelerates home),
+     the mark's own guides settle to their resting strength, and the rest of the layer fades on the same clock. */
+  :root[data-peek-state="leaving"] .mono-bleed path {
+    transition: stroke-dashoffset var(--_peek-leave) var(--motion-easing-in);
+  }
+
+  /* Isometric: the monogram built from its two parts --------------------------------------------------------- */
+
+  @container style(--hero-figure: isometric) {
+    .figure {
+      block-size: min(calc(var(--_fig) / 1.1045), calc(var(--layout-stage-h-phone) * 0.4));
+      grid-column: 1 / -1;
+      grid-row: 1;
+      margin-block-end: var(--_rhythm);
+      position: relative;
+    }
+
+    .stack {
+      grid-row: 2;
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .figure {
+        block-size: auto;
+        inline-size: var(--hero-figure-size-wide);
+        inset: var(--_rhythm) var(--_x) var(--_rhythm) auto;
+        margin: 0;
+        position: absolute;
+      }
+
+      .stack {
+        grid-row: 1;
+      }
+    }
+  }
+
+  /* The SVG fills the figure; its viewBox fits the drawing inside, centred. */
+  .build {
+    block-size: 100%;
+    inline-size: 100%;
+    inset: 0;
+    overflow: visible;
+    position: absolute;
+  }
+
+  .build * {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .build pattern circle {
+    fill: var(--figure-line);
+    opacity: 0.2;
+  }
+
+  .rail {
+    fill: none;
+    stroke: var(--figure-line);
+    stroke-dasharray: 6 7;
+    stroke-opacity: 0.34;
+    stroke-width: var(--figure-stroke-width);
+  }
+
+  .rail-draw {
+    fill: none;
+    stroke: var(--figure-line);
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    stroke-width: 40;
+  }
+
+  .face {
+    stroke: var(--figure-edge);
+    stroke-linejoin: round;
+    stroke-width: var(--figure-stroke-width);
+  }
+
+  .part-t {
+    --_front: var(--figure-face);
+    --_side-h: var(--figure-face-light);
+    --_side-d: var(--figure-face-dark);
+  }
+
+  .part-j {
+    --_front: var(--figure-mark);
+    --_side-h: var(--figure-mark-light);
+    --_side-d: var(--figure-mark-dark);
+  }
+
+  .face-front {
+    fill: var(--_front);
+  }
+
+  .face-h {
+    fill: var(--_side-h);
+  }
+
+  .face-d {
+    fill: var(--_side-d);
+  }
+
+  .arrow,
+  .click {
+    display: none;
+  }
+
+  /* Lattice: the monogram's own 60° lattice at page scale, painted on the canvas by runtime.ts --------------------- */
+
+  @container style(--hero-figure: lattice) {
+    .hero {
+      position: static;
+    }
+
+    .field {
+      block-size: var(--layout-stage-h-phone);
+      inline-size: 100%;
+      inset: 0 0 auto;
+      pointer-events: none;
+      position: absolute;
+      z-index: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mono-pen {
+      display: none;
+    }
+  }
+}
