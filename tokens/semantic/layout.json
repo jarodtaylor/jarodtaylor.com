@@ -1,0 +1,36 @@
+{
+  "layout": {
+    "$type": "string",
+    "figure-phone": {
+      "$value": "{fluid.hero-figure.phone}"
+    },
+    "figure-wide": {
+      "$value": "{fluid.hero-figure.wide}"
+    }
+  },
+  "choice": {
+    "$type": "string",
+    "$description": "Enumerated knobs, read by container style queries. Never key CSS on a brand name.",
+    "hero-figure": {
+      "$value": "{knob.hero-figure}"
+    },
+    "hero-layout": {
+      "$value": "{knob.hero-layout}"
+    },
+    "hero-intro": {
+      "$value": "{knob.hero-intro}"
+    },
+    "nav-mode": {
+      "$value": "{knob.nav-mode}"
+    },
+    "hero-cue": {
+      "$value": "{knob.hero-cue}"
+    },
+    "talk-style": {
+      "$value": "{knob.talk-style}"
+    },
+    "label-case": {
+      "$value": "{knob.label-case}"
+    }
+  }
+}

@@ -10,6 +10,9 @@
       },
       "label": {
         "$value": "{font.family.label}"
+      },
+      "lead": {
+        "$value": "{font.family.lead}"
       }
     },
     "weight": {
@@ -22,6 +25,9 @@
       },
       "label": {
         "$value": "{font.weight.label}"
+      },
+      "lead": {
+        "$value": "{font.weight.lead}"
       }
     },
     "variation": {
@@ -35,6 +41,9 @@
       },
       "label": {
         "$value": "{font.variation.label}"
+      },
+      "lead": {
+        "$value": "{font.variation.lead}"
       }
     },
     "size": {
@@ -64,13 +73,54 @@
     "leading": {
       "$type": "number",
       "body": {
-        "$value": "{font.line-height.normal}"
+        "$value": "{font.leading.text}"
       },
       "snug": {
         "$value": "{font.line-height.snug}"
       },
       "heading": {
         "$value": "{font.line-height.tight}"
+      },
+      "display": {
+        "$value": "{font.leading.display}"
+      },
+      "label": {
+        "$value": "{font.leading.label}"
+      },
+      "lead": {
+        "$value": "{font.leading.lead}"
+      }
+    },
+    "tracking": {
+      "$type": "string",
+      "$description": "letter-spacing per type role.",
+      "display": {
+        "$value": "{font.tracking.display}"
+      },
+      "text": {
+        "$value": "{font.tracking.text}"
+      },
+      "label": {
+        "$value": "{font.tracking.label}"
+      },
+      "lead": {
+        "$value": "{font.tracking.lead}"
+      }
+    },
+    "fluid": {
+      "$type": "string",
+      "$description": "Fluid hero sizes: phone below 48rem, wide above.",
+      "display-phone": {
+        "$value": "{fluid.hero-display.phone}"
+      },
+      "display-wide": {
+        "$value": "{fluid.hero-display.wide}"
+      },
+      "lead-phone": {
+        "$value": "{fluid.hero-lead.phone}"
+      },
+      "lead-wide": {
+        "$value": "{fluid.hero-lead.wide}"
       }
     }
   }

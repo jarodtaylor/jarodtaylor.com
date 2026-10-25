@@ -64,8 +64,12 @@ interface RampKnobs {
   taper: Token<number>;
 }
 
+/** Faces a brand loads. */
 export const FONT_ROLES = ['display', 'text', 'label'] as const;
 type FontRole = (typeof FONT_ROLES)[number];
+/** Type roles: each face's role, plus `lead` (the tagline), which borrows the display or text face. */
+export const TYPE_ROLES = [...FONT_ROLES, 'lead'] as const;
+type TypeRole = (typeof TYPE_ROLES)[number];
 
 /** Fluid sizes are CSS expressions, one per shared breakpoint band: phone below 48rem, wide above. */
 export const FLUID_SIZES = ['hero-display', 'hero-lead', 'hero-figure'] as const;
@@ -99,10 +103,15 @@ export interface Knobs {
   type: {
     base: Token<Dimension>;
     ratio: Token<number>;
-    family: Record<FontRole, Token<FontFamily>>;
-    weight: Record<FontRole, Token<number>>;
+    /** `lead` is an alias to the face it borrows: {font.family.display} or {font.family.text}. */
+    family: Record<FontRole, Token<FontFamily>> & { lead: Token<string> };
+    weight: Record<TypeRole, Token<number>>;
     /** A font-variation-settings value, e.g. `"wdth" 62`, or `normal`. */
-    variation: Record<FontRole, Token<string>>;
+    variation: Record<TypeRole, Token<string>>;
+    /** Unitless line-height. */
+    leading: Record<TypeRole, Token<number>>;
+    /** letter-spacing in em, e.g. -0.02em, or 0. */
+    tracking: Record<TypeRole, Token<string>>;
   };
   space: { base: Token<Dimension>; density: Token<number> };
   shape: { radius: Token<Dimension>; 'border-width': Token<Dimension> };
@@ -125,9 +134,11 @@ type Leaf<T> = { $value: T };
 export interface Primitives {
   color: { $type: 'color'; role: Record<string, Leaf<string>> } & Record<RampName, Record<RampStep, Leaf<OklchColor>>>;
   font: {
-    family: { $type: 'fontFamily' } & Record<FontRole, Leaf<FontFamily>>;
-    weight: { $type: 'fontWeight' } & Record<FontRole, Leaf<number>>;
-    variation: { $type: 'string' } & Record<FontRole, Leaf<string>>;
+    family: { $type: 'fontFamily' } & Record<FontRole, Leaf<FontFamily>> & { lead: Leaf<string> };
+    weight: { $type: 'fontWeight' } & Record<TypeRole, Leaf<number>>;
+    variation: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
+    leading: { $type: 'number' } & Record<TypeRole, Leaf<number>>;
+    tracking: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
     size: { $type: 'dimension' } & Record<TypeStep, Leaf<Dimension>>;
     'line-height': { $type: 'number' } & Record<LineHeight, Leaf<number>>;
   };
@@ -203,9 +214,11 @@ export function derive(knobs: Knobs): Primitives {
       ),
     },
     font: {
-      family: { $type: 'fontFamily', ...pick(FONT_ROLES, (r) => type.family[r].$value) },
-      weight: { $type: 'fontWeight', ...pick(FONT_ROLES, (r) => type.weight[r].$value) },
-      variation: { $type: 'string', ...pick(FONT_ROLES, (r) => type.variation[r].$value) },
+      family: { $type: 'fontFamily', ...pick(FONT_ROLES, (r) => type.family[r].$value), lead: { $value: type.family.lead.$value } },
+      weight: { $type: 'fontWeight', ...pick(TYPE_ROLES, (r) => type.weight[r].$value) },
+      variation: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.variation[r].$value) },
+      leading: { $type: 'number', ...pick(TYPE_ROLES, (r) => type.leading[r].$value) },
+      tracking: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.tracking[r].$value) },
       size: {
         $type: 'dimension',
         ...mapScale(TYPE_SCALE, (exp) => scaleDim(type.base.$value, type.ratio.$value ** exp)),
@@ -275,6 +288,14 @@ function validate(k: Knobs): void {
   for (const r of FONT_ROLES) {
     const v = k.type?.family?.[r]?.$value;
     if (!(typeof v === 'string' ? v : Array.isArray(v) && v.length > 0)) errors.push(`type.family.${r} must be a font family`);
+  }
+  if (!/^\{font\.family\.(display|text)\}$/.test(String(k.type?.family?.lead?.$value)))
+    errors.push(`type.family.lead must be {font.family.display} or {font.family.text} (got ${JSON.stringify(k.type?.family?.lead?.$value)})`);
+  for (const r of TYPE_ROLES) {
+    num(`type.leading.${r}`, k.type?.leading?.[r]?.$value, (n) => n > 0 && n <= 3, 'in (0, 3]');
+    const tracking = k.type?.tracking?.[r]?.$value;
+    if (typeof tracking !== 'string' || !/^(0|-?\d*\.?\d+em)$/.test(tracking))
+      errors.push(`type.tracking.${r} must be 0 or an em length like -0.02em (got ${JSON.stringify(tracking)})`);
     num(`type.weight.${r}`, k.type?.weight?.[r]?.$value, (n) => n >= 1 && n <= 1000, 'in [1, 1000]');
     const axes = k.type?.variation?.[r]?.$value;
     if (typeof axes !== 'string' || !VARIATION.test(axes))

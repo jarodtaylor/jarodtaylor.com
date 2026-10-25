@@ -6,11 +6,7 @@ import { derive, toSrgbGamut, ENUMS, RAMP, RAMPS, type EnumKnob, type Knobs, typ
 const load = (brand: string): Knobs =>
   JSON.parse(readFileSync(new URL(`../tokens/knobs/${brand}.json`, import.meta.url), 'utf8'));
 
-const loadFixture = (brand: string): Knobs =>
-  JSON.parse(readFileSync(new URL(`./fixtures/${brand}.knobs.json`, import.meta.url), 'utf8'));
-
-const brands = ['default', 'alt'] as const;
-const fixtures = ['default', 'blocks', 'clean'] as const;
+const brands = ['default', 'blocks', 'clean'] as const;
 
 /** Leaf $values of a token group, in key order, excluding $-prefixed group metadata. */
 const values = <T>(group: object): T[] =>
@@ -22,9 +18,8 @@ const values = <T>(group: object): T[] =>
 const oracleInSrgb = ({ components }: OklchColor) =>
   new Color('oklch', components).inGamut('srgb', { epsilon: 0 });
 
-const knobSets = [...brands.map((b) => [b, load(b)] as const), ...fixtures.map((f) => [`fixture ${f}`, loadFixture(f)] as const)];
-
-describe.each(knobSets)('derive(%s knobs)', (_, knobs) => {
+describe.each(brands)('derive(%s knobs)', (brand) => {
+  const knobs = load(brand);
   const tokens = derive(knobs);
 
   it('is deterministic and does not mutate its input', () => {
@@ -74,6 +69,9 @@ describe.each(knobSets)('derive(%s knobs)', (_, knobs) => {
   it('passes font roles, fluid sizes and motion through', () => {
     expect(tokens.font.variation.display.$value).toBe(knobs.type.variation.display.$value);
     expect(tokens.font.weight.label.$value).toBe(knobs.type.weight.label.$value);
+    expect(tokens.font.family.lead.$value).toBe(knobs.type.family.lead.$value);
+    expect(tokens.font.leading.lead.$value).toBe(knobs.type.leading.lead.$value);
+    expect(tokens.font.tracking.display.$value).toBe(knobs.type.tracking.display.$value);
     expect(tokens.fluid['hero-display'].wide.$value).toBe(knobs.fluid['hero-display'].wide.$value);
     expect(tokens.fluid.$extensions).toEqual({ 'com.jarodtaylor.export': { figma: false } });
     expect(tokens.duration.base.$value).toEqual(knobs.motion.duration.base.$value);
@@ -81,17 +79,17 @@ describe.each(knobSets)('derive(%s knobs)', (_, knobs) => {
   });
 });
 
-describe.each(fixtures)('%s fixture reproduces its prototype', (brand) => {
-  const knobs = loadFixture(brand);
+describe.each(brands)('%s knobs reproduce the approved prototype', (brand) => {
+  const knobs = load(brand);
   const tokens = derive(knobs);
   const expected = JSON.parse(readFileSync(new URL('./fixtures/prototype-colors.json', import.meta.url), 'utf8'))[brand] as Record<
     string,
     string
   >;
 
-  it('defines the same color roles as every other fixture', () => {
+  it('defines the same color roles as every other brand', () => {
     expect(Object.keys(knobs.color.role).filter((k) => !k.startsWith('$'))).toEqual(
-      Object.keys(loadFixture('default').color.role).filter((k) => !k.startsWith('$')),
+      Object.keys(load('default').color.role).filter((k) => !k.startsWith('$')),
     );
   });
 
@@ -173,6 +171,16 @@ describe('validation', () => {
 
   it.each(['wdth 62', '"wdth"', '"wdth" 62,', 'bold'])('rejects the variation %j', (v) => {
     expect(broken((k) => (k.type.variation.text.$value = v))).toThrow(/type\.variation\.text/);
+  });
+
+  it('rejects a lead face that is not the display or text face', () => {
+    for (const bad of ['{font.family.label}', 'Georgia', ['Georgia', 'serif']])
+      expect(broken((k) => (k.type.family.lead = { $value: bad as string }))).toThrow(/type\.family\.lead/);
+  });
+
+  it('rejects tracking that is not 0 or em, and leading out of range', () => {
+    expect(broken((k) => (k.type.tracking.lead.$value = '-1px'))).toThrow(/type\.tracking\.lead/);
+    expect(broken((k) => (k.type.leading.display.$value = 0))).toThrow(/type\.leading\.display/);
   });
 
   it('rejects a duration in px and an easing with x outside [0, 1]', () => {

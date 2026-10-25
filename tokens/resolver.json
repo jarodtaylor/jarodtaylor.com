@@ -9,14 +9,18 @@
         { "$ref": "semantic/space.json" },
         { "$ref": "semantic/type.json" },
         { "$ref": "semantic/shape.json" },
-        { "$ref": "semantic/motion.json" }
+        { "$ref": "semantic/motion.json" },
+        { "$ref": "semantic/layout.json" }
       ]
     },
     "component": {
       "sources": [
         { "$ref": "component/button.json" },
         { "$ref": "component/card.json" },
-        { "$ref": "component/section.json" }
+        { "$ref": "component/section.json" },
+        { "$ref": "component/header.json" },
+        { "$ref": "component/hero.json" },
+        { "$ref": "component/figure.json" }
       ]
     }
   },
@@ -25,7 +29,8 @@
       "description": "Primitives derived from tokens/knobs/<brand>.json by scripts/derive.ts.",
       "contexts": {
         "default": [{ "$ref": "generated/default.json" }],
-        "alt": [{ "$ref": "generated/alt.json" }]
+        "blocks": [{ "$ref": "generated/blocks.json" }],
+        "clean": [{ "$ref": "generated/clean.json" }]
       },
       "default": "default"
     }

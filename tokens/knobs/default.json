@@ -1,105 +1,133 @@
 {
-  "$description": "Brand knobs: default. PLACEHOLDER values until the brand is designed in Phase 1. This file is the only thing a brand authors; scripts/derive.ts turns it into tokens/generated/default.json.",
+  "$description": "Brand knobs: default (Backstage-lite, prototypes/r6-backstage). The only thing a brand authors; scripts/derive.ts turns it into tokens/generated/default.json. Colours were fitted to the prototype (scripts/fixtures/prototype-colors.json).",
   "color": {
     "ramp": {
       "$type": "number",
-      "$description": "OKLCH ramps on the shared lightness ladder (steps 150…975 = L × 1000). hue in degrees; hue-shift in degrees per unit L away from peak; chroma is the peak chroma before sRGB clamping; peak is the L of peak chroma; taper is the falloff exponent (0 flat, 1 linear).",
       "neutral": {
-        "$description": "Neutral ramp",
-        "hue": { "$value": 250 },
-        "hue-shift": { "$value": 0 },
-        "chroma": { "$value": 0.012 },
-        "peak": { "$value": 0.6 },
-        "taper": { "$value": 1 }
+        "hue": { "$value": 242.3 },
+        "hue-shift": { "$value": -10.2 },
+        "chroma": { "$value": 0.029 },
+        "peak": { "$value": 0.901 },
+        "taper": { "$value": 0.05 }
       },
       "accent": {
-        "$description": "Accent ramp",
-        "hue": { "$value": 255 },
-        "hue-shift": { "$value": 0 },
-        "chroma": { "$value": 0.16 },
-        "peak": { "$value": 0.6 },
-        "taper": { "$value": 1 }
+        "hue": { "$value": 123.6 },
+        "hue-shift": { "$value": -24.9 },
+        "chroma": { "$value": 0.194 },
+        "peak": { "$value": 0.911 },
+        "taper": { "$value": 1.06 }
       },
       "guide": {
-        "$description": "Figure guide lines (PLACEHOLDER)",
-        "hue": { "$value": 232 },
-        "hue-shift": { "$value": 0 },
-        "chroma": { "$value": 0.1 },
-        "peak": { "$value": 0.6 },
-        "taper": { "$value": 1 }
+        "hue": { "$value": 224.7 },
+        "hue-shift": { "$value": 20.5 },
+        "chroma": { "$value": 0.126 },
+        "peak": { "$value": 0.402 },
+        "taper": { "$value": 0.52 }
       },
       "redline": {
-        "$description": "Figure redlines (PLACEHOLDER)",
-        "hue": { "$value": 20 },
-        "hue-shift": { "$value": 0 },
-        "chroma": { "$value": 0.2 },
-        "peak": { "$value": 0.6 },
-        "taper": { "$value": 1 }
+        "hue": { "$value": 19.9 },
+        "hue-shift": { "$value": -1.1 },
+        "chroma": { "$value": 0.223 },
+        "peak": { "$value": 0.823 },
+        "taper": { "$value": 1.36 }
       }
     },
     "role": {
       "$type": "color",
-      "$description": "Which ramp step plays each color role. The semantic tier aliases these, so every brand defines the same role names.",
-      "bg": { "$value": "{color.neutral.950}" },
-      "text": { "$value": "{color.neutral.300}" }
+      "bg": { "$value": "{color.neutral.175}" },
+      "bg-next": { "$value": "{color.neutral.200}" },
+      "text": { "$value": "{color.neutral.975}" },
+      "text-muted": { "$value": "{color.neutral.750}" },
+      "text-quiet": { "$value": "{color.neutral.750}" },
+      "rule": { "$value": "{color.neutral.300}" },
+      "accent": { "$value": "{color.accent.900}" },
+      "on-accent": { "$value": "{color.accent.225}" },
+      "accent-text": { "$value": "{color.accent.900}" },
+      "focus": { "$value": "{color.accent.900}" },
+      "figure-line": { "$value": "{color.neutral.975}" },
+      "figure-mark": { "$value": "{color.accent.900}" },
+      "figure-mark-light": { "$value": "{color.accent.800}" },
+      "figure-mark-dark": { "$value": "{color.accent.700}" },
+      "figure-face": { "$value": "{color.neutral.975}" },
+      "figure-face-light": { "$value": "{color.neutral.850}" },
+      "figure-face-dark": { "$value": "{color.neutral.750}" },
+      "figure-edge": { "$value": "{color.neutral.175}" },
+      "figure-guide": { "$value": "{color.guide.675}" },
+      "figure-guide-ink": { "$value": "{color.guide.750}" },
+      "figure-redline": { "$value": "{color.redline.700}" },
+      "figure-on-redline": { "$value": "{color.redline.175}" }
     }
   },
   "type": {
-    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" }, "$description": "Body text size; step 0 of the type scale" },
-    "ratio": { "$type": "number", "$value": 1.2, "$description": "Modular type scale ratio" },
+    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "ratio": { "$type": "number", "$value": 1.25 },
     "family": {
       "$type": "fontFamily",
-      "display": { "$value": ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
-      "text": { "$value": ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
-      "label": { "$value": ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"] }
+      "display": { "$value": ["Archivo", "Arial Narrow", "sans-serif"] },
+      "text": { "$value": ["Schibsted Grotesk", "system-ui", "sans-serif"] },
+      "label": { "$value": ["Martian Mono", "ui-monospace", "monospace"] },
+      "lead": { "$value": "{font.family.text}" }
     },
     "weight": {
       "$type": "fontWeight",
-      "display": { "$value": 700 },
+      "display": { "$value": 820 },
       "text": { "$value": 400 },
-      "label": { "$value": 400 }
+      "label": { "$value": 400 },
+      "lead": { "$value": 500 }
     },
     "variation": {
       "$type": "string",
-      "$description": "font-variation-settings per role: \"wdth\" 62, \"opsz\" 96, … or normal",
-      "display": { "$value": "normal" },
+      "display": { "$value": "\"wdth\" 62" },
       "text": { "$value": "normal" },
-      "label": { "$value": "normal" }
+      "label": { "$value": "\"wdth\" 87.5" },
+      "lead": { "$value": "normal" }
+    },
+    "leading": {
+      "$type": "number",
+      "$description": "Unitless line-height per type role",
+      "display": { "$value": 0.82 },
+      "text": { "$value": 1.55 },
+      "label": { "$value": 1.35 },
+      "lead": { "$value": 1.1 }
+    },
+    "tracking": {
+      "$type": "string",
+      "$description": "letter-spacing per type role: 0 or an em length",
+      "display": { "$value": "-0.02em" },
+      "text": { "$value": "0" },
+      "label": { "$value": "0.08em" },
+      "lead": { "$value": "-0.02em" }
     }
   },
   "space": {
-    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" }, "$description": "Spacing unit before density" },
-    "density": { "$type": "number", "$value": 1, "$description": "Multiplier on every spacing step. Below 1 is tighter, above 1 is airier" }
+    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "density": { "$type": "number", "$value": 1 }
   },
   "shape": {
-    "radius": { "$type": "dimension", "$value": { "value": 0.25, "unit": "rem" }, "$description": "Base corner radius" },
-    "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" }, "$description": "Base border weight" }
+    "radius": { "$type": "dimension", "$value": { "value": 0, "unit": "rem" } },
+    "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" } }
   },
   "fluid": {
     "$type": "string",
-    "$description": "Fluid sizes as CSS expressions (vw, svh, rem; clamp/min/max/calc). phone is below 48rem, wide above. Not exported to Figma.",
     "hero-display": {
-      "$description": "Hero name size",
-      "phone": { "$value": "clamp(2.5rem, 12vw, 4rem)" },
-      "wide": { "$value": "min(8vw, 14svh)" }
+      "phone": { "$value": "35vw" },
+      "wide": { "$value": "min(12.5vw, 21svh)" }
     },
     "hero-lead": {
-      "$description": "Hero tagline size",
-      "phone": { "$value": "clamp(1.25rem, 5vw, 1.75rem)" },
-      "wide": { "$value": "clamp(1.5rem, 1rem + 1vw, 2.5rem)" }
+      "phone": { "$value": "clamp(1.625rem, 7vw, 2.25rem)" },
+      "wide": { "$value": "min(2.6vw, 4.4svh)" }
     },
     "hero-figure": {
-      "$description": "Hero figure extent",
       "phone": { "$value": "80vw" },
-      "wide": { "$value": "min(45vw, 70svh)" }
+      "wide": { "$value": "calc(100svh - 14rem)" }
     }
   },
   "motion": {
     "duration": {
       "$type": "duration",
-      "fast": { "$value": { "value": 160, "unit": "ms" } },
-      "base": { "$value": { "value": 240, "unit": "ms" } },
-      "slow": { "$value": { "value": 560, "unit": "ms" } }
+      "fast": { "$value": { "value": 240, "unit": "ms" } },
+      "base": { "$value": { "value": 460, "unit": "ms" } },
+      "slow": { "$value": { "value": 800, "unit": "ms" } }
     },
     "easing": {
       "$type": "cubicBezier",
@@ -111,7 +139,6 @@
   },
   "enum": {
     "$type": "string",
-    "$description": "Enumerated knobs. Component CSS reacts with container style queries; derive() validates each against its list.",
     "decoration": { "$value": "rules", "$extensions": { "com.jarodtaylor.enum": ["rules", "none"] } },
     "hero-figure": { "$value": "construction", "$extensions": { "com.jarodtaylor.enum": ["construction", "isometric", "lattice"] } },
     "hero-layout": { "$value": "stack", "$extensions": { "com.jarodtaylor.enum": ["stack", "name-over-details"] } },

@@ -1,5 +1,5 @@
 {
-  "$description": "Brand knobs: clean (Clean and sharp, prototypes/r6-clean). Step 1 fixture: colors fitted to the prototype (see prototype-colors.json); type, fluid and motion values are first drafts for Step 2.",
+  "$description": "Brand knobs: clean (Clean and sharp, prototypes/r6-clean). The only thing a brand authors; scripts/derive.ts turns it into tokens/generated/clean.json. Colours were fitted to the prototype (scripts/fixtures/prototype-colors.json).",
   "color": {
     "ramp": {
       "$type": "number",
@@ -65,19 +65,38 @@
       "$type": "fontFamily",
       "display": { "$value": ["Funnel Display", "ui-sans-serif", "system-ui", "sans-serif"] },
       "text": { "$value": ["Funnel Sans", "ui-sans-serif", "system-ui", "sans-serif"] },
-      "label": { "$value": ["Funnel Sans", "ui-sans-serif", "system-ui", "sans-serif"] }
+      "label": { "$value": ["Funnel Sans", "ui-sans-serif", "system-ui", "sans-serif"] },
+      "lead": { "$value": "{font.family.display}" }
     },
     "weight": {
       "$type": "fontWeight",
       "display": { "$value": 560 },
       "text": { "$value": 380 },
-      "label": { "$value": 500 }
+      "label": { "$value": 500 },
+      "lead": { "$value": 420 }
     },
     "variation": {
       "$type": "string",
       "display": { "$value": "normal" },
       "text": { "$value": "normal" },
-      "label": { "$value": "normal" }
+      "label": { "$value": "normal" },
+      "lead": { "$value": "normal" }
+    },
+    "leading": {
+      "$type": "number",
+      "$description": "Unitless line-height per type role",
+      "display": { "$value": 0.84 },
+      "text": { "$value": 1.5 },
+      "label": { "$value": 1.3 },
+      "lead": { "$value": 1.12 }
+    },
+    "tracking": {
+      "$type": "string",
+      "$description": "letter-spacing per type role: 0 or an em length",
+      "display": { "$value": "-0.04em" },
+      "text": { "$value": "0" },
+      "label": { "$value": "0" },
+      "lead": { "$value": "-0.015em" }
     }
   },
   "space": {

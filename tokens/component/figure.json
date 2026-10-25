@@ -1,0 +1,111 @@
+{
+  "figure": {
+    "line": {
+      "$type": "color",
+      "$value": "{graphic.line}"
+    },
+    "mark": {
+      "$type": "color",
+      "$value": "{graphic.mark}"
+    },
+    "mark-light": {
+      "$type": "color",
+      "$value": "{graphic.mark-light}"
+    },
+    "mark-dark": {
+      "$type": "color",
+      "$value": "{graphic.mark-dark}"
+    },
+    "face": {
+      "$type": "color",
+      "$value": "{graphic.face}"
+    },
+    "face-light": {
+      "$type": "color",
+      "$value": "{graphic.face-light}"
+    },
+    "face-dark": {
+      "$type": "color",
+      "$value": "{graphic.face-dark}"
+    },
+    "edge": {
+      "$type": "color",
+      "$value": "{graphic.edge}"
+    },
+    "guide": {
+      "$type": "color",
+      "$value": "{graphic.guide}"
+    },
+    "guide-ink": {
+      "$type": "color",
+      "$value": "{graphic.guide-ink}"
+    },
+    "stroke-width": {
+      "$type": "dimension",
+      "$value": "{shape.border-width.default}"
+    },
+    "draw-duration": {
+      "$type": "duration",
+      "$value": "{motion.duration.slow}"
+    },
+    "draw-easing": {
+      "$type": "cubicBezier",
+      "$value": "{motion.easing.draw}"
+    },
+    "pop-easing": {
+      "$type": "cubicBezier",
+      "$value": "{motion.easing.pop}"
+    }
+  },
+  "spec": {
+    "$description": "The Peek spec layer: redline boxes, labels, guides and the spec card",
+    "line": {
+      "$type": "color",
+      "$value": "{graphic.redline}"
+    },
+    "label-bg": {
+      "$type": "color",
+      "$value": "{surface.annotation.bg}"
+    },
+    "label-text": {
+      "$type": "color",
+      "$value": "{surface.annotation.text}"
+    },
+    "guide": {
+      "$type": "color",
+      "$value": "{graphic.guide}"
+    },
+    "guide-ink": {
+      "$type": "color",
+      "$value": "{graphic.guide-ink}"
+    },
+    "card-bg": {
+      "$type": "color",
+      "$value": "{surface.raised.bg}"
+    },
+    "card-text": {
+      "$type": "color",
+      "$value": "{surface.raised.text}"
+    },
+    "card-text-muted": {
+      "$type": "color",
+      "$value": "{surface.raised.text-muted}"
+    },
+    "font-family": {
+      "$type": "fontFamily",
+      "$value": "{type.family.label}"
+    },
+    "font-size": {
+      "$type": "dimension",
+      "$value": "{type.size.small}"
+    },
+    "duration": {
+      "$type": "duration",
+      "$value": "{motion.duration.base}"
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "$value": "{motion.easing.out}"
+    }
+  }
+}

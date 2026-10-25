@@ -33,7 +33,7 @@ Run `pnpm test && pnpm typecheck && pnpm check` before committing.
 tokens/knobs/<brand>.json      TIER 1   the only thing a brand authors (DTCG)
   └─ scripts/derive.ts         pure derive(knobs) → primitives; no Node APIs (it will run in the browser)
 tokens/generated/<brand>.json  TIER 1b  derived primitives, committed, never hand-edited
-tokens/semantic/*.json         TIER 2   aliases only: surface roles, space, type, shape, decoration
+tokens/semantic/*.json         TIER 2   aliases only: surface roles, graphic, space, type, shape, motion, layout, choice
 tokens/component/*.json        TIER 3   aliases only: what components consume
 tokens/resolver.json           DTCG Resolver 2025.10; the "brand" modifier is the single list of brands
 terrazzo.config.ts             → src/styles/tokens.css + public/tokens/<brand>.json
@@ -41,11 +41,11 @@ terrazzo.config.ts             → src/styles/tokens.css + public/tokens/<brand>
 
 - **Add a brand**: create `tokens/knobs/<name>.json` and add a `<name>` context to the `brand` modifier in `tokens/resolver.json`. The build fails if the two lists disagree.
 - **Colour ramps**: four required ramps (`neutral`, `accent`, `guide`, `redline`) on one fixed-lightness ladder. Steps are named L×1000, `150`–`975` every 25 (`color.neutral.750` is L 0.75). A brand sets 5 knobs per ramp in `color.ramp.<name>`: `hue`, `hue-shift`, `chroma`, `peak` and `taper`.
-- **Colour roles**: a brand picks the step for each role in `color.role`, as an alias (`"text-muted": { "$value": "{color.neutral.750}" }`). derive() emits it as an alias (`--color-role-text-muted: var(--color-neutral-750)`). The semantic tier aliases `{color.role.*}`, never ramp steps, so it stays shared. `pnpm tokens` fails, naming the brand and the role, if a pick isn't a real step or a brand lacks a role another brand has. (The placeholder `surface.*` aliases move to roles in merge Step 3.)
-- **Fixtures**: `scripts/fixtures/<brand>.knobs.json` are the three brands' fitted knobs. `prototype-colors.json` holds the prototype colours their roles must match within ΔE00 2 (`derive.test.ts`).
+- **Colour roles**: a brand picks the step for each role in `color.role`, as an alias (`"text-muted": { "$value": "{color.neutral.750}" }`). derive() emits it as an alias (`--color-role-text-muted: var(--color-neutral-750)`). The semantic tier aliases `{color.role.*}`, never ramp steps, so it stays shared. `pnpm tokens` fails, naming the brand and the role, if a pick isn't a real step or a brand lacks a role another brand has.
+- **Brands**: `default` (Backstage-lite), `blocks`, `clean`. Their ramps were fitted to the approved prototypes. `scripts/fixtures/prototype-colors.json` holds the prototype colours their roles must match within ΔE00 2 (`derive.test.ts`); AA wins over that match.
 - Aliases compile to `var(--…)` references, not flattened values, so setting a primitive at runtime cascades through the semantic and component tiers. Remix v2 depends on this.
 - `derive()` clamps every color into sRGB. That keeps Terrazzo from emitting wide-gamut `@media` duplicates and makes the `hex` fallback exact.
-- **Resolved per-brand JSON** for checkers, exports and the "{n} tokens changed" readout: `public/tokens/<brand>.json` (shipped at `dist/tokens/<brand>.json`). It's a flat map of `token.id → { $type, $value, aliasOf? }`. Colors carry `components` (OKLCH) and `hex`. For contrast, each `surface.<role>` group (`default | raised | inverse | accent`) holds `bg` plus the foregrounds used on it (`text`, `text-muted`, `link`, `border`, `focus`). `check:contrast` derives its pairs from this naming: every sibling of `bg` is text at 4.5:1, except `border` (decorative, skipped) and `focus` (3:1).
+- **Resolved per-brand JSON** for checkers, exports and the "{n} tokens changed" readout: `public/tokens/<brand>.json` (shipped at `dist/tokens/<brand>.json`). It's a flat map of `token.id → { $type, $value, aliasOf? }`. Colors carry `components` (OKLCH) and `hex`. For contrast, each `surface.<role>` group (`default | raised | inverse | accent | annotation`) holds `bg` plus the foregrounds used on it (`text`, `text-muted`, `link`, `border`, `focus`, …). `check:contrast` derives its pairs from this naming: every sibling of `bg` is text at 4.5:1, except `border` (decorative, skipped) and `focus` (3:1).
 - `src/styles/tokens.css` and `public/tokens/` are build output and gitignored.
 
 ## Token rules (non-negotiable)

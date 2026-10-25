@@ -1,0 +1,125 @@
+{
+  "header": {
+    "bg": {
+      "$type": "color",
+      "$value": "{surface.default.bg}"
+    },
+    "text": {
+      "$type": "color",
+      "$value": "{surface.default.text}"
+    },
+    "rule": {
+      "$type": "color",
+      "$value": "{surface.default.border}"
+    },
+    "nav-mode": {
+      "$type": "string",
+      "$value": "{choice.nav-mode}"
+    },
+    "info": {
+      "$description": "The info strip: role, location, status",
+      "text": {
+        "$type": "color",
+        "$value": "{surface.default.text-muted}"
+      },
+      "status": {
+        "$type": "color",
+        "$value": "{surface.default.accent}"
+      },
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.label}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.label}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.label}"
+      },
+      "font-size": {
+        "$type": "dimension",
+        "$value": "{type.size.small}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.label}"
+      },
+      "label-case": {
+        "$type": "string",
+        "$value": "{choice.label-case}"
+      }
+    },
+    "menu": {
+      "$description": "The phone nav popover",
+      "bg": {
+        "$type": "color",
+        "$value": "{surface.raised.bg}"
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{surface.raised.text}"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{surface.raised.border}"
+      }
+    }
+  },
+  "talk": {
+    "$description": "The Let's talk button. talk-style picks pill-fill (accent fill) or outline (text-colored border; fills with accent on hover)",
+    "style": {
+      "$type": "string",
+      "$value": "{choice.talk-style}"
+    },
+    "bg": {
+      "$type": "color",
+      "$value": "{surface.accent.bg}"
+    },
+    "text": {
+      "$type": "color",
+      "$value": "{surface.accent.text}"
+    },
+    "outline-text": {
+      "$type": "color",
+      "$value": "{surface.default.text}"
+    },
+    "outline-border": {
+      "$type": "color",
+      "$value": "{surface.default.text}"
+    },
+    "radius": {
+      "$type": "dimension",
+      "$value": "{shape.radius.pill}"
+    },
+    "border-width": {
+      "$type": "dimension",
+      "$value": "{shape.border-width.default}"
+    },
+    "font-family": {
+      "$type": "fontFamily",
+      "$value": "{type.family.label}"
+    },
+    "font-weight": {
+      "$type": "fontWeight",
+      "$value": "{type.weight.label}"
+    },
+    "font-size": {
+      "$type": "dimension",
+      "$value": "{type.size.small}"
+    },
+    "tracking": {
+      "$type": "string",
+      "$value": "{type.tracking.label}"
+    },
+    "duration": {
+      "$type": "duration",
+      "$value": "{motion.duration.fast}"
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "$value": "{motion.easing.out}"
+    }
+  }
+}
