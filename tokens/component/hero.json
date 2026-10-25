@@ -106,12 +106,24 @@
         "$value": "{type.leading.body}"
       },
       "size": {
-        "$type": "dimension",
-        "$value": "{type.size.body}"
+        "$type": "string",
+        "$value": "{type.fluid.body-phone}"
       },
       "color": {
         "$type": "color",
-        "$value": "{surface.default.text-muted}"
+        "$value": "{surface.default.text-body}"
+      },
+      "size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.body-wide}"
+      },
+      "measure": {
+        "$type": "string",
+        "$value": "{layout.measure-phone}"
+      },
+      "measure-wide": {
+        "$type": "string",
+        "$value": "{layout.measure-wide}"
       }
     },
     "small": {
@@ -125,8 +137,24 @@
         "$value": "{type.family.label}"
       },
       "font-size": {
-        "$type": "dimension",
-        "$value": "{type.size.small}"
+        "$type": "string",
+        "$value": "{type.fluid.label-phone}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.label}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.label}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.label}"
+      },
+      "font-size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.label-wide}"
       }
     },
     "cue-color": {

@@ -67,17 +67,42 @@ interface RampKnobs {
 /** Faces a brand loads. */
 export const FONT_ROLES = ['display', 'text', 'label'] as const;
 type FontRole = (typeof FONT_ROLES)[number];
-/** Type roles: each face's role, plus `lead` (the tagline), which borrows the display or text face. */
-export const TYPE_ROLES = [...FONT_ROLES, 'lead'] as const;
+/**
+ * Type roles: each face's role, plus two that borrow a face: `lead` (the tagline) borrows the display
+ * or text face, `control` (nav, buttons, toggles) borrows any of the three.
+ */
+const ALIAS_ROLES = ['lead', 'control'] as const;
+type AliasRole = (typeof ALIAS_ROLES)[number];
+export const TYPE_ROLES = [...FONT_ROLES, ...ALIAS_ROLES] as const;
 type TypeRole = (typeof TYPE_ROLES)[number];
 
-/** Fluid sizes are CSS expressions, one per shared breakpoint band: phone below 48rem, wide above. */
-export const FLUID_SIZES = ['hero-display', 'hero-lead', 'hero-figure'] as const;
+/**
+ * Fluid sizes are CSS expressions, one per shared breakpoint band: phone below 48rem, wide above.
+ * The page frame (gutter, column gap, header and control heights, vertical rhythm, first-screen height),
+ * the small type steps and the hero's own sizes all scale with the viewport, and each brand scales them its own way.
+ */
+export const FLUID_SIZES = [
+  'page-x',
+  'col-gap',
+  'header-h',
+  'control-h',
+  'rhythm',
+  'stage-h',
+  'mark-header',
+  'text-body',
+  'text-label',
+  'text-small',
+  'measure',
+  'hero-display',
+  'hero-lead',
+  'hero-figure',
+] as const;
 type FluidSize = (typeof FLUID_SIZES)[number];
 const FLUID_BANDS = ['phone', 'wide'] as const;
 type FluidBand = (typeof FLUID_BANDS)[number];
 
-export const DURATIONS = ['fast', 'base', 'slow'] as const;
+/** `beat` is the unit sequenced motion (the Peek choreography) is written in: every delay is a multiple of it. */
+export const DURATIONS = ['beat', 'fast', 'base', 'slow'] as const;
 type DurationStep = (typeof DURATIONS)[number];
 export const EASINGS = ['out', 'in', 'draw', 'pop'] as const;
 type EasingName = (typeof EASINGS)[number];
@@ -103,8 +128,8 @@ export interface Knobs {
   type: {
     base: Token<Dimension>;
     ratio: Token<number>;
-    /** `lead` is an alias to the face it borrows: {font.family.display} or {font.family.text}. */
-    family: Record<FontRole, Token<FontFamily>> & { lead: Token<string> };
+    /** Alias roles name the face they borrow: `lead` {font.family.display|text}, `control` {font.family.display|text|label}. */
+    family: Record<FontRole, Token<FontFamily>> & Record<AliasRole, Token<string>>;
     weight: Record<TypeRole, Token<number>>;
     /** A font-variation-settings value, e.g. `"wdth" 62`, or `normal`. */
     variation: Record<TypeRole, Token<string>>;
@@ -134,7 +159,7 @@ type Leaf<T> = { $value: T };
 export interface Primitives {
   color: { $type: 'color'; role: Record<string, Leaf<string>> } & Record<RampName, Record<RampStep, Leaf<OklchColor>>>;
   font: {
-    family: { $type: 'fontFamily' } & Record<FontRole, Leaf<FontFamily>> & { lead: Leaf<string> };
+    family: { $type: 'fontFamily' } & Record<FontRole, Leaf<FontFamily>> & Record<AliasRole, Leaf<string>>;
     weight: { $type: 'fontWeight' } & Record<TypeRole, Leaf<number>>;
     variation: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
     leading: { $type: 'number' } & Record<TypeRole, Leaf<number>>;
@@ -214,7 +239,7 @@ export function derive(knobs: Knobs): Primitives {
       ),
     },
     font: {
-      family: { $type: 'fontFamily', ...pick(FONT_ROLES, (r) => type.family[r].$value), lead: { $value: type.family.lead.$value } },
+      family: { $type: 'fontFamily', ...pick(FONT_ROLES, (r) => type.family[r].$value), ...pick(ALIAS_ROLES, (r) => type.family[r].$value) },
       weight: { $type: 'fontWeight', ...pick(TYPE_ROLES, (r) => type.weight[r].$value) },
       variation: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.variation[r].$value) },
       leading: { $type: 'number', ...pick(TYPE_ROLES, (r) => type.leading[r].$value) },
@@ -291,6 +316,8 @@ function validate(k: Knobs): void {
   }
   if (!/^\{font\.family\.(display|text)\}$/.test(String(k.type?.family?.lead?.$value)))
     errors.push(`type.family.lead must be {font.family.display} or {font.family.text} (got ${JSON.stringify(k.type?.family?.lead?.$value)})`);
+  if (!/^\{font\.family\.(display|text|label)\}$/.test(String(k.type?.family?.control?.$value)))
+    errors.push(`type.family.control must be {font.family.display}, {font.family.text} or {font.family.label} (got ${JSON.stringify(k.type?.family?.control?.$value)})`);
   for (const r of TYPE_ROLES) {
     num(`type.leading.${r}`, k.type?.leading?.[r]?.$value, (n) => n > 0 && n <= 3, 'in (0, 3]');
     const tracking = k.type?.tracking?.[r]?.$value;
@@ -309,7 +336,7 @@ function validate(k: Knobs): void {
     for (const b of FLUID_BANDS) {
       const v = k.fluid?.[f]?.[b]?.$value;
       if (!isFluidLength(v))
-        errors.push(`fluid.${f}.${b} must be a length in vw/svh/rem, optionally with clamp/min/max/calc (got ${JSON.stringify(v)})`);
+        errors.push(`fluid.${f}.${b} must be a length in vw/svh/rem/ch/em, optionally with clamp/min/max/calc (got ${JSON.stringify(v)})`);
     }
   }
   for (const d of DURATIONS) {
@@ -337,20 +364,20 @@ function validate(k: Knobs): void {
 const VARIATION = /^(normal|"[a-zA-Z0-9]{4}" -?\d*\.?\d+(, "[a-zA-Z0-9]{4}" -?\d*\.?\d+)*)$/;
 
 /**
- * A fluid length: numbers in vw, svh or rem (unitless ones only as factors), joined by
- * + - * / inside clamp(), min(), max() or calc(). At least one number must carry a unit.
+ * A fluid length: numbers in vw, svh, rem, or the element-relative ch and em (for a measure), with unitless
+ * ones only as factors, joined by + - * / inside clamp(), min(), max() or calc(). At least one number must carry a unit.
  */
 function isFluidLength(v: unknown): boolean {
   if (typeof v !== 'string') return false;
-  const tokens = v.match(/\d*\.?\d+(?:vw|svh|rem)?|clamp\(|min\(|max\(|calc\(|[(),+\-*/]|\s+|./g) ?? [];
+  const tokens = v.match(/\d*\.?\d+(?:vw|svh|rem|ch|em)?|clamp\(|min\(|max\(|calc\(|[(),+\-*/]|\s+|./g) ?? [];
   let depth = 0;
   for (const t of tokens) {
     if (t.endsWith('(')) depth++;
     else if (t === ')') depth--;
-    else if (!/^(\d*\.?\d+(vw|svh|rem)?|[,+\-*/]|\s+)$/.test(t) || (t === ',' && depth === 0)) return false;
+    else if (!/^(\d*\.?\d+(vw|svh|rem|ch|em)?|[,+\-*/]|\s+)$/.test(t) || (t === ',' && depth === 0)) return false;
     if (depth < 0) return false;
   }
-  return depth === 0 && tokens.some((t) => /\d(vw|svh|rem)$/.test(t));
+  return depth === 0 && tokens.some((t) => /\d(vw|svh|rem|ch|em)$/.test(t));
 }
 
 function mapScale<K extends string, V, R>(scale: Record<K, V>, fn: (v: V) => R): Record<K, Leaf<R>> {

@@ -26,6 +26,9 @@
       },
       "accent": {
         "$value": "{color.role.accent-text}"
+      },
+      "text-body": {
+        "$value": "{color.role.text-body}"
       }
     },
     "raised": {
@@ -145,6 +148,13 @@
     },
     "on-redline": {
       "$value": "{color.role.figure-on-redline}"
+    }
+  },
+  "line": {
+    "$type": "color",
+    "$description": "Decorative lines that are not a surface's border: control outlines whose text or icon already identifies them, so no contrast minimum applies.",
+    "strong": {
+      "$value": "{color.role.rule-strong}"
     }
   }
 }

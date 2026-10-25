@@ -1,11 +1,60 @@
 {
   "layout": {
     "$type": "string",
+    "$description": "The page frame and figure sizes, fluid: phone below 48rem, wide above. Components pick the band in a media query.",
+    "page-x-phone": {
+      "$value": "{fluid.page-x.phone}"
+    },
+    "page-x-wide": {
+      "$value": "{fluid.page-x.wide}"
+    },
+    "col-gap-phone": {
+      "$value": "{fluid.col-gap.phone}"
+    },
+    "col-gap-wide": {
+      "$value": "{fluid.col-gap.wide}"
+    },
+    "header-h-phone": {
+      "$value": "{fluid.header-h.phone}"
+    },
+    "header-h-wide": {
+      "$value": "{fluid.header-h.wide}"
+    },
+    "control-h-phone": {
+      "$value": "{fluid.control-h.phone}"
+    },
+    "control-h-wide": {
+      "$value": "{fluid.control-h.wide}"
+    },
+    "rhythm-phone": {
+      "$value": "{fluid.rhythm.phone}"
+    },
+    "rhythm-wide": {
+      "$value": "{fluid.rhythm.wide}"
+    },
+    "stage-h-phone": {
+      "$value": "{fluid.stage-h.phone}"
+    },
+    "stage-h-wide": {
+      "$value": "{fluid.stage-h.wide}"
+    },
+    "mark-header-phone": {
+      "$value": "{fluid.mark-header.phone}"
+    },
+    "mark-header-wide": {
+      "$value": "{fluid.mark-header.wide}"
+    },
     "figure-phone": {
       "$value": "{fluid.hero-figure.phone}"
     },
     "figure-wide": {
       "$value": "{fluid.hero-figure.wide}"
+    },
+    "measure-phone": {
+      "$value": "{fluid.measure.phone}"
+    },
+    "measure-wide": {
+      "$value": "{fluid.measure.wide}"
     }
   },
   "choice": {

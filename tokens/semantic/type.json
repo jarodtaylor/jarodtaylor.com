@@ -13,6 +13,9 @@
       },
       "lead": {
         "$value": "{font.family.lead}"
+      },
+      "control": {
+        "$value": "{font.family.control}"
       }
     },
     "weight": {
@@ -28,6 +31,9 @@
       },
       "lead": {
         "$value": "{font.weight.lead}"
+      },
+      "control": {
+        "$value": "{font.weight.control}"
       }
     },
     "variation": {
@@ -44,6 +50,9 @@
       },
       "lead": {
         "$value": "{font.variation.lead}"
+      },
+      "control": {
+        "$value": "{font.variation.control}"
       }
     },
     "size": {
@@ -89,6 +98,9 @@
       },
       "lead": {
         "$value": "{font.leading.lead}"
+      },
+      "control": {
+        "$value": "{font.leading.control}"
       }
     },
     "tracking": {
@@ -105,11 +117,14 @@
       },
       "lead": {
         "$value": "{font.tracking.lead}"
+      },
+      "control": {
+        "$value": "{font.tracking.control}"
       }
     },
     "fluid": {
       "$type": "string",
-      "$description": "Fluid hero sizes: phone below 48rem, wide above.",
+      "$description": "Fluid type: phone below 48rem, wide above. display and lead are the hero name and tagline; body, label (controls and socials) and small (info strip, annotations) are the small steps.",
       "display-phone": {
         "$value": "{fluid.hero-display.phone}"
       },
@@ -121,6 +136,24 @@
       },
       "lead-wide": {
         "$value": "{fluid.hero-lead.wide}"
+      },
+      "body-phone": {
+        "$value": "{fluid.text-body.phone}"
+      },
+      "body-wide": {
+        "$value": "{fluid.text-body.wide}"
+      },
+      "label-phone": {
+        "$value": "{fluid.text-label.phone}"
+      },
+      "label-wide": {
+        "$value": "{fluid.text-label.wide}"
+      },
+      "small-phone": {
+        "$value": "{fluid.text-small.phone}"
+      },
+      "small-wide": {
+        "$value": "{fluid.text-small.wide}"
       }
     }
   }

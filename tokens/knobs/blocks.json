@@ -38,8 +38,10 @@
       "bg-next": { "$value": "{color.neutral.350}" },
       "text": { "$value": "{color.neutral.975}" },
       "text-muted": { "$value": "{color.neutral.850}" },
+      "text-body": { "$value": "{color.neutral.850}" },
       "text-quiet": { "$value": "{color.neutral.800}" },
       "rule": { "$value": "{color.neutral.525}" },
+      "rule-strong": { "$value": "{color.neutral.650}" },
       "accent": { "$value": "{color.accent.675}" },
       "on-accent": { "$value": "{color.neutral.275}" },
       "accent-text": { "$value": "{color.accent.775}" },
@@ -63,24 +65,27 @@
     "ratio": { "$type": "number", "$value": 1.25 },
     "family": {
       "$type": "fontFamily",
-      "display": { "$value": ["Bricolage Grotesque", "Arial Narrow", "sans-serif"] },
-      "text": { "$value": ["Atkinson Hyperlegible Next", "Helvetica Neue", "sans-serif"] },
-      "label": { "$value": ["Atkinson Hyperlegible Next", "Helvetica Neue", "sans-serif"] },
-      "lead": { "$value": "{font.family.display}" }
+      "display": { "$value": ["Bricolage Grotesque", "Bricolage Grotesque Fallback", "Arial Narrow", "sans-serif"] },
+      "text": { "$value": ["Atkinson Hyperlegible Next", "Atkinson Hyperlegible Next Fallback", "Helvetica Neue", "sans-serif"] },
+      "label": { "$value": ["Atkinson Hyperlegible Next", "Atkinson Hyperlegible Next Fallback", "Helvetica Neue", "sans-serif"] },
+      "lead": { "$value": "{font.family.display}" },
+      "control": { "$value": "{font.family.text}" }
     },
     "weight": {
       "$type": "fontWeight",
       "display": { "$value": 800 },
       "text": { "$value": 400 },
       "label": { "$value": 600 },
-      "lead": { "$value": 700 }
+      "lead": { "$value": 700 },
+      "control": { "$value": 700 }
     },
     "variation": {
       "$type": "string",
       "display": { "$value": "\"wdth\" 86, \"opsz\" 96" },
       "text": { "$value": "normal" },
       "label": { "$value": "normal" },
-      "lead": { "$value": "\"wdth\" 86, \"opsz\" 96" }
+      "lead": { "$value": "\"wdth\" 86, \"opsz\" 96" },
+      "control": { "$value": "normal" }
     },
     "leading": {
       "$type": "number",
@@ -88,7 +93,8 @@
       "display": { "$value": 0.88 },
       "text": { "$value": 1.5 },
       "label": { "$value": 1.3 },
-      "lead": { "$value": 1.08 }
+      "lead": { "$value": 1.08 },
+      "control": { "$value": 1 }
     },
     "tracking": {
       "$type": "string",
@@ -96,7 +102,8 @@
       "display": { "$value": "-0.035em" },
       "text": { "$value": "0" },
       "label": { "$value": "0.02em" },
-      "lead": { "$value": "-0.015em" }
+      "lead": { "$value": "-0.015em" },
+      "control": { "$value": "0" }
     }
   },
   "space": {
@@ -109,6 +116,50 @@
   },
   "fluid": {
     "$type": "string",
+    "page-x": {
+      "phone": { "$value": "clamp(1.25rem, 4vw, 7rem)" },
+      "wide": { "$value": "clamp(1.25rem, 4vw, 7rem)" }
+    },
+    "col-gap": {
+      "phone": { "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" },
+      "wide": { "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" }
+    },
+    "header-h": {
+      "phone": { "$value": "clamp(3.75rem, 3rem + 1.4vw, 5.5rem)" },
+      "wide": { "$value": "clamp(3.75rem, 3rem + 1.4vw, 5.5rem)" }
+    },
+    "control-h": {
+      "phone": { "$value": "2.75rem" },
+      "wide": { "$value": "2.75rem" }
+    },
+    "rhythm": {
+      "phone": { "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" },
+      "wide": { "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" }
+    },
+    "stage-h": {
+      "phone": { "$value": "100svh" },
+      "wide": { "$value": "100svh" }
+    },
+    "mark-header": {
+      "phone": { "$value": "clamp(1.625rem, 1.3rem + 0.6vw, 2.5rem)" },
+      "wide": { "$value": "clamp(1.625rem, 1.3rem + 0.6vw, 2.5rem)" }
+    },
+    "text-body": {
+      "phone": { "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)" },
+      "wide": { "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)" }
+    },
+    "text-label": {
+      "phone": { "$value": "clamp(0.8125rem, 0.68rem + 0.22vw, 1.0625rem)" },
+      "wide": { "$value": "clamp(0.8125rem, 0.68rem + 0.22vw, 1.0625rem)" }
+    },
+    "text-small": {
+      "phone": { "$value": "clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem)" },
+      "wide": { "$value": "clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem)" }
+    },
+    "measure": {
+      "phone": { "$value": "46ch" },
+      "wide": { "$value": "46ch" }
+    },
     "hero-display": {
       "phone": { "$value": "max(3.5rem, min(9.6vw, 19svh))" },
       "wide": { "$value": "max(3.5rem, min(9.6vw, 19svh))" }
@@ -125,6 +176,7 @@
   "motion": {
     "duration": {
       "$type": "duration",
+      "beat": { "$value": { "value": 100, "unit": "ms" } },
       "fast": { "$value": { "value": 160, "unit": "ms" } },
       "base": { "$value": { "value": 300, "unit": "ms" } },
       "slow": { "$value": { "value": 760, "unit": "ms" } }

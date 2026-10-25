@@ -1655,11 +1655,17 @@
       "text-muted": {
         "$value": "{color.neutral.750}"
       },
+      "text-body": {
+        "$value": "{color.neutral.975}"
+      },
       "text-quiet": {
         "$value": "{color.neutral.750}"
       },
       "rule": {
         "$value": "{color.neutral.300}"
+      },
+      "rule-strong": {
+        "$value": "{color.neutral.450}"
       },
       "accent": {
         "$value": "{color.accent.900}"
@@ -1717,6 +1723,7 @@
       "display": {
         "$value": [
           "Archivo",
+          "Archivo Fallback",
           "Arial Narrow",
           "sans-serif"
         ]
@@ -1724,6 +1731,7 @@
       "text": {
         "$value": [
           "Schibsted Grotesk",
+          "Schibsted Grotesk Fallback",
           "system-ui",
           "sans-serif"
         ]
@@ -1736,6 +1744,9 @@
         ]
       },
       "lead": {
+        "$value": "{font.family.text}"
+      },
+      "control": {
         "$value": "{font.family.text}"
       }
     },
@@ -1752,6 +1763,9 @@
       },
       "lead": {
         "$value": 500
+      },
+      "control": {
+        "$value": 600
       }
     },
     "variation": {
@@ -1766,6 +1780,9 @@
         "$value": "\"wdth\" 87.5"
       },
       "lead": {
+        "$value": "normal"
+      },
+      "control": {
         "$value": "normal"
       }
     },
@@ -1782,6 +1799,9 @@
       },
       "lead": {
         "$value": 1.1
+      },
+      "control": {
+        "$value": 1.35
       }
     },
     "tracking": {
@@ -1793,10 +1813,13 @@
         "$value": "0"
       },
       "label": {
-        "$value": "0.08em"
+        "$value": "0"
       },
       "lead": {
         "$value": "-0.02em"
+      },
+      "control": {
+        "$value": "0.08em"
       }
     },
     "size": {
@@ -1983,6 +2006,94 @@
         "figma": false
       }
     },
+    "page-x": {
+      "phone": {
+        "$value": "clamp(1rem, 3.2vw, 6rem)"
+      },
+      "wide": {
+        "$value": "clamp(1rem, 3.2vw, 6rem)"
+      }
+    },
+    "col-gap": {
+      "phone": {
+        "$value": "clamp(1rem, 1.6vw, 2.5rem)"
+      },
+      "wide": {
+        "$value": "clamp(1rem, 1.6vw, 2.5rem)"
+      }
+    },
+    "header-h": {
+      "phone": {
+        "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)"
+      },
+      "wide": {
+        "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)"
+      }
+    },
+    "control-h": {
+      "phone": {
+        "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)"
+      },
+      "wide": {
+        "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)"
+      }
+    },
+    "rhythm": {
+      "phone": {
+        "$value": "clamp(2rem, 4.6svh, 4.5rem)"
+      },
+      "wide": {
+        "$value": "clamp(2rem, 4.6svh, 4.5rem)"
+      }
+    },
+    "stage-h": {
+      "phone": {
+        "$value": "100svh"
+      },
+      "wide": {
+        "$value": "100svh"
+      }
+    },
+    "mark-header": {
+      "phone": {
+        "$value": "clamp(1.25rem, 0.9rem + 0.7vw, 1.875rem)"
+      },
+      "wide": {
+        "$value": "clamp(1.25rem, 0.9rem + 0.7vw, 1.875rem)"
+      }
+    },
+    "text-body": {
+      "phone": {
+        "$value": "clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem)"
+      },
+      "wide": {
+        "$value": "clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem)"
+      }
+    },
+    "text-label": {
+      "phone": {
+        "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)"
+      },
+      "wide": {
+        "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)"
+      }
+    },
+    "text-small": {
+      "phone": {
+        "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)"
+      },
+      "wide": {
+        "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)"
+      }
+    },
+    "measure": {
+      "phone": {
+        "$value": "44ch"
+      },
+      "wide": {
+        "$value": "44ch"
+      }
+    },
     "hero-display": {
       "phone": {
         "$value": "35vw"
@@ -2001,15 +2112,21 @@
     },
     "hero-figure": {
       "phone": {
-        "$value": "80vw"
+        "$value": "78vw"
       },
       "wide": {
-        "$value": "calc(100svh - 14rem)"
+        "$value": "calc(100svh - 4rem)"
       }
     }
   },
   "duration": {
     "$type": "duration",
+    "beat": {
+      "$value": {
+        "value": 100,
+        "unit": "ms"
+      }
+    },
     "fast": {
       "$value": {
         "value": 240,

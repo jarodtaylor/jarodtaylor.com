@@ -96,8 +96,8 @@
       "$value": "{type.family.label}"
     },
     "font-size": {
-      "$type": "dimension",
-      "$value": "{type.size.small}"
+      "$type": "string",
+      "$value": "{type.fluid.small-phone}"
     },
     "duration": {
       "$type": "duration",
@@ -106,6 +106,14 @@
     "easing": {
       "$type": "cubicBezier",
       "$value": "{motion.easing.out}"
+    },
+    "font-size-wide": {
+      "$type": "string",
+      "$value": "{type.fluid.small-wide}"
+    },
+    "beat": {
+      "$type": "duration",
+      "$value": "{motion.duration.beat}"
     }
   }
 }

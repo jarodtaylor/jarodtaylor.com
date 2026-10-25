@@ -38,8 +38,10 @@
       "bg-next": { "$value": "{color.neutral.250}" },
       "text": { "$value": "{color.neutral.975}" },
       "text-muted": { "$value": "{color.neutral.850}" },
+      "text-body": { "$value": "{color.neutral.850}" },
       "text-quiet": { "$value": "{color.neutral.850}" },
       "rule": { "$value": "{color.neutral.475}" },
+      "rule-strong": { "$value": "{color.neutral.600}" },
       "accent": { "$value": "{color.accent.800}" },
       "on-accent": { "$value": "{color.neutral.250}" },
       "accent-text": { "$value": "{color.accent.800}" },
@@ -63,24 +65,27 @@
     "ratio": { "$type": "number", "$value": 1.25 },
     "family": {
       "$type": "fontFamily",
-      "display": { "$value": ["Funnel Display", "ui-sans-serif", "system-ui", "sans-serif"] },
-      "text": { "$value": ["Funnel Sans", "ui-sans-serif", "system-ui", "sans-serif"] },
-      "label": { "$value": ["Funnel Sans", "ui-sans-serif", "system-ui", "sans-serif"] },
-      "lead": { "$value": "{font.family.display}" }
+      "display": { "$value": ["Funnel Display", "Funnel Display Fallback", "ui-sans-serif", "system-ui", "sans-serif"] },
+      "text": { "$value": ["Funnel Sans", "Funnel Sans Fallback", "ui-sans-serif", "system-ui", "sans-serif"] },
+      "label": { "$value": ["Funnel Sans", "Funnel Sans Fallback", "ui-sans-serif", "system-ui", "sans-serif"] },
+      "lead": { "$value": "{font.family.display}" },
+      "control": { "$value": "{font.family.label}" }
     },
     "weight": {
       "$type": "fontWeight",
       "display": { "$value": 560 },
       "text": { "$value": 380 },
       "label": { "$value": 500 },
-      "lead": { "$value": 420 }
+      "lead": { "$value": 420 },
+      "control": { "$value": 500 }
     },
     "variation": {
       "$type": "string",
       "display": { "$value": "normal" },
       "text": { "$value": "normal" },
       "label": { "$value": "normal" },
-      "lead": { "$value": "normal" }
+      "lead": { "$value": "normal" },
+      "control": { "$value": "normal" }
     },
     "leading": {
       "$type": "number",
@@ -88,7 +93,8 @@
       "display": { "$value": 0.84 },
       "text": { "$value": 1.5 },
       "label": { "$value": 1.3 },
-      "lead": { "$value": 1.12 }
+      "lead": { "$value": 1.12 },
+      "control": { "$value": 1.3 }
     },
     "tracking": {
       "$type": "string",
@@ -96,7 +102,8 @@
       "display": { "$value": "-0.04em" },
       "text": { "$value": "0" },
       "label": { "$value": "0" },
-      "lead": { "$value": "-0.015em" }
+      "lead": { "$value": "-0.015em" },
+      "control": { "$value": "0" }
     }
   },
   "space": {
@@ -109,6 +116,50 @@
   },
   "fluid": {
     "$type": "string",
+    "page-x": {
+      "phone": { "$value": "clamp(1rem, 0.4rem + 2.6vw, 4rem)" },
+      "wide": { "$value": "clamp(1rem, 0.4rem + 2.6vw, 4rem)" }
+    },
+    "col-gap": {
+      "phone": { "$value": "clamp(1.25rem, 0.8rem + 1.6vw, 3.5rem)" },
+      "wide": { "$value": "clamp(1.25rem, 0.8rem + 1.6vw, 3.5rem)" }
+    },
+    "header-h": {
+      "phone": { "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" },
+      "wide": { "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" }
+    },
+    "control-h": {
+      "phone": { "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" },
+      "wide": { "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" }
+    },
+    "rhythm": {
+      "phone": { "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)" },
+      "wide": { "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)" }
+    },
+    "stage-h": {
+      "phone": { "$value": "100svh" },
+      "wide": { "$value": "100svh" }
+    },
+    "mark-header": {
+      "phone": { "$value": "clamp(1.75rem, 1.4rem + 0.6vw, 2.5rem)" },
+      "wide": { "$value": "clamp(1.75rem, 1.4rem + 0.6vw, 2.5rem)" }
+    },
+    "text-body": {
+      "phone": { "$value": "clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem)" },
+      "wide": { "$value": "clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem)" }
+    },
+    "text-label": {
+      "phone": { "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)" },
+      "wide": { "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)" }
+    },
+    "text-small": {
+      "phone": { "$value": "clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem)" },
+      "wide": { "$value": "clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem)" }
+    },
+    "measure": {
+      "phone": { "$value": "36em" },
+      "wide": { "$value": "36em" }
+    },
     "hero-display": {
       "phone": { "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" },
       "wide": { "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" }
@@ -125,6 +176,7 @@
   "motion": {
     "duration": {
       "$type": "duration",
+      "beat": { "$value": { "value": 100, "unit": "ms" } },
       "fast": { "$value": { "value": 160, "unit": "ms" } },
       "base": { "$value": { "value": 240, "unit": "ms" } },
       "slow": { "$value": { "value": 480, "unit": "ms" } }

@@ -16,6 +16,57 @@
       "$type": "string",
       "$value": "{choice.nav-mode}"
     },
+    "mark-size": {
+      "$type": "string",
+      "$value": "{layout.mark-header-phone}"
+    },
+    "mark-size-wide": {
+      "$type": "string",
+      "$value": "{layout.mark-header-wide}"
+    },
+    "control": {
+      "$description": "Nav links, the menu and Peek buttons. label-case (upper | none) is read by a style query.",
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.control}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.control}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.control}"
+      },
+      "leading": {
+        "$type": "number",
+        "$value": "{type.leading.control}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.control}"
+      },
+      "font-size": {
+        "$type": "string",
+        "$value": "{type.fluid.label-phone}"
+      },
+      "font-size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.label-wide}"
+      },
+      "label-case": {
+        "$type": "string",
+        "$value": "{choice.label-case}"
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{surface.default.text-muted}"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{line.strong}"
+      }
+    },
     "info": {
       "$description": "The info strip: role, location, status",
       "text": {
@@ -39,16 +90,16 @@
         "$value": "{type.variation.label}"
       },
       "font-size": {
-        "$type": "dimension",
-        "$value": "{type.size.small}"
+        "$type": "string",
+        "$value": "{type.fluid.small-phone}"
       },
       "tracking": {
         "$type": "string",
         "$value": "{type.tracking.label}"
       },
-      "label-case": {
+      "font-size-wide": {
         "$type": "string",
-        "$value": "{choice.label-case}"
+        "$value": "{type.fluid.small-wide}"
       }
     },
     "menu": {
@@ -99,19 +150,19 @@
     },
     "font-family": {
       "$type": "fontFamily",
-      "$value": "{type.family.label}"
+      "$value": "{type.family.control}"
     },
     "font-weight": {
       "$type": "fontWeight",
-      "$value": "{type.weight.label}"
+      "$value": "{type.weight.control}"
     },
     "font-size": {
-      "$type": "dimension",
-      "$value": "{type.size.small}"
+      "$type": "string",
+      "$value": "{type.fluid.label-phone}"
     },
     "tracking": {
       "$type": "string",
-      "$value": "{type.tracking.label}"
+      "$value": "{type.tracking.control}"
     },
     "duration": {
       "$type": "duration",
@@ -120,6 +171,10 @@
     "easing": {
       "$type": "cubicBezier",
       "$value": "{motion.easing.out}"
+    },
+    "font-size-wide": {
+      "$type": "string",
+      "$value": "{type.fluid.label-wide}"
     }
   }
 }
