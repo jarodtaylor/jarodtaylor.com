@@ -4,18 +4,18 @@
     "ramp": {
       "$type": "number",
       "neutral": {
-        "hue": { "$value": 172.4 },
-        "hue-shift": { "$value": -8.7 },
-        "chroma": { "$value": 0.198 },
-        "peak": { "$value": 0.053 },
-        "taper": { "$value": 0.92 }
+        "hue": { "$value": 170.8 },
+        "hue-shift": { "$value": -4.8 },
+        "chroma": { "$value": 0.074 },
+        "peak": { "$value": 0.228 },
+        "taper": { "$value": 0.49 }
       },
       "accent": {
-        "hue": { "$value": 53.2 },
-        "hue-shift": { "$value": 13.3 },
-        "chroma": { "$value": 0.123 },
-        "peak": { "$value": 0.85 },
-        "taper": { "$value": 0 }
+        "hue": { "$value": 53.1 },
+        "hue-shift": { "$value": 28 },
+        "chroma": { "$value": 0.124 },
+        "peak": { "$value": 0.82 },
+        "taper": { "$value": 0.29 }
       },
       "guide": {
         "hue": { "$value": 232 },
@@ -36,7 +36,7 @@
       "$type": "color",
       "bg": { "$value": "{color.neutral.275}" },
       "bg-next": { "$value": "{color.neutral.250}" },
-      "text": { "$value": "{color.neutral.950}" },
+      "text": { "$value": "{color.neutral.975}" },
       "text-muted": { "$value": "{color.neutral.850}" },
       "text-quiet": { "$value": "{color.neutral.850}" },
       "rule": { "$value": "{color.neutral.475}" },
@@ -44,11 +44,11 @@
       "on-accent": { "$value": "{color.neutral.250}" },
       "accent-text": { "$value": "{color.accent.800}" },
       "focus": { "$value": "{color.accent.800}" },
-      "figure-line": { "$value": "{color.neutral.950}" },
+      "figure-line": { "$value": "{color.neutral.975}" },
       "figure-mark": { "$value": "{color.accent.800}" },
       "figure-mark-h": { "$value": "{color.accent.700}" },
       "figure-mark-d": { "$value": "{color.accent.600}" },
-      "figure-face": { "$value": "{color.neutral.950}" },
+      "figure-face": { "$value": "{color.neutral.975}" },
       "figure-face-h": { "$value": "{color.neutral.850}" },
       "figure-face-d": { "$value": "{color.neutral.750}" },
       "figure-edge": { "$value": "{color.neutral.200}" },

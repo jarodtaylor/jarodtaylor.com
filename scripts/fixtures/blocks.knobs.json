@@ -11,11 +11,11 @@
         "taper": { "$value": 1.06 }
       },
       "accent": {
-        "hue": { "$value": 46.2 },
-        "hue-shift": { "$value": 27.3 },
-        "chroma": { "$value": 0.233 },
-        "peak": { "$value": 0.95 },
-        "taper": { "$value": 0.59 }
+        "hue": { "$value": 41.1 },
+        "hue-shift": { "$value": 27 },
+        "chroma": { "$value": 0.195 },
+        "peak": { "$value": 0.763 },
+        "taper": { "$value": 0.48 }
       },
       "guide": {
         "hue": { "$value": 232 },
