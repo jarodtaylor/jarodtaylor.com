@@ -12,6 +12,12 @@
  * plays each colour role (color.role.text-muted → {color.neutral.750}); the semantic tier aliases
  * roles, so it stays shared while brands put a role at different lightness or on a different ramp.
  *
+ * Knob files are Figma-importable (Figma authors knobs; code owns derive): every token carries its own
+ * $type and uses only types Figma's DTCG import accepts. Dimensions are px (derive turns base sizes into
+ * rem), durations are seconds, weights are numbers, a font family is one name, and everything else
+ * (role picks, easings, enums, fluid sizes, axes) is a string that derive parses. Docs live here, not in
+ * the knob files, because a Figma export drops descriptions.
+ *
  * This module must stay pure and dependency-free: no Node APIs, no imports.
  * It runs at build time (scripts/build-tokens.ts) and, later, in the browser
  * for Remix v2 live knobs.
@@ -35,8 +41,8 @@ interface Token<T> {
 
 /**
  * Enumerated knobs: discrete layout and decoration choices that component CSS reads with
- * container style queries. Each knob file repeats its list in $extensions.com.jarodtaylor.enum
- * (for tools such as the Remix UI); validate() checks the two agree.
+ * container style queries. These lists are the only source of the allowed values (tools such as the
+ * Remix UI import them from here); knob files carry just the chosen string.
  */
 export const ENUMS = {
   decoration: ['rules', 'none'],
@@ -108,9 +114,19 @@ export const EASINGS = ['out', 'in', 'draw', 'pop'] as const;
 type EasingName = (typeof EASINGS)[number];
 
 type FontFamily = string | string[];
+/** Knob dimensions are px, the only unit Figma imports. */
+interface PxDimension {
+  value: number;
+  unit: 'px';
+}
+/** Knob durations are seconds, the only unit Figma imports; primitives are ms. */
+interface Seconds {
+  value: number;
+  unit: 's';
+}
 export interface Duration {
   value: number;
-  unit: 'ms' | 's';
+  unit: 'ms';
 }
 type CubicBezier = [number, number, number, number];
 
@@ -119,17 +135,25 @@ export interface Knobs {
   color: {
     ramp: Record<RampName, RampKnobs>;
     /**
-     * Color roles: each brand picks the ramp step that plays a role, as an alias like {color.neutral.750}.
-     * The semantic tier aliases roles, so it stays shared even though brands put muted text (say) at
-     * different lightness or source it from different ramps. Every brand must define the same role names.
+     * Color roles: each brand picks the ramp step that plays a role, as a string like "neutral.750";
+     * derive emits it as the alias {color.neutral.750}. The semantic tier aliases roles, so it stays
+     * shared even though brands put muted text (say) at different lightness or source it from different
+     * ramps. Every brand must define the same role names.
+     * TODO(Phase 4): once the ramps exist as Figma variables, make role picks native Figma aliases.
      */
     role: Record<string, Token<string>>;
   };
   type: {
-    base: Token<Dimension>;
+    /** Body size in px; the type scale is emitted in rem (16px = 1rem). */
+    base: Token<PxDimension>;
     ratio: Token<number>;
-    /** Alias roles name the face they borrow: `lead` {font.family.display|text}, `control` {font.family.display|text|label}. */
-    family: Record<FontRole, Token<FontFamily>> & Record<AliasRole, Token<string>>;
+    /**
+     * Each face is one family name (Figma takes no stacks). Alias roles name the face they borrow:
+     * `lead` display | text, `control` display | text | label.
+     */
+    family: Record<FontRole, Token<string>> & Record<AliasRole, Token<string>>;
+    /** The rest of each face's stack, comma-separated, e.g. "Archivo Fallback, Arial Narrow, sans-serif". */
+    fallback: Record<FontRole, Token<string>>;
     weight: Record<TypeRole, Token<number>>;
     /** A font-variation-settings value, e.g. `"wdth" 62`, or `normal`. */
     variation: Record<TypeRole, Token<string>>;
@@ -138,10 +162,12 @@ export interface Knobs {
     /** letter-spacing in em, e.g. -0.02em, or 0. */
     tracking: Record<TypeRole, Token<string>>;
   };
-  space: { base: Token<Dimension>; density: Token<number> };
-  shape: { radius: Token<Dimension>; 'border-width': Token<Dimension> };
+  /** base and radius are authored in px and emitted in rem; border-width stays px. */
+  space: { base: Token<PxDimension>; density: Token<number> };
+  shape: { radius: Token<PxDimension>; 'border-width': Token<PxDimension> };
   fluid: Record<FluidSize, Record<FluidBand, Token<string>>>;
-  motion: { duration: Record<DurationStep, Token<Duration>>; easing: Record<EasingName, Token<CubicBezier>> };
+  /** Easings are strings of four numbers, "x1, y1, x2, y2". */
+  motion: { duration: Record<DurationStep, Token<Seconds>>; easing: Record<EasingName, Token<string>> };
   enum: Record<EnumKnob, Token<string>>;
 }
 
@@ -235,31 +261,35 @@ export function derive(knobs: Knobs): Primitives {
       role: Object.fromEntries(
         Object.entries(color.role)
           .filter(([name]) => !name.startsWith('$'))
-          .map(([name, t]) => [name, { $value: t.$value }]),
+          .map(([name, t]) => [name, { $value: `{color.${t.$value}}` }]),
       ),
     },
     font: {
-      family: { $type: 'fontFamily', ...pick(FONT_ROLES, (r) => type.family[r].$value), ...pick(ALIAS_ROLES, (r) => type.family[r].$value) },
+      family: {
+        $type: 'fontFamily',
+        ...pick(FONT_ROLES, (r) => [type.family[r].$value, ...list(type.fallback[r].$value)]),
+        ...pick(ALIAS_ROLES, (r) => `{font.family.${type.family[r].$value}}`),
+      },
       weight: { $type: 'fontWeight', ...pick(TYPE_ROLES, (r) => type.weight[r].$value) },
       variation: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.variation[r].$value) },
       leading: { $type: 'number', ...pick(TYPE_ROLES, (r) => type.leading[r].$value) },
       tracking: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.tracking[r].$value) },
       size: {
         $type: 'dimension',
-        ...mapScale(TYPE_SCALE, (exp) => scaleDim(type.base.$value, type.ratio.$value ** exp)),
+        ...mapScale(TYPE_SCALE, (exp) => scaleDim(toRem(type.base.$value), type.ratio.$value ** exp)),
       },
       'line-height': { $type: 'number', ...mapScale(LINE_HEIGHT, (v) => v) },
     },
     size: {
       space: {
         $type: 'dimension',
-        ...mapScale(SPACE_SCALE, (m) => scaleDim(space.base.$value, m * space.density.$value)),
+        ...mapScale(SPACE_SCALE, (m) => scaleDim(toRem(space.base.$value), m * space.density.$value)),
       },
       radius: {
         $type: 'dimension',
-        sm: { $value: scaleDim(shape.radius.$value, 0.5) },
-        md: { $value: scaleDim(shape.radius.$value, 1) },
-        lg: { $value: scaleDim(shape.radius.$value, 2) },
+        sm: { $value: scaleDim(toRem(shape.radius.$value), 0.5) },
+        md: { $value: scaleDim(toRem(shape.radius.$value), 1) },
+        lg: { $value: scaleDim(toRem(shape.radius.$value), 2) },
         full: { $value: { value: 9999, unit: 'px' } },
       },
       border: {
@@ -276,8 +306,8 @@ export function derive(knobs: Knobs): Primitives {
         Record<FluidBand, Leaf<string>>
       >),
     },
-    duration: { $type: 'duration', ...pick(DURATIONS, (d) => ({ ...knobs.motion.duration[d].$value })) },
-    easing: { $type: 'cubicBezier', ...pick(EASINGS, (e) => [...knobs.motion.easing[e].$value] as CubicBezier) },
+    duration: { $type: 'duration', ...pick(DURATIONS, (d) => ({ value: round(knobs.motion.duration[d].$value.value * 1000, 3), unit: 'ms' as const })) },
+    easing: { $type: 'cubicBezier', ...pick(EASINGS, (e) => list(knobs.motion.easing[e].$value).map(Number) as CubicBezier) },
     knob: { $type: 'string', ...pick(Object.keys(ENUMS) as EnumKnob[], (e) => knobs.enum[e].$value) } as Primitives['knob'],
   };
 }
@@ -287,8 +317,8 @@ function validate(k: Knobs): void {
   const num = (path: string, v: unknown, ok: (n: number) => boolean, rule: string) => {
     if (typeof v !== 'number' || !Number.isFinite(v) || !ok(v)) errors.push(`${path} must be ${rule} (got ${JSON.stringify(v)})`);
   };
-  const dim = (path: string, d: Dimension | undefined, ok: (n: number) => boolean, rule: string) => {
-    if (!d || (d.unit !== 'px' && d.unit !== 'rem')) errors.push(`${path} must be a px or rem dimension`);
+  const dim = (path: string, d: PxDimension | undefined, ok: (n: number) => boolean, rule: string) => {
+    if (!d || d.unit !== 'px') errors.push(`${path} must be a px dimension`);
     else num(path, d.value, ok, rule);
   };
   const positive = (n: number) => n > 0;
@@ -304,20 +334,23 @@ function validate(k: Knobs): void {
   if (!k.color?.role || typeof k.color.role !== 'object') errors.push('color.role must be a group of role aliases');
   for (const [name, t] of Object.entries(k.color?.role ?? {})) {
     if (name.startsWith('$')) continue;
-    const [, rampName, step] = /^\{color\.([\w-]+)\.(\d+)\}$/.exec(String(t?.$value)) ?? [];
+    const [, rampName, step] = /^([\w-]+)\.(\d+)$/.exec(String(t?.$value)) ?? [];
     if (!RAMPS.includes(rampName as RampName) || !(step! in RAMP))
-      errors.push(`color.role.${name} must alias a ramp step like {color.neutral.750} (got ${JSON.stringify(t?.$value)})`);
+      errors.push(`color.role.${name} must name a ramp step like "neutral.750" (got ${JSON.stringify(t?.$value)})`);
   }
   dim('type.base', k.type?.base?.$value, positive, '> 0');
   num('type.ratio', k.type?.ratio?.$value, (n) => n > 1, '> 1');
   for (const r of FONT_ROLES) {
     const v = k.type?.family?.[r]?.$value;
-    if (!(typeof v === 'string' ? v : Array.isArray(v) && v.length > 0)) errors.push(`type.family.${r} must be a font family`);
+    if (typeof v !== 'string' || !v.trim() || v.includes(',')) errors.push(`type.family.${r} must be one font family name (got ${JSON.stringify(v)})`);
+    const tail = k.type?.fallback?.[r]?.$value;
+    if (typeof tail !== 'string' || !GENERIC_FAMILIES.has(list(tail).at(-1)!))
+      errors.push(`type.fallback.${r} must be a comma-separated stack ending in a generic family like sans-serif (got ${JSON.stringify(tail)})`);
   }
-  if (!/^\{font\.family\.(display|text)\}$/.test(String(k.type?.family?.lead?.$value)))
-    errors.push(`type.family.lead must be {font.family.display} or {font.family.text} (got ${JSON.stringify(k.type?.family?.lead?.$value)})`);
-  if (!/^\{font\.family\.(display|text|label)\}$/.test(String(k.type?.family?.control?.$value)))
-    errors.push(`type.family.control must be {font.family.display}, {font.family.text} or {font.family.label} (got ${JSON.stringify(k.type?.family?.control?.$value)})`);
+  if (!['display', 'text'].includes(k.type?.family?.lead?.$value as string))
+    errors.push(`type.family.lead must be display or text (got ${JSON.stringify(k.type?.family?.lead?.$value)})`);
+  if (!FONT_ROLES.includes(k.type?.family?.control?.$value as FontRole))
+    errors.push(`type.family.control must be display, text or label (got ${JSON.stringify(k.type?.family?.control?.$value)})`);
   for (const r of TYPE_ROLES) {
     num(`type.leading.${r}`, k.type?.leading?.[r]?.$value, (n) => n > 0 && n <= 3, 'in (0, 3]');
     const tracking = k.type?.tracking?.[r]?.$value;
@@ -341,24 +374,33 @@ function validate(k: Knobs): void {
   }
   for (const d of DURATIONS) {
     const v = k.motion?.duration?.[d]?.$value;
-    if (!v || (v.unit !== 'ms' && v.unit !== 's')) errors.push(`motion.duration.${d} must be an ms or s duration`);
+    if (!v || v.unit !== 's') errors.push(`motion.duration.${d} must be a duration in s`);
     else num(`motion.duration.${d}`, v.value, (n) => n >= 0, '≥ 0');
   }
   for (const e of EASINGS) {
-    const v = k.motion?.easing?.[e]?.$value;
-    const ok = Array.isArray(v) && v.length === 4 && v.every(Number.isFinite) && [v[0], v[2]].every((x) => x >= 0 && x <= 1);
-    if (!ok) errors.push(`motion.easing.${e} must be a cubic Bézier [x1, y1, x2, y2] with x in [0, 1] (got ${JSON.stringify(v)})`);
+    const raw = k.motion?.easing?.[e]?.$value;
+    const v = typeof raw === 'string' ? list(raw).map((x) => (/^-?\d*\.?\d+$/.test(x) ? Number(x) : NaN)) : [];
+    const ok = v.length === 4 && v.every(Number.isFinite) && [v[0]!, v[2]!].every((x) => x >= 0 && x <= 1);
+    if (!ok) errors.push(`motion.easing.${e} must be a cubic Bézier "x1, y1, x2, y2" with x in [0, 1] (got ${JSON.stringify(raw)})`);
   }
   for (const [name, allowed] of Object.entries(ENUMS) as [EnumKnob, readonly string[]][]) {
     const knob = k.enum?.[name];
     if (!allowed.includes(knob?.$value as string))
       errors.push(`enum.${name} must be one of ${allowed.join(' | ')} (got ${JSON.stringify(knob?.$value)})`);
-    const listed = (knob?.$extensions?.['com.jarodtaylor.enum'] as string[] | undefined)?.join(' | ');
-    if (listed !== allowed.join(' | '))
-      errors.push(`enum.${name} $extensions.com.jarodtaylor.enum must list ${allowed.join(' | ')} (got ${listed ?? 'nothing'})`);
   }
 
   if (errors.length) throw new Error(`Invalid knobs:\n  - ${errors.join('\n  - ')}`);
+}
+
+const GENERIC_FAMILIES = new Set(['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-serif', 'ui-sans-serif', 'ui-monospace', 'ui-rounded', 'math']);
+
+/** "a, b , c" → ["a", "b", "c"]. */
+function list(s: string): string[] {
+  return s.split(',').map((x) => x.trim()).filter(Boolean);
+}
+
+function toRem(d: PxDimension): Dimension {
+  return { value: round(d.value / 16, 4), unit: 'rem' };
 }
 
 const VARIATION = /^(normal|"[a-zA-Z0-9]{4}" -?\d*\.?\d+(, "[a-zA-Z0-9]{4}" -?\d*\.?\d+)*)$/;

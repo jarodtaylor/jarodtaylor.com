@@ -1,203 +1,194 @@
 {
-  "$description": "Brand knobs: default (Backstage-lite, prototypes/r6-backstage). The only thing a brand authors; scripts/derive.ts turns it into tokens/generated/default.json. Colours were fitted to the prototype (scripts/fixtures/prototype-colors.json).",
   "color": {
     "ramp": {
-      "$type": "number",
       "neutral": {
-        "hue": { "$value": 242.3 },
-        "hue-shift": { "$value": -10.2 },
-        "chroma": { "$value": 0.029 },
-        "peak": { "$value": 0.901 },
-        "taper": { "$value": 0.05 }
+        "hue": { "$type": "number", "$value": 242.3 },
+        "hue-shift": { "$type": "number", "$value": -10.2 },
+        "chroma": { "$type": "number", "$value": 0.029 },
+        "peak": { "$type": "number", "$value": 0.901 },
+        "taper": { "$type": "number", "$value": 0.05 }
       },
       "accent": {
-        "hue": { "$value": 123.6 },
-        "hue-shift": { "$value": -24.9 },
-        "chroma": { "$value": 0.194 },
-        "peak": { "$value": 0.911 },
-        "taper": { "$value": 1.06 }
+        "hue": { "$type": "number", "$value": 123.6 },
+        "hue-shift": { "$type": "number", "$value": -24.9 },
+        "chroma": { "$type": "number", "$value": 0.194 },
+        "peak": { "$type": "number", "$value": 0.911 },
+        "taper": { "$type": "number", "$value": 1.06 }
       },
       "guide": {
-        "hue": { "$value": 224.7 },
-        "hue-shift": { "$value": 20.5 },
-        "chroma": { "$value": 0.126 },
-        "peak": { "$value": 0.402 },
-        "taper": { "$value": 0.52 }
+        "hue": { "$type": "number", "$value": 224.7 },
+        "hue-shift": { "$type": "number", "$value": 20.5 },
+        "chroma": { "$type": "number", "$value": 0.126 },
+        "peak": { "$type": "number", "$value": 0.402 },
+        "taper": { "$type": "number", "$value": 0.52 }
       },
       "redline": {
-        "hue": { "$value": 19.9 },
-        "hue-shift": { "$value": -1.1 },
-        "chroma": { "$value": 0.223 },
-        "peak": { "$value": 0.823 },
-        "taper": { "$value": 1.36 }
+        "hue": { "$type": "number", "$value": 19.9 },
+        "hue-shift": { "$type": "number", "$value": -1.1 },
+        "chroma": { "$type": "number", "$value": 0.223 },
+        "peak": { "$type": "number", "$value": 0.823 },
+        "taper": { "$type": "number", "$value": 1.36 }
       }
     },
     "role": {
-      "$type": "color",
-      "bg": { "$value": "{color.neutral.175}" },
-      "bg-next": { "$value": "{color.neutral.200}" },
-      "text": { "$value": "{color.neutral.975}" },
-      "text-muted": { "$value": "{color.neutral.750}" },
-      "text-body": { "$value": "{color.neutral.975}" },
-      "text-quiet": { "$value": "{color.neutral.750}" },
-      "rule": { "$value": "{color.neutral.300}" },
-      "rule-strong": { "$value": "{color.neutral.450}" },
-      "accent": { "$value": "{color.accent.900}" },
-      "on-accent": { "$value": "{color.accent.225}" },
-      "accent-text": { "$value": "{color.accent.900}" },
-      "focus": { "$value": "{color.accent.900}" },
-      "figure-line": { "$value": "{color.neutral.975}" },
-      "figure-mark": { "$value": "{color.accent.900}" },
-      "figure-mark-light": { "$value": "{color.accent.800}" },
-      "figure-mark-dark": { "$value": "{color.accent.700}" },
-      "figure-face": { "$value": "{color.neutral.975}" },
-      "figure-face-light": { "$value": "{color.neutral.850}" },
-      "figure-face-dark": { "$value": "{color.neutral.750}" },
-      "figure-edge": { "$value": "{color.neutral.175}" },
-      "figure-guide": { "$value": "{color.guide.675}" },
-      "figure-guide-ink": { "$value": "{color.guide.750}" },
-      "figure-redline": { "$value": "{color.redline.700}" },
-      "figure-on-redline": { "$value": "{color.redline.175}" }
+      "bg": { "$type": "string", "$value": "neutral.175" },
+      "bg-next": { "$type": "string", "$value": "neutral.200" },
+      "text": { "$type": "string", "$value": "neutral.975" },
+      "text-muted": { "$type": "string", "$value": "neutral.750" },
+      "text-body": { "$type": "string", "$value": "neutral.975" },
+      "text-quiet": { "$type": "string", "$value": "neutral.750" },
+      "rule": { "$type": "string", "$value": "neutral.300" },
+      "rule-strong": { "$type": "string", "$value": "neutral.450" },
+      "accent": { "$type": "string", "$value": "accent.900" },
+      "on-accent": { "$type": "string", "$value": "accent.225" },
+      "accent-text": { "$type": "string", "$value": "accent.900" },
+      "focus": { "$type": "string", "$value": "accent.900" },
+      "figure-line": { "$type": "string", "$value": "neutral.975" },
+      "figure-mark": { "$type": "string", "$value": "accent.900" },
+      "figure-mark-light": { "$type": "string", "$value": "accent.800" },
+      "figure-mark-dark": { "$type": "string", "$value": "accent.700" },
+      "figure-face": { "$type": "string", "$value": "neutral.975" },
+      "figure-face-light": { "$type": "string", "$value": "neutral.850" },
+      "figure-face-dark": { "$type": "string", "$value": "neutral.750" },
+      "figure-edge": { "$type": "string", "$value": "neutral.175" },
+      "figure-guide": { "$type": "string", "$value": "guide.675" },
+      "figure-guide-ink": { "$type": "string", "$value": "guide.750" },
+      "figure-redline": { "$type": "string", "$value": "redline.700" },
+      "figure-on-redline": { "$type": "string", "$value": "redline.175" }
     }
   },
   "type": {
-    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "base": { "$type": "dimension", "$value": { "value": 16, "unit": "px" } },
     "ratio": { "$type": "number", "$value": 1.25 },
     "family": {
-      "$type": "fontFamily",
-      "display": { "$value": ["Archivo", "Archivo Fallback", "Arial Narrow", "sans-serif"] },
-      "text": { "$value": ["Schibsted Grotesk", "Schibsted Grotesk Fallback", "system-ui", "sans-serif"] },
-      "label": { "$value": ["Martian Mono", "ui-monospace", "monospace"] },
-      "lead": { "$value": "{font.family.text}" },
-      "control": { "$value": "{font.family.text}" }
+      "display": { "$type": "fontFamily", "$value": "Archivo" },
+      "text": { "$type": "fontFamily", "$value": "Schibsted Grotesk" },
+      "label": { "$type": "fontFamily", "$value": "Martian Mono" },
+      "lead": { "$type": "string", "$value": "text" },
+      "control": { "$type": "string", "$value": "text" }
+    },
+    "fallback": {
+      "display": { "$type": "string", "$value": "Archivo Fallback, Arial Narrow, sans-serif" },
+      "text": { "$type": "string", "$value": "Schibsted Grotesk Fallback, system-ui, sans-serif" },
+      "label": { "$type": "string", "$value": "ui-monospace, monospace" }
     },
     "weight": {
-      "$type": "fontWeight",
-      "display": { "$value": 820 },
-      "text": { "$value": 400 },
-      "label": { "$value": 400 },
-      "lead": { "$value": 500 },
-      "control": { "$value": 600 }
+      "display": { "$type": "number", "$value": 820 },
+      "text": { "$type": "number", "$value": 400 },
+      "label": { "$type": "number", "$value": 400 },
+      "lead": { "$type": "number", "$value": 500 },
+      "control": { "$type": "number", "$value": 600 }
     },
     "variation": {
-      "$type": "string",
-      "display": { "$value": "\"wdth\" 62" },
-      "text": { "$value": "normal" },
-      "label": { "$value": "\"wdth\" 87.5" },
-      "lead": { "$value": "normal" },
-      "control": { "$value": "normal" }
+      "display": { "$type": "string", "$value": "\"wdth\" 62" },
+      "text": { "$type": "string", "$value": "normal" },
+      "label": { "$type": "string", "$value": "\"wdth\" 87.5" },
+      "lead": { "$type": "string", "$value": "normal" },
+      "control": { "$type": "string", "$value": "normal" }
     },
     "leading": {
-      "$type": "number",
-      "$description": "Unitless line-height per type role",
-      "display": { "$value": 0.82 },
-      "text": { "$value": 1.55 },
-      "label": { "$value": 1.35 },
-      "lead": { "$value": 1.1 },
-      "control": { "$value": 1.35 }
+      "display": { "$type": "number", "$value": 0.82 },
+      "text": { "$type": "number", "$value": 1.55 },
+      "label": { "$type": "number", "$value": 1.35 },
+      "lead": { "$type": "number", "$value": 1.1 },
+      "control": { "$type": "number", "$value": 1.35 }
     },
     "tracking": {
-      "$type": "string",
-      "$description": "letter-spacing per type role: 0 or an em length",
-      "display": { "$value": "-0.02em" },
-      "text": { "$value": "0" },
-      "label": { "$value": "0" },
-      "lead": { "$value": "-0.02em" },
-      "control": { "$value": "0.08em" }
+      "display": { "$type": "string", "$value": "-0.02em" },
+      "text": { "$type": "string", "$value": "0" },
+      "label": { "$type": "string", "$value": "0" },
+      "lead": { "$type": "string", "$value": "-0.02em" },
+      "control": { "$type": "string", "$value": "0.08em" }
     }
   },
   "space": {
-    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "base": { "$type": "dimension", "$value": { "value": 16, "unit": "px" } },
     "density": { "$type": "number", "$value": 1 }
   },
   "shape": {
-    "radius": { "$type": "dimension", "$value": { "value": 0, "unit": "rem" } },
+    "radius": { "$type": "dimension", "$value": { "value": 0, "unit": "px" } },
     "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" } }
   },
   "fluid": {
-    "$type": "string",
     "page-x": {
-      "phone": { "$value": "clamp(1rem, 3.2vw, 6rem)" },
-      "wide": { "$value": "clamp(1rem, 3.2vw, 6rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1rem, 3.2vw, 6rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1rem, 3.2vw, 6rem)" }
     },
     "col-gap": {
-      "phone": { "$value": "clamp(1rem, 1.6vw, 2.5rem)" },
-      "wide": { "$value": "clamp(1rem, 1.6vw, 2.5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1rem, 1.6vw, 2.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1rem, 1.6vw, 2.5rem)" }
     },
     "header-h": {
-      "phone": { "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" },
-      "wide": { "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" }
     },
     "control-h": {
-      "phone": { "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" },
-      "wide": { "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" }
+      "phone": { "$type": "string", "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" },
+      "wide": { "$type": "string", "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" }
     },
     "rhythm": {
-      "phone": { "$value": "clamp(2rem, 4.6svh, 4.5rem)" },
-      "wide": { "$value": "clamp(2rem, 4.6svh, 4.5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(2rem, 4.6svh, 4.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(2rem, 4.6svh, 4.5rem)" }
     },
     "stage-h": {
-      "phone": { "$value": "100svh" },
-      "wide": { "$value": "100svh" }
+      "phone": { "$type": "string", "$value": "100svh" },
+      "wide": { "$type": "string", "$value": "100svh" }
     },
     "mark-header": {
-      "phone": { "$value": "clamp(1.25rem, 0.9rem + 0.7vw, 1.875rem)" },
-      "wide": { "$value": "clamp(1.25rem, 0.9rem + 0.7vw, 1.875rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1.25rem, 0.9rem + 0.7vw, 1.875rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.25rem, 0.9rem + 0.7vw, 1.875rem)" }
     },
     "text-body": {
-      "phone": { "$value": "clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem)" },
-      "wide": { "$value": "clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.0625rem, 0.82rem + 0.42vw, 1.5rem)" }
     },
     "text-label": {
-      "phone": { "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)" },
-      "wide": { "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)" }
+      "phone": { "$type": "string", "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)" }
     },
     "text-small": {
-      "phone": { "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" },
-      "wide": { "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" }
+      "phone": { "$type": "string", "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" }
     },
     "measure": {
-      "phone": { "$value": "44ch" },
-      "wide": { "$value": "44ch" }
+      "phone": { "$type": "string", "$value": "44ch" },
+      "wide": { "$type": "string", "$value": "44ch" }
     },
     "hero-display": {
-      "phone": { "$value": "35vw" },
-      "wide": { "$value": "min(12.5vw, 21svh)" }
+      "phone": { "$type": "string", "$value": "35vw" },
+      "wide": { "$type": "string", "$value": "min(12.5vw, 21svh)" }
     },
     "hero-lead": {
-      "phone": { "$value": "clamp(1.625rem, 7vw, 2.25rem)" },
-      "wide": { "$value": "min(2.6vw, 4.4svh)" }
+      "phone": { "$type": "string", "$value": "clamp(1.625rem, 7vw, 2.25rem)" },
+      "wide": { "$type": "string", "$value": "min(2.6vw, 4.4svh)" }
     },
     "hero-figure": {
-      "phone": { "$value": "78vw" },
-      "wide": { "$value": "calc(100svh - 4rem)" }
+      "phone": { "$type": "string", "$value": "78vw" },
+      "wide": { "$type": "string", "$value": "calc(100svh - 4rem)" }
     }
   },
   "motion": {
     "duration": {
-      "$type": "duration",
-      "beat": { "$value": { "value": 100, "unit": "ms" } },
-      "fast": { "$value": { "value": 240, "unit": "ms" } },
-      "base": { "$value": { "value": 460, "unit": "ms" } },
-      "slow": { "$value": { "value": 800, "unit": "ms" } }
+      "beat": { "$type": "duration", "$value": { "value": 0.1, "unit": "s" } },
+      "fast": { "$type": "duration", "$value": { "value": 0.24, "unit": "s" } },
+      "base": { "$type": "duration", "$value": { "value": 0.46, "unit": "s" } },
+      "slow": { "$type": "duration", "$value": { "value": 0.8, "unit": "s" } }
     },
     "easing": {
-      "$type": "cubicBezier",
-      "out": { "$value": [0.16, 1, 0.3, 1] },
-      "in": { "$value": [0.55, 0, 0.75, 0] },
-      "draw": { "$value": [0.65, 0, 0.25, 1] },
-      "pop": { "$value": [0.3, 1.5, 0.6, 1] }
+      "out": { "$type": "string", "$value": "0.16, 1, 0.3, 1" },
+      "in": { "$type": "string", "$value": "0.55, 0, 0.75, 0" },
+      "draw": { "$type": "string", "$value": "0.65, 0, 0.25, 1" },
+      "pop": { "$type": "string", "$value": "0.3, 1.5, 0.6, 1" }
     }
   },
   "enum": {
-    "$type": "string",
-    "decoration": { "$value": "rules", "$extensions": { "com.jarodtaylor.enum": ["rules", "none"] } },
-    "hero-figure": { "$value": "construction", "$extensions": { "com.jarodtaylor.enum": ["construction", "isometric", "lattice"] } },
-    "hero-layout": { "$value": "stack", "$extensions": { "com.jarodtaylor.enum": ["stack", "name-over-details"] } },
-    "hero-intro": { "$value": "peek", "$extensions": { "com.jarodtaylor.enum": ["peek", "assemble", "none"] } },
-    "nav-mode": { "$value": "toggle", "$extensions": { "com.jarodtaylor.enum": ["toggle", "wrap"] } },
-    "hero-cue": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["none", "icon", "labelled"] } },
-    "talk-style": { "$value": "pill-fill", "$extensions": { "com.jarodtaylor.enum": ["pill-fill", "outline"] } },
-    "label-case": { "$value": "upper", "$extensions": { "com.jarodtaylor.enum": ["upper", "none"] } }
+    "decoration": { "$type": "string", "$value": "rules" },
+    "hero-figure": { "$type": "string", "$value": "construction" },
+    "hero-layout": { "$type": "string", "$value": "stack" },
+    "hero-intro": { "$type": "string", "$value": "peek" },
+    "nav-mode": { "$type": "string", "$value": "toggle" },
+    "hero-cue": { "$type": "string", "$value": "none" },
+    "talk-style": { "$type": "string", "$value": "pill-fill" },
+    "label-case": { "$type": "string", "$value": "upper" }
   }
 }

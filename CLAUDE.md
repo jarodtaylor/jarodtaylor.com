@@ -30,7 +30,7 @@ Run `pnpm test && pnpm typecheck && pnpm check` before committing.
 ## Token pipeline
 
 ```
-tokens/knobs/<brand>.json      TIER 1   the only thing a brand authors (DTCG)
+tokens/knobs/<brand>.json      TIER 1   the only thing a brand authors (DTCG, Figma-importable)
   └─ scripts/derive.ts         pure derive(knobs) → primitives; no Node APIs (it will run in the browser)
 tokens/generated/<brand>.json  TIER 1b  derived primitives, committed, never hand-edited
 tokens/semantic/*.json         TIER 2   aliases only: surface roles, graphic, space, type, shape, motion, layout, choice
@@ -41,7 +41,8 @@ terrazzo.config.ts             → src/styles/tokens.css + public/tokens/<brand>
 
 - **Add a brand**: create `tokens/knobs/<name>.json` and add a `<name>` context to the `brand` modifier in `tokens/resolver.json`. The build fails if the two lists disagree.
 - **Colour ramps**: four required ramps (`neutral`, `accent`, `guide`, `redline`) on one fixed-lightness ladder. Steps are named L×1000, `150`–`975` every 25 (`color.neutral.750` is L 0.75). A brand sets 5 knobs per ramp in `color.ramp.<name>`: `hue`, `hue-shift`, `chroma`, `peak` and `taper`.
-- **Colour roles**: a brand picks the step for each role in `color.role`, as an alias (`"text-muted": { "$value": "{color.neutral.750}" }`). derive() emits it as an alias (`--color-role-text-muted: var(--color-neutral-750)`). The semantic tier aliases `{color.role.*}`, never ramp steps, so it stays shared. `pnpm tokens` fails, naming the brand and the role, if a pick isn't a real step or a brand lacks a role another brand has.
+- **Knobs are Figma-importable** (Figma authors knobs; code owns derive()). Every token has its own `$type`, only from Figma's DTCG import set: dimensions in px (derive emits base sizes in rem), durations in s (emitted in ms), weights as `number`, `fontFamily` as one name (the rest of the stack is the `type.fallback.<role>` string), everything else as `string` (role picks, easings `"x1, y1, x2, y2"`, enums, fluid sizes, axes). No `$description`s in knob files: Figma export drops them, so docs live in `derive.ts`.
+- **Colour roles**: a brand picks the step for each role in `color.role`, as a string (`"text-muted": { "$type": "string", "$value": "neutral.750" }`). derive() emits it as an alias (`--color-role-text-muted: var(--color-neutral-750)`). The semantic tier aliases `{color.role.*}`, never ramp steps, so it stays shared. `pnpm tokens` fails, naming the brand and the role, if a pick isn't a real step or a brand lacks a role another brand has.
 - **Brands**: `default` (Backstage-lite), `blocks`, `clean`. Their ramps were fitted to the approved prototypes. `scripts/fixtures/prototype-colors.json` holds the prototype colours their roles must match within ΔE00 2 (`derive.test.ts`); AA wins over that match.
 - Aliases compile to `var(--…)` references, not flattened values, so setting a primitive at runtime cascades through the semantic and component tiers. Remix v2 depends on this.
 - `derive()` clamps every color into sRGB. That keeps Terrazzo from emitting wide-gamut `@media` duplicates and makes the `hex` fallback exact.

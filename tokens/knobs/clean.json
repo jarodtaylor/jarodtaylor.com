@@ -1,203 +1,194 @@
 {
-  "$description": "Brand knobs: clean (Clean and sharp, prototypes/r6-clean). The only thing a brand authors; scripts/derive.ts turns it into tokens/generated/clean.json. Colours were fitted to the prototype (scripts/fixtures/prototype-colors.json).",
   "color": {
     "ramp": {
-      "$type": "number",
       "neutral": {
-        "hue": { "$value": 170.8 },
-        "hue-shift": { "$value": -4.8 },
-        "chroma": { "$value": 0.074 },
-        "peak": { "$value": 0.228 },
-        "taper": { "$value": 0.49 }
+        "hue": { "$type": "number", "$value": 170.8 },
+        "hue-shift": { "$type": "number", "$value": -4.8 },
+        "chroma": { "$type": "number", "$value": 0.074 },
+        "peak": { "$type": "number", "$value": 0.228 },
+        "taper": { "$type": "number", "$value": 0.49 }
       },
       "accent": {
-        "hue": { "$value": 53.1 },
-        "hue-shift": { "$value": 28 },
-        "chroma": { "$value": 0.124 },
-        "peak": { "$value": 0.82 },
-        "taper": { "$value": 0.29 }
+        "hue": { "$type": "number", "$value": 53.1 },
+        "hue-shift": { "$type": "number", "$value": 28 },
+        "chroma": { "$type": "number", "$value": 0.124 },
+        "peak": { "$type": "number", "$value": 0.82 },
+        "taper": { "$type": "number", "$value": 0.29 }
       },
       "guide": {
-        "hue": { "$value": 232 },
-        "hue-shift": { "$value": 0 },
-        "chroma": { "$value": 0.1 },
-        "peak": { "$value": 0.6 },
-        "taper": { "$value": 1 }
+        "hue": { "$type": "number", "$value": 232 },
+        "hue-shift": { "$type": "number", "$value": 0 },
+        "chroma": { "$type": "number", "$value": 0.1 },
+        "peak": { "$type": "number", "$value": 0.6 },
+        "taper": { "$type": "number", "$value": 1 }
       },
       "redline": {
-        "hue": { "$value": 20 },
-        "hue-shift": { "$value": 0 },
-        "chroma": { "$value": 0.2 },
-        "peak": { "$value": 0.75 },
-        "taper": { "$value": 1.2 }
+        "hue": { "$type": "number", "$value": 20 },
+        "hue-shift": { "$type": "number", "$value": 0 },
+        "chroma": { "$type": "number", "$value": 0.2 },
+        "peak": { "$type": "number", "$value": 0.75 },
+        "taper": { "$type": "number", "$value": 1.2 }
       }
     },
     "role": {
-      "$type": "color",
-      "bg": { "$value": "{color.neutral.275}" },
-      "bg-next": { "$value": "{color.neutral.250}" },
-      "text": { "$value": "{color.neutral.975}" },
-      "text-muted": { "$value": "{color.neutral.850}" },
-      "text-body": { "$value": "{color.neutral.850}" },
-      "text-quiet": { "$value": "{color.neutral.850}" },
-      "rule": { "$value": "{color.neutral.475}" },
-      "rule-strong": { "$value": "{color.neutral.600}" },
-      "accent": { "$value": "{color.accent.800}" },
-      "on-accent": { "$value": "{color.neutral.250}" },
-      "accent-text": { "$value": "{color.accent.800}" },
-      "focus": { "$value": "{color.accent.800}" },
-      "figure-line": { "$value": "{color.neutral.975}" },
-      "figure-mark": { "$value": "{color.accent.800}" },
-      "figure-mark-light": { "$value": "{color.accent.700}" },
-      "figure-mark-dark": { "$value": "{color.accent.600}" },
-      "figure-face": { "$value": "{color.neutral.975}" },
-      "figure-face-light": { "$value": "{color.neutral.850}" },
-      "figure-face-dark": { "$value": "{color.neutral.750}" },
-      "figure-edge": { "$value": "{color.neutral.200}" },
-      "figure-guide": { "$value": "{color.guide.675}" },
-      "figure-guide-ink": { "$value": "{color.guide.750}" },
-      "figure-redline": { "$value": "{color.redline.700}" },
-      "figure-on-redline": { "$value": "{color.redline.175}" }
+      "bg": { "$type": "string", "$value": "neutral.275" },
+      "bg-next": { "$type": "string", "$value": "neutral.250" },
+      "text": { "$type": "string", "$value": "neutral.975" },
+      "text-muted": { "$type": "string", "$value": "neutral.850" },
+      "text-body": { "$type": "string", "$value": "neutral.850" },
+      "text-quiet": { "$type": "string", "$value": "neutral.850" },
+      "rule": { "$type": "string", "$value": "neutral.475" },
+      "rule-strong": { "$type": "string", "$value": "neutral.600" },
+      "accent": { "$type": "string", "$value": "accent.800" },
+      "on-accent": { "$type": "string", "$value": "neutral.250" },
+      "accent-text": { "$type": "string", "$value": "accent.800" },
+      "focus": { "$type": "string", "$value": "accent.800" },
+      "figure-line": { "$type": "string", "$value": "neutral.975" },
+      "figure-mark": { "$type": "string", "$value": "accent.800" },
+      "figure-mark-light": { "$type": "string", "$value": "accent.700" },
+      "figure-mark-dark": { "$type": "string", "$value": "accent.600" },
+      "figure-face": { "$type": "string", "$value": "neutral.975" },
+      "figure-face-light": { "$type": "string", "$value": "neutral.850" },
+      "figure-face-dark": { "$type": "string", "$value": "neutral.750" },
+      "figure-edge": { "$type": "string", "$value": "neutral.200" },
+      "figure-guide": { "$type": "string", "$value": "guide.675" },
+      "figure-guide-ink": { "$type": "string", "$value": "guide.750" },
+      "figure-redline": { "$type": "string", "$value": "redline.700" },
+      "figure-on-redline": { "$type": "string", "$value": "redline.175" }
     }
   },
   "type": {
-    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "base": { "$type": "dimension", "$value": { "value": 16, "unit": "px" } },
     "ratio": { "$type": "number", "$value": 1.25 },
     "family": {
-      "$type": "fontFamily",
-      "display": { "$value": ["Funnel Display", "Funnel Display Fallback", "ui-sans-serif", "system-ui", "sans-serif"] },
-      "text": { "$value": ["Funnel Sans", "Funnel Sans Fallback", "ui-sans-serif", "system-ui", "sans-serif"] },
-      "label": { "$value": ["Funnel Sans", "Funnel Sans Fallback", "ui-sans-serif", "system-ui", "sans-serif"] },
-      "lead": { "$value": "{font.family.display}" },
-      "control": { "$value": "{font.family.label}" }
+      "display": { "$type": "fontFamily", "$value": "Funnel Display" },
+      "text": { "$type": "fontFamily", "$value": "Funnel Sans" },
+      "label": { "$type": "fontFamily", "$value": "Funnel Sans" },
+      "lead": { "$type": "string", "$value": "display" },
+      "control": { "$type": "string", "$value": "label" }
+    },
+    "fallback": {
+      "display": { "$type": "string", "$value": "Funnel Display Fallback, ui-sans-serif, system-ui, sans-serif" },
+      "text": { "$type": "string", "$value": "Funnel Sans Fallback, ui-sans-serif, system-ui, sans-serif" },
+      "label": { "$type": "string", "$value": "Funnel Sans Fallback, ui-sans-serif, system-ui, sans-serif" }
     },
     "weight": {
-      "$type": "fontWeight",
-      "display": { "$value": 560 },
-      "text": { "$value": 380 },
-      "label": { "$value": 500 },
-      "lead": { "$value": 420 },
-      "control": { "$value": 500 }
+      "display": { "$type": "number", "$value": 560 },
+      "text": { "$type": "number", "$value": 380 },
+      "label": { "$type": "number", "$value": 500 },
+      "lead": { "$type": "number", "$value": 420 },
+      "control": { "$type": "number", "$value": 500 }
     },
     "variation": {
-      "$type": "string",
-      "display": { "$value": "normal" },
-      "text": { "$value": "normal" },
-      "label": { "$value": "normal" },
-      "lead": { "$value": "normal" },
-      "control": { "$value": "normal" }
+      "display": { "$type": "string", "$value": "normal" },
+      "text": { "$type": "string", "$value": "normal" },
+      "label": { "$type": "string", "$value": "normal" },
+      "lead": { "$type": "string", "$value": "normal" },
+      "control": { "$type": "string", "$value": "normal" }
     },
     "leading": {
-      "$type": "number",
-      "$description": "Unitless line-height per type role",
-      "display": { "$value": 0.84 },
-      "text": { "$value": 1.5 },
-      "label": { "$value": 1.3 },
-      "lead": { "$value": 1.12 },
-      "control": { "$value": 1.3 }
+      "display": { "$type": "number", "$value": 0.84 },
+      "text": { "$type": "number", "$value": 1.5 },
+      "label": { "$type": "number", "$value": 1.3 },
+      "lead": { "$type": "number", "$value": 1.12 },
+      "control": { "$type": "number", "$value": 1.3 }
     },
     "tracking": {
-      "$type": "string",
-      "$description": "letter-spacing per type role: 0 or an em length",
-      "display": { "$value": "-0.04em" },
-      "text": { "$value": "0" },
-      "label": { "$value": "0" },
-      "lead": { "$value": "-0.015em" },
-      "control": { "$value": "0" }
+      "display": { "$type": "string", "$value": "-0.04em" },
+      "text": { "$type": "string", "$value": "0" },
+      "label": { "$type": "string", "$value": "0" },
+      "lead": { "$type": "string", "$value": "-0.015em" },
+      "control": { "$type": "string", "$value": "0" }
     }
   },
   "space": {
-    "base": { "$type": "dimension", "$value": { "value": 1, "unit": "rem" } },
+    "base": { "$type": "dimension", "$value": { "value": 16, "unit": "px" } },
     "density": { "$type": "number", "$value": 1 }
   },
   "shape": {
-    "radius": { "$type": "dimension", "$value": { "value": 0, "unit": "rem" } },
+    "radius": { "$type": "dimension", "$value": { "value": 0, "unit": "px" } },
     "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" } }
   },
   "fluid": {
-    "$type": "string",
     "page-x": {
-      "phone": { "$value": "clamp(1rem, 0.4rem + 2.6vw, 4rem)" },
-      "wide": { "$value": "clamp(1rem, 0.4rem + 2.6vw, 4rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1rem, 0.4rem + 2.6vw, 4rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1rem, 0.4rem + 2.6vw, 4rem)" }
     },
     "col-gap": {
-      "phone": { "$value": "clamp(1.25rem, 0.8rem + 1.6vw, 3.5rem)" },
-      "wide": { "$value": "clamp(1.25rem, 0.8rem + 1.6vw, 3.5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1.25rem, 0.8rem + 1.6vw, 3.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.25rem, 0.8rem + 1.6vw, 3.5rem)" }
     },
     "header-h": {
-      "phone": { "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" },
-      "wide": { "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)" }
     },
     "control-h": {
-      "phone": { "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" },
-      "wide": { "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" }
+      "phone": { "$type": "string", "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" },
+      "wide": { "$type": "string", "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" }
     },
     "rhythm": {
-      "phone": { "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)" },
-      "wide": { "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)" }
     },
     "stage-h": {
-      "phone": { "$value": "100svh" },
-      "wide": { "$value": "100svh" }
+      "phone": { "$type": "string", "$value": "100svh" },
+      "wide": { "$type": "string", "$value": "100svh" }
     },
     "mark-header": {
-      "phone": { "$value": "clamp(1.75rem, 1.4rem + 0.6vw, 2.5rem)" },
-      "wide": { "$value": "clamp(1.75rem, 1.4rem + 0.6vw, 2.5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1.75rem, 1.4rem + 0.6vw, 2.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.75rem, 1.4rem + 0.6vw, 2.5rem)" }
     },
     "text-body": {
-      "phone": { "$value": "clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem)" },
-      "wide": { "$value": "clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.0625rem, 0.85rem + 0.5vw, 1.625rem)" }
     },
     "text-label": {
-      "phone": { "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)" },
-      "wide": { "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)" }
+      "phone": { "$type": "string", "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)" }
     },
     "text-small": {
-      "phone": { "$value": "clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem)" },
-      "wide": { "$value": "clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem)" }
+      "phone": { "$type": "string", "$value": "clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem)" }
     },
     "measure": {
-      "phone": { "$value": "36em" },
-      "wide": { "$value": "36em" }
+      "phone": { "$type": "string", "$value": "36em" },
+      "wide": { "$type": "string", "$value": "36em" }
     },
     "hero-display": {
-      "phone": { "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" },
-      "wide": { "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" }
+      "phone": { "$type": "string", "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" },
+      "wide": { "$type": "string", "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)" }
     },
     "hero-lead": {
-      "phone": { "$value": "clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem)" },
-      "wide": { "$value": "clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem)" }
+      "phone": { "$type": "string", "$value": "clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.5rem, 0.9rem + 1.6vw, 3.5rem)" }
     },
     "hero-figure": {
-      "phone": { "$value": "100vw" },
-      "wide": { "$value": "100vw" }
+      "phone": { "$type": "string", "$value": "100vw" },
+      "wide": { "$type": "string", "$value": "100vw" }
     }
   },
   "motion": {
     "duration": {
-      "$type": "duration",
-      "beat": { "$value": { "value": 100, "unit": "ms" } },
-      "fast": { "$value": { "value": 160, "unit": "ms" } },
-      "base": { "$value": { "value": 240, "unit": "ms" } },
-      "slow": { "$value": { "value": 480, "unit": "ms" } }
+      "beat": { "$type": "duration", "$value": { "value": 0.1, "unit": "s" } },
+      "fast": { "$type": "duration", "$value": { "value": 0.16, "unit": "s" } },
+      "base": { "$type": "duration", "$value": { "value": 0.24, "unit": "s" } },
+      "slow": { "$type": "duration", "$value": { "value": 0.48, "unit": "s" } }
     },
     "easing": {
-      "$type": "cubicBezier",
-      "out": { "$value": [0.16, 1, 0.3, 1] },
-      "in": { "$value": [0.55, 0, 0.75, 0] },
-      "draw": { "$value": [0.65, 0, 0.25, 1] },
-      "pop": { "$value": [0.3, 1.5, 0.6, 1] }
+      "out": { "$type": "string", "$value": "0.16, 1, 0.3, 1" },
+      "in": { "$type": "string", "$value": "0.55, 0, 0.75, 0" },
+      "draw": { "$type": "string", "$value": "0.65, 0, 0.25, 1" },
+      "pop": { "$type": "string", "$value": "0.3, 1.5, 0.6, 1" }
     }
   },
   "enum": {
-    "$type": "string",
-    "decoration": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["rules", "none"] } },
-    "hero-figure": { "$value": "lattice", "$extensions": { "com.jarodtaylor.enum": ["construction", "isometric", "lattice"] } },
-    "hero-layout": { "$value": "name-over-details", "$extensions": { "com.jarodtaylor.enum": ["stack", "name-over-details"] } },
-    "hero-intro": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["peek", "assemble", "none"] } },
-    "nav-mode": { "$value": "wrap", "$extensions": { "com.jarodtaylor.enum": ["toggle", "wrap"] } },
-    "hero-cue": { "$value": "labelled", "$extensions": { "com.jarodtaylor.enum": ["none", "icon", "labelled"] } },
-    "talk-style": { "$value": "outline", "$extensions": { "com.jarodtaylor.enum": ["pill-fill", "outline"] } },
-    "label-case": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["upper", "none"] } }
+    "decoration": { "$type": "string", "$value": "none" },
+    "hero-figure": { "$type": "string", "$value": "lattice" },
+    "hero-layout": { "$type": "string", "$value": "name-over-details" },
+    "hero-intro": { "$type": "string", "$value": "none" },
+    "nav-mode": { "$type": "string", "$value": "wrap" },
+    "hero-cue": { "$type": "string", "$value": "labelled" },
+    "talk-style": { "$type": "string", "$value": "outline" },
+    "label-case": { "$type": "string", "$value": "none" }
   }
 }

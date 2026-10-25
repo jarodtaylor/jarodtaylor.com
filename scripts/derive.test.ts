@@ -32,7 +32,7 @@ describe.each(brands)('derive(%s knobs)', (brand) => {
   it('produces a strictly increasing type scale anchored on the base size', () => {
     const sizes = values<{ value: number; unit: string }>(tokens.font.size);
     sizes.slice(1).forEach((s, i) => expect(s.value).toBeGreaterThan(sizes[i]!.value));
-    expect(tokens.font.size.md.$value).toEqual(knobs.type.base.$value);
+    expect(tokens.font.size.md.$value).toEqual({ value: knobs.type.base.$value.value / 16, unit: 'rem' });
   });
 
   it('produces a strictly increasing space scale', () => {
@@ -69,13 +69,15 @@ describe.each(brands)('derive(%s knobs)', (brand) => {
   it('passes font roles, fluid sizes and motion through', () => {
     expect(tokens.font.variation.display.$value).toBe(knobs.type.variation.display.$value);
     expect(tokens.font.weight.label.$value).toBe(knobs.type.weight.label.$value);
-    expect(tokens.font.family.lead.$value).toBe(knobs.type.family.lead.$value);
+    expect(tokens.font.family.lead.$value).toBe(`{font.family.${knobs.type.family.lead.$value}}`);
+    expect(tokens.font.family.display.$value).toEqual([knobs.type.family.display.$value, ...knobs.type.fallback.display.$value.split(', ')]);
     expect(tokens.font.leading.lead.$value).toBe(knobs.type.leading.lead.$value);
     expect(tokens.font.tracking.display.$value).toBe(knobs.type.tracking.display.$value);
     expect(tokens.fluid['hero-display'].wide.$value).toBe(knobs.fluid['hero-display'].wide.$value);
     expect(tokens.fluid.$extensions).toEqual({ 'com.jarodtaylor.export': { figma: false } });
-    expect(tokens.duration.base.$value).toEqual(knobs.motion.duration.base.$value);
-    expect(tokens.easing.out.$value).toEqual(knobs.motion.easing.out.$value);
+    expect(tokens.duration.base.$value).toEqual({ value: Math.round(knobs.motion.duration.base.$value.value * 1000), unit: 'ms' });
+    expect(tokens.easing.out.$value.join(', ')).toBe(knobs.motion.easing.out.$value);
+    expect(tokens.color.role.bg!.$value).toBe(`{color.${knobs.color.role.bg!.$value}}`);
   });
 });
 
@@ -145,10 +147,10 @@ describe('validation', () => {
     expect(broken((k) => delete (k.enum as Partial<Knobs['enum']>)[name])).toThrow(new RegExp(`enum\\.${name} must be one of`));
   });
 
-  it('rejects an enum list in $extensions that disagrees with derive()', () => {
-    expect(broken((k) => (k.enum['hero-cue'].$extensions = { 'com.jarodtaylor.enum': ['none', 'icon'] }))).toThrow(
-      /enum\.hero-cue \$extensions/,
-    );
+  it('accepts only knob types Figma imports: px dimensions, seconds, single family names', () => {
+    expect(broken((k) => (k.type.base.$value = { value: 1, unit: 'rem' as 'px' }))).toThrow(/type\.base must be a px dimension/);
+    expect(broken((k) => (k.type.family.display.$value = 'Archivo, sans-serif'))).toThrow(/type\.family\.display must be one font family/);
+    expect(broken((k) => (k.type.fallback.label.$value = 'Menlo'))).toThrow(/type\.fallback\.label/);
   });
 
   it.each(['35vw', 'min(12.5vw, 21svh)', 'max(3.5rem, min(9.6vw, 19svh))', 'clamp(4.5rem, 0.6rem + 16.4vw, 32rem)', 'calc(100svh - 4rem)'])(
@@ -174,7 +176,7 @@ describe('validation', () => {
   });
 
   it('rejects a lead face that is not the display or text face', () => {
-    for (const bad of ['{font.family.label}', 'Georgia', ['Georgia', 'serif']])
+    for (const bad of ['label', '{font.family.text}', 'Georgia', ['Georgia', 'serif']])
       expect(broken((k) => (k.type.family.lead = { $value: bad as string }))).toThrow(/type\.family\.lead/);
   });
 
@@ -184,17 +186,18 @@ describe('validation', () => {
   });
 
   it('rejects a duration in px and an easing with x outside [0, 1]', () => {
-    expect(broken((k) => (k.motion.duration.fast.$value = { value: 1, unit: 'px' as 'ms' }))).toThrow(/motion\.duration\.fast/);
-    expect(broken((k) => (k.motion.easing.pop.$value = [1.2, 0, 0.5, 1]))).toThrow(/motion\.easing\.pop/);
+    expect(broken((k) => (k.motion.duration.fast.$value = { value: 240, unit: 'ms' as 's' }))).toThrow(/motion\.duration\.fast/);
+    for (const bad of ['1.2, 0, 0.5, 1', '0.1, 0, 0.5', 'ease-out'])
+      expect(broken((k) => (k.motion.easing.pop.$value = bad))).toThrow(/motion\.easing\.pop/);
   });
 
   it('rejects a type ratio that would not grow', () => {
     expect(broken((k) => (k.type.ratio.$value = 1))).toThrow(/type\.ratio/);
   });
 
-  it('rejects a role that aliases anything but a ramp step', () => {
-    for (const bad of ['{color.neutral.760}', '{color.mauve.500}', '#fff', '{surface.default.bg}'])
-      expect(broken((k) => (k.color.role.bg = { $value: bad }))).toThrow(/color\.role\.bg must alias a ramp step/);
+  it('rejects a role pick that is not a ramp step', () => {
+    for (const bad of ['neutral.760', 'mauve.500', '#fff', '{color.neutral.750}'])
+      expect(broken((k) => (k.color.role.bg = { $value: bad }))).toThrow(/color\.role\.bg must name a ramp step/);
   });
 
   it('rejects a missing ramp and an out-of-range peak', () => {

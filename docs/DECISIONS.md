@@ -14,6 +14,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | T3 | Pick 2–4 About photos (candid or working) | Phase 2 |
 | T4 | Make a list of the parts you like on each inspiration site (or just narrate during the walk) | Phase 1 |
 | T5 | Case studies, on your own schedule (I can interview you when ready) | Later |
+| T6 | Figma round-trip spike: import `tokens/knobs/{default,blocks,clean}.json` into one Variables collection (a mode per brand) via native DTCG import, export the modes, run `pnpm tokens`, diff. Then make role picks native Figma aliases once ramps are variables | Phase 4 |
 
 ## 🟡 Open questions
 
@@ -29,6 +30,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 
 | Date | Decision | Why |
 |---|---|---|
+| 2026-10-24 | **Knob files are Figma-importable**: per-token `$type`, px dimensions (rem derived), seconds, number weights, one-name `fontFamily` + `type.fallback.<role>` string, string role picks / easings / enums; no descriptions; enum lists live only in `derive.ts`. Emitted CSS unchanged (tokens.css byte-identical) | Figma authors knobs; Figma's DTCG import accepts only color, px dimension, s duration, single fontFamily, number, string |
 | 2026-10-24 | Remix Steps 4–5 built: **tokens extended** (fluid page-x, col-gap and rhythm surface as `space.*`; header-h, control-h, stage-h, mark-header, text-body/label/small, measure; `control` type role; `beat` duration; `text-body`, `rule-strong` roles; `line.strong`). Default `label` tracking → 0 (small print); controls carry the 0.08em | Steps 1–3 couldn't express the Backstage prototype within lint; added through knobs → semantic → component, not around the gate |
 | 2026-10-24 | Breakpoint media queries carry `stylelint-disable-next-line unit-allowed-list -- shared breakpoint`; SVG rotations likewise (geometry). Stylelint 17's unit-allowed-list has no media-feature ignore option | Sanctioned escape hatch with a reason, instead of loosening the rule |
 | 2026-10-24 | Hero runtime is `src/components/Hero/runtime.ts` (not `hero.ts`: macOS's case-insensitive FS resolves `./Hero` to it). 2.5 KB gzip | One module, well under 15 KB |
