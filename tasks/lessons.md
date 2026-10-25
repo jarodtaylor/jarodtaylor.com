@@ -32,3 +32,9 @@
 
 - **Every round inherited the round-1 hero content lock** (name, role, location, tagline, bio, pills, 2 CTAs, socials). That lock, not the visual direction, made each hero feel crammed. Re-check content scope before re-briefing visuals: the hero only needs the wow + who he is; the homepage and header carry the rest.
 - **Design the header/nav system with the hero**, not after. Utility info (role, location, Let's talk, socials) can live in small footprints around the header (piergorelli.com pattern).
+
+## 2026-10-24 — Remix build gotchas
+
+- **Style queries go stale under `display: none` (Chromium).** If an ancestor is `display: none` when a brand token changes, its descendants' `@container style()` results aren't recomputed when it reappears. Take elements out of flow instead of hiding them when their children query tokens. Always test brand switches in sequence (default → clean → blocks), not just fresh loads.
+- **Case-insensitive FS:** `Hero.tsx` and `hero.ts` in one folder collide on macOS (`./Hero` resolves to the .ts). Name runtime modules distinctly.
+- **Stylelint `unit-allowed-list` always checks media queries** (no ignore option in v17); breakpoints need a reasoned disable comment.
