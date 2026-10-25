@@ -2262,6 +2262,12 @@
     },
     "info-layout": {
       "$value": "stack"
+    },
+    "font-smoothing": {
+      "$value": "auto"
+    },
+    "link-underline": {
+      "$value": "always"
     }
   }
 }

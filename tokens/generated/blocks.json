@@ -2263,6 +2263,12 @@
     },
     "info-layout": {
       "$value": "split"
+    },
+    "font-smoothing": {
+      "$value": "auto"
+    },
+    "link-underline": {
+      "$value": "always"
     }
   }
 }

@@ -12,6 +12,13 @@
     display: grid;
   }
 
+  @container style(--choice-font-smoothing: antialiased) {
+    .stage {
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+    }
+  }
+
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 48rem) {
     .stage {

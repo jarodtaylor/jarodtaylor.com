@@ -83,6 +83,7 @@
     color: inherit;
     display: flex;
     gap: calc(var(--_gap) * 1.125);
+    inline-size: auto;
     inset: auto;
     margin: 0;
     overflow: visible;

@@ -59,6 +59,10 @@ export const ENUMS = {
   'menu-label': ['text', 'icon'],
   /** Phones: the info strip's two halves stacked at the left (stack), or role left and place right, wrapping (split). */
   'info-layout': ['stack', 'split'],
+  /** How glyphs are rasterised where the platform allows a choice: the platform default, or grayscale antialiasing (lighter). */
+  'font-smoothing': ['auto', 'antialiased'],
+  /** Small links (the socials): underlined at rest (always), or only on hover and focus (hover). */
+  'link-underline': ['always', 'hover'],
 } as const;
 export type EnumKnob = keyof typeof ENUMS;
 

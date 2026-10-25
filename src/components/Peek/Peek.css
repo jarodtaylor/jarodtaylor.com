@@ -178,12 +178,15 @@
       right: 0;
     }
 
-    :is([data-peek="side"], [data-peek="side-below"])::after {
-      bottom: auto;
-      clip-path: inset(0 0 0 calc((1 - var(--_lab)) * 100%));
-      left: calc(100% + var(--space-inset-sm));
-      top: 0;
-      translate: calc((var(--_lab) - 1) * 100%) 0;
+    /* Only the stack layout leaves open space on the right; in columns the labels keep to their default, above. */
+    @container style(--hero-layout: stack) {
+      :is([data-peek="side"], [data-peek="side-below"])::after {
+        bottom: auto;
+        clip-path: inset(0 0 0 calc((1 - var(--_lab)) * 100%));
+        left: calc(100% + var(--space-inset-sm));
+        top: 0;
+        translate: calc((var(--_lab) - 1) * 100%) 0;
+      }
     }
   }
 
@@ -450,6 +453,23 @@
 
     .spec .spec-head dd {
       color: var(--surface-default-accent);
+    }
+  }
+
+  /* In columns the details fill the hero's floor, so the card rises to the open band under the header. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 64rem) {
+    @container style(--hero-layout: name-over-details) {
+      /* The socials end the row, so their label hangs from its right edge. */
+      [data-peek="side-below"]::after {
+        left: auto;
+        right: 0;
+      }
+
+      .spec {
+        bottom: auto;
+        top: calc(var(--layout-header-h-wide) + var(--space-section));
+      }
     }
   }
 

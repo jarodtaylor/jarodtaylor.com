@@ -77,6 +77,12 @@
     },
     "info-layout": {
       "$value": "{knob.info-layout}"
+    },
+    "font-smoothing": {
+      "$value": "{knob.font-smoothing}"
+    },
+    "link-underline": {
+      "$value": "{knob.link-underline}"
     }
   }
 }

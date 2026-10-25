@@ -135,6 +135,12 @@
     text-decoration-color: var(--surface-default-accent);
   }
 
+  @container style(--choice-link-underline: hover) {
+    .social a:not(:hover, :focus-visible) {
+      text-decoration-color: transparent;
+    }
+  }
+
   /* stack: the details run straight on under the name: a gap between groups, a tighter one inside the reading pair. */
   @container style(--hero-layout: stack) {
     .details {
@@ -164,15 +170,19 @@
 
   /* name-over-details: the name owns its row; the details sit below it on a rule, in columns. */
   @container style(--hero-layout: name-over-details) {
+    .hero {
+      align-content: end;
+    }
+
     .details {
       align-items: start;
       border-block-start: var(--shape-border-width-default) solid var(--surface-default-border);
       column-gap: var(--_gap);
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      margin-block-start: var(--_rhythm);
+      margin-block-start: calc(var(--_display) * var(--hero-name-descent) + var(--_stack-gap));
       padding-block-start: var(--_rhythm);
-      row-gap: var(--space-stack-md);
+      row-gap: var(--_stack-gap-tight);
       width: 100%;
     }
 
@@ -180,6 +190,18 @@
     .bio,
     .social {
       grid-column: 1 / -1;
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .tagline {
+        grid-column: 1 / 7;
+      }
+
+      .bio,
+      .social {
+        grid-column: 7 / 13;
+      }
     }
 
     /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
@@ -193,9 +215,26 @@
       }
 
       .social {
+        align-items: flex-end;
         flex-direction: column;
         grid-column: 11 / 13;
         justify-self: end;
+        row-gap: var(--space-stack-xs);
+      }
+
+      .social a {
+        padding-block: 0;
+      }
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 112rem) {
+      .tagline {
+        grid-column: 1 / 5;
+      }
+
+      .bio {
+        grid-column: 6 / 10;
       }
     }
   }
@@ -261,6 +300,12 @@
   @container style(--hero-cue: labelled) {
     .cue {
       display: inline-flex;
+      margin-block-start: calc(var(--_stack-gap) * 2);
+    }
+
+    .cue svg {
+      block-size: var(--_small);
+      inline-size: calc(var(--_small) * 0.6);
     }
   }
 

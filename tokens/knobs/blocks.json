@@ -214,6 +214,8 @@
     "label-case": { "$type": "string", "$value": "none" },
     "nav-align": { "$type": "string", "$value": "end" },
     "menu-label": { "$type": "string", "$value": "icon" },
-    "info-layout": { "$type": "string", "$value": "split" }
+    "info-layout": { "$type": "string", "$value": "split" },
+    "font-smoothing": { "$type": "string", "$value": "auto" },
+    "link-underline": { "$type": "string", "$value": "always" }
   }
 }
