@@ -5,6 +5,13 @@
  * is computed here, once, from the handful of knobs a brand authors. The
  * output is concrete values that Terrazzo compiles and Figma can import.
  *
+ * Colour model: four required OKLCH ramps (neutral, accent, guide, redline) on one shared ladder.
+ * Steps are fixed lightness, named L × 1000: 150, 175, … 975. A brand sets each ramp's hue, hue-shift
+ * (hue drift per unit L), peak chroma, peak (the L where chroma peaks) and taper (how fast chroma
+ * falls toward black and white). Every step is clamped into sRGB. A brand then picks which step
+ * plays each colour role (color.role.text-muted → {color.neutral.750}); the semantic tier aliases
+ * roles, so it stays shared while brands put a role at different lightness or on a different ramp.
+ *
  * This module must stay pure and dependency-free: no Node APIs, no imports.
  * It runs at build time (scripts/build-tokens.ts) and, later, in the browser
  * for Remix v2 live knobs.

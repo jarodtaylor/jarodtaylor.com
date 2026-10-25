@@ -26,11 +26,11 @@
     "focus": "#fd9a73",
     "figure-line": "#f2f5fb",
     "figure-mark": "#f56333",
-    "figure-mark-h": "#d54c25",
-    "figure-mark-d": "#af371c",
+    "figure-mark-light": "#d54c25",
+    "figure-mark-dark": "#af371c",
     "figure-face": "#f2f5fb",
-    "figure-face-h": "#c3d1ef",
-    "figure-face-d": "#93aade",
+    "figure-face-light": "#c3d1ef",
+    "figure-face-dark": "#93aade",
     "figure-edge": "#071869"
   },
   "clean": {
