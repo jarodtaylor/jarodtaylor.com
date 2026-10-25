@@ -23,6 +23,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | Q5 | Signature "wow" moment(s)? | Decide in Phase 1. Lead candidate: the brand switch itself |
 | Q6 | Newsletter: yes or no? | Later |
 | Q7 | ✅ Doing it (2026-10-24). Was: if round 5 falls short, switch to Impeccable `/impeccable` new-work flow, **code-led** (`buildPath: code`, direction picker, Bolder hand), not comp-led | Decide after Jarod reviews round 5 |
+| Q8 | Figma → Terrazzo → CSS: which token tier does Figma author? Figma can't do derive() math | Figma authors the brand layer (knobs + role picks); derived ramps are pushed into Figma read-only; CI derives. Keep knobs Figma-importable now (px, sRGB, no composites) |
 
 ## ✅ Decisions
 
