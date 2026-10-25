@@ -52,7 +52,7 @@ Humanized, direct, first person. **No em-dashes anywhere in site copy.** AI is f
 - Role line: **Engineering Leader | Design Engineering, Frontend Systems & Developer Experience**. Location: Frisco, TX.
 - No headshot in the hero (photos only in About).
 - No target role, level or location preferences on the site (that's LinkedIn's job).
-- Direction: open (2026-10-24). Backstage round 5 (`prototypes/round5/`) is the benchmark; Impeccable code-led directions are being explored before locking.
+- Direction: locked (2026-10-24). Default brand **Backstage-lite** (`prototypes/r6-backstage/`: dark slate + lime, Archivo condensed / Schibsted Grotesk / Martian Mono, peek-layer intro, monogram line drawing). Remix brands: **Building blocks** (`prototypes/r6-blocks/`) and **Clean and sharp** (`prototypes/r6-clean/`), each with its own fonts.
 
 ## Accessibility
 
