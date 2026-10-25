@@ -1653,19 +1653,25 @@
         "$value": "{color.neutral.975}"
       },
       "text-muted": {
-        "$value": "{color.neutral.850}"
+        "$value": "{color.neutral.800}"
       },
       "text-body": {
         "$value": "{color.neutral.850}"
       },
       "text-quiet": {
-        "$value": "{color.neutral.800}"
+        "$value": "{color.neutral.975}"
       },
       "rule": {
         "$value": "{color.neutral.525}"
       },
       "rule-strong": {
         "$value": "{color.neutral.650}"
+      },
+      "separator": {
+        "$value": "{color.neutral.800}"
+      },
+      "text-lead": {
+        "$value": "{color.neutral.975}"
       },
       "accent": {
         "$value": "{color.accent.675}"
@@ -1767,6 +1773,9 @@
       },
       "control": {
         "$value": 700
+      },
+      "nav": {
+        "$value": 400
       }
     },
     "variation": {
@@ -1821,6 +1830,12 @@
       },
       "control": {
         "$value": "0"
+      }
+    },
+    "descent": {
+      "$type": "number",
+      "display": {
+        "$value": 0
       }
     },
     "size": {
@@ -2033,18 +2048,18 @@
     },
     "control-h": {
       "phone": {
-        "$value": "2.75rem"
+        "$value": "calc(2.75 * clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem))"
       },
       "wide": {
-        "$value": "2.75rem"
+        "$value": "calc(2.75 * clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem))"
       }
     },
     "rhythm": {
       "phone": {
-        "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)"
+        "$value": "clamp(2rem, 1.2rem + 2vw, 4.5rem)"
       },
       "wide": {
-        "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)"
+        "$value": "clamp(2rem, 1.2rem + 2vw, 4.5rem)"
       }
     },
     "stage-h": {
@@ -2057,10 +2072,10 @@
     },
     "mark-header": {
       "phone": {
-        "$value": "clamp(1.625rem, 1.3rem + 0.6vw, 2.5rem)"
+        "$value": "clamp(1.418rem, 1.134rem + 0.524vw, 2.181rem)"
       },
       "wide": {
-        "$value": "clamp(1.625rem, 1.3rem + 0.6vw, 2.5rem)"
+        "$value": "clamp(1.418rem, 1.134rem + 0.524vw, 2.181rem)"
       }
     },
     "text-body": {
@@ -2085,6 +2100,38 @@
       },
       "wide": {
         "$value": "clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem)"
+      }
+    },
+    "text-control": {
+      "phone": {
+        "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)"
+      },
+      "wide": {
+        "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)"
+      }
+    },
+    "stack-gap": {
+      "phone": {
+        "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)"
+      },
+      "wide": {
+        "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)"
+      }
+    },
+    "stack-gap-tight": {
+      "phone": {
+        "$value": "clamp(0.75rem, 0.55rem + 0.35vw, 1.25rem)"
+      },
+      "wide": {
+        "$value": "clamp(0.75rem, 0.55rem + 0.35vw, 1.25rem)"
+      }
+    },
+    "rule-bleed": {
+      "phone": {
+        "$value": "0rem"
+      },
+      "wide": {
+        "$value": "0rem"
       }
     },
     "measure": {
@@ -2113,7 +2160,7 @@
     },
     "hero-figure": {
       "phone": {
-        "$value": "90vw"
+        "$value": "calc(100vw - 2 * clamp(1.25rem, 4vw, 7rem))"
       },
       "wide": {
         "$value": "54vw"
@@ -2203,10 +2250,19 @@
       "$value": "icon"
     },
     "talk-style": {
-      "$value": "pill-fill"
+      "$value": "outline"
     },
     "label-case": {
       "$value": "none"
+    },
+    "nav-align": {
+      "$value": "end"
+    },
+    "menu-label": {
+      "$value": "icon"
+    },
+    "info-layout": {
+      "$value": "split"
     }
   }
 }

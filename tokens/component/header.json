@@ -48,11 +48,11 @@
       },
       "font-size": {
         "$type": "string",
-        "$value": "{type.fluid.label-phone}"
+        "$value": "{type.fluid.control-phone}"
       },
       "font-size-wide": {
         "$type": "string",
-        "$value": "{type.fluid.label-wide}"
+        "$value": "{type.fluid.control-wide}"
       },
       "label-case": {
         "$type": "string",
@@ -60,11 +60,15 @@
       },
       "muted": {
         "$type": "color",
-        "$value": "{surface.default.text-muted}"
+        "$value": "{surface.default.text-quiet}"
       },
       "border": {
         "$type": "color",
         "$value": "{line.strong}"
+      },
+      "nav-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.nav}"
       }
     },
     "info": {
@@ -83,7 +87,7 @@
       },
       "font-weight": {
         "$type": "fontWeight",
-        "$value": "{type.weight.label}"
+        "$value": "{type.weight.text}"
       },
       "font-variation": {
         "$type": "string",
@@ -100,6 +104,22 @@
       "font-size-wide": {
         "$type": "string",
         "$value": "{type.fluid.small-wide}"
+      },
+      "sep": {
+        "$type": "color",
+        "$value": "{surface.default.separator}"
+      },
+      "layout": {
+        "$type": "string",
+        "$value": "{choice.info-layout}"
+      },
+      "rule-bleed": {
+        "$type": "string",
+        "$value": "{layout.rule-bleed-phone}"
+      },
+      "rule-bleed-wide": {
+        "$type": "string",
+        "$value": "{layout.rule-bleed-wide}"
       }
     },
     "menu": {
@@ -116,6 +136,14 @@
         "$type": "color",
         "$value": "{surface.raised.border}"
       }
+    },
+    "nav-align": {
+      "$type": "string",
+      "$value": "{choice.nav-align}"
+    },
+    "menu-label": {
+      "$type": "string",
+      "$value": "{choice.menu-label}"
     }
   },
   "talk": {
@@ -158,7 +186,7 @@
     },
     "font-size": {
       "$type": "string",
-      "$value": "{type.fluid.label-phone}"
+      "$value": "{type.fluid.control-phone}"
     },
     "tracking": {
       "$type": "string",
@@ -174,7 +202,11 @@
     },
     "font-size-wide": {
       "$type": "string",
-      "$value": "{type.fluid.label-wide}"
+      "$value": "{type.fluid.control-wide}"
+    },
+    "outline-radius": {
+      "$type": "dimension",
+      "$value": "{shape.radius.control}"
     }
   }
 }

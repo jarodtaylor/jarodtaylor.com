@@ -53,6 +53,12 @@ export const ENUMS = {
   'hero-cue': ['none', 'icon', 'labelled'],
   'talk-style': ['pill-fill', 'outline'],
   'label-case': ['upper', 'none'],
+  /** Wide screens: the nav packed beside the mark (start), on the page's centre line (center), or beside the actions (end). */
+  'nav-align': ['start', 'center', 'end'],
+  /** The phone menu button: the word Menu with two bars (text), or the bars alone, named for assistive tech (icon). */
+  'menu-label': ['text', 'icon'],
+  /** Phones: the info strip's two halves stacked at the left (stack), or role left and place right, wrapping (split). */
+  'info-layout': ['stack', 'split'],
 } as const;
 export type EnumKnob = keyof typeof ENUMS;
 
@@ -81,11 +87,16 @@ const ALIAS_ROLES = ['lead', 'control'] as const;
 type AliasRole = (typeof ALIAS_ROLES)[number];
 export const TYPE_ROLES = [...FONT_ROLES, ...ALIAS_ROLES] as const;
 type TypeRole = (typeof TYPE_ROLES)[number];
+/** Weights beyond the type roles: `nav` (nav links, which can sit lighter than the control role's buttons). */
+const EXTRA_WEIGHTS = ['nav'] as const;
+type ExtraWeight = (typeof EXTRA_WEIGHTS)[number];
 
 /**
  * Fluid sizes are CSS expressions, one per shared breakpoint band: phone below 48rem, wide above.
  * The page frame (gutter, column gap, header and control heights, vertical rhythm, first-screen height),
  * the small type steps and the hero's own sizes all scale with the viewport, and each brand scales them its own way.
+ * text-control sizes nav and buttons; stack-gap and stack-gap-tight space the hero's text groups (the gap between
+ * groups, and the tighter one between tagline and bio); rule-bleed is how far the info strip's rule runs past the gutter.
  */
 export const FLUID_SIZES = [
   'page-x',
@@ -98,6 +109,10 @@ export const FLUID_SIZES = [
   'text-body',
   'text-label',
   'text-small',
+  'text-control',
+  'stack-gap',
+  'stack-gap-tight',
+  'rule-bleed',
   'measure',
   'hero-display',
   'hero-lead',
@@ -154,13 +169,15 @@ export interface Knobs {
     family: Record<FontRole, Token<string>> & Record<AliasRole, Token<string>>;
     /** The rest of each face's stack, comma-separated, e.g. "Archivo Fallback, Arial Narrow, sans-serif". */
     fallback: Record<FontRole, Token<string>>;
-    weight: Record<TypeRole, Token<number>>;
+    weight: Record<TypeRole | ExtraWeight, Token<number>>;
     /** A font-variation-settings value, e.g. `"wdth" 62`, or `normal`. */
     variation: Record<TypeRole, Token<string>>;
     /** Unitless line-height. */
     leading: Record<TypeRole, Token<number>>;
     /** letter-spacing in em, e.g. -0.02em, or 0. */
     tracking: Record<TypeRole, Token<string>>;
+    /** How far the display face's descenders hang below its line box, in em (0 when the leading already clears them). */
+    descent: { display: Token<number> };
   };
   /** base and radius are authored in px and emitted in rem; border-width stays px. */
   space: { base: Token<PxDimension>; density: Token<number> };
@@ -186,10 +203,11 @@ export interface Primitives {
   color: { $type: 'color'; role: Record<string, Leaf<string>> } & Record<RampName, Record<RampStep, Leaf<OklchColor>>>;
   font: {
     family: { $type: 'fontFamily' } & Record<FontRole, Leaf<FontFamily>> & Record<AliasRole, Leaf<string>>;
-    weight: { $type: 'fontWeight' } & Record<TypeRole, Leaf<number>>;
+    weight: { $type: 'fontWeight' } & Record<TypeRole | ExtraWeight, Leaf<number>>;
     variation: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
     leading: { $type: 'number' } & Record<TypeRole, Leaf<number>>;
     tracking: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
+    descent: { $type: 'number'; display: Leaf<number> };
     size: { $type: 'dimension' } & Record<TypeStep, Leaf<Dimension>>;
     'line-height': { $type: 'number' } & Record<LineHeight, Leaf<number>>;
   };
@@ -270,10 +288,11 @@ export function derive(knobs: Knobs): Primitives {
         ...pick(FONT_ROLES, (r) => [type.family[r].$value, ...list(type.fallback[r].$value)]),
         ...pick(ALIAS_ROLES, (r) => `{font.family.${type.family[r].$value}}`),
       },
-      weight: { $type: 'fontWeight', ...pick(TYPE_ROLES, (r) => type.weight[r].$value) },
+      weight: { $type: 'fontWeight', ...pick([...TYPE_ROLES, ...EXTRA_WEIGHTS], (r) => type.weight[r].$value) },
       variation: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.variation[r].$value) },
       leading: { $type: 'number', ...pick(TYPE_ROLES, (r) => type.leading[r].$value) },
       tracking: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.tracking[r].$value) },
+      descent: { $type: 'number', display: { $value: type.descent.display.$value } },
       size: {
         $type: 'dimension',
         ...mapScale(TYPE_SCALE, (exp) => scaleDim(toRem(type.base.$value), type.ratio.$value ** exp)),
@@ -361,6 +380,8 @@ function validate(k: Knobs): void {
     if (typeof axes !== 'string' || !VARIATION.test(axes))
       errors.push(`type.variation.${r} must be normal or a list like "wdth" 62, "opsz" 96 (got ${JSON.stringify(axes)})`);
   }
+  num('type.descent.display', k.type?.descent?.display?.$value, (n) => n >= 0 && n <= 1, 'in [0, 1]');
+  for (const w of EXTRA_WEIGHTS) num(`type.weight.${w}`, k.type?.weight?.[w]?.$value, (n) => n >= 1 && n <= 1000, 'in [1, 1000]');
   dim('space.base', k.space?.base?.$value, positive, '> 0');
   num('space.density', k.space?.density?.$value, positive, '> 0');
   dim('shape.radius', k.shape?.radius?.$value, (n) => n >= 0, '≥ 0');

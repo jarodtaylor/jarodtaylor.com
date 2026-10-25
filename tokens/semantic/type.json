@@ -34,6 +34,9 @@
       },
       "control": {
         "$value": "{font.weight.control}"
+      },
+      "nav": {
+        "$value": "{font.weight.nav}"
       }
     },
     "variation": {
@@ -154,6 +157,18 @@
       },
       "small-wide": {
         "$value": "{fluid.text-small.wide}"
+      },
+      "control-phone": {
+        "$value": "{fluid.text-control.phone}"
+      },
+      "control-wide": {
+        "$value": "{fluid.text-control.wide}"
+      }
+    },
+    "descent": {
+      "$type": "number",
+      "display": {
+        "$value": "{font.descent.display}"
       }
     }
   }

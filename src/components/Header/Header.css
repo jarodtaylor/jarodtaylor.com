@@ -32,7 +32,7 @@
     }
   }
 
-  /* Every control speaks in one small style. */
+  /* Every control speaks in one small style; nav links can sit lighter than the buttons. */
   .nav,
   .nav-toggle,
   .peek-toggle {
@@ -42,6 +42,10 @@
     font-weight: var(--header-control-font-weight);
     letter-spacing: var(--header-control-tracking);
     line-height: var(--header-control-leading);
+  }
+
+  .nav {
+    font-weight: var(--header-control-nav-weight);
   }
 
   @container style(--header-control-label-case: upper) {
@@ -138,6 +142,27 @@
       .nav:has(.nav-list:popover-open) .nav-toggle::after {
         block-size: 0;
         border-block-end: 0;
+      }
+
+      /* icon: the bars alone, larger; the word stays the button's name for assistive tech. */
+      @container style(--header-menu-label: icon) {
+        .nav-toggle {
+          justify-content: center;
+          min-inline-size: var(--_control-h);
+          padding: 0;
+        }
+
+        .nav-toggle-label {
+          clip-path: inset(50%);
+          overflow: hidden;
+          position: absolute;
+          white-space: nowrap;
+        }
+
+        .nav-toggle::after {
+          block-size: calc(var(--_control-size) * 0.5);
+          inline-size: calc(var(--_control-size) * 1.4);
+        }
       }
 
       .nav-list:not(:popover-open) {
@@ -276,6 +301,7 @@
   @container style(--talk-style: outline) {
     .talk {
       border-color: var(--talk-outline-border);
+      border-radius: var(--talk-outline-radius);
       color: var(--talk-outline-text);
     }
 
@@ -286,13 +312,30 @@
     }
   }
 
-  /* Wide screens: three zones. Mark left, nav on the page's centre line, Peek and Let's talk right. */
+  /* nav-align. end (the default flow): the mark's auto margin packs nav, Peek and Let's talk to the right.
+     start: the nav follows the mark a column gap on, and the auto margin moves to the nav. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    @container style(--header-nav-align: start) {
+      .mark {
+        margin-inline-end: 0;
+      }
+
+      .nav {
+        margin-inline: calc(var(--_gap) - var(--space-stack-sm)) auto;
+      }
+    }
+  }
+
+  /* Wide screens. center: three zones, with the nav on the page's centre line. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 64rem) {
-    .nav {
-      left: 50%;
-      position: absolute;
-      translate: -50% 0;
+    @container style(--header-nav-align: center) {
+      .nav {
+        left: 50%;
+        position: absolute;
+        translate: -50% 0;
+      }
     }
 
     .peek-toggle {

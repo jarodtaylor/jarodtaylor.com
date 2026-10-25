@@ -59,6 +59,22 @@
       "$type": "string",
       "$value": "{fluid.rhythm.wide}"
     },
-    "$description": "Spacing. page-x (page gutter), col-gap and rhythm (vertical step between hero groups) are fluid: phone below 48rem, wide above."
+    "$description": "Spacing. page-x (page gutter), col-gap and rhythm (vertical step between hero groups) are fluid: phone below 48rem, wide above.",
+    "stack-gap-phone": {
+      "$type": "string",
+      "$value": "{fluid.stack-gap.phone}"
+    },
+    "stack-gap-wide": {
+      "$type": "string",
+      "$value": "{fluid.stack-gap.wide}"
+    },
+    "stack-gap-tight-phone": {
+      "$type": "string",
+      "$value": "{fluid.stack-gap-tight.phone}"
+    },
+    "stack-gap-tight-wide": {
+      "$type": "string",
+      "$value": "{fluid.stack-gap-tight.wide}"
+    }
   }
 }

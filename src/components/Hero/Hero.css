@@ -4,6 +4,8 @@
     --_x: var(--space-page-x-phone);
     --_gap: var(--space-col-gap-phone);
     --_rhythm: var(--space-rhythm-phone);
+    --_stack-gap: var(--space-stack-gap-phone);
+    --_stack-gap-tight: var(--space-stack-gap-tight-phone);
     --_display: var(--hero-name-size-phone);
     --_lead: var(--hero-lead-size-phone);
     --_body: var(--hero-body-size);
@@ -24,6 +26,8 @@
       --_x: var(--space-page-x-wide);
       --_gap: var(--space-col-gap-wide);
       --_rhythm: var(--space-rhythm-wide);
+      --_stack-gap: var(--space-stack-gap-wide);
+      --_stack-gap-tight: var(--space-stack-gap-tight-wide);
       --_display: var(--hero-name-size-wide);
       --_lead: var(--hero-lead-size-wide);
       --_body: var(--hero-body-size-wide);
@@ -61,11 +65,14 @@
     letter-spacing: var(--hero-name-tracking);
     line-height: var(--hero-name-leading);
     margin-inline-start: calc(var(--_display) * -0.035);
-    white-space: nowrap;
   }
 
-  .name span {
-    display: block;
+  /* One line on wide screens; on phones the name wraps where it must (a big size breaks it into two). */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .name {
+      white-space: nowrap;
+    }
   }
 
   .tagline {
@@ -128,28 +135,27 @@
     text-decoration-color: var(--surface-default-accent);
   }
 
-  /* stack: the details run straight on under the name, one rhythm apart. */
+  /* stack: the details run straight on under the name: a gap between groups, a tighter one inside the reading pair. */
   @container style(--hero-layout: stack) {
     .details {
       display: contents;
     }
 
     .tagline {
-      /* Clear the descender of the y: the name's line box is tighter than its glyphs. */
-      margin-block-start: calc(var(--_display) * 0.17 + var(--_rhythm) * 0.5);
+      /* Clear the name's descenders where they hang below its line box. */
+      margin-block-start: calc(var(--_display) * var(--hero-name-descent) + var(--_stack-gap));
     }
 
-    .bio,
+    .bio {
+      margin-block-start: var(--_stack-gap-tight);
+    }
+
     .social {
-      margin-block-start: calc(var(--_rhythm) * 0.5);
+      margin-block-start: var(--_stack-gap);
     }
 
     /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
     @media (min-width: 48rem) {
-      .name span {
-        display: inline;
-      }
-
       .tagline {
         white-space: nowrap;
       }
@@ -222,9 +228,25 @@
     stroke-width: calc(var(--figure-stroke-width) * 1.5);
   }
 
+  /* icon: an arrow in the hero's bottom-right corner, wide screens only. labelled: words and arrow, in flow under the text. */
   @container style(--hero-cue: icon) {
-    .cue {
-      display: inline-flex;
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .cue {
+        bottom: var(--_rhythm);
+        display: inline-flex;
+        grid-area: auto;
+        margin: 0;
+        padding-block: var(--space-inset-sm);
+        position: absolute;
+        right: var(--_x);
+        z-index: 1;
+      }
+
+      .cue svg {
+        block-size: calc(var(--space-inset-md) * 2.5);
+        inline-size: var(--space-inset-md);
+      }
     }
 
     /* Visually hidden: the words stay the link's name. */
@@ -536,14 +558,26 @@
       grid-row: 2;
     }
 
+    /* Figure and text pack to the hero's floor together. */
+    .hero {
+      align-content: end;
+    }
+
     /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
     @media (min-width: 48rem) {
       .figure {
         block-size: auto;
         inline-size: var(--hero-figure-size-wide);
-        inset: var(--_rhythm) var(--_x) var(--_rhythm) auto;
+        grid-area: auto;
+        inset: var(--_stack-gap) var(--_x) var(--_stack-gap) auto;
         margin: 0;
         position: absolute;
+      }
+
+      /* The parts keep a little air above and below inside the field. */
+      .figure > .build {
+        block-size: 92%;
+        top: 4%;
       }
 
       .stack {

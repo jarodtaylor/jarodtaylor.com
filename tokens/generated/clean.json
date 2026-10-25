@@ -1659,13 +1659,19 @@
         "$value": "{color.neutral.850}"
       },
       "text-quiet": {
-        "$value": "{color.neutral.850}"
+        "$value": "{color.neutral.975}"
       },
       "rule": {
         "$value": "{color.neutral.475}"
       },
       "rule-strong": {
         "$value": "{color.neutral.600}"
+      },
+      "separator": {
+        "$value": "{color.neutral.850}"
+      },
+      "text-lead": {
+        "$value": "{color.accent.800}"
       },
       "accent": {
         "$value": "{color.accent.800}"
@@ -1770,6 +1776,9 @@
       },
       "control": {
         "$value": 500
+      },
+      "nav": {
+        "$value": 500
       }
     },
     "variation": {
@@ -1824,6 +1833,12 @@
       },
       "control": {
         "$value": "0"
+      }
+    },
+    "descent": {
+      "$type": "number",
+      "display": {
+        "$value": 0.12
       }
     },
     "size": {
@@ -2028,10 +2043,10 @@
     },
     "header-h": {
       "phone": {
-        "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)"
+        "$value": "calc(clamp(1rem, 0.6rem + 1.2vw, 2.25rem) + clamp(1.25rem, 0.8rem + 1vw, 2.25rem) + 2.6rem)"
       },
       "wide": {
-        "$value": "clamp(3.5rem, 2.75rem + 1.2vw, 5rem)"
+        "$value": "calc(clamp(1rem, 0.6rem + 1.2vw, 2.25rem) + clamp(1.25rem, 0.8rem + 1vw, 2.25rem) + 2.6rem)"
       }
     },
     "control-h": {
@@ -2044,10 +2059,10 @@
     },
     "rhythm": {
       "phone": {
-        "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)"
+        "$value": "clamp(1.25rem, 0.8rem + 1.4vw, 2.5rem)"
       },
       "wide": {
-        "$value": "clamp(1.25rem, 0.8rem + 1vw, 2.25rem)"
+        "$value": "clamp(1.25rem, 0.8rem + 1.4vw, 2.5rem)"
       }
     },
     "stage-h": {
@@ -2090,6 +2105,38 @@
         "$value": "clamp(0.75rem, 0.68rem + 0.16vw, 0.9375rem)"
       }
     },
+    "text-control": {
+      "phone": {
+        "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)"
+      },
+      "wide": {
+        "$value": "clamp(0.8125rem, 0.72rem + 0.22vw, 1.0625rem)"
+      }
+    },
+    "stack-gap": {
+      "phone": {
+        "$value": "clamp(1rem, 0.5rem + 1vw, 2rem)"
+      },
+      "wide": {
+        "$value": "clamp(1rem, 0.5rem + 1vw, 2rem)"
+      }
+    },
+    "stack-gap-tight": {
+      "phone": {
+        "$value": "1.25rem"
+      },
+      "wide": {
+        "$value": "1.25rem"
+      }
+    },
+    "rule-bleed": {
+      "phone": {
+        "$value": "0rem"
+      },
+      "wide": {
+        "$value": "0rem"
+      }
+    },
     "measure": {
       "phone": {
         "$value": "36em"
@@ -2100,7 +2147,7 @@
     },
     "hero-display": {
       "phone": {
-        "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)"
+        "$value": "clamp(4.5rem, 25.5vw, 9rem)"
       },
       "wide": {
         "$value": "clamp(4.5rem, 0.6rem + 16.4vw, 32rem)"
@@ -2210,6 +2257,15 @@
     },
     "label-case": {
       "$value": "none"
+    },
+    "nav-align": {
+      "$value": "start"
+    },
+    "menu-label": {
+      "$value": "text"
+    },
+    "info-layout": {
+      "$value": "stack"
     }
   }
 }

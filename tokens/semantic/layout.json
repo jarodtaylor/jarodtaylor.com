@@ -37,6 +37,12 @@
     },
     "measure-wide": {
       "$value": "{fluid.measure.wide}"
+    },
+    "rule-bleed-phone": {
+      "$value": "{fluid.rule-bleed.phone}"
+    },
+    "rule-bleed-wide": {
+      "$value": "{fluid.rule-bleed.wide}"
     }
   },
   "choice": {
@@ -62,6 +68,15 @@
     },
     "label-case": {
       "$value": "{knob.label-case}"
+    },
+    "nav-align": {
+      "$value": "{knob.nav-align}"
+    },
+    "menu-label": {
+      "$value": "{knob.menu-label}"
+    },
+    "info-layout": {
+      "$value": "{knob.info-layout}"
     }
   }
 }

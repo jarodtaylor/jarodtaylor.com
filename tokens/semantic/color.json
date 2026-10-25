@@ -29,6 +29,12 @@
       },
       "text-body": {
         "$value": "{color.role.text-body}"
+      },
+      "separator": {
+        "$value": "{color.role.separator}"
+      },
+      "text-lead": {
+        "$value": "{color.role.text-lead}"
       }
     },
     "raised": {

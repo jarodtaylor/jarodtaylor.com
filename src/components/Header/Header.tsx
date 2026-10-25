@@ -25,7 +25,7 @@ export function Header() {
       </a>
       <nav className="nav" aria-label="Primary">
         <button className="nav-toggle" type="button" popoverTarget="nav-list">
-          Menu
+          <span className="nav-toggle-label">Menu</span>
         </button>
         <ul className="nav-list" id="nav-list" popover="auto">
           {NAV.map(({ label, href }) => (

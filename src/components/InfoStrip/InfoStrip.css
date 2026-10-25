@@ -1,12 +1,13 @@
 @layer components {
-  /* A step under the control labels and muted, on a hairline that runs out to both screen edges
-     (an outset border image the width of the gutter, so it costs no pseudo-element). */
+  /* A step under the control labels and muted, on a hairline that can run past the gutter toward the screen edges
+     (an outset border image, --header-info-rule-bleed wide, so it costs no pseudo-element). */
   .info {
     --_x: var(--space-page-x-phone);
     --_size: var(--header-info-font-size);
+    --_bleed: var(--header-info-rule-bleed);
 
     border-block-start: var(--shape-border-width-default) solid;
-    border-image: conic-gradient(var(--header-rule) 0 0) 1 / var(--shape-border-width-default) 0 0 0 / 0 var(--_x);
+    border-image: conic-gradient(var(--header-rule) 0 0) 1 / var(--shape-border-width-default) 0 0 0 / 0 var(--_bleed);
     color: var(--header-info-text);
     display: flex;
     flex-direction: column;
@@ -28,7 +29,7 @@
   }
 
   .info-sep {
-    color: var(--header-info-status);
+    color: var(--header-info-sep);
     padding-inline: calc(var(--_size) * 0.3);
   }
 
@@ -78,6 +79,20 @@
     .info {
       --_x: var(--space-page-x-wide);
       --_size: var(--header-info-font-size-wide);
+      --_bleed: var(--header-info-rule-bleed-wide);
+    }
+  }
+
+  /* split (phones): role left, place right, wrapping; wide screens are always split. */
+  @container style(--header-info-layout: split) {
+    .info {
+      flex-flow: row wrap;
+      justify-content: space-between;
+    }
+
+    .info-place {
+      margin-inline-start: auto;
+      text-align: end;
     }
   }
 

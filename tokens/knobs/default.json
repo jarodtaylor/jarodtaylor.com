@@ -39,6 +39,8 @@
       "text-quiet": { "$type": "string", "$value": "neutral.750" },
       "rule": { "$type": "string", "$value": "neutral.300" },
       "rule-strong": { "$type": "string", "$value": "neutral.450" },
+      "separator": { "$type": "string", "$value": "accent.900" },
+      "text-lead": { "$type": "string", "$value": "neutral.975" },
       "accent": { "$type": "string", "$value": "accent.900" },
       "on-accent": { "$type": "string", "$value": "accent.225" },
       "accent-text": { "$type": "string", "$value": "accent.900" },
@@ -77,7 +79,8 @@
       "text": { "$type": "number", "$value": 400 },
       "label": { "$type": "number", "$value": 400 },
       "lead": { "$type": "number", "$value": 500 },
-      "control": { "$type": "number", "$value": 600 }
+      "control": { "$type": "number", "$value": 600 },
+      "nav": { "$type": "number", "$value": 600 }
     },
     "variation": {
       "display": { "$type": "string", "$value": "\"wdth\" 62" },
@@ -99,6 +102,9 @@
       "label": { "$type": "string", "$value": "0" },
       "lead": { "$type": "string", "$value": "-0.02em" },
       "control": { "$type": "string", "$value": "0.08em" }
+    },
+    "descent": {
+      "display": { "$type": "number", "$value": 0.17 }
     }
   },
   "space": {
@@ -150,6 +156,22 @@
       "phone": { "$type": "string", "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" },
       "wide": { "$type": "string", "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" }
     },
+    "text-control": {
+      "phone": { "$type": "string", "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)" }
+    },
+    "stack-gap": {
+      "phone": { "$type": "string", "$value": "clamp(1rem, 2.3svh, 2.25rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1rem, 2.3svh, 2.25rem)" }
+    },
+    "stack-gap-tight": {
+      "phone": { "$type": "string", "$value": "clamp(1rem, 2.3svh, 2.25rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1rem, 2.3svh, 2.25rem)" }
+    },
+    "rule-bleed": {
+      "phone": { "$type": "string", "$value": "clamp(1rem, 3.2vw, 6rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1rem, 3.2vw, 6rem)" }
+    },
     "measure": {
       "phone": { "$type": "string", "$value": "44ch" },
       "wide": { "$type": "string", "$value": "44ch" }
@@ -189,6 +211,9 @@
     "nav-mode": { "$type": "string", "$value": "toggle" },
     "hero-cue": { "$type": "string", "$value": "none" },
     "talk-style": { "$type": "string", "$value": "pill-fill" },
-    "label-case": { "$type": "string", "$value": "upper" }
+    "label-case": { "$type": "string", "$value": "upper" },
+    "nav-align": { "$type": "string", "$value": "center" },
+    "menu-label": { "$type": "string", "$value": "text" },
+    "info-layout": { "$type": "string", "$value": "stack" }
   }
 }

@@ -1667,6 +1667,12 @@
       "rule-strong": {
         "$value": "{color.neutral.450}"
       },
+      "separator": {
+        "$value": "{color.accent.900}"
+      },
+      "text-lead": {
+        "$value": "{color.neutral.975}"
+      },
       "accent": {
         "$value": "{color.accent.900}"
       },
@@ -1766,6 +1772,9 @@
       },
       "control": {
         "$value": 600
+      },
+      "nav": {
+        "$value": 600
       }
     },
     "variation": {
@@ -1820,6 +1829,12 @@
       },
       "control": {
         "$value": "0.08em"
+      }
+    },
+    "descent": {
+      "$type": "number",
+      "display": {
+        "$value": 0.17
       }
     },
     "size": {
@@ -2086,6 +2101,38 @@
         "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)"
       }
     },
+    "text-control": {
+      "phone": {
+        "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)"
+      },
+      "wide": {
+        "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)"
+      }
+    },
+    "stack-gap": {
+      "phone": {
+        "$value": "clamp(1rem, 2.3svh, 2.25rem)"
+      },
+      "wide": {
+        "$value": "clamp(1rem, 2.3svh, 2.25rem)"
+      }
+    },
+    "stack-gap-tight": {
+      "phone": {
+        "$value": "clamp(1rem, 2.3svh, 2.25rem)"
+      },
+      "wide": {
+        "$value": "clamp(1rem, 2.3svh, 2.25rem)"
+      }
+    },
+    "rule-bleed": {
+      "phone": {
+        "$value": "clamp(1rem, 3.2vw, 6rem)"
+      },
+      "wide": {
+        "$value": "clamp(1rem, 3.2vw, 6rem)"
+      }
+    },
     "measure": {
       "phone": {
         "$value": "44ch"
@@ -2206,6 +2253,15 @@
     },
     "label-case": {
       "$value": "upper"
+    },
+    "nav-align": {
+      "$value": "center"
+    },
+    "menu-label": {
+      "$value": "text"
+    },
+    "info-layout": {
+      "$value": "stack"
     }
   }
 }

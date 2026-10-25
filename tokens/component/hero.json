@@ -52,6 +52,10 @@
       "color": {
         "$type": "color",
         "$value": "{surface.default.text}"
+      },
+      "descent": {
+        "$type": "number",
+        "$value": "{type.descent.display}"
       }
     },
     "lead": {
@@ -85,7 +89,7 @@
       },
       "color": {
         "$type": "color",
-        "$value": "{surface.default.text}"
+        "$value": "{surface.default.text-lead}"
       },
       "accent": {
         "$type": "color",

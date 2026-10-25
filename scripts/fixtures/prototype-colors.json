@@ -13,13 +13,14 @@
     "figure-guide": "oklch(68% 0.09 232)",
     "figure-guide-ink": "oklch(76% 0.08 232)",
     "figure-redline": "oklch(71% 0.18 20)",
-    "figure-on-redline": "oklch(17% 0.03 20)"
+    "figure-on-redline": "oklch(17% 0.03 20)",
+    "text-body": "oklch(96% 0.012 240)"
   },
   "blocks": {
     "bg": "#1633b1",
     "text": "#f2f5fb",
-    "text-muted": "#c2d1f3",
-    "text-quiet": "#a9bcec",
+    "text-muted": "#a9bcec",
+    "text-quiet": "#f2f5fb",
     "accent": "#f56333",
     "on-accent": "#071869",
     "accent-text": "#fd9a73",
@@ -31,19 +32,21 @@
     "figure-face": "#f2f5fb",
     "figure-face-light": "#c3d1ef",
     "figure-face-dark": "#93aade",
-    "figure-edge": "#071869"
+    "figure-edge": "#071869",
+    "text-body": "#c2d1f3"
   },
   "clean": {
     "bg": "oklch(0.285 0.058 170)",
     "bg-next": "oklch(0.235 0.05 172)",
     "text": "oklch(0.965 0.014 165)",
     "text-muted": "oklch(0.84 0.035 168)",
-    "text-quiet": "oklch(0.84 0.035 168)",
+    "text-quiet": "oklch(0.965 0.014 165)",
     "accent": "oklch(0.81 0.125 52)",
     "on-accent": "oklch(0.235 0.05 172)",
     "accent-text": "oklch(0.81 0.125 52)",
     "focus": "oklch(0.81 0.125 52)",
     "figure-line": "oklch(0.965 0.014 165)",
-    "figure-mark": "oklch(0.81 0.125 52)"
+    "figure-mark": "oklch(0.81 0.125 52)",
+    "text-body": "oklch(0.84 0.035 168)"
   }
 }
