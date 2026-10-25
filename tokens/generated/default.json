@@ -298,15 +298,6 @@
   "font": {
     "family": {
       "$type": "fontFamily",
-      "body": {
-        "$value": [
-          "system-ui",
-          "-apple-system",
-          "Segoe UI",
-          "Roboto",
-          "sans-serif"
-        ]
-      },
       "display": {
         "$value": [
           "system-ui",
@@ -316,7 +307,16 @@
           "sans-serif"
         ]
       },
-      "mono": {
+      "text": {
+        "$value": [
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "sans-serif"
+        ]
+      },
+      "label": {
         "$value": [
           "ui-monospace",
           "SFMono-Regular",
@@ -328,11 +328,26 @@
     },
     "weight": {
       "$type": "fontWeight",
-      "body": {
-        "$value": 400
-      },
       "display": {
         "$value": 700
+      },
+      "text": {
+        "$value": 400
+      },
+      "label": {
+        "$value": 400
+      }
+    },
+    "variation": {
+      "$type": "string",
+      "display": {
+        "$value": "normal"
+      },
+      "text": {
+        "$value": "normal"
+      },
+      "label": {
+        "$value": "normal"
       }
     },
     "size": {
@@ -512,10 +527,119 @@
       }
     }
   },
+  "fluid": {
+    "$type": "string",
+    "$extensions": {
+      "com.jarodtaylor.export": {
+        "figma": false
+      }
+    },
+    "hero-display": {
+      "phone": {
+        "$value": "clamp(2.5rem, 12vw, 4rem)"
+      },
+      "wide": {
+        "$value": "min(8vw, 14svh)"
+      }
+    },
+    "hero-lead": {
+      "phone": {
+        "$value": "clamp(1.25rem, 5vw, 1.75rem)"
+      },
+      "wide": {
+        "$value": "clamp(1.5rem, 1rem + 1vw, 2.5rem)"
+      }
+    },
+    "hero-figure": {
+      "phone": {
+        "$value": "80vw"
+      },
+      "wide": {
+        "$value": "min(45vw, 70svh)"
+      }
+    }
+  },
+  "duration": {
+    "$type": "duration",
+    "fast": {
+      "$value": {
+        "value": 160,
+        "unit": "ms"
+      }
+    },
+    "base": {
+      "$value": {
+        "value": 240,
+        "unit": "ms"
+      }
+    },
+    "slow": {
+      "$value": {
+        "value": 560,
+        "unit": "ms"
+      }
+    }
+  },
+  "easing": {
+    "$type": "cubicBezier",
+    "out": {
+      "$value": [
+        0.16,
+        1,
+        0.3,
+        1
+      ]
+    },
+    "in": {
+      "$value": [
+        0.55,
+        0,
+        0.75,
+        0
+      ]
+    },
+    "draw": {
+      "$value": [
+        0.65,
+        0,
+        0.25,
+        1
+      ]
+    },
+    "pop": {
+      "$value": [
+        0.3,
+        1.5,
+        0.6,
+        1
+      ]
+    }
+  },
   "knob": {
+    "$type": "string",
     "decoration": {
-      "$type": "string",
       "$value": "rules"
+    },
+    "hero-figure": {
+      "$value": "construction"
+    },
+    "hero-layout": {
+      "$value": "stack"
+    },
+    "hero-intro": {
+      "$value": "peek"
+    },
+    "nav-mode": {
+      "$value": "toggle"
+    },
+    "hero-cue": {
+      "$value": "none"
+    },
+    "talk-style": {
+      "$value": "pill-fill"
+    },
+    "label-case": {
+      "$value": "upper"
     }
   }
 }

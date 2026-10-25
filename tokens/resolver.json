@@ -8,7 +8,8 @@
         { "$ref": "semantic/color.json" },
         { "$ref": "semantic/space.json" },
         { "$ref": "semantic/type.json" },
-        { "$ref": "semantic/shape.json" }
+        { "$ref": "semantic/shape.json" },
+        { "$ref": "semantic/motion.json" }
       ]
     },
     "component": {

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import Color from 'colorjs.io';
 import { describe, expect, it } from 'vitest';
-import { derive, toSrgbGamut, RAMP, type Knobs, type OklchColor } from './derive.ts';
+import { derive, toSrgbGamut, ENUMS, RAMP, type EnumKnob, type Knobs, type OklchColor } from './derive.ts';
 
 const load = (brand: string): Knobs =>
   JSON.parse(readFileSync(new URL(`../tokens/knobs/${brand}.json`, import.meta.url), 'utf8'));
@@ -62,8 +62,17 @@ describe.each(brands)('derive(%s knobs)', (brand) => {
     }
   });
 
-  it('passes the enumerated decoration knob through', () => {
-    expect(tokens.knob.decoration.$value).toBe(knobs.decoration.$value);
+  it('passes every enumerated knob through', () => {
+    for (const name of Object.keys(ENUMS) as EnumKnob[]) expect(tokens.knob[name].$value).toBe(knobs.enum[name].$value);
+  });
+
+  it('passes font roles, fluid sizes and motion through', () => {
+    expect(tokens.font.variation.display.$value).toBe(knobs.type.variation.display.$value);
+    expect(tokens.font.weight.label.$value).toBe(knobs.type.weight.label.$value);
+    expect(tokens.fluid['hero-display'].wide.$value).toBe(knobs.fluid['hero-display'].wide.$value);
+    expect(tokens.fluid.$extensions).toEqual({ 'com.jarodtaylor.export': { figma: false } });
+    expect(tokens.duration.base.$value).toEqual(knobs.motion.duration.base.$value);
+    expect(tokens.easing.out.$value).toEqual(knobs.motion.easing.out.$value);
   });
 });
 
@@ -99,7 +108,45 @@ describe('validation', () => {
   };
 
   it('rejects an unknown decoration value', () => {
-    expect(broken((k) => (k.decoration.$value = 'squiggles'))).toThrow(/decoration must be one of rules \| none/);
+    expect(broken((k) => (k.enum.decoration.$value = 'squiggles'))).toThrow(/enum\.decoration must be one of rules \| none/);
+  });
+
+  it.each(Object.keys(ENUMS) as EnumKnob[])('rejects an unknown %s value, and a missing one', (name) => {
+    expect(broken((k) => (k.enum[name].$value = 'squiggles'))).toThrow(new RegExp(`enum\\.${name} must be one of`));
+    expect(broken((k) => delete (k.enum as Partial<Knobs['enum']>)[name])).toThrow(new RegExp(`enum\\.${name} must be one of`));
+  });
+
+  it('rejects an enum list in $extensions that disagrees with derive()', () => {
+    expect(broken((k) => (k.enum['hero-cue'].$extensions = { 'com.jarodtaylor.enum': ['none', 'icon'] }))).toThrow(
+      /enum\.hero-cue \$extensions/,
+    );
+  });
+
+  it.each(['35vw', 'min(12.5vw, 21svh)', 'max(3.5rem, min(9.6vw, 19svh))', 'clamp(4.5rem, 0.6rem + 16.4vw, 32rem)', 'calc(100svh - 4rem)'])(
+    'accepts the fluid length %s',
+    (v) => {
+      expect(broken((k) => (k.fluid['hero-display'].wide.$value = v))).not.toThrow();
+    },
+  );
+
+  it.each(['12px', '2', 'var(--x)', 'min(12vw, 20svh', 'min(12vw), 20svh)', '12vw, 20svh', 'url(x.png)', ''])(
+    'rejects the fluid length %j',
+    (v) => {
+      expect(broken((k) => (k.fluid['hero-lead'].phone.$value = v))).toThrow(/fluid\.hero-lead\.phone/);
+    },
+  );
+
+  it.each(['normal', '"wdth" 62', '"wdth" 86, "opsz" 96'])('accepts the variation %j', (v) => {
+    expect(broken((k) => (k.type.variation.display.$value = v))).not.toThrow();
+  });
+
+  it.each(['wdth 62', '"wdth"', '"wdth" 62,', 'bold'])('rejects the variation %j', (v) => {
+    expect(broken((k) => (k.type.variation.text.$value = v))).toThrow(/type\.variation\.text/);
+  });
+
+  it('rejects a duration in px and an easing with x outside [0, 1]', () => {
+    expect(broken((k) => (k.motion.duration.fast.$value = { value: 1, unit: 'px' as 'ms' }))).toThrow(/motion\.duration\.fast/);
+    expect(broken((k) => (k.motion.easing.pop.$value = [1.2, 0, 0.5, 1]))).toThrow(/motion\.easing\.pop/);
   });
 
   it('rejects a type ratio that would not grow', () => {

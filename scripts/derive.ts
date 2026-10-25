@@ -26,10 +26,43 @@ interface Token<T> {
   $extensions?: Record<string, unknown>;
 }
 
-export const DECORATIONS = ['rules', 'none'] as const;
-export type Decoration = (typeof DECORATIONS)[number];
+/**
+ * Enumerated knobs: discrete layout and decoration choices that component CSS reads with
+ * container style queries. Each knob file repeats its list in $extensions.com.jarodtaylor.enum
+ * (for tools such as the Remix UI); validate() checks the two agree.
+ */
+export const ENUMS = {
+  decoration: ['rules', 'none'],
+  'hero-figure': ['construction', 'isometric', 'lattice'],
+  'hero-layout': ['stack', 'name-over-details'],
+  'hero-intro': ['peek', 'assemble', 'none'],
+  'nav-mode': ['toggle', 'wrap'],
+  'hero-cue': ['none', 'icon', 'labelled'],
+  'talk-style': ['pill-fill', 'outline'],
+  'label-case': ['upper', 'none'],
+} as const;
+export type EnumKnob = keyof typeof ENUMS;
+
+export const FONT_ROLES = ['display', 'text', 'label'] as const;
+type FontRole = (typeof FONT_ROLES)[number];
+
+/** Fluid sizes are CSS expressions, one per shared breakpoint band: phone below 48rem, wide above. */
+export const FLUID_SIZES = ['hero-display', 'hero-lead', 'hero-figure'] as const;
+type FluidSize = (typeof FLUID_SIZES)[number];
+const FLUID_BANDS = ['phone', 'wide'] as const;
+type FluidBand = (typeof FLUID_BANDS)[number];
+
+export const DURATIONS = ['fast', 'base', 'slow'] as const;
+type DurationStep = (typeof DURATIONS)[number];
+export const EASINGS = ['out', 'in', 'draw', 'pop'] as const;
+type EasingName = (typeof EASINGS)[number];
 
 type FontFamily = string | string[];
+export interface Duration {
+  value: number;
+  unit: 'ms' | 's';
+}
+type CubicBezier = [number, number, number, number];
 
 /** Shape of tokens/knobs/<brand>.json. Group-level $type/$description are allowed and ignored. */
 export interface Knobs {
@@ -40,12 +73,16 @@ export interface Knobs {
   type: {
     base: Token<Dimension>;
     ratio: Token<number>;
-    family: { body: Token<FontFamily>; display: Token<FontFamily>; mono: Token<FontFamily> };
-    weight: { body: Token<number>; display: Token<number> };
+    family: Record<FontRole, Token<FontFamily>>;
+    weight: Record<FontRole, Token<number>>;
+    /** A font-variation-settings value, e.g. `"wdth" 62`, or `normal`. */
+    variation: Record<FontRole, Token<string>>;
   };
   space: { base: Token<Dimension>; density: Token<number> };
   shape: { radius: Token<Dimension>; 'border-width': Token<Dimension> };
-  decoration: Token<string>;
+  fluid: Record<FluidSize, Record<FluidBand, Token<string>>>;
+  motion: { duration: Record<DurationStep, Token<Duration>>; easing: Record<EasingName, Token<CubicBezier>> };
+  enum: Record<EnumKnob, Token<string>>;
 }
 
 export interface OklchColor {
@@ -66,8 +103,9 @@ export interface Primitives {
     accent: Record<RampStep, Leaf<OklchColor>>;
   };
   font: {
-    family: { $type: 'fontFamily'; body: Leaf<FontFamily>; display: Leaf<FontFamily>; mono: Leaf<FontFamily> };
-    weight: { $type: 'fontWeight'; body: Leaf<number>; display: Leaf<number> };
+    family: { $type: 'fontFamily' } & Record<FontRole, Leaf<FontFamily>>;
+    weight: { $type: 'fontWeight' } & Record<FontRole, Leaf<number>>;
+    variation: { $type: 'string' } & Record<FontRole, Leaf<string>>;
     size: { $type: 'dimension' } & Record<TypeStep, Leaf<Dimension>>;
     'line-height': { $type: 'number' } & Record<LineHeight, Leaf<number>>;
   };
@@ -76,10 +114,14 @@ export interface Primitives {
     radius: { $type: 'dimension' } & Record<RadiusStep, Leaf<Dimension>>;
     border: { $type: 'dimension' } & Record<BorderStep, Leaf<Dimension>>;
   };
-  knob: {
-    decoration: { $type: 'string'; $value: Decoration };
-  };
+  fluid: { $type: 'string'; $extensions: typeof NOT_FOR_FIGMA } & Record<FluidSize, Record<FluidBand, Leaf<string>>>;
+  duration: { $type: 'duration' } & Record<DurationStep, Leaf<Duration>>;
+  easing: { $type: 'cubicBezier' } & Record<EasingName, Leaf<CubicBezier>>;
+  knob: { $type: 'string' } & { [K in EnumKnob]: Leaf<(typeof ENUMS)[K][number]> };
 }
+
+/** Figma variables can't hold CSS expressions; the Figma export skips groups carrying this. */
+const NOT_FOR_FIGMA = { 'com.jarodtaylor.export': { figma: false } } as const;
 
 // ---------------------------------------------------------------------------
 // Scales
@@ -143,17 +185,9 @@ export function derive(knobs: Knobs): Primitives {
       accent: ramp(color.accent.hue.$value, color.accent.chroma.$value),
     },
     font: {
-      family: {
-        $type: 'fontFamily',
-        body: { $value: type.family.body.$value },
-        display: { $value: type.family.display.$value },
-        mono: { $value: type.family.mono.$value },
-      },
-      weight: {
-        $type: 'fontWeight',
-        body: { $value: type.weight.body.$value },
-        display: { $value: type.weight.display.$value },
-      },
+      family: { $type: 'fontFamily', ...pick(FONT_ROLES, (r) => type.family[r].$value) },
+      weight: { $type: 'fontWeight', ...pick(FONT_ROLES, (r) => type.weight[r].$value) },
+      variation: { $type: 'string', ...pick(FONT_ROLES, (r) => type.variation[r].$value) },
       size: {
         $type: 'dimension',
         ...mapScale(TYPE_SCALE, (exp) => scaleDim(type.base.$value, type.ratio.$value ** exp)),
@@ -178,9 +212,17 @@ export function derive(knobs: Knobs): Primitives {
         thick: { $value: scaleDim(shape['border-width'].$value, 2) },
       },
     },
-    knob: {
-      decoration: { $type: 'string', $value: knobs.decoration.$value as Decoration },
+    fluid: {
+      $type: 'string',
+      $extensions: NOT_FOR_FIGMA,
+      ...(Object.fromEntries(FLUID_SIZES.map((f) => [f, pick(FLUID_BANDS, (b) => knobs.fluid[f][b].$value)])) as Record<
+        FluidSize,
+        Record<FluidBand, Leaf<string>>
+      >),
     },
+    duration: { $type: 'duration', ...pick(DURATIONS, (d) => ({ ...knobs.motion.duration[d].$value })) },
+    easing: { $type: 'cubicBezier', ...pick(EASINGS, (e) => [...knobs.motion.easing[e].$value] as CubicBezier) },
+    knob: { $type: 'string', ...pick(Object.keys(ENUMS) as EnumKnob[], (e) => knobs.enum[e].$value) } as Primitives['knob'],
   };
 }
 
@@ -201,27 +243,75 @@ function validate(k: Knobs): void {
   }
   dim('type.base', k.type?.base?.$value, positive, '> 0');
   num('type.ratio', k.type?.ratio?.$value, (n) => n > 1, '> 1');
-  for (const f of ['body', 'display', 'mono'] as const) {
-    const v = k.type?.family?.[f]?.$value;
-    if (!(typeof v === 'string' ? v : Array.isArray(v) && v.length > 0)) errors.push(`type.family.${f} must be a font family`);
-  }
-  for (const w of ['body', 'display'] as const) {
-    num(`type.weight.${w}`, k.type?.weight?.[w]?.$value, (n) => n >= 1 && n <= 1000, 'in [1, 1000]');
+  for (const r of FONT_ROLES) {
+    const v = k.type?.family?.[r]?.$value;
+    if (!(typeof v === 'string' ? v : Array.isArray(v) && v.length > 0)) errors.push(`type.family.${r} must be a font family`);
+    num(`type.weight.${r}`, k.type?.weight?.[r]?.$value, (n) => n >= 1 && n <= 1000, 'in [1, 1000]');
+    const axes = k.type?.variation?.[r]?.$value;
+    if (typeof axes !== 'string' || !VARIATION.test(axes))
+      errors.push(`type.variation.${r} must be normal or a list like "wdth" 62, "opsz" 96 (got ${JSON.stringify(axes)})`);
   }
   dim('space.base', k.space?.base?.$value, positive, '> 0');
   num('space.density', k.space?.density?.$value, positive, '> 0');
   dim('shape.radius', k.shape?.radius?.$value, (n) => n >= 0, '≥ 0');
   dim('shape.border-width', k.shape?.['border-width']?.$value, (n) => n >= 0, '≥ 0');
-  if (!DECORATIONS.includes(k.decoration?.$value as Decoration)) {
-    errors.push(`decoration must be one of ${DECORATIONS.join(' | ')} (got ${JSON.stringify(k.decoration?.$value)})`);
+  for (const f of FLUID_SIZES) {
+    for (const b of FLUID_BANDS) {
+      const v = k.fluid?.[f]?.[b]?.$value;
+      if (!isFluidLength(v))
+        errors.push(`fluid.${f}.${b} must be a length in vw/svh/rem, optionally with clamp/min/max/calc (got ${JSON.stringify(v)})`);
+    }
+  }
+  for (const d of DURATIONS) {
+    const v = k.motion?.duration?.[d]?.$value;
+    if (!v || (v.unit !== 'ms' && v.unit !== 's')) errors.push(`motion.duration.${d} must be an ms or s duration`);
+    else num(`motion.duration.${d}`, v.value, (n) => n >= 0, '≥ 0');
+  }
+  for (const e of EASINGS) {
+    const v = k.motion?.easing?.[e]?.$value;
+    const ok = Array.isArray(v) && v.length === 4 && v.every(Number.isFinite) && [v[0], v[2]].every((x) => x >= 0 && x <= 1);
+    if (!ok) errors.push(`motion.easing.${e} must be a cubic Bézier [x1, y1, x2, y2] with x in [0, 1] (got ${JSON.stringify(v)})`);
+  }
+  for (const [name, allowed] of Object.entries(ENUMS) as [EnumKnob, readonly string[]][]) {
+    const knob = k.enum?.[name];
+    if (!allowed.includes(knob?.$value as string))
+      errors.push(`enum.${name} must be one of ${allowed.join(' | ')} (got ${JSON.stringify(knob?.$value)})`);
+    const listed = (knob?.$extensions?.['com.jarodtaylor.enum'] as string[] | undefined)?.join(' | ');
+    if (listed !== allowed.join(' | '))
+      errors.push(`enum.${name} $extensions.com.jarodtaylor.enum must list ${allowed.join(' | ')} (got ${listed ?? 'nothing'})`);
   }
 
   if (errors.length) throw new Error(`Invalid knobs:\n  - ${errors.join('\n  - ')}`);
 }
 
+const VARIATION = /^(normal|"[a-zA-Z0-9]{4}" -?\d*\.?\d+(, "[a-zA-Z0-9]{4}" -?\d*\.?\d+)*)$/;
+
+/**
+ * A fluid length: numbers in vw, svh or rem (unitless ones only as factors), joined by
+ * + - * / inside clamp(), min(), max() or calc(). At least one number must carry a unit.
+ */
+function isFluidLength(v: unknown): boolean {
+  if (typeof v !== 'string') return false;
+  const tokens = v.match(/\d*\.?\d+(?:vw|svh|rem)?|clamp\(|min\(|max\(|calc\(|[(),+\-*/]|\s+|./g) ?? [];
+  let depth = 0;
+  for (const t of tokens) {
+    if (t.endsWith('(')) depth++;
+    else if (t === ')') depth--;
+    else if (!/^(\d*\.?\d+(vw|svh|rem)?|[,+\-*/]|\s+)$/.test(t) || (t === ',' && depth === 0)) return false;
+    if (depth < 0) return false;
+  }
+  return depth === 0 && tokens.some((t) => /\d(vw|svh|rem)$/.test(t));
+}
+
 function mapScale<K extends string, V, R>(scale: Record<K, V>, fn: (v: V) => R): Record<K, Leaf<R>> {
   const out = {} as Record<K, Leaf<R>>;
   for (const key of Object.keys(scale) as K[]) out[key] = { $value: fn(scale[key]) };
+  return out;
+}
+
+function pick<K extends string, R>(keys: readonly K[], fn: (key: K) => R): Record<K, Leaf<R>> {
+  const out = {} as Record<K, Leaf<R>>;
+  for (const key of keys) out[key] = { $value: fn(key) };
   return out;
 }
 

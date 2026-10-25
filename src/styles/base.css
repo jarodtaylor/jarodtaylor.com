@@ -3,17 +3,19 @@
   body {
     background: var(--surface-default-bg);
     color: var(--surface-default-text);
-    font-family: var(--type-family-body);
+    font-family: var(--type-family-text);
     font-size: var(--type-size-body);
-    font-weight: var(--type-weight-body);
+    font-weight: var(--type-weight-text);
+    font-variation-settings: var(--type-variation-text);
     line-height: var(--type-leading-body);
   }
 
   h1,
   h2,
   h3 {
-    font-family: var(--type-family-heading);
-    font-weight: var(--type-weight-heading);
+    font-family: var(--type-family-display);
+    font-weight: var(--type-weight-display);
+    font-variation-settings: var(--type-variation-display);
     line-height: var(--type-leading-heading);
   }
 
@@ -34,7 +36,9 @@
   }
 
   code {
-    font-family: var(--type-family-code);
+    font-family: var(--type-family-label);
+    font-weight: var(--type-weight-label);
+    font-variation-settings: var(--type-variation-label);
   }
 
   :focus-visible {

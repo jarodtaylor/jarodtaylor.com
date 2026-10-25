@@ -15,14 +15,22 @@
     "ratio": { "$type": "number", "$value": 1.2, "$description": "Modular type scale ratio" },
     "family": {
       "$type": "fontFamily",
-      "body": { "$value": ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
       "display": { "$value": ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
-      "mono": { "$value": ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"] }
+      "text": { "$value": ["system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"] },
+      "label": { "$value": ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"] }
     },
     "weight": {
       "$type": "fontWeight",
-      "body": { "$value": 400 },
-      "display": { "$value": 700 }
+      "display": { "$value": 700 },
+      "text": { "$value": 400 },
+      "label": { "$value": 400 }
+    },
+    "variation": {
+      "$type": "string",
+      "$description": "font-variation-settings per role: \"wdth\" 62, \"opsz\" 96, … or normal",
+      "display": { "$value": "normal" },
+      "text": { "$value": "normal" },
+      "label": { "$value": "normal" }
     }
   },
   "space": {
@@ -33,10 +41,50 @@
     "radius": { "$type": "dimension", "$value": { "value": 0.25, "unit": "rem" }, "$description": "Base corner radius" },
     "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" }, "$description": "Base border weight" }
   },
-  "decoration": {
+  "fluid": {
     "$type": "string",
-    "$value": "rules",
-    "$description": "Enumerated: rules | none. Component CSS reacts with container style queries.",
-    "$extensions": { "com.jarodtaylor.enum": ["rules", "none"] }
+    "$description": "Fluid sizes as CSS expressions (vw, svh, rem; clamp/min/max/calc). phone is below 48rem, wide above. Not exported to Figma.",
+    "hero-display": {
+      "$description": "Hero name size",
+      "phone": { "$value": "clamp(2.5rem, 12vw, 4rem)" },
+      "wide": { "$value": "min(8vw, 14svh)" }
+    },
+    "hero-lead": {
+      "$description": "Hero tagline size",
+      "phone": { "$value": "clamp(1.25rem, 5vw, 1.75rem)" },
+      "wide": { "$value": "clamp(1.5rem, 1rem + 1vw, 2.5rem)" }
+    },
+    "hero-figure": {
+      "$description": "Hero figure extent",
+      "phone": { "$value": "80vw" },
+      "wide": { "$value": "min(45vw, 70svh)" }
+    }
+  },
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "fast": { "$value": { "value": 160, "unit": "ms" } },
+      "base": { "$value": { "value": 240, "unit": "ms" } },
+      "slow": { "$value": { "value": 560, "unit": "ms" } }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "out": { "$value": [0.16, 1, 0.3, 1] },
+      "in": { "$value": [0.55, 0, 0.75, 0] },
+      "draw": { "$value": [0.65, 0, 0.25, 1] },
+      "pop": { "$value": [0.3, 1.5, 0.6, 1] }
+    }
+  },
+  "enum": {
+    "$type": "string",
+    "$description": "Enumerated knobs. Component CSS reacts with container style queries; derive() validates each against its list.",
+    "decoration": { "$value": "rules", "$extensions": { "com.jarodtaylor.enum": ["rules", "none"] } },
+    "hero-figure": { "$value": "construction", "$extensions": { "com.jarodtaylor.enum": ["construction", "isometric", "lattice"] } },
+    "hero-layout": { "$value": "stack", "$extensions": { "com.jarodtaylor.enum": ["stack", "name-over-details"] } },
+    "hero-intro": { "$value": "peek", "$extensions": { "com.jarodtaylor.enum": ["peek", "assemble", "none"] } },
+    "nav-mode": { "$value": "toggle", "$extensions": { "com.jarodtaylor.enum": ["toggle", "wrap"] } },
+    "hero-cue": { "$value": "none", "$extensions": { "com.jarodtaylor.enum": ["none", "icon", "labelled"] } },
+    "talk-style": { "$value": "pill-fill", "$extensions": { "com.jarodtaylor.enum": ["pill-fill", "outline"] } },
+    "label-case": { "$value": "upper", "$extensions": { "com.jarodtaylor.enum": ["upper", "none"] } }
   }
 }

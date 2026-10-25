@@ -2,23 +2,39 @@
   "type": {
     "family": {
       "$type": "fontFamily",
-      "body": {
-        "$value": "{font.family.body}"
-      },
-      "heading": {
+      "display": {
         "$value": "{font.family.display}"
       },
-      "code": {
-        "$value": "{font.family.mono}"
+      "text": {
+        "$value": "{font.family.text}"
+      },
+      "label": {
+        "$value": "{font.family.label}"
       }
     },
     "weight": {
       "$type": "fontWeight",
-      "body": {
-        "$value": "{font.weight.body}"
-      },
-      "heading": {
+      "display": {
         "$value": "{font.weight.display}"
+      },
+      "text": {
+        "$value": "{font.weight.text}"
+      },
+      "label": {
+        "$value": "{font.weight.label}"
+      }
+    },
+    "variation": {
+      "$type": "string",
+      "$description": "font-variation-settings for each role: axes such as wdth and opsz, or normal.",
+      "display": {
+        "$value": "{font.variation.display}"
+      },
+      "text": {
+        "$value": "{font.variation.text}"
+      },
+      "label": {
+        "$value": "{font.variation.label}"
       }
     },
     "size": {
