@@ -147,3 +147,54 @@ Use a new branch, `feat/remix-hero`, cut from `feat/design-direction` so the pro
 - Steps 1, 4 and 5 go to Opus subagents, because correctness matters most there.
 - Steps 2–3 go to Sonnet.
 - Step 0 goes to Fable, for the gate.
+
+## Amendments after the Fable gate (2026-10-24, approved by Jarod)
+
+These amendments override the matching parts of the plan above.
+
+**A1. Markup invariance**
+
+- Everything the prototype JS added to the DOM is now rendered at build time in the Hero component:
+  - the bleed paths
+  - the pen clone
+  - the per-vertex `--at` timings
+
+  This works because the mark is all straight segments, so the geometry can be computed ahead of time.
+- At runtime, JS only does two things: toggle state on `<html>`, and paint pixels on the canvas.
+- The invariance snapshot changes:
+  - It blanks the text in `[data-readout]`.
+  - It drops the `data-spec`/`data-tpl` attributes and the canvas `width`/`height` attributes.
+  - The Colophon discloses this.
+- No font names are interpolated into content. The face name goes in a row on the spec card instead.
+- **One hero module** replaces the per-brand dynamic imports. All three prototypes' JS together is about 5.3 KB gzip.
+
+**A2. Lint (Jarod agreed)**
+
+- Add `motion.*` tokens for durations and easings.
+- Allow math in private `--_` props, as long as it combines only `var()` refs and unitless numbers.
+- Raw colours, raw lengths and brand selectors stay banned.
+
+**A3. `derive()` colour**
+
+- **N named ramps** instead of two: `color.ramp.{neutral,accent,guide,redline,…}`.
+- Each ramp has its own lightness anchor and peak-chroma lightness.
+- The ramps must reach L 0.175.
+- Acceptance test: `derive()` reproduces each prototype's hero colours within ΔE00 ≤ 2.
+
+**A4. Fluid sizes**
+
+- Fluid sizes are `$type: string` tokens, for example `min(12.5vw, 21svh)`.
+- Spike first that Terrazzo emits them unquoted.
+- Fluid sizes are excluded from the Figma export.
+- Each brand gets a phone value and a wide value, read inside the shared breakpoints.
+
+**A5. Fonts**
+
+- Self-host all three pairings, including Funnel. Browsers fetch only the faces in use, so no lazy `<link>` injection is needed.
+- `@font-face` rules go in `src/styles/fonts.css`, which is added to stylelint `ignoreFiles`.
+- **Metric-matched fallbacks** (`size-adjust`, ascent/descent overrides) for each display face, to keep CLS < 0.1.
+
+**A6. Brand range**
+
+- Three dark brands with the same composition is intentional (Jarod). A light brand is possible later.
+- Add Blocks' tagline colour `#fd9a73` on `#1633b1` (about 4.7:1) to the risky contrast pairs.
