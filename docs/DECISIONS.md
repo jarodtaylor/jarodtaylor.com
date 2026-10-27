@@ -25,6 +25,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | Q6 | Newsletter: yes or no? | Later |
 | Q7 | ✅ Doing it (2026-10-24). Was: if round 5 falls short, switch to Impeccable `/impeccable` new-work flow, **code-led** (`buildPath: code`, direction picker, Bolder hand), not comp-led | Decide after Jarod reviews round 5 |
 | Q8 | ✅ Decided 2026-10-24 (see Decisions). Was: Figma → Terrazzo → CSS: which token tier does Figma author? Figma can't do derive() math | Figma authors the brand layer (knobs + role picks); derived ramps are pushed into Figma read-only; CI derives. Keep knobs Figma-importable now (px, sRGB, no composites) |
+| Q9 | Tablet nav: 4 items + Let's talk already fill the header; a 5th item won't fit. Collapse into the menu at tablet widths? | Yes: move the existing popover menu breakpoint from 48rem to 64rem, with Let's talk inside the menu below that. Decide with the pixel-pushing pass |
 
 ## ✅ Decisions
 
