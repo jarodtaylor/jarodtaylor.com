@@ -181,6 +181,10 @@
         position: fixed;
       }
 
+      .nav-list:popover-open :focus-visible {
+        outline-color: var(--header-menu-focus);
+      }
+
       .nav-list:popover-open a {
         color: var(--header-menu-text);
         display: block;

@@ -1673,6 +1673,15 @@
       "text-lead": {
         "$value": "{color.neutral.975}"
       },
+      "menu-bg": {
+        "$value": "{color.neutral.975}"
+      },
+      "menu-text": {
+        "$value": "{color.neutral.400}"
+      },
+      "menu-focus": {
+        "$value": "{color.neutral.400}"
+      },
       "accent": {
         "$value": "{color.accent.675}"
       },

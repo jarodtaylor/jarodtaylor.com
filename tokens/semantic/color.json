@@ -108,6 +108,21 @@
       "focus": {
         "$value": "{color.role.figure-on-redline}"
       }
+    },
+    "menu": {
+      "$description": "The phone nav popover",
+      "bg": {
+        "$value": "{color.role.menu-bg}"
+      },
+      "text": {
+        "$value": "{color.role.menu-text}"
+      },
+      "border": {
+        "$value": "{color.role.rule}"
+      },
+      "focus": {
+        "$value": "{color.role.menu-focus}"
+      }
     }
   },
   "focus": {

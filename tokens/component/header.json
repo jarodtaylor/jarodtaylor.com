@@ -126,15 +126,19 @@
       "$description": "The phone nav popover",
       "bg": {
         "$type": "color",
-        "$value": "{surface.raised.bg}"
+        "$value": "{surface.menu.bg}"
       },
       "text": {
         "$type": "color",
-        "$value": "{surface.raised.text}"
+        "$value": "{surface.menu.text}"
       },
       "border": {
         "$type": "color",
-        "$value": "{surface.raised.border}"
+        "$value": "{surface.menu.border}"
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "{surface.menu.focus}"
       }
     },
     "nav-align": {
