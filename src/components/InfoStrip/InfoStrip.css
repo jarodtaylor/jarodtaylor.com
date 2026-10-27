@@ -24,8 +24,11 @@
     z-index: 5;
   }
 
-  .info-role {
-    text-wrap: balance;
+  /* stack balances the role's lines; the other layouts let it run on as far as it fits. */
+  @container style(--header-info-layout: stack) {
+    .info-role {
+      text-wrap: balance;
+    }
   }
 
   .info-sep {
