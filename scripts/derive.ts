@@ -57,8 +57,8 @@ export const ENUMS = {
   'nav-align': ['start', 'center', 'end'],
   /** The phone menu button: the word Menu with two bars (text), or the bars alone, named for assistive tech (icon). */
   'menu-label': ['text', 'icon'],
-  /** Phones: the info strip's two halves stacked at the left (stack), or role left and place right, wrapping (split). */
-  'info-layout': ['stack', 'split'],
+  /** The info strip's two halves: stacked at the left below 64rem (stack) or below 48rem (stack-phone), or role left and place right, wrapping, at every width (split). */
+  'info-layout': ['stack', 'stack-phone', 'split'],
   /** How glyphs are rasterised where the platform allows a choice: the platform default, or grayscale antialiasing (lighter). */
   'font-smoothing': ['auto', 'antialiased'],
   /** Small links (the socials): underlined at rest (always), or only on hover and focus (hover). */
@@ -182,6 +182,8 @@ export interface Knobs {
     tracking: Record<TypeRole, Token<string>>;
     /** How far the display face's descenders hang below its line box, in em (0 when the leading already clears them). */
     descent: { display: Token<number> };
+    /** The display face's vertical metrics in em (OS/2 typo ascender, descender, cap height), for Peek's measurements. */
+    metrics: { display: Record<'ascent' | 'descender' | 'cap', Token<number>> };
   };
   /** base and radius are authored in px and emitted in rem; border-width stays px. */
   space: { base: Token<PxDimension>; density: Token<number> };
@@ -212,6 +214,7 @@ export interface Primitives {
     leading: { $type: 'number' } & Record<TypeRole, Leaf<number>>;
     tracking: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
     descent: { $type: 'number'; display: Leaf<number> };
+    metrics: { $type: 'number'; display: Record<'ascent' | 'descender' | 'cap', Leaf<number>> };
     size: { $type: 'dimension' } & Record<TypeStep, Leaf<Dimension>>;
     'line-height': { $type: 'number' } & Record<LineHeight, Leaf<number>>;
   };
@@ -297,6 +300,7 @@ export function derive(knobs: Knobs): Primitives {
       leading: { $type: 'number', ...pick(TYPE_ROLES, (r) => type.leading[r].$value) },
       tracking: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.tracking[r].$value) },
       descent: { $type: 'number', display: { $value: type.descent.display.$value } },
+      metrics: { $type: 'number', display: pick(['ascent', 'descender', 'cap'] as const, (m) => type.metrics.display[m].$value) },
       size: {
         $type: 'dimension',
         ...mapScale(TYPE_SCALE, (exp) => scaleDim(toRem(type.base.$value), type.ratio.$value ** exp)),
@@ -384,6 +388,8 @@ function validate(k: Knobs): void {
     if (typeof axes !== 'string' || !VARIATION.test(axes))
       errors.push(`type.variation.${r} must be normal or a list like "wdth" 62, "opsz" 96 (got ${JSON.stringify(axes)})`);
   }
+  for (const m of ['ascent', 'descender', 'cap'] as const)
+    num(`type.metrics.display.${m}`, k.type?.metrics?.display?.[m]?.$value, (n) => n >= 0 && n <= 2, 'in [0, 2]');
   num('type.descent.display', k.type?.descent?.display?.$value, (n) => n >= 0 && n <= 1, 'in [0, 1]');
   for (const w of EXTRA_WEIGHTS) num(`type.weight.${w}`, k.type?.weight?.[w]?.$value, (n) => n >= 1 && n <= 1000, 'in [1, 1000]');
   dim('space.base', k.space?.base?.$value, positive, '> 0');

@@ -83,7 +83,19 @@
     }
   }
 
-  /* split (phones): role left, place right, wrapping; wide screens are always split. */
+  /* stack-phone: one row from 48rem. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    @container style(--header-info-layout: stack-phone) {
+      .info {
+        flex-direction: row;
+        gap: var(--space-inset-lg);
+        justify-content: space-between;
+      }
+    }
+  }
+
+  /* split: role left, place right, wrapping, at every width. */
   @container style(--header-info-layout: split) {
     .info {
       flex-flow: row wrap;

@@ -105,6 +105,13 @@
     },
     "descent": {
       "display": { "$type": "number", "$value": 0.17 }
+    },
+    "metrics": {
+      "display": {
+        "ascent": { "$type": "number", "$value": 0.878 },
+        "descender": { "$type": "number", "$value": 0.21 },
+        "cap": { "$type": "number", "$value": 0.686 }
+      }
     }
   },
   "space": {

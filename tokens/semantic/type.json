@@ -170,6 +170,19 @@
       "display": {
         "$value": "{font.descent.display}"
       }
+    },
+    "metrics": {
+      "$type": "number",
+      "$description": "The display face's vertical metrics in em.",
+      "display-ascent": {
+        "$value": "{font.metrics.display.ascent}"
+      },
+      "display-descender": {
+        "$value": "{font.metrics.display.descender}"
+      },
+      "display-cap": {
+        "$value": "{font.metrics.display.cap}"
+      }
     }
   }
 }

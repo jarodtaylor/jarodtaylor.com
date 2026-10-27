@@ -1841,6 +1841,20 @@
         "$value": 0.12
       }
     },
+    "metrics": {
+      "$type": "number",
+      "display": {
+        "ascent": {
+          "$value": 1
+        },
+        "descender": {
+          "$value": 0.25
+        },
+        "cap": {
+          "$value": 0.675
+        }
+      }
+    },
     "size": {
       "$type": "dimension",
       "xs": {
@@ -2265,7 +2279,7 @@
       "$value": "text"
     },
     "info-layout": {
-      "$value": "stack"
+      "$value": "stack-phone"
     },
     "font-smoothing": {
       "$value": "antialiased"

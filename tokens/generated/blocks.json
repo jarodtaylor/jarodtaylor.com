@@ -1838,6 +1838,20 @@
         "$value": 0
       }
     },
+    "metrics": {
+      "$type": "number",
+      "display": {
+        "ascent": {
+          "$value": 0.93
+        },
+        "descender": {
+          "$value": 0.27
+        },
+        "cap": {
+          "$value": 0.66
+        }
+      }
+    },
     "size": {
       "$type": "dimension",
       "xs": {

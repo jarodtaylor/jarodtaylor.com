@@ -105,6 +105,13 @@
     },
     "descent": {
       "display": { "$type": "number", "$value": 0.12 }
+    },
+    "metrics": {
+      "display": {
+        "ascent": { "$type": "number", "$value": 1.0 },
+        "descender": { "$type": "number", "$value": 0.25 },
+        "cap": { "$type": "number", "$value": 0.675 }
+      }
     }
   },
   "space": {
@@ -214,7 +221,7 @@
     "label-case": { "$type": "string", "$value": "none" },
     "nav-align": { "$type": "string", "$value": "start" },
     "menu-label": { "$type": "string", "$value": "text" },
-    "info-layout": { "$type": "string", "$value": "stack" },
+    "info-layout": { "$type": "string", "$value": "stack-phone" },
     "font-smoothing": { "$type": "string", "$value": "antialiased" },
     "link-underline": { "$type": "string", "$value": "hover" }
   }

@@ -64,7 +64,7 @@
   :root[data-peek-state="leaving"] {
     --_layer: calc(0);
 
-    transition: --_layer var(--_peek-leave) var(--spec-easing) calc(var(--_beat) * 0.6);
+    transition: --_layer var(--_peek-leave) var(--figure-draw-easing) calc(var(--_beat) * 0.6);
   }
 
   /* 1. Columns: each one's edges draw down the whole stage, left to right. */
@@ -90,12 +90,19 @@
     display: none;
   }
 
-  :root:is([data-peek-state="on"], [data-peek-state="leaving"]) .cols i {
+  :root[data-peek-state="on"] .cols i {
     transform: none;
+    transition: transform var(--_peek-cols-dur) var(--figure-draw-easing) calc(var(--_i) * var(--_peek-cols-step));
   }
 
-  :root[data-peek-state="on"] .cols i {
-    transition: transform var(--_peek-cols-dur) var(--figure-draw-easing) calc(var(--_i) * var(--_peek-cols-step));
+  /* Leaving, the columns don't fade: each one's edges retract back up along their length, left to right,
+     all home inside the leave window. */
+  :root[data-peek-state="leaving"] .cols {
+    opacity: 1;
+  }
+
+  :root[data-peek-state="leaving"] .cols i {
+    transition: transform calc(var(--_peek-leave) * 0.8) var(--figure-draw-easing) calc(var(--_i) * var(--_peek-cols-step) * 0.3);
   }
 
   /* 4. Redline boxes. Each block's box draws its perimeter as two pens from the top-left corner, meeting at the
@@ -290,12 +297,14 @@
     right: 0;
   }
 
+  /* From the face's metrics: the first line's cap height from the top, the last line's baseline from the bottom
+     (half the leading's slack sits above the ascender and below the descender). */
   .dim--cap {
-    top: calc(var(--_display) * 0.058);
+    top: calc(var(--_display) * ((var(--hero-name-leading) - var(--hero-name-ascent) - var(--hero-name-descender)) / 2 + var(--hero-name-ascent) - var(--hero-name-cap)));
   }
 
   .dim--base {
-    top: calc(var(--_display) * 1.55);
+    bottom: calc(var(--_display) * (var(--hero-name-leading) - var(--hero-name-ascent) + var(--hero-name-descender)) / 2);
   }
 
   .dim--base b {
@@ -304,7 +313,7 @@
   }
 
   .dim--size {
-    block-size: calc(var(--_display) * 1.64);
+    bottom: 0;
     border-block-start: 0;
     border-inline-start: var(--shape-border-width-default) solid var(--spec-line);
     left: calc(var(--_x) * -0.4);
@@ -349,14 +358,6 @@
       --_display: var(--hero-name-size-wide);
     }
 
-    .dim--base {
-      top: calc(var(--_display) * 0.73);
-    }
-
-    .dim--size {
-      block-size: calc(var(--_display) * 0.82);
-    }
-
     .dim--size b {
       background: none;
       bottom: 0;
@@ -373,11 +374,25 @@
     }
   }
 
-  :root:is([data-peek-state="on"], [data-peek-state="leaving"]) .dim {
+  :root[data-peek-state="on"] .dim {
     transform: none;
   }
 
-  :root:is([data-peek-state="on"], [data-peek-state="leaving"]) .dim b {
+  /* Leaving, the rules retract along their length too (no fade); only their labels fade, quickly. */
+  :root[data-peek-state="leaving"] .dims {
+    opacity: 1;
+  }
+
+  :root[data-peek-state="leaving"] .dim {
+    transition: transform calc(var(--_peek-leave) * 0.8) var(--figure-draw-easing);
+  }
+
+  :root[data-peek-state="leaving"] .dim b {
+    opacity: 0;
+    transition: opacity calc(var(--_peek-leave) * 0.4) var(--motion-easing-in);
+  }
+
+  :root[data-peek-state="on"] .dim b {
     opacity: 1;
   }
 
@@ -518,8 +533,11 @@
     }
   }
 
-  :root.intro .skip-intro {
-    display: block;
+  /* Only the peek intro offers a button; the assemble intro is skipped by any key, click or scroll. */
+  @container style(--hero-intro: peek) {
+    :root.intro .skip-intro {
+      display: block;
+    }
   }
 
   /* One frame without transitions, so a skip lands on the resting state instead of animating to it. */

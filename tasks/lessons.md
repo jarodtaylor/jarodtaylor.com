@@ -38,3 +38,8 @@
 - **Style queries go stale under `display: none` (Chromium).** If an ancestor is `display: none` when a brand token changes, its descendants' `@container style()` results aren't recomputed when it reappears. Take elements out of flow instead of hiding them when their children query tokens. Always test brand switches in sequence (default → clean → blocks), not just fresh loads.
 - **Case-insensitive FS:** `Hero.tsx` and `hero.ts` in one folder collide on macOS (`./Hero` resolves to the .ts). Name runtime modules distinctly.
 - **Stylelint `unit-allowed-list` always checks media queries** (no ignore option in v17); breakpoints need a reasoned disable comment.
+
+## 2026-10-26 — Peek exit popped
+
+- **An exit fade on an expo-out curve reads as a pop:** 74% of the change lands in the first third. Fades out use an in-out curve, and guide lines never fade: they retract along their length, finishing inside the state's own timer.
+- **Check exits frame by frame against the prototype** (sample a property at 60/200/350/500 ms); a screenshot of the end state can't show this class of bug.
