@@ -44,6 +44,7 @@
       "menu-bg": { "$type": "string", "$value": "neutral.200" },
       "menu-text": { "$type": "string", "$value": "neutral.975" },
       "menu-focus": { "$type": "string", "$value": "accent.900" },
+      "menu-shadow": { "$type": "string", "$value": "neutral.150" },
       "accent": { "$type": "string", "$value": "accent.900" },
       "on-accent": { "$type": "string", "$value": "accent.225" },
       "accent-text": { "$type": "string", "$value": "accent.900" },
@@ -115,6 +116,10 @@
         "descender": { "$type": "number", "$value": 0.21 },
         "cap": { "$type": "number", "$value": 0.686 }
       }
+    },
+    "separator-gap": {
+      "pipe": { "$type": "number", "$value": 0.3 },
+      "dot": { "$type": "number", "$value": 0.5 }
     }
   },
   "space": {
@@ -165,6 +170,10 @@
     "text-small": {
       "phone": { "$type": "string", "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" },
       "wide": { "$type": "string", "$value": "clamp(0.6875rem, 0.5rem + 0.2vw, 0.875rem)" }
+    },
+    "nav-gap": {
+      "phone": { "$type": "string", "$value": "clamp(1.125rem, 1.8vw, 2.8125rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.125rem, 1.8vw, 2.8125rem)" }
     },
     "text-control": {
       "phone": { "$type": "string", "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)" },
@@ -226,6 +235,7 @@
     "menu-label": { "$type": "string", "$value": "text" },
     "info-layout": { "$type": "string", "$value": "stack" },
     "font-smoothing": { "$type": "string", "$value": "auto" },
-    "link-underline": { "$type": "string", "$value": "always" }
+    "link-underline": { "$type": "string", "$value": "always" },
+    "menu-shape": { "$type": "string", "$value": "panel" }
   }
 }

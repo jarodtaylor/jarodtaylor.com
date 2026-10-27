@@ -44,6 +44,7 @@
       "menu-bg": { "$type": "string", "$value": "neutral.975" },
       "menu-text": { "$type": "string", "$value": "neutral.400" },
       "menu-focus": { "$type": "string", "$value": "neutral.400" },
+      "menu-shadow": { "$type": "string", "$value": "neutral.150" },
       "accent": { "$type": "string", "$value": "accent.675" },
       "on-accent": { "$type": "string", "$value": "neutral.275" },
       "accent-text": { "$type": "string", "$value": "accent.775" },
@@ -115,6 +116,10 @@
         "descender": { "$type": "number", "$value": 0.27 },
         "cap": { "$type": "number", "$value": 0.66 }
       }
+    },
+    "separator-gap": {
+      "pipe": { "$type": "number", "$value": 0 },
+      "dot": { "$type": "number", "$value": 0.5 }
     }
   },
   "space": {
@@ -165,6 +170,10 @@
     "text-small": {
       "phone": { "$type": "string", "$value": "clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem)" },
       "wide": { "$type": "string", "$value": "clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem)" }
+    },
+    "nav-gap": {
+      "phone": { "$type": "string", "$value": "calc(1.125 * clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem))" },
+      "wide": { "$type": "string", "$value": "calc(1.125 * clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem))" }
     },
     "text-control": {
       "phone": { "$type": "string", "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)" },
@@ -226,6 +235,7 @@
     "menu-label": { "$type": "string", "$value": "icon" },
     "info-layout": { "$type": "string", "$value": "split" },
     "font-smoothing": { "$type": "string", "$value": "auto" },
-    "link-underline": { "$type": "string", "$value": "always" }
+    "link-underline": { "$type": "string", "$value": "always" },
+    "menu-shape": { "$type": "string", "$value": "card" }
   }
 }

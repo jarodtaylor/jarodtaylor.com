@@ -4,6 +4,7 @@
     --_h: var(--layout-header-h-phone);
     --_x: var(--space-page-x-phone);
     --_gap: var(--space-col-gap-phone);
+    --_nav-gap: var(--header-nav-gap);
     --_control-h: var(--layout-control-h-phone);
     --_control-size: var(--header-control-font-size);
     --_talk-size: var(--talk-font-size);
@@ -25,6 +26,7 @@
       --_h: var(--layout-header-h-wide);
       --_x: var(--space-page-x-wide);
       --_gap: var(--space-col-gap-wide);
+      --_nav-gap: var(--header-nav-gap-wide);
       --_control-h: var(--layout-control-h-wide);
       --_control-size: var(--header-control-font-size-wide);
       --_talk-size: var(--talk-font-size-wide);
@@ -82,7 +84,7 @@
     border: 0;
     color: inherit;
     display: flex;
-    gap: calc(var(--_gap) * 1.125);
+    gap: var(--_nav-gap);
     inline-size: auto;
     inset: auto;
     margin: 0;
@@ -179,6 +181,23 @@
         inset: var(--_h) 0 auto;
         padding: var(--space-inset-sm) var(--_x) var(--space-inset-md);
         position: fixed;
+      }
+
+      /* card: a small raised card hung from the header's right end, instead of the full-width panel. */
+      @container style(--header-menu-shape: card) {
+        .nav-list:popover-open {
+          border: 0;
+          border-radius: var(--header-menu-radius);
+          box-shadow: 0 var(--space-stack-sm) var(--space-inset-lg) calc(var(--space-inset-sm) * -1) var(--header-menu-shadow);
+          inset: calc(var(--_h) - var(--space-inset-sm)) var(--_x) auto auto;
+          min-inline-size: calc(var(--space-stack-xl) * 3);
+          padding: var(--space-inset-sm) 0;
+        }
+
+        .nav-list:popover-open a {
+          font-weight: var(--header-control-font-weight);
+          padding: var(--space-inset-sm) var(--space-stack-md);
+        }
       }
 
       .nav-list:popover-open :focus-visible {

@@ -30,11 +30,11 @@
 
   .info-sep {
     color: var(--header-info-sep);
-    padding-inline: calc(var(--_size) * 0.3);
+    padding-inline: calc(var(--_size) * var(--header-info-sep-gap));
   }
 
   .info-dot {
-    padding-inline: calc(var(--_size) * 0.5);
+    padding-inline: calc(var(--_size) * var(--header-info-dot-gap));
   }
 
   /* Open to new roles: a small dot with a ring breathing out of it. Still under reduced motion. */

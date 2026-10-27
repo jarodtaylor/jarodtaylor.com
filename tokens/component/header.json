@@ -120,6 +120,14 @@
       "rule-bleed-wide": {
         "$type": "string",
         "$value": "{layout.rule-bleed-wide}"
+      },
+      "sep-gap": {
+        "$type": "number",
+        "$value": "{type.separator-gap.pipe}"
+      },
+      "dot-gap": {
+        "$type": "number",
+        "$value": "{type.separator-gap.dot}"
       }
     },
     "menu": {
@@ -139,6 +147,18 @@
       "focus": {
         "$type": "color",
         "$value": "{surface.menu.focus}"
+      },
+      "shape": {
+        "$type": "string",
+        "$value": "{choice.menu-shape}"
+      },
+      "shadow": {
+        "$type": "color",
+        "$value": "{graphic.shadow}"
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{shape.radius.control}"
       }
     },
     "nav-align": {
@@ -148,6 +168,14 @@
     "menu-label": {
       "$type": "string",
       "$value": "{choice.menu-label}"
+    },
+    "nav-gap": {
+      "$type": "string",
+      "$value": "{layout.nav-gap-phone}"
+    },
+    "nav-gap-wide": {
+      "$type": "string",
+      "$value": "{layout.nav-gap-wide}"
     }
   },
   "talk": {

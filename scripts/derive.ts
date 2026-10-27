@@ -63,6 +63,8 @@ export const ENUMS = {
   'font-smoothing': ['auto', 'antialiased'],
   /** Small links (the socials): underlined at rest (always), or only on hover and focus (hover). */
   'link-underline': ['always', 'hover'],
+  /** The open phone menu: a full-width panel under the header (panel), or a small raised card at the right (card). */
+  'menu-shape': ['panel', 'card'],
 } as const;
 export type EnumKnob = keyof typeof ENUMS;
 
@@ -99,7 +101,7 @@ type ExtraWeight = (typeof EXTRA_WEIGHTS)[number];
  * Fluid sizes are CSS expressions, one per shared breakpoint band: phone below 48rem, wide above.
  * The page frame (gutter, column gap, header and control heights, vertical rhythm, first-screen height),
  * the small type steps and the hero's own sizes all scale with the viewport, and each brand scales them its own way.
- * text-control sizes nav and buttons; stack-gap and stack-gap-tight space the hero's text groups (the gap between
+ * text-control sizes nav and buttons; nav-gap spaces the nav links; stack-gap and stack-gap-tight space the hero's text groups (the gap between
  * groups, and the tighter one between tagline and bio); rule-bleed is how far the info strip's rule runs past the gutter.
  */
 export const FLUID_SIZES = [
@@ -114,6 +116,7 @@ export const FLUID_SIZES = [
   'text-label',
   'text-small',
   'text-control',
+  'nav-gap',
   'stack-gap',
   'stack-gap-tight',
   'rule-bleed',
@@ -184,6 +187,8 @@ export interface Knobs {
     descent: { display: Token<number> };
     /** The display face's vertical metrics in em (OS/2 typo ascender, descender, cap height), for Peek's measurements. */
     metrics: { display: Record<'ascent' | 'descender' | 'cap', Token<number>> };
+    /** Extra space either side of the info strip's separators, in em of the strip's size: `pipe` (|) and `dot` (·). */
+    'separator-gap': Record<'pipe' | 'dot', Token<number>>;
   };
   /** base and radius are authored in px and emitted in rem; border-width stays px. */
   space: { base: Token<PxDimension>; density: Token<number> };
@@ -215,6 +220,7 @@ export interface Primitives {
     tracking: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
     descent: { $type: 'number'; display: Leaf<number> };
     metrics: { $type: 'number'; display: Record<'ascent' | 'descender' | 'cap', Leaf<number>> };
+    'separator-gap': { $type: 'number' } & Record<'pipe' | 'dot', Leaf<number>>;
     size: { $type: 'dimension' } & Record<TypeStep, Leaf<Dimension>>;
     'line-height': { $type: 'number' } & Record<LineHeight, Leaf<number>>;
   };
@@ -301,6 +307,7 @@ export function derive(knobs: Knobs): Primitives {
       tracking: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.tracking[r].$value) },
       descent: { $type: 'number', display: { $value: type.descent.display.$value } },
       metrics: { $type: 'number', display: pick(['ascent', 'descender', 'cap'] as const, (m) => type.metrics.display[m].$value) },
+      'separator-gap': { $type: 'number', ...pick(['pipe', 'dot'] as const, (g) => type['separator-gap'][g].$value) },
       size: {
         $type: 'dimension',
         ...mapScale(TYPE_SCALE, (exp) => scaleDim(toRem(type.base.$value), type.ratio.$value ** exp)),
@@ -388,6 +395,8 @@ function validate(k: Knobs): void {
     if (typeof axes !== 'string' || !VARIATION.test(axes))
       errors.push(`type.variation.${r} must be normal or a list like "wdth" 62, "opsz" 96 (got ${JSON.stringify(axes)})`);
   }
+  for (const g of ['pipe', 'dot'] as const)
+    num(`type.separator-gap.${g}`, k.type?.['separator-gap']?.[g]?.$value, (n) => n >= 0 && n <= 2, 'in [0, 2]');
   for (const m of ['ascent', 'descender', 'cap'] as const)
     num(`type.metrics.display.${m}`, k.type?.metrics?.display?.[m]?.$value, (n) => n >= 0 && n <= 2, 'in [0, 2]');
   num('type.descent.display', k.type?.descent?.display?.$value, (n) => n >= 0 && n <= 1, 'in [0, 1]');

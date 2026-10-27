@@ -1682,6 +1682,9 @@
       "menu-focus": {
         "$value": "{color.neutral.400}"
       },
+      "menu-shadow": {
+        "$value": "{color.neutral.150}"
+      },
       "accent": {
         "$value": "{color.accent.675}"
       },
@@ -1859,6 +1862,15 @@
         "cap": {
           "$value": 0.66
         }
+      }
+    },
+    "separator-gap": {
+      "$type": "number",
+      "pipe": {
+        "$value": 0
+      },
+      "dot": {
+        "$value": 0.5
       }
     },
     "size": {
@@ -2133,6 +2145,14 @@
         "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)"
       }
     },
+    "nav-gap": {
+      "phone": {
+        "$value": "calc(1.125 * clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem))"
+      },
+      "wide": {
+        "$value": "calc(1.125 * clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem))"
+      }
+    },
     "stack-gap": {
       "phone": {
         "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)"
@@ -2292,6 +2312,9 @@
     },
     "link-underline": {
       "$value": "always"
+    },
+    "menu-shape": {
+      "$value": "card"
     }
   }
 }

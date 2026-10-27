@@ -43,6 +43,12 @@
     },
     "rule-bleed-wide": {
       "$value": "{fluid.rule-bleed.wide}"
+    },
+    "nav-gap-phone": {
+      "$value": "{fluid.nav-gap.phone}"
+    },
+    "nav-gap-wide": {
+      "$value": "{fluid.nav-gap.wide}"
     }
   },
   "choice": {
@@ -83,6 +89,9 @@
     },
     "link-underline": {
       "$value": "{knob.link-underline}"
+    },
+    "menu-shape": {
+      "$value": "{knob.menu-shape}"
     }
   }
 }

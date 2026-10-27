@@ -471,6 +471,18 @@
     }
   }
 
+  /* The isometric figure's rail runs the full page, under the card: while Peek is up the card gets the page's ground
+     behind it (as a spread shadow, so its layout doesn't move). At rest the empty card box must not cover the rail. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 64rem) {
+    @container style(--hero-figure: isometric) {
+      :root:is([data-peek-state="on"], [data-peek-state="leaving"]) .spec {
+        background: var(--hero-bg);
+        box-shadow: 0 0 0 var(--space-stack-sm) var(--hero-bg);
+      }
+    }
+  }
+
   /* In columns the details fill the hero's floor, so the card rises to the open band under the header. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 64rem) {
@@ -514,11 +526,12 @@
     font-family: var(--header-control-font-family);
     font-size: var(--header-control-font-size);
     font-weight: var(--header-control-font-weight);
-    left: var(--_x);
     letter-spacing: var(--header-control-tracking);
     min-block-size: var(--layout-control-h-phone);
+    left: 50%;
     padding: 0 var(--space-stack-sm);
     position: fixed;
+    translate: -50% 0;
     z-index: 40;
   }
 
@@ -535,8 +548,13 @@
 
   /* Only the peek intro offers a button; the assemble intro is skipped by any key, click or scroll. */
   @container style(--hero-intro: peek) {
-    :root.intro .skip-intro {
-      display: block;
+    /* In the open middle of the floor, clear of the text block (the right corner belongs to Peek's spec card).
+       Phones have no room beside the socials; there a tap anywhere skips, as does any key or scroll everywhere. */
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      :root.intro .skip-intro {
+        display: block;
+      }
     }
   }
 

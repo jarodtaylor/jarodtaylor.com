@@ -54,6 +54,10 @@ export function Isometric() {
         <mask id="build-lattice-mask" maskUnits="userSpaceOnUse" x="-3000" y="-3000" width="6000" height="6000">
           <rect x="-3000" y="-3000" width="6000" height="6000" fill="url(#build-lattice-fade)" />
         </mask>
+        {/* The parts travel in from outside the mark; clipped at the drawing's top edge, they never cross the header. */}
+        <clipPath id="build-clip">
+          <rect x="-3000" y="-45.61" width="6000" height="6000" />
+        </clipPath>
         <mask id="build-rail-reveal" maskUnits="userSpaceOnUse" x="-3000" y="-3000" width="6000" height="6000">
           <path className="rail-draw" pathLength={1} d="M339.85 237.32L-1160.15 -2360.76" />
           <path className="rail-draw" pathLength={1} d="M339.85 237.32L1839.85 2835.4" />
@@ -64,7 +68,7 @@ export function Isometric() {
       <path className="rail" mask="url(#build-rail-reveal)" d="M-1160.15 -2360.76L1839.85 2835.4" />
 
       {/* The click settles around the joint, where the two tips meet. */}
-      <g className="assembly" style={{ transformBox: 'view-box', transformOrigin: '339.85px 237.32px' }}>
+      <g className="assembly" clipPath="url(#build-clip)" style={{ transformBox: 'view-box', transformOrigin: '339.85px 237.32px' }}>
         <g className="part part-t" style={T_MOTION}>
           {T_SIDES.map(([face, a, b]) => (
             <path key={a.join()} className={`face face-${face}`} d={side(a, b)} />

@@ -1682,6 +1682,9 @@
       "menu-focus": {
         "$value": "{color.accent.900}"
       },
+      "menu-shadow": {
+        "$value": "{color.neutral.150}"
+      },
       "accent": {
         "$value": "{color.accent.900}"
       },
@@ -1858,6 +1861,15 @@
         "cap": {
           "$value": 0.686
         }
+      }
+    },
+    "separator-gap": {
+      "$type": "number",
+      "pipe": {
+        "$value": 0.3
+      },
+      "dot": {
+        "$value": 0.5
       }
     },
     "size": {
@@ -2132,6 +2144,14 @@
         "$value": "clamp(0.75rem, 0.62rem + 0.22vw, 1rem)"
       }
     },
+    "nav-gap": {
+      "phone": {
+        "$value": "clamp(1.125rem, 1.8vw, 2.8125rem)"
+      },
+      "wide": {
+        "$value": "clamp(1.125rem, 1.8vw, 2.8125rem)"
+      }
+    },
     "stack-gap": {
       "phone": {
         "$value": "clamp(1rem, 2.3svh, 2.25rem)"
@@ -2291,6 +2311,9 @@
     },
     "link-underline": {
       "$value": "always"
+    },
+    "menu-shape": {
+      "$value": "panel"
     }
   }
 }
