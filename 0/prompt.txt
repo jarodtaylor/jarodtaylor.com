@@ -1,0 +1,5 @@
+Okay, a couple things. 1. you have to remember that my ADHD brain does not like to read walls of text. Step by step works way better, otherwise, I will breeze through what you say and miss something. 
+
+2. I have setup AWS CLI (and the MCP if necessary). 
+
+3. We need to make sure we're capturing decisions, open questions, etc. Otherwise, I will forget.
