@@ -840,8 +840,14 @@
     stroke-width: calc(var(--figure-stroke-width) * 2);
   }
 
-  /* Hover: the parts ease a quarter edge apart along their rail (--_pull, set on each part), and snap back home. */
+  /* Hover: the parts ease a quarter edge apart along their rail (--_pull, set on each part), and snap back home.
+     The figure is inert (pointer-events: none); only the isometric parts take the pointer back, so hidden figures
+     and the empty field stay click-through. */
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .build .assembly {
+      pointer-events: auto;
+    }
+
     .part {
       transition: translate calc(var(--_beat) * 2.4) var(--motion-easing-in);
     }
