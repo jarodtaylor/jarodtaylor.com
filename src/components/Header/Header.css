@@ -249,6 +249,7 @@
 
     @container style(--header-menu-shape: panel) {
       .nav-list {
+        block-size: auto; /* undo the popover's fit-content height, so it runs to the bottom */
         border-inline-start: var(--shape-border-width-default) solid var(--header-menu-border);
         inline-size: min(calc(var(--space-stack-xl) * 5), 100%);
         inset: var(--_h) 0 0 auto;
