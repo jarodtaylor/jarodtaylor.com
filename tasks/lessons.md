@@ -43,3 +43,9 @@
 
 - **An exit fade on an expo-out curve reads as a pop:** 74% of the change lands in the first third. Fades out use an in-out curve, and guide lines never fade: they retract along their length, finishing inside the state's own timer.
 - **Check exits frame by frame against the prototype** (sample a property at 60/200/350/500 ms); a screenshot of the end state can't show this class of bug.
+
+## 2026-10-28: Entire review on PR #5 (13 findings, all cleanup)
+- **After any rename or removal (a brand key, a role, a ramp step, a knob), sweep for leftovers in the same commit:** CLAUDE.md, DECISIONS paths, doc comments, tests, unused component tokens, and enum values that no longer do anything. Most of Entire's findings were things left behind after a change.
+- **Never commit build output into prototypes.** Seeds come from a script that rebuilds a pinned commit. Abandoned design rounds go to the `archive/prototypes` branch, not main.
+- **Generated CSS `content` on real content elements is read aloud by screen readers.** Give it an empty alternative (`content: attr(x) / ""`).
+- **Don't let two tiers share a token prefix** (e.g. a primitive `figure.*` and a component `figure.*`).
