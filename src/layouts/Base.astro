@@ -30,7 +30,7 @@ const brand = resolver.modifiers.brand;
 const brands = Object.keys(brand.contexts);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // The default brand's faces, fetched before the stylesheet asks for them. Remix brands load theirs on demand.
-const preloadFonts = ['archivo', 'schibsted-grotesk', 'martian-mono'];
+const preloadFonts = ['funnel-display', 'funnel-sans'];
 ---
 <!doctype html>
 <html lang="en" data-brand={brand.default}>

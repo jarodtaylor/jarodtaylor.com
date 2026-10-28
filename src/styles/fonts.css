@@ -1,7 +1,7 @@
 /*
  * Every face the brands use, self-hosted: latin-subset variable woff2 in public/fonts/, all SIL OFL 1.1.
  * A browser downloads only the faces the active brand's --type-family-* tokens name, so the Remix brands cost
- * nothing until they're switched on. Base.astro preloads the default brand's three.
+ * nothing until they're switched on. Base.astro preloads the default brand's (clean's) two.
  *
  * Each face that sets a lot of text has a metric-matched fallback ("<Face> Fallback", listed right after it in the
  * family token): a local Arial scaled to the face's width (size-adjust, measured on the hero's own copy at the
@@ -9,7 +9,7 @@
  * Not linted (stylelint ignoreFiles): font names, file URLs and metric overrides are the point of this file.
  */
 
-/* default: Archivo (the name, condensed), Schibsted Grotesk (text), Martian Mono (small print) */
+/* backstage: Archivo (the name, condensed), Schibsted Grotesk (text), Martian Mono (small print) */
 @font-face {
   font-family: "Archivo";
   font-style: normal;
@@ -87,7 +87,7 @@
   line-gap-override: 0%;
 }
 
-/* clean: Funnel Display (the name and tagline), Funnel Sans (text and labels) */
+/* clean (the default brand): Funnel Display (the name and tagline), Funnel Sans (text and labels) */
 @font-face {
   font-family: "Funnel Display";
   font-style: normal;

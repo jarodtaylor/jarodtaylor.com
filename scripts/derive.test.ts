@@ -6,7 +6,7 @@ import { derive, toSrgbGamut, ENUMS, RAMP, RAMPS, type EnumKnob, type Knobs, typ
 const load = (brand: string): Knobs =>
   JSON.parse(readFileSync(new URL(`../tokens/knobs/${brand}.json`, import.meta.url), 'utf8'));
 
-const brands = ['default', 'blocks', 'clean'] as const;
+const brands = ['backstage', 'blocks', 'clean'] as const;
 
 /** Leaf $values of a token group, in key order, excluding $-prefixed group metadata. */
 const values = <T>(group: object): T[] =>
@@ -91,7 +91,7 @@ describe.each(brands)('%s knobs reproduce the approved prototype', (brand) => {
 
   it('defines the same color roles as every other brand', () => {
     expect(Object.keys(knobs.color.role).filter((k) => !k.startsWith('$'))).toEqual(
-      Object.keys(load('default').color.role).filter((k) => !k.startsWith('$')),
+      Object.keys(load('backstage').color.role).filter((k) => !k.startsWith('$')),
     );
   });
 
@@ -133,7 +133,7 @@ describe('toSrgbGamut', () => {
 
 describe('validation', () => {
   const broken = (mutate: (k: Knobs) => void) => {
-    const k = load('default');
+    const k = load('backstage');
     mutate(k);
     return () => derive(k);
   };

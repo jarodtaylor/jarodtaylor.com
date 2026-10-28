@@ -28,11 +28,11 @@
     "brand": {
       "description": "Primitives derived from tokens/knobs/<brand>.json by scripts/derive.ts.",
       "contexts": {
-        "default": [{ "$ref": "generated/default.json" }],
+        "backstage": [{ "$ref": "generated/backstage.json" }],
         "blocks": [{ "$ref": "generated/blocks.json" }],
         "clean": [{ "$ref": "generated/clean.json" }]
       },
-      "default": "default"
+      "default": "clean"
     }
   },
   "resolutionOrder": [

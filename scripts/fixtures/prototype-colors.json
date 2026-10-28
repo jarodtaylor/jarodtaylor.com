@@ -1,6 +1,6 @@
 {
   "$description": "The approved prototypes' colors, by color role, from prototypes/r6-*/styles.css (Backstage rule is its color-mix(in oklch, ink 16%, bg), precomputed). derive.test.ts checks each brand's tokens/knobs file reproduces them within ΔE00 2.",
-  "default": {
+  "backstage": {
     "bg": "oklch(17.5% 0.026 252)",
     "text": "oklch(96% 0.012 240)",
     "text-muted": "oklch(76% 0.03 245)",

@@ -36,7 +36,7 @@ const resolver = readJson('resolver.json');
 const tierSources: { $ref: string }[] = [...resolver.sets.semantic.sources, ...resolver.sets.component.sources];
 const allowed = new Set(tierSources.flatMap(({ $ref }) => tokenIds(readJson($ref))).map((id) => `--${id.replaceAll('.', '-')}`));
 // Primitive groups are whatever derive() emits (color, size, font, knob, …); named only for a clearer message.
-const primitiveGroups = Object.keys(readJson('generated/default.json')).filter((key) => !key.startsWith('$'));
+const primitiveGroups = Object.keys(readJson('generated/clean.json')).filter((key) => !key.startsWith('$'));
 
 const tierVars = 'tokens/tier-vars';
 const tierMessages = ruleMessages(tierVars, {
