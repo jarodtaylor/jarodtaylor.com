@@ -1,0 +1,1 @@
+We can just ditch the old impeccable stuff. Don't need them. We'll start fresh. I created the blank repo: git@github.com:jarodtaylor/jarodtaylor.com.git -- as for jarodtaylor.com the registrar is with Dreamhost. I think I have a Cloudfront account, though. I will look.
