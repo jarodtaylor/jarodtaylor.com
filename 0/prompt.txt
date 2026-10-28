@@ -1,0 +1,156 @@
+<task-notification>
+<task-id>a2c42deeaaa59654c</task-id>
+<tool-use-id>toolu_01LutejcRJi4anoH3TVDDBz1</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jarod-Code-personal-jarodtaylor-com/e071936d-eecf-4712-8180-225a10b3edb2/tasks/a2c42deeaaa59654c.output</output-file>
+<status>completed</status>
+<summary>Agent "Map three r6 prototypes" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>I read all the source files in the three sketches and checked one screenshot (clean at 1440). The main finding: the header, info strip and text content are close to mergeable, but the three hero figures are three different kinds of artwork, and each sketch runs its own JS. A single markup would need one variant switch for the figure and behaviour, plus a few smaller structural switches (list in section 5).
+
+## 1. DOM outline
+
+**Backstage** (`r6-backstage/index.html`)
+- Body order: `a.skip`, then a hidden `svg.defs` holding `symbol#reg` (the registration-mark icon) and `symbol#jt` (viewBox `0 0 575.65 502.31`, 2 paths), then `div.stage`, then `button.skip-intro[data-skip-intro]`, then `script hero.js`.
+- `.stage` contains:
+  - `div.cols` with 12 `&lt;i style="--i:n"&gt;` (column guides)
+  - `header.masthead`: `a.mark &gt; svg &gt; use#jt`, `nav.nav &gt; button.nav-toggle[data-nav-toggle][aria-expanded] + ul#nav-list &gt; li*4`, `button.peek-toggle[aria-pressed][data-peek-toggle] &gt; svg(use#reg) + span.peek-word`, `a.talk`
+  - `p.info[data-peek][data-spec]`: `span.role` (containing `span.sep` "|") and `span.loc` (containing `span.dot` and `span.status`)
+  - `main#main &gt; section.hero`:
+    - `figure.figure`
+    - `div.stack` with `div.name-block[data-peek] &gt; h1.name &gt; span "Jarod" + span "Taylor"`, then `div.dims &gt; span.dim.dim--cap|--base|--size &gt; b`, then `p.tagline[data-build][data-peek] &gt; span.hl`, `p.bio[data-build][data-peek]`, `ul.social[data-build][data-peek]`
+    - `dl.spec` with 7 rows of `div[style=--r] &gt; dt + dd[data-readout]`
+- Figure is `svg.mono viewBox="-40 -40 655.65 582.31"` containing:
+  - `g.mono-bleed`: empty, filled by JS
+  - `g.mono-guides`: `path.g-tri` `M0 0H575.65L287.8 498.5Z`, 6 `path.g-h` (y = 0, 73.6, 93.2, 164.3, 333.9, 502.3), 9 `path.g-d` diagonals, `path.g-axis`. All have `pathLength="1"` and a `--d` stagger index.
+  - `g.mono-line`: the 2 JT paths
+  - `g.mono-marks`: `path.g-arc`, `text.g-deg` "60°", `text.g-size` "575.65 × 502.31", and `g.g-pts` with 21 vertex circles (r 3.5)
+
+**Blocks** (`r6-blocks/index.html`)
+- Body order: `a.skip-link`, then `div.first`, then `section#work.next`. `hero.js` loads in the head.
+- `.first` contains:
+  - `header.masthead`: `a.masthead-mark &gt; svg` (inline paths), `nav.nav &gt; button.nav-toggle[popovertarget] (svg icon) + ul.nav-list#nav-list[popover]`, `a.talk`. There is no Peek button.
+  - `p.info`: `span.info-role` (the "|" is plain text), `span.info-place` containing `span.info-sep` and `span.status &gt; span.status-dot`
+  - `main#main.hero`: the hero is `main` itself, with no `section` and no wrapper around the text. Children are flat: `h1.name` "Jarod Taylor" (no spans), `p.tagline &gt; em`, `p.bio`, `ul.social`, `figure.field`, `a.cue &gt; svg(.cue-shaft, .cue-head)`.
+- Figure is `svg.build viewBox="-10 -45.61 616.21 557.92" role="img"` with a `&lt;title&gt;`. It contains:
+  - `defs`: `pattern#lattice` (41.12 × 71.22 dot grid), `radialGradient#lattice-fade`, `mask#lattice-mask`, and `mask#rail-reveal` holding 2 `path.rail-draw` that run from the joint (339.85, 237.32) out to ±1500 units
+  - `rect.lattice` and `path.rail` (the full 60° line)
+  - `g.assembly` with 4 groups in hidden-line order: `g.part.part-t` (`face-d`, `face-h`), `g.part.part-j` (`face-d`, `face-h`, `face-d`), `g.part.part-t &gt; path.face.face-front`, `g.part.part-j &gt; path.face.face-front`
+  - 2 `g.arrow` (each `path.arrow-shaft` + `path.arrow-head`) and `g.click` with 3 short strokes
+
+**Clean** (`r6-clean/index.html`)
+- Body order: `a.skip`, then `canvas.field` (outside `main`), then `header.site`, then `main#main`.
+- `header.site` wraps both a `div.bar` (holding `a.mark &gt; svg` inline, `nav.nav &gt; ul &gt; li*4` with no toggle, `a.talk`) and the `p.info` (holding `span.info-role` and `span.info-place`, where "·" is plain text, then `span.status`). The header is `position:absolute`.
+- `main#main` contains:
+  - `section.hero[aria-labelledby]`: `h1.name#name`, then `div.details` (wrapping `p.tagline` with no accent span, `p.bio`, `ul.social`), then `a.cue &gt; span "Selected work" + svg`
+  - `section.next#work &gt; h2`
+- There is no figure element; the mark is drawn into the canvas.
+
+**Where the DOM differs**
+- **Hero container:** Backstage `section.hero &gt; .stack` / Blocks flat `main.hero` / Clean `section.hero &gt; .details` (the details wrapper groups tagline, bio and social only).
+- **Header wraps the info strip:** Clean only. In the other two it is a sibling.
+- **Phone nav:** Backstage uses an aria-expanded button driven by JS; Blocks uses `popover` with no JS; Clean has no toggle and moves the nav to a second row.
+- **Peek button and skip-intro button:** Backstage only.
+- **Name:** Backstage splits it into two spans plus `.dims`; the others have plain text.
+- **Tagline accent:** Backstage `span.hl` / Blocks `em` / Clean none (the whole tagline is accent-coloured).
+- **Status dot:** Backstage `::before` / Blocks a real `span.status-dot` / Clean `::before`.
+- **Cue:** Blocks has an icon only (shown at 60rem and up); Clean has a text label plus icon; Backstage has none.
+- **`.next` section:** in Blocks it sits outside `main`; in Clean it is inside `main`.
+
+## 2. Palette, type, layout
+
+| | Backstage | Blocks | Clean |
+|---|---|---|---|
+| bg | `oklch(17.5% .026 252)` slate | `#1633b1` cobalt | `oklch(.285 .058 170)` pine |
+| ink / muted | 96% .012 240 / 76% .03 245 | `#f2f5fb` / `#c2d1f3`, quiet `#a9bcec` | `.965 .014 165` / `.84 .035 168` |
+| accent | lime `oklch(90% .19 124)`, on-accent 22% .045 140 | persimmon `#f56333`, side faces `-h #d54c25` / `-d #af371c`, text `#fd9a73` | apricot `oklch(.81 .125 52)`, on-accent pine-deep |
+| extra | guide 68% .09 232, guide-ink 76% .08 232, redline 71% .18 20, surface | edge `#071869`, paper-h `#c3d1ef`, paper-d `#93aade`, faint = paper 22% | pine-deep `.235 .05 172` (`.next` section), rule = mist /.28 |
+| display font | Archivo, wght 820, wdth 62% (`font-stretch`) | Bricolage Grotesque, 800, `"wdth" 86, "opsz" 96` (via `font-variation-settings`), self-hosted | Funnel Display, 560 |
+| text font | Schibsted Grotesk; tagline 500 | Atkinson Hyperlegible Next; tagline uses the display face at 700 | Funnel Sans 380; tagline uses the display face at 420 |
+| label font | Martian Mono 400, wdth 87.5% (info, social); nav and talk are text 600, uppercase, +.08em | Atkinson 600, +.02em | Funnel Sans 500 |
+| display size | 35vw on phones; `min(12.5vw, 21svh)` at 48rem and up; lh .82, -.02em | `max(3.5rem, min(9.6vw, 19svh))`; lh .88, -.035em | `clamp(4.5rem, .6rem+16.4vw, 32rem)`; phone `clamp(4.5rem, 25.5vw, 9rem)`; lh .84, -.04em |
+| lead size | `clamp(1.625rem, 7vw, 2.25rem)`, then `min(2.6vw, 4.4svh)` | `clamp(1.5rem, .95rem+1.5vw, 3.4rem)` | `clamp(1.5rem, .9rem+1.6vw, 3.5rem)` |
+| body size | `clamp(1.0625rem, .82rem+.42vw, 1.5rem)`, 44ch | `clamp(1.0625rem, .78rem+.42vw, 1.45rem)`, 46ch | `clamp(1.0625rem, .85rem+.5vw, 1.625rem)`, 36em |
+| breakpoints | 48rem, 64rem | 47.99rem, 60rem | 720px, 1100px, 1800px |
+
+**Layout at 390 / 1440 / 2560**
+
+- **Backstage**
+  - 390: 4 columns. The name breaks onto 2 lines (spans become block). The figure is absolutely positioned behind the name: 78vw wide, pushed right by 23.4vw, opacity `--mark-phone` .3.
+  - 1440: 12 columns. `.stack` spans 1/-1 in row 1 and sits bottom-left (flex-end). The figure sits in columns 6/-1 of the same row, centred, `max-width: calc(var(--mark-h) * 655.65/582.31)`. Nav is centred absolutely; the Peek word shows; the spec card sits bottom-right.
+  - 2560: same layout. The name is capped by 21svh.
+- **Blocks**
+  - 390: the grid areas run field, name, tagline, bio, social. The figure is a block above the name, height `min((100vw - 2·gutter)/1.1045, 40svh)`. Nav is a popover.
+  - 1440 and 2560 (at 60rem and up): the text stays in the lower-left grid flow (`align-content:end`). `.field` becomes absolute on the right at `inline-size: var(--mark-share)` = 54vw, from inset-block space-m to the bottom. The cue arrow sits bottom-right. The name is capped by 19svh.
+- **Clean**
+  - All sizes: the canvas covers 100svh behind everything. The header is absolute. The hero grid rows are `1fr auto auto auto`, putting the name in row 2 and pushing it down. `.details` is a 12-column row with a top rule.
+  - 1440: tagline 1/6, bio 6/11, social 11/13 right-aligned. The screenshot shows the name on one line.
+  - 2560 (1800px and up): tagline 1/5, bio 6/10.
+  - 390 (720px and down): the bar becomes `"mark talk" / "nav nav"`, everything spans 1/-1, hero padding-top is 15.5rem.
+  - The canvas mark (`field.js`): on phones (`w &lt; 720`) it is 1.2w wide at y 0.2h; on wide screens it is `min(0.6w, 1.25h)` wide and bleeds off the right edge at y 0.06h.
+
+## 3. JS
+
+**Backstage `hero.js`** (7.2 KB)
+- Builds the bleed lines: each guide is extended 5000 units from both ends into `.mono-bleed`.
+- Clones `.mono-line` as `.mono-pen`. CSS animates the pen as a 0.03 dash lapping the outline every `--pen-lap` 16s.
+- Writes live readouts: the computed font sizes and families go into `data-spec` / `data-readout`.
+- `timeVertices()` samples both outline paths at 301 points and gives each vertex circle an `--at` delay so it pops as the pen passes.
+- A state machine sets `html[data-peek-state]` to `arm`, `on` or `leaving`, or removes it. The Peek toggle and Escape drive it.
+- Intro: the inline head script sets `.js`, `.intro` and `data-peek-state=arm`, guarded by sessionStorage `jt-intro`, `?intro` and no-preference reduced motion, with a 4s failsafe. The JS waits for `fonts.ready` (capped at 700ms), runs show, waits `--peek-settled` + `--peek-hold`, then hides. Any keydown, pointerdown, wheel, touchmove or scroll triggers `settle()`, which applies a no-transition frame via `.settling`. It also runs the phone menu.
+- Reduced motion: the intro is never armed, all transitions and animations are disabled, and the pen is `display:none`. Peek still works, as an instant cut.
+
+**Blocks `hero.js`** (1.2 KB)
+- Exits unless `.intro` is set. Sets sessionStorage `jt-r6-blocks`.
+- Skip (keydown, pointerdown, wheel, touchstart) calls `.finish()` on every finite animation. On `load` it waits for all of them to finish, then removes `intro` and `building`.
+- All choreography lives in CSS (`.building`):
+  - The rail draws out from the joint through the `rail-reveal` mask.
+  - Arrows draw then retract.
+  - The parts travel linearly from ±(123.36, 213.67) along the 60° rail and both arrive at `--t-click` 1340ms.
+  - Faces stay paper line-drawings on the field colour until the click, then a `step-end` switch fills them with colour.
+  - On the click the assembly scales to 1.022, three click strokes appear, and the rail opacity eases from .8 to .34.
+  - Text rises in a stagger; the name is never animated.
+- Hover (when hover is available and motion is allowed): the parts pull apart by (10.28, 17.8).
+- Reduced motion: the head script never adds `.intro`, the status pulse `::after` is gated off, and the hover pull is gated off.
+
+**Clean `field.js`** (4.9 KB)
+- A canvas 2D lattice: side `s = W/14`, row height `r = s·√3/2`. Each vertex draws edges at 0°, 60° and 120°.
+- Strokes are grouped by alpha quantised to 0.02. The base pass uses `--field-line` at .05 + .2 glow. Inside `clip(mark)` it uses `--field-mark` at .22 + .45 glow, then strokes the outline at .3.
+- A ring of light expands from the mark centre every 9000ms, throttled to 33ms per frame.
+- ResizeObserver (80ms debounce), IntersectionObserver and visibilitychange pause it.
+- No intro and no session handling.
+- Reduced motion: draws one still frame with no ring and listens for media-query changes. CSS kills the transitions and the breathe animation.
+
+## 4. Monogram geometry
+
+**The outline is shared.** All three use the same two path strings from `src/assets/jt-logo-icon.svg` (`M286.22 164.31h.08l-41.1-71.17…` and `m230.41 73.72 26.52.12…`) on base viewBox `0 0 575.65 502.31`. The header mark is the same in all three, though Backstage references a `&lt;symbol&gt;` while the other two inline the paths.
+
+**Each figure frames it differently:**
+- **Backstage** pads by 40 on every side (`-40 -40 655.65 582.31`). Its guides follow the outline's own edge lines (y = 73.6, 93.2, 164.3…), not the 14-division lattice.
+- **Blocks** redraws the outline as absolute-coordinate front faces. It is the same shape, except the J's front face starts at `M286.3 164.31`, folding in the `h.08` step. It adds extruded side faces offset by (+20.56, −35.61), which is length 41.12 at 60°, and its viewBox `-10 -45.61 616.21 557.92` includes that depth. Its `pattern#lattice` is 41.12 × 71.22 (two rows of 35.61), which is exactly Clean's lattice: 575.65/14 = 41.12, and 41.12·√3/2 = 35.61.
+- **Clean** draws the same lattice on canvas, scaled to page size by W/575.65.
+
+So Blocks and Clean share the lattice, and Backstage uses outline-edge guides. One caveat: the outline is not exactly on the 14-division lattice. For example, 164.31/35.61 = 4.61 rows, so both comments slightly overstate the fit.
+
+## 5. Differences a custom-property value cannot express
+
+1. **Figure renderer:** SVG construction drawing (Backstage), SVG extruded assembly with lattice pattern and rail (Blocks), or a full-viewport canvas (Clean). These are different elements and a different JS module each, so this needs an enumerated `figure` knob.
+2. **Figure placement model:** a grid item in columns 6/-1 (Backstage), absolutely positioned at 54vw on the right (Blocks), or a canvas behind the whole first viewport at `z-index:-1` positioned by JS (Clean). On phones: behind the name at .3 opacity, a block above the name, or a canvas bleeding off the top.
+3. **Intro system:** a Peek state machine with an intro-plus-replay toggle (Backstage), a one-shot CSS build that skips via `finish()` (Blocks), or none (Clean). The sessionStorage keys differ, and only Backstage has the `[data-skip-intro]` button and the 4s failsafe.
+4. **Peek-only DOM** in Backstage: the `.cols` grid lines, `.dims`, `dl.spec`, the `data-peek` / `data-spec` / `data-build` attributes, the redline `::before`/`::after` boxes, and the Peek toggle with `symbol#reg`.
+5. **Resting animation:** the pen lap (Backstage), the hover pull-apart of the parts (Blocks), or the expanding light ring (Clean).
+6. **Phone nav mechanism:** a JS aria-expanded button with an ≡ drawn in CSS, a `popover` with an SVG icon, or a wrapped second row with no toggle.
+7. **Header structure:** Clean nests the info strip inside an absolute `header.site &gt; .bar`. The others use a sibling info strip in a stage grid with rows `auto auto 1fr`. Backstage also centres the nav absolutely at 64rem and up.
+8. **Hero text grouping:** stacked bottom-left in one column (Backstage, Blocks), or the name on its own row above a ruled 12-column details row with right-aligned socials (Clean). This needs a wrapper element and grid-column spans per breakpoint.
+9. **Name markup:** Backstage needs two spans to force the 2-line break on phones, plus `white-space: nowrap`. Clean relies on `text-wrap: balance` with a phone-only size override.
+10. **Tagline accent:** a partial span (`.hl` or `em` around "behind the work.") versus the whole tagline in accent. This is expressible only if the span always exists and its colour is a token, so the markup should always carry it.
+11. **Cue:** none, icon-only shown at 60rem and up, or a labelled "Selected work" link. Needs presence and variant knobs.
+12. **Status dot:** a real span (Blocks, scale-pulse `::after`) versus `::before` with a box-shadow breathe. This is unifiable, but the animation keyframes differ, so it needs a knob or one shared choice.
+13. **Text transform:** Backstage sets nav, talk and Peek labels uppercase with +.08em tracking and the mono sentence case only for info and socials. The others never uppercase. `text-transform` can take a token value, but the per-element split (mono vs text face per role) needs role-level font tokens.
+14. **Font axes mechanism:** `font-stretch` (Backstage) versus `font-variation-settings` (Blocks). Clean has no axes. Both can be tokens, but a token set must define both, with defaults `normal` and `normal`.
+15. **Font loading:** Google `@import` (Backstage, Clean) versus self-hosted `@font-face` with preload (Blocks). This is a different `&lt;head&gt;` and `fonts.css` per brand.
+16. **Talk button shape:** pill filled with accent (Backstage), outlined with 0.375rem radius (Blocks), or square outlined (Clean). Mostly tokenisable (radius, fill and border colours), but the hover inversion target differs.
+17. **Below-fold `.next`:** inside versus outside `main`, paper versus pine-deep background, with or without an `h2`.
+18. **Blocks figure semantics:** `role="img"` with a `&lt;title&gt;`, versus `aria-hidden` (Backstage) or a decorative canvas (Clean).
+19. **Breakpoint values:** 48/64rem, 47.99/60rem, and 720/1100/1800px. Media queries cannot read custom properties, so one breakpoint set has to be chosen, or the per-brand layout handled with container queries and class switches.</result>
+<usage><subagent_tokens>91199</subagent_tokens><tool_uses>12</tool_uses><duration_ms>108170</duration_ms></usage>
+</task-notification>
