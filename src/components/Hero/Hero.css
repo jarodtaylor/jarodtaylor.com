@@ -117,9 +117,13 @@
     list-style: none;
   }
 
+  /* Each link: its icon, then its label in capitals. */
   .social a {
+    align-items: center;
     color: var(--hero-small-color);
-    display: inline-block;
+    display: inline-flex;
+    gap: calc(var(--_small) * 0.5);
+    text-transform: uppercase;
     padding-block: var(--space-inset-sm);
     text-decoration: underline;
     text-decoration-color: var(--surface-default-border);
@@ -128,6 +132,12 @@
     transition:
       color var(--motion-duration-fast) var(--motion-easing-out),
       text-decoration-color var(--motion-duration-fast) var(--motion-easing-out);
+  }
+
+  .social svg {
+    block-size: calc(var(--_small) * 1.15);
+    flex: none;
+    inline-size: calc(var(--_small) * 1.15);
   }
 
   .social a:hover {
