@@ -1,0 +1,140 @@
+<task-notification>
+<task-id>a049b5620b644d4b8</task-id>
+<tool-use-id>toolu_014doYAo926uimkYFpMKRBNf</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jarod-Code-personal-jarodtaylor-com/e071936d-eecf-4712-8180-225a10b3edb2/tasks/a049b5620b644d4b8.output</output-file>
+<status>completed</status>
+<summary>Agent "Map token pipeline and src" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Everything below was read from the repo; I changed nothing.
+
+## 1. tokens/
+
+**Knob files.** There are two, `tokens/knobs/default.json` and `tokens/knobs/alt.json`. They have the same fields:
+
+| Knob | default | alt |
+|---|---|---|
+| `color.neutral.hue` / `.chroma` | 250 / 0.012 | 70 / 0.02 |
+| `color.accent.hue` / `.chroma` | 255 / 0.16 | 30 / 0.14 |
+| `type.base` (dimension) | 1rem | 1.125rem |
+| `type.ratio` | 1.2 | 1.333 |
+| `type.family.body` / `.display` / `.mono` (string arrays) | system-ui stack / same / ui-monospace stack | Iowan Old Style… / Didot… / Courier New… |
+| `type.weight.body` / `.display` | 400 / 700 | 400 / 400 |
+| `space.base` / `space.density` | 1rem / 1 | 1rem / 1.5 |
+| `shape.radius` / `shape.border-width` | 0.25rem / 1px | 1rem / 2px |
+| `decoration` (string, enum) | `"rules"` | `"none"` |
+
+**resolver.json.** It has one `brand` modifier with contexts `default` → `generated/default.json` and `alt` → `generated/alt.json`, and `"default": "default"`. The resolution order is brand, then semantic, then component. `scripts/brands.ts` reads the brand list from here, so it is the single source.
+
+**Semantic files:**
+- `color.json`: `surface.{default,raised,inverse,accent}.{bg,text,text-muted,border,link,focus}` and `focus.ring`
+- `space.json`: `space.inset.{sm,md,lg}`, `space.stack.{xs..xl}`, `space.gutter`, `space.section`
+- `type.json`: `type.family.{body,heading,code}`, `type.weight.{body,heading}`, `type.size.{small,body,lead,h3,h2,h1,display}`, `type.leading.{body,snug,heading}`
+- `shape.json`: `shape.radius.{control,container,pill}`, `shape.border-width.{default,strong}`, `decoration` (`{knob.decoration}`)
+
+**Component files:**
+- `button.json`: bg, text, border-color, border-width, radius, padding-block, padding-inline, font-family, font-weight, font-size
+- `card.json`: bg, text, text-muted, border-color, border-width, radius, padding, gap
+- `section.json`: padding-block, gap, rule-width, decoration (`{decoration}`)
+
+**How an enumerated knob works, end to end:**
+1. The knob is a `$type: "string"` with `$extensions: {"com.jarodtaylor.enum": ["rules","none"]}`.
+2. `derive.ts` checks the value against `DECORATIONS` and outputs it as `knob.decoration`.
+3. Generated `src/styles/tokens.css` chains it: `--knob-decoration: rules;` → `--decoration: var(--knob-decoration);` → `--section-decoration: var(--decoration);`, inside `:root, [data-brand="default"]` and `[data-brand="alt"]` blocks in `@layer tokens`.
+4. The only consumer is `src/components/SectionShell/SectionShell.css`:
+   ```css
+   @container style(--section-decoration: rules) {
+     .section__title { border-block-end: var(--section-rule-width) solid var(--_border); ... }
+   }
+   ```
+   A comment there notes that style queries only match descendants, which is why the rule sits on the title rather than the section.
+
+## 2. scripts/derive.ts (320 lines, pure, no imports)
+
+`derive(knobs)` validates the knobs and returns primitives:
+- **`color.neutral` / `color.accent`:** 12-step OKLCH ramps (0, 50 … 950). Lightness is fixed per step (0.995 down to 0.22). Chroma is the knob value times a taper, then reduced until it fits sRGB. Each color also gets a `hex` fallback.
+- **`font.size`:** steps xs through 5xl, computed as base × ratio^(−2…6).
+- **`font.line-height`:** tight 1.1, snug 1.3, normal 1.55 (fixed).
+- **`font.family` / `font.weight`:** copied straight from the knobs.
+- **`size.space`:** steps 1–10, computed as base × multiplier (0.25…8) × density.
+- **`size.radius`:** sm ×0.5, md ×1, lg ×2, full 9999px.
+- **`size.border`:** thin ×1, thick ×2.
+- **`knob.decoration`.**
+
+**Fonts:** only family arrays and a body/display weight exist. There are no `wdth` or other axes, no font-variation tokens, no `@font-face`, and no font loading at all. I searched src, scripts, tokens, astro.config and package.json and found nothing; the brands use system and local font stacks. Per-brand font loading is planned but not built. `docs/PLAN.md:96-97` says the default brand's fonts should be self-hosted, subset, preloaded and metric-matched, and other brands' fonts should load "only when that brand is activated". The markup-invariance test already excludes those future lazily injected `&lt;link&gt;`s.
+
+The supporting scripts are `build-tokens.ts`, `check-tokens-fresh.ts`, `contrast.ts` with `check-contrast.ts`, `terrazzo-plugin-resolved-json.ts`, and tests (`derive.test.ts`, `contrast.test.ts`).
+
+## 3. src/
+
+- **Pages:**
+  - `index.astro` is a pre-launch home: one `SectionShell` at level 1 with bio paragraphs and two `Button` links.
+  - `lab.astro` is a noindex token playground: brand-picker buttons (`?brand=&lt;name&gt;`), pillar `Card`s on a raised surface, plus inverse and accent sections.
+  - `404.astro`.
+- **`layouts/Base.astro`:** sets `&lt;html data-brand={brand.default}&gt;`, inlines `layers.css`, and adds Person JSON-LD and a skip link. The brand switch script, which runs before first paint:
+  ```js
+  const requested = new URLSearchParams(location.search).get('brand');
+  if (brands.includes(requested)) document.documentElement.dataset.brand = requested;
+  ```
+  It has no header, footer or nav.
+- **Components (React .tsx with a CSS file each):**
+  - `Button` renders `&lt;a class="button"&gt;` when `href` is set, otherwise `&lt;button&gt;`.
+  - `Card` renders `article.card` with an optional `.card__eyebrow`, `h3.card__title` and `.card__body`.
+  - `SectionShell` renders `section.section.section--{default|raised|inverse|accent}` &gt; `.section__inner` &gt; h1/h2 `.section__title`. It maps surface tokens onto private `--_bg/_text/_link/_border/_focus` props.
+- **Hero/Header:** neither exists.
+- **Styles:** `src/styles/` holds `layers.css`, `reset.css`, `tokens.css` (generated), `base.css`, `utilities.css` and `global.css`.
+- **Content:** `src/content/data/` has career, pillars, testimonials, work and workbench JSON.
+- **`src/assets/` (untracked):** only `jt-logo-icon.svg` (336 B). It is the JT monogram mark: two `&lt;path&gt;`s, `viewBox="0 0 575.65 502.31"`, with no fill set, so it renders in currentColor.
+
+## 4. Tests and lint
+
+**`tests/markup-invariance.e2e.ts`:** for every built page, it loads the page under each brand via `?brand=` and snapshots `&lt;body&gt;` outerHTML. It then sets `dataset.brand` on the client for each other brand, waits two animation frames and snapshots again.
+- The HTML must be identical.
+- A computed-style string must differ, so the test can't pass if switching silently did nothing. It compares color, background-color, font-family, font-size, font-weight, padding, border and border-radius across all elements.
+- It strips Remix UI state attributes (`open`, `hidden`, `aria-expanded`, `data-state`, …) under `[data-remix-ui]`.
+- It skips if there are fewer than two brands.
+- `tests/site.ts` supplies `brands` and `builtPages`. `a11y.e2e.ts` also exists.
+
+**Stylelint (`scripts/stylelint-plugin-tokens.ts` plus `stylelint.config.js`):**
+- **`tokens/tier-vars`:**
+  - Every `var(--x)` and every property named in a style query must be a semantic or component token, or a private `--_` prop. Primitives (`--color-*`, `--size-*`, `--font-*`, `--knob-*`) and unknown names are rejected.
+  - Declaring any non-`--_` custom property is forbidden.
+  - A `--_` prop's value must be var() references only.
+  - The allowed list is read live from the token JSON.
+- **`tokens/no-brand-keys`:** no selector or at-rule condition may contain `data-brand` or `--brand`.
+- **Config rules:**
+  - No hex colors, named colors, or color functions (rgb…oklch, color-mix, light-dark).
+  - Units are limited to `%` and `fr`.
+  - `font*`, `line-height` and `letter-spacing` values must be a single `var(--…)`.
+  - Every disable comment needs a reason.
+- `tokens.css` and `reset.css` are not linted.
+
+## 5. Brands
+
+The code has two brands: `default` and `alt`. Both knob files say they are placeholders:
+- `default`: "PLACEHOLDER values until the brand is designed in Phase 1"
+- `alt`: "PLACEHOLDER brand that exists to prove Remix differs in more than color"
+
+The decisions log names the three real brands, but they exist only as prototypes in `prototypes/r6-*`, not as tokens. `docs/DECISIONS.md:55` (2026-10-24) records the lock:
+- Backstage-lite is the default (`prototypes/r6-backstage/`, using the R1 fonts).
+- Building blocks (`r6-blocks/`) and Clean and sharp (`r6-clean/`) are the Remix brands.
+- Clean keeps Funnel Display/Sans.
+- Each Remix brand keeps its own type.
+
+## 6. Git
+
+- **Current branch:** `feat/design-direction`. Untracked: `.impeccable/questions/` and `src/assets/`.
+- **Local branches:** feat/deploy, feat/design-direction, feat/foundation, main.
+- **Remote branches:** origin/HEAD → origin/main, origin/feat/deploy, origin/feat/foundation, origin/main. `feat/design-direction` has never been pushed.
+- **Base:** main is an ancestor of HEAD, so the branch is based on main. It is 39 commits ahead.
+- **What the branch adds:** only prototypes, `.impeccable/`, `PRODUCT.md`, `docs/DECISIONS.md`, `docs/design/*` and `tasks/lessons.md`. It has no changes to src, tokens or scripts, so everything in sections 1–4 is the state of main.
+- **`git log --oneline main -5`:**
+  ```
+  78adbd9 Merge pull request #3 from jarodtaylor/feat/deploy
+  094502b Merge branch 'feat/foundation' into feat/deploy
+  98b283e Address PR review feedback (#1)
+  7748990 Log email verification and DKIM
+  ae42415 Broaden role line to match LinkedIn positioning
+  ```
+- **HEAD:** `9aa29d0 docs: lock the three round-6 brands; Backstage-lite is the default`.</result>
+<usage><subagent_tokens>60516</subagent_tokens><tool_uses>8</tool_uses><duration_ms>64560</duration_ms></usage>
+</task-notification>
