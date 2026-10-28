@@ -44,10 +44,6 @@
       "$type": "dimension",
       "$value": "{shape.border-width.default}"
     },
-    "draw-duration": {
-      "$type": "duration",
-      "$value": "{motion.duration.slow}"
-    },
     "draw-easing": {
       "$type": "cubicBezier",
       "$value": "{motion.easing.draw}"
@@ -79,10 +75,6 @@
       "$type": "color",
       "$value": "{graphic.guide-ink}"
     },
-    "card-bg": {
-      "$type": "color",
-      "$value": "{surface.raised.bg}"
-    },
     "card-text": {
       "$type": "color",
       "$value": "{surface.raised.text}"
@@ -98,10 +90,6 @@
     "font-size": {
       "$type": "string",
       "$value": "{type.fluid.small-phone}"
-    },
-    "duration": {
-      "$type": "duration",
-      "$value": "{motion.duration.base}"
     },
     "easing": {
       "$type": "cubicBezier",

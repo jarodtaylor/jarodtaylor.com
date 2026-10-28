@@ -189,14 +189,6 @@
       "$type": "string",
       "$value": "{layout.figure-wide}"
     },
-    "intro-duration": {
-      "$type": "duration",
-      "$value": "{motion.duration.slow}"
-    },
-    "intro-easing": {
-      "$type": "cubicBezier",
-      "$value": "{motion.easing.draw}"
-    },
     "lattice-drop-phone": {
       "$type": "number",
       "$value": "{layout.lattice-drop-phone}"
