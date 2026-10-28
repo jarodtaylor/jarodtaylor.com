@@ -225,12 +225,14 @@ export interface Primitives {
     space: { $type: 'dimension' } & Record<SpaceStep, Leaf<Dimension>>;
     radius: { $type: 'dimension' } & Record<RadiusStep, Leaf<Dimension>>;
     border: { $type: 'dimension' } & Record<BorderStep, Leaf<Dimension>>;
+    /** Whole lattice rows the lattice mark drops, per band. Under size, not figure, so the primitive tier never shares
+        a prefix with the figure.* component tokens. */
+    'lattice-drop': { $type: 'number' } & Record<FluidBand, Leaf<number>>;
   };
   fluid: { $type: 'string'; $extensions: typeof NOT_FOR_FIGMA } & Record<FluidSize, Record<FluidBand, Leaf<string>>>;
   duration: { $type: 'duration' } & Record<DurationStep, Leaf<Duration>>;
   easing: { $type: 'cubicBezier' } & Record<EasingName, Leaf<CubicBezier>>;
   knob: { $type: 'string' } & { [K in EnumKnob]: Leaf<(typeof ENUMS)[K][number]> };
-  figure: { $type: 'number'; 'lattice-drop': Record<FluidBand, Leaf<number>> };
 }
 
 /** Figma variables can't hold CSS expressions; the Figma export skips groups carrying this. */
@@ -331,6 +333,7 @@ export function derive(knobs: Knobs): Primitives {
         thin: { $value: scaleDim(shape['border-width'].$value, 1) },
         thick: { $value: scaleDim(shape['border-width'].$value, 2) },
       },
+      'lattice-drop': { $type: 'number', ...pick(FLUID_BANDS, (b) => knobs.figure['lattice-drop'][b].$value) },
     },
     fluid: {
       $type: 'string',
@@ -343,7 +346,6 @@ export function derive(knobs: Knobs): Primitives {
     duration: { $type: 'duration', ...pick(DURATIONS, (d) => ({ value: round(knobs.motion.duration[d].$value.value * 1000, 3), unit: 'ms' as const })) },
     easing: { $type: 'cubicBezier', ...pick(EASINGS, (e) => list(knobs.motion.easing[e].$value).map(Number) as CubicBezier) },
     knob: { $type: 'string', ...pick(Object.keys(ENUMS) as EnumKnob[], (e) => knobs.enum[e].$value) } as Primitives['knob'],
-    figure: { $type: 'number', 'lattice-drop': pick(FLUID_BANDS, (b) => knobs.figure['lattice-drop'][b].$value) },
   };
 }
 

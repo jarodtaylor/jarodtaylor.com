@@ -2087,6 +2087,15 @@
           "unit": "px"
         }
       }
+    },
+    "lattice-drop": {
+      "$type": "number",
+      "phone": {
+        "$value": 0
+      },
+      "wide": {
+        "$value": 0
+      }
     }
   },
   "fluid": {
@@ -2348,17 +2357,6 @@
     },
     "hero-ground": {
       "$value": "none"
-    }
-  },
-  "figure": {
-    "$type": "number",
-    "lattice-drop": {
-      "phone": {
-        "$value": 0
-      },
-      "wide": {
-        "$value": 0
-      }
     }
   }
 }

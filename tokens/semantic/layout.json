@@ -52,11 +52,11 @@
     },
     "lattice-drop-phone": {
       "$type": "number",
-      "$value": "{figure.lattice-drop.phone}"
+      "$value": "{size.lattice-drop.phone}"
     },
     "lattice-drop-wide": {
       "$type": "number",
-      "$value": "{figure.lattice-drop.wide}"
+      "$value": "{size.lattice-drop.wide}"
     }
   },
   "choice": {
