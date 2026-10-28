@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import layers from '../styles/layers.css?raw';
+import fontsCss from '../styles/fonts.css?raw';
 import resolver from '../../tokens/resolver.json';
 
 interface Props {
@@ -29,8 +30,22 @@ const person = {
 const brand = resolver.modifiers.brand;
 const brands = Object.keys(brand.contexts);
 const canonical = new URL(Astro.url.pathname, Astro.site);
-// The default brand's faces, fetched before the stylesheet asks for them. Remix brands load theirs on demand.
-const preloadFonts = ['funnel-display', 'funnel-sans'];
+// The default brand's faces, fetched before the stylesheet asks for them (Remix brands load theirs on demand).
+// Derived, so changing the default brand in resolver.json changes the preloads: the default's family knobs name
+// the faces, and fonts.css's @font-face rules map each face to its file.
+const knobFiles = import.meta.glob<{ type: { family: Record<string, { $value: string }> } }>('../../tokens/knobs/*.json', {
+  eager: true,
+  import: 'default',
+});
+const defaultFamilies = ['display', 'text', 'label'].map(
+  (role) => knobFiles[`../../tokens/knobs/${brand.default}.json`]!.type.family[role]!.$value,
+);
+const faceFiles = [...fontsCss.matchAll(/@font-face\s*\{([^}]*)\}/g)].flatMap(([, rule]) => {
+  const family = /font-family:\s*"([^"]+)"/.exec(rule!)?.[1];
+  const file = /url\("\/fonts\/([\w-]+)\.woff2"\)/.exec(rule!)?.[1];
+  return family && file ? [{ family, file }] : [];
+});
+const preloadFonts = [...new Set(defaultFamilies.map((f) => faceFiles.find((face) => face.family === f)?.file))].filter(Boolean);
 ---
 <!doctype html>
 <html lang="en" data-brand={brand.default}>
