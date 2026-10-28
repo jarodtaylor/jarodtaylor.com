@@ -1,0 +1,90 @@
+<task-notification>
+<task-id>a0beeed4866fde3bd</task-id>
+<tool-use-id>toolu_01Rj7aD7Qa2gz8ZZDyabbMAt</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jarod-Code-personal-jarodtaylor-com/e071936d-eecf-4712-8180-225a10b3edb2/tasks/a0beeed4866fde3bd.output</output-file>
+<status>completed</status>
+<summary>Agent "Map Impeccable skill workflow" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>I've read the installed skill, its references, the agent headers and the impeccable.style docs. One finding matters most: **setting `buildPath: "code"` does not by itself stop image generation.** The direction-picking round still makes images whenever an image tool or API key is available.
+
+**1. Commands** (`~/.claude/skills/impeccable/SKILL.md`, `scripts/command-metadata.json`)
+- **Build**
+  - `shape`: interviews you and writes a design brief. No code.
+  - `init` (alias `teach`): writes PRODUCT.md and records `buildPath`.
+  - `document`: writes DESIGN.md from existing code.
+  - `extract`: pulls repeated tokens and components into the design system.
+  - `craft`: deprecated alias for ordinary new work.
+- **Evaluate**
+  - `critique`: UX review with scores, plus a detector run and browser overlay.
+  - `audit`: accessibility, performance, responsive and anti-pattern checks, rated P0–P3.
+- **Refine**
+  - `polish`: final pass before shipping.
+  - `bolder` / `quieter`: turn the volume up or down.
+  - `distill`: strip to essentials.
+  - `harden`: errors, i18n, edge cases.
+  - `onboard`: first-run flows and empty states.
+- **Enhance**
+  - `animate`, `colorize`, `typeset`: motion, colour, typography.
+  - `layout`: spacing and hierarchy.
+  - `delight`: personality touches.
+  - `overdrive`: push past convention.
+- **Fix**
+  - `clarify`: UX copy.
+  - `adapt`: responsive and devices.
+  - `optimize`: UI performance.
+- **Iterate**
+  - `live`: pick an element in the browser and get variants hot-swapped in.
+  - `generate`: the same, but for an element you name, with no manual picking.
+- **Admin:** `hooks`, `doctor`, `pin`.
+
+**2. Code-first flow** (`reference/new-work.md`, `init.md`, `shape.md`)
+- **Order:** `init` → (`shape` if you want a brief) → new-work → `polish` / `critique` / `audit` → `live` for tweaks.
+- **How the world is chosen:**
+  - The agent lists seven directions drawn from the audience's world.
+  - `impeccable concept-seed --scope direction --mode &lt;mode&gt;` randomly assigns one and adds challengers.
+  - These show up as cards on a local page (`impeccable serve-question`) with re-roll (plain, safer or bolder) and a plain "category standard" option. You lock one.
+  - Inside an established world, `--scope surface` deals layout options instead.
+- **Code-led build:** no comp round. The ambition is written into a "Direction contract" in the surface brief: THESIS, OWN-WORLD, STORY, FIRST VIEWPORT, FORM and FINISH.
+- **Artifacts:**
+  - PRODUCT.md (product truth).
+  - Surface brief, managed with `impeccable surface-brief read|write`.
+  - DESIGN.md (written at the end from the finished build) plus the `.impeccable/design.json` sidecar.
+  - Screenshots in `.impeccable/review/`.
+- **Image catch:** new-work.md:53 says "When image generation exists, every card also declares a `comp`". In code-led mode, the chosen card's image is still used later as the "critique reference".
+- **To skip images completely:** set `buildPath: "code"` and also take image generation away (no image tool or key). Without it, cards show palette chips and simple wireframes, and the docs say "code-led is the only path".
+
+**3. buildPath** (new-work.md:55, `doctor.md:49`, impeccable.style/docs/config)
+- `"comp"` means a generated mock comes first and the build is checked against it. `"code"` means build directly.
+- `config.local.json` overrides it per machine. The page toggle changes only the current session.
+- Your project's `"comp"` is why both rounds made mocks. There is no separate "disable mocks" key.
+- Other keys:
+  - `hook.{enabled,quiet,perEditRules}`
+  - `detector.{ignoreRules,ignoreFiles,ignoreValues,designSystem.enabled,extensions}`
+  - `projectRoots`: separate design folders in one repo, each with its own PRODUCT.md and DESIGN.md.
+  - `stalenessCheck`
+
+**4. Tokens** (`reference/extract.md`, `document.md`)
+- `extract` is generic: consolidate things used 3+ times, split primitive vs semantic tokens, and stop to ask if no design system exists.
+- `document` reads DTCG / Style Dictionary / `tokens.json` as inputs. It writes DESIGN.md in the Google Stitch format: YAML frontmatter limited to colors, typography, rounded, spacing and components, with everything else in the sidecar. It says the "frontmatter is normative".
+- **Conflicts with a multi-brand DTCG pipeline:**
+  - DESIGN.md assumes one brand and becomes a second source of truth.
+  - The drift detector checks code against DESIGN.md's fonts, colours, radii and type sizes.
+  - Ways around it: make DESIGN.md a generated output of the pipeline, use `projectRoots` for one per brand, or set `detector.designSystem.enabled: false`.
+
+**5. Live mode and slop detector** (`reference/live.md`, `hooks.md`, `critique.md`)
+- **Live:** `impeccable live` plus a background `live-poll` loop. It needs a dev server with hot reload (or a static file). You select an element, it generates variants, and accepted ones are written back to source. Steering and manual copy edits are supported.
+- **Detector you can run in CI:**
+  - Command: `npx impeccable detect &lt;dir|file|url&gt;`.
+  - Flags: `--json`, `--quiet`, `--no-advisory`, `--no-design-system`, `--scope type,layout`, `--viewport WxH`, `--no-config`, `--no-inline-ignores`.
+  - Exit codes: 0 clean, 2 findings, 1 scan failure.
+  - It reads the config ignores and supports `impeccable-disable` comments in files.
+  - Separately, a per-edit hook covers the obvious problems and a Stop hook runs the full rule set. Your hook consent is recorded in `config.local.json`.
+- The banned patterns no scanner catches are in `reference/craft-floor.md` (I didn't open it). There's a catalog at impeccable.style/slop.
+
+**6. Subagents** (`~/.claude/agents/impeccable-*.md`)
+- **finish-reviewer:** runs at the end of every new-work build, fresh with no conversation history, given the screenshots and the contract. It returns one of ship, fix, rebuild or recapture, with at most two fix rounds.
+- **documenter:** runs after the last fix and writes DESIGN.md and `design.json` from what was built.
+- **asset-producer:** comp-led only. It creates the comps and image "plates" (illustrations, photos, textures) that the build places.
+- **manual-edit-applier:** live mode only. It applies batches of manual copy edits to source.</result>
+<usage><subagent_tokens>79211</subagent_tokens><tool_uses>15</tool_uses><duration_ms>80138</duration_ms></usage>
+</task-notification>
