@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { bleed, CORNERS, HEIGHT, PATHS, penFraction, WIDTH } from '../../lib/monogram';
+import { bleed, CORNERS, edgeGuides, HEIGHT, PATHS, penFraction, WIDTH } from '../../lib/monogram';
 
 type Line = [number, number, number, number];
 
@@ -10,19 +10,11 @@ const PAD = 40;
 const L = -PAD;
 const R = WIDTH + PAD;
 
-/** The mark's construction: its triangle, the rows its horizontals sit on, and its 60° diagonals, each run past the mark. */
+/** The mark's construction: its triangle, the rows its horizontals sit on, and its slanted edges, each run past the mark. */
 const ROWS = [0, 73.6, 93.2, 164.3, 333.9, 502.3];
-const DIAGONALS: [Line, number][] = [
-  [[-26.2, -40, 310.1, 542.3], 0],
-  [[55.9, -40, 392, 542.3], 1],
-  [[86.2, -40, 422.3, 542.3], 2],
-  [[168.3, -40, 504.6, 542.3], 3],
-  [[191.2, -40, 527.4, 542.3], 4],
-  [[273.3, -40, 609.5, 542.3], 5],
-  [[600, -40, 263.8, 542.3], 2],
-  [[518, -40, 181.6, 542.3], 3],
-  [[364.9, -40, 28.5, 542.3], 4],
-];
+/** One line per slanted edge, exactly on it; they draw in left to right over six steps. */
+const EDGES = edgeGuides([L, L], [R, HEIGHT + PAD]);
+const DIAGONALS = EDGES.map((g, i): [Line, number] => [g, Math.round((i * 5) / Math.max(1, EDGES.length - 1))]);
 const AXIS: Line = [287.8, -40, 287.8, 542.3];
 const GUIDES: [Line, number][] = [...ROWS.map((y, i): [Line, number] => [[L, y, R, y], i]), ...DIAGONALS, [AXIS, 6]];
 

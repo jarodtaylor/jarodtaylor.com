@@ -68,6 +68,41 @@ export function penFraction([px, py]: Point): number {
   return best.at;
 }
 
+type Line = [number, number, number, number];
+
+/**
+ * The mark's slanted construction: one line through each non-horizontal outline edge, extended to the box [lo, hi].
+ * Every guide lies exactly on the edge it extends, so none runs beside the outline (the outline isn't drawn exactly on
+ * a 60° lattice, so hand-placed 60° guides did), and edges whose lines nearly coincide share one guide.
+ * Sorted left to right by where each crosses the top of the box.
+ */
+export function edgeGuides(lo: Point, hi: Point): Line[] {
+  const edges = OUTLINES.flatMap((o) => o.map((a, i): [Point, Point] => [a, o[(i + 1) % o.length]!]));
+  // Each slanted edge as x at the box's top and bottom rows, plus its length.
+  const lines = edges
+    .map(([a, b]) => {
+      const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      const at = (y: number) => a[0] + ((y - a[1]) * (b[0] - a[0])) / (b[1] - a[1]);
+      return { len, top: at(lo[1]), bottom: at(hi[1]), slope: (b[0] - a[0]) / (b[1] - a[1]), slanted: Math.abs(b[1] - a[1]) >= len * 0.5 };
+    })
+    // Too short to guide, or (near) horizontal: the rows cover those.
+    .filter((l) => l.len >= 10 && l.slanted)
+    .sort((p, q) => q.len - p.len);
+  // Lines that nearly coincide inside the box (within 3° and 6 units at either row) read as one doubled line:
+  // the longest edge keeps the guide, and the others are drawn by the outline alone.
+  const kept: typeof lines = [];
+  for (const l of lines) {
+    const twin = kept.some(
+      (k) =>
+        Math.abs(Math.atan(k.slope) - Math.atan(l.slope)) < (3 * Math.PI) / 180 &&
+        Math.min(Math.abs(k.top - l.top), Math.abs(k.bottom - l.bottom)) < 6,
+    );
+    if (!twin) kept.push(l);
+  }
+  const f = (n: number) => +n.toFixed(2);
+  return kept.map((l): Line => [f(l.top), lo[1], f(l.bottom), hi[1]]).sort((p, q) => p[0] - q[0]);
+}
+
 /**
  * A construction line continued out of both ends, just past any screen edge: two paths that grow away from the mark.
  * The reach is kept short (2500 units clears the farthest corner from 390 to 2560 wide), so most of each path is on
