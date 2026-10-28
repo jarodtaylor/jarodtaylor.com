@@ -228,7 +228,8 @@
     "info-layout": { "$type": "string", "$value": "stack" },
     "font-smoothing": { "$type": "string", "$value": "auto" },
     "link-underline": { "$type": "string", "$value": "always" },
-    "menu-shape": { "$type": "string", "$value": "panel" }
+    "menu-shape": { "$type": "string", "$value": "panel" },
+    "hero-ground": { "$type": "string", "$value": "plotter" }
   },
   "figure": {
     "lattice-drop": {

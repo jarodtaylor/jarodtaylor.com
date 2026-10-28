@@ -2294,6 +2294,9 @@
     },
     "menu-shape": {
       "$value": "card"
+    },
+    "hero-ground": {
+      "$value": "none"
     }
   },
   "figure": {

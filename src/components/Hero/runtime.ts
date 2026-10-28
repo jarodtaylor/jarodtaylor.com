@@ -1,7 +1,7 @@
 /**
  * Hero runtime: one small module for every brand. CSS owns every beat; this only moves state on <html>
- * (data-peek-state, .intro, .building, .settling), keeps the clock, writes Peek's readouts and paints the lattice
- * canvas. It reads the brand's choices from tokens (--hero-intro, --hero-figure), so a brand switch
+ * (data-peek-state, .intro, .building, .settling), keeps the clock, writes Peek's readouts and paints the hero's
+ * canvas (the lattice figure, or the plotter ground). It reads the brand's choices from tokens (--hero-intro, --hero-figure), so a brand switch
  * (html[data-brand] changing) just re-reads them. Nothing here adds or removes elements in <body>.
  *
  * The intro is decided before first paint by the inline script in index.astro (once per session, never under
@@ -301,6 +301,190 @@ function lattice(canvas: HTMLCanvasElement): () => void {
   };
 }
 
+// The plotter: the hero's real column grid, faint, with a plotter head walking it --------------------------------
+// Every vertical is a gutter of the 4 / 12 column grid and every row one module (column + gutter) down, read from
+// the hero's computed layout. The head, a registration target in the mark's colour, walks gutter to gutter along
+// the lines only, keeps to the figure's side of the sheet, leaves a fading trail and reads out where it stops.
+// Paused off-screen and in hidden tabs; one still frame (grid and parked head) under reduced motion.
+
+function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return () => {};
+  const SPEED = 0.07; // px per ms: unhurried, like a pen plotter
+  const PAUSE = 1400;
+  const TRAIL = 7000; // ms for a stroke of trail to fade out
+  type Stop = { c: number; r: number; x: number; y: number };
+  let w = 0;
+  let h = 0;
+  let xs: number[] = [];
+  let ys: number[] = [];
+  let ink = { grid: '', pen: '', head: '' };
+  let font = '';
+  let head = { c: 0, r: 0 };
+  let path: Stop[] = [];
+  let seg = 0;
+  let segAt = 0;
+  let trail: { x: number; y: number; at: number }[] = [];
+  let raf = 0;
+  let last = 0;
+  let visible = true;
+
+  function layout() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const cs = getComputedStyle(hero);
+    const cols = cs.gridTemplateColumns.split(' ').map(parseFloat);
+    const gap = parseFloat(cs.columnGap);
+    const left = parseFloat(cs.paddingLeft);
+    const top = parseFloat(cs.paddingTop);
+    const p = cols[0]! + gap;
+    xs = [left, ...cols.map((c, i) => left + i * p + c + (i < cols.length - 1 ? gap / 2 : 0))];
+    ys = [];
+    for (let y = top; y <= h - top + 1; y += p) ys.push(y);
+    ink = { grid: token('--spec-guide'), pen: token('--figure-guide-ink'), head: token('--figure-mark') };
+    font = `${getComputedStyle($('.info')!).fontSize} ${token('--spec-font-family')}`;
+    head = { c: xs.length - 2, r: 0 };
+    path = [];
+    trail = [];
+  }
+
+  // The next stop favours the figure's side of the sheet, away from the text block (bottom left).
+  function plan(now: number) {
+    const n = xs.length;
+    const m = ys.length;
+    let c: number;
+    let r: number;
+    do {
+      c = Math.floor(Math.random() * n);
+      r = Math.floor(Math.random() * m);
+    } while ((c < n * 0.5 && r > m * 0.35) || (c === head.c && r === head.r));
+    const turn = Math.random() < 0.5 ? { c, r: head.r } : { c: head.c, r };
+    path = [head, turn, { c, r }].map((q) => ({ ...q, x: xs[q.c]!, y: ys[q.r]! }));
+    seg = 0;
+    segAt = now + PAUSE;
+  }
+
+  function cross(x: number, y: number, s: number) {
+    ctx!.moveTo(x - s, y);
+    ctx!.lineTo(x + s, y);
+    ctx!.moveTo(x, y - s);
+    ctx!.lineTo(x, y + s);
+  }
+
+  function frame(now: number | null) {
+    const c2 = ctx!;
+    c2.clearRect(0, 0, w, h);
+    c2.lineWidth = 1;
+    // The sheet: faint gutter lines, a cross where each meets a module row.
+    c2.strokeStyle = ink.grid;
+    c2.globalAlpha = 0.05;
+    c2.beginPath();
+    xs.forEach((x) => (c2.moveTo(x, 0), c2.lineTo(x, h)));
+    ys.forEach((y) => (c2.moveTo(0, y), c2.lineTo(w, y)));
+    c2.stroke();
+    c2.globalAlpha = 0.28;
+    c2.beginPath();
+    xs.forEach((x) => ys.forEach((y) => cross(x, y, 5)));
+    c2.stroke();
+
+    let pos = { x: xs[head.c]!, y: ys[head.r]! };
+    if (now != null) {
+      if (!path.length) plan(now);
+      const a = path[seg]!;
+      const b = path[seg + 1];
+      if (now > segAt && b) {
+        const len = Math.hypot(b.x - a.x, b.y - a.y);
+        const t = Math.min(1, (now - segAt) / (len / SPEED || 1));
+        pos = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
+        trail.push({ ...pos, at: now });
+        if (t === 1) {
+          seg++;
+          segAt = now;
+          if (seg === path.length - 1) {
+            head = path[seg]!;
+            path = [];
+          }
+        }
+      } else pos = a;
+      // The pen's line, fading by age.
+      trail = trail.filter((q) => now - q.at < TRAIL);
+      c2.strokeStyle = ink.pen;
+      for (let i = 1; i < trail.length; i++) {
+        const q = trail[i]!;
+        const o = trail[i - 1]!;
+        if (q.at - o.at > 200) continue;
+        c2.globalAlpha = 0.55 * (1 - (now - q.at) / TRAIL);
+        c2.beginPath();
+        c2.moveTo(o.x, o.y);
+        c2.lineTo(q.x, q.y);
+        c2.stroke();
+      }
+    }
+    // The head: a registration target, and where it sits on the grid.
+    c2.globalAlpha = 0.9;
+    c2.strokeStyle = ink.head;
+    c2.beginPath();
+    c2.arc(pos.x, pos.y, 5, 0, Math.PI * 2);
+    cross(pos.x, pos.y, 10);
+    c2.stroke();
+    const c = xs.indexOf(pos.x);
+    const r = ys.indexOf(pos.y);
+    if (c >= 0 && r >= 0) {
+      c2.globalAlpha = 0.7;
+      c2.fillStyle = ink.pen;
+      c2.font = font;
+      c2.fillText(`g${String(c).padStart(2, '0')} · m${String(r).padStart(2, '0')}`, pos.x + 14, pos.y - 10);
+    }
+  }
+
+  function tick(now: number) {
+    raf = requestAnimationFrame(tick);
+    if (now - last < 33) return;
+    last = now;
+    frame(now);
+  }
+
+  function update() {
+    cancelAnimationFrame(raf);
+    raf = 0;
+    if (reduced.matches) frame(null);
+    else if (visible && !document.hidden) raf = requestAnimationFrame(tick);
+  }
+
+  let pending = 0;
+  const resize = new ResizeObserver(() => {
+    clearTimeout(pending);
+    pending = window.setTimeout(() => {
+      layout();
+      update();
+    }, 80);
+  });
+  const onScreen = new IntersectionObserver(([entry]) => {
+    visible = !!entry?.isIntersecting;
+    update();
+  });
+  resize.observe(canvas);
+  onScreen.observe(canvas);
+  document.addEventListener('visibilitychange', update);
+  reduced.addEventListener('change', update);
+  layout();
+  update();
+
+  return () => {
+    cancelAnimationFrame(raf);
+    clearTimeout(pending);
+    resize.disconnect();
+    onScreen.disconnect();
+    document.removeEventListener('visibilitychange', update);
+    reduced.removeEventListener('change', update);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  };
+}
+
 // Wiring ----------------------------------------------------------------------------------------------------------
 
 let stopFigure = () => {};
@@ -310,7 +494,8 @@ function start() {
   stopFigure();
   stopFigure = () => {};
   const canvas = $<HTMLCanvasElement>('canvas.field');
-  if (token('--hero-figure') === 'lattice' && canvas) stopFigure = lattice(canvas);
+  if (canvas && token('--hero-figure') === 'lattice') stopFigure = lattice(canvas);
+  else if (canvas && token('--hero-ground') === 'plotter') stopFigure = plotter(canvas, $('.hero')!);
   readouts();
 }
 

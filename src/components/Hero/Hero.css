@@ -654,6 +654,70 @@
     transition: stroke-dashoffset var(--_peek-leave) var(--motion-easing-out);
   }
 
+  /* At rest the monogram is the mark alone (outline and the lapping pen): its construction guides and triangle
+     belong to Peek. They draw in with it and, leaving, retract back the way they came, staggered like the build
+     and home inside the leave window (guides never fade). */
+  :root:not([data-peek-state]) .mono-guides path {
+    stroke-dashoffset: 1;
+  }
+
+  :root[data-peek-state="leaving"] .mono-guides {
+    opacity: 1;
+  }
+
+  :root[data-peek-state="leaving"] .mono-guides path {
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset calc(var(--_peek-leave) * 0.7) var(--figure-draw-easing) calc(var(--_d) * var(--_beat) * 0.4);
+  }
+
+  /* Phones: the mark at full strength. Its strokes are in drawing units, so on a small mark they get heavier to
+     read; the mark bleeds off the right edge behind the name, and the name knocks the lines out where they cross
+     (a halo in the ground colour), like a drawing breaking a line at a crossing. */
+  @container style(--hero-figure: construction) {
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (max-width: 47.99rem) {
+      .figure {
+        inline-size: calc(var(--_fig) * 1.18);
+        opacity: 1;
+        right: calc(var(--_fig) * -0.34);
+        top: calc(var(--_rhythm) * 0.25);
+      }
+
+      .mono-line {
+        stroke-width: calc(var(--figure-stroke-width) * 2.6);
+      }
+
+      .mono-pen {
+        stroke-width: calc(var(--figure-stroke-width) * 4.4);
+      }
+
+      .name {
+        -webkit-text-stroke: calc(var(--_display) * 0.05) var(--surface-default-bg);
+        paint-order: stroke fill;
+      }
+    }
+  }
+
+  /* The plotter ground: the hero's canvas, painted by runtime.ts, behind the text. Peek takes the sheet away while
+     it draws the real spec, and it comes back after. */
+  @container style(--hero-ground: plotter) {
+    .field {
+      block-size: 100%;
+      display: block;
+      inline-size: 100%;
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+      transition: opacity calc(var(--_beat) * 6) var(--motion-easing-out);
+      z-index: 0;
+    }
+
+    :root[data-peek-state] .field {
+      opacity: 0;
+      transition-duration: calc(var(--_beat) * 3);
+    }
+  }
+
   /* Isometric: the monogram built from its two parts --------------------------------------------------------- */
 
   @container style(--hero-figure: isometric) {

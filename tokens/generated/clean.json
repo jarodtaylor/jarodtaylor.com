@@ -2297,6 +2297,9 @@
     },
     "menu-shape": {
       "$value": "panel"
+    },
+    "hero-ground": {
+      "$value": "none"
     }
   },
   "figure": {

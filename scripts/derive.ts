@@ -61,6 +61,8 @@ export const ENUMS = {
   'link-underline': ['always', 'hover'],
   /** The open phone menu: a full-width panel under the header (panel), or a small raised card at the right (card). */
   'menu-shape': ['panel', 'card'],
+  /** What the hero's ground does behind the construction figure: nothing, or a plotter walking the column grid (canvas). */
+  'hero-ground': ['none', 'plotter'],
 } as const;
 export type EnumKnob = keyof typeof ENUMS;
 

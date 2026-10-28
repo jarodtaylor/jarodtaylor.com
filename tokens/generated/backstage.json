@@ -2293,6 +2293,9 @@
     },
     "menu-shape": {
       "$value": "panel"
+    },
+    "hero-ground": {
+      "$value": "plotter"
     }
   },
   "figure": {

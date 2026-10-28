@@ -16,6 +16,10 @@
       "$type": "string",
       "$value": "{choice.hero-figure}"
     },
+    "ground": {
+      "$type": "string",
+      "$value": "{choice.hero-ground}"
+    },
     "cue": {
       "$type": "string",
       "$value": "{choice.hero-cue}"

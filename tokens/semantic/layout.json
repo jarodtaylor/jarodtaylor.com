@@ -91,6 +91,9 @@
     },
     "menu-shape": {
       "$value": "{knob.menu-shape}"
+    },
+    "hero-ground": {
+      "$value": "{knob.hero-ground}"
     }
   }
 }
