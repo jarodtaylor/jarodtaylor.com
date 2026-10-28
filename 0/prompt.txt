@@ -1,0 +1,7 @@
+<task-notification>
+<task-id>b2l335sud</task-id>
+<tool-use-id>toolu_01UcJ5LhcZMrUeyLsfdmkmd8</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jarod-Code-personal-jarodtaylor-com/e071936d-eecf-4712-8180-225a10b3edb2/tasks/b2l335sud.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait for Jarod's direction choice" completed (exit code 0)</summary>
+</task-notification>
