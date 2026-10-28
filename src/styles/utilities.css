@@ -17,6 +17,13 @@
     z-index: 50;
   }
 
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .skip-link {
+      left: var(--space-page-x-wide);
+    }
+  }
+
   .skip-link:focus-visible {
     outline-color: var(--surface-accent-focus);
   }
