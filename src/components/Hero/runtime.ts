@@ -190,10 +190,11 @@ function lattice(canvas: HTMLCanvasElement): () => void {
     // Large and bleeding off the right edge on wide screens, behind the top on phones.
     const phone = w < 48 * parseFloat(getComputedStyle(root).fontSize);
     const W = phone ? w * 1.2 : Math.min(w * 0.6, h * 1.25);
-    const x0 = phone ? w - W * 0.88 : w - W * 0.9;
-    const y0 = phone ? h * 0.2 : h * 0.06;
     const s = W / DIV;
     const r = (s * Math.sqrt(3)) / 2;
+    const x0 = phone ? w - W * 0.88 : w - W * 0.9;
+    // Wide screens: one lattice row below the top band, so the mark starts under the header's rule.
+    const y0 = phone ? h * 0.2 : h * 0.06 + r;
     const cx = x0 + W / 2;
     const cy = y0 + W * 0.36;
     reach = Math.hypot(Math.max(cx, w - cx), Math.max(cy, h - cy)) + s * 3;
