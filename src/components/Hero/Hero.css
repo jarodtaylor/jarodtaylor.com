@@ -114,7 +114,8 @@
     font-variation-settings: var(--hero-small-font-variation);
     font-weight: var(--hero-small-font-weight);
     letter-spacing: var(--hero-small-tracking);
-    margin: 0;
+    /* Every layout: clear the name's descenders where they hang below its line box. */
+    margin: calc(var(--_display) * var(--hero-name-descent) + var(--_stack-gap-tight)) 0 0;
     padding: 0;
     position: relative;
     row-gap: var(--space-stack-xs);
@@ -199,11 +200,6 @@
       display: contents;
     }
 
-    /* The roles clear the name's descenders where they hang below its line box. */
-    .roles {
-      margin-block-start: calc(var(--_display) * var(--hero-name-descent) + var(--_stack-gap-tight));
-    }
-
     .tagline {
       margin-block-start: var(--_stack-gap);
     }
@@ -228,10 +224,6 @@
   @container style(--hero-layout: name-over-details) {
     .hero {
       align-content: end;
-    }
-
-    .roles {
-      margin-block-start: calc(var(--_display) * var(--hero-name-descent) + var(--_stack-gap-tight));
     }
 
     .details {
