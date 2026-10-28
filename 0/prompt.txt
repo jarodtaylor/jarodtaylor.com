@@ -1,0 +1,1 @@
+Okay, so a few things are still needed for backstage lite. [Image #18] Let's put "I build the work behind the work" on one line. I also think that font was supposed to be Grotesk not Archivo, right? [Image #19]. Lastly, I don't see the Martian Mono being used at all.
