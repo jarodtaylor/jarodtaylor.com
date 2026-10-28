@@ -44,10 +44,15 @@ const preloadFonts = ['funnel-display', 'funnel-sans'];
     {preloadFonts.map((face) => <link rel="preload" href={`/fonts/${face}.woff2`} as="font" type="font/woff2" crossorigin />)}
     {noindex && <meta name="robots" content="noindex" />}
     <script type="application/ld+json" set:html={JSON.stringify(person)} />
-    <!-- Brand switch: ?brand=<name> sets data-brand before first paint. Tokens do the rest. -->
+    <!-- Brand switch, before first paint: ?brand=<name> wins and is remembered for this tab (sessionStorage), so
+         internal links keep the brand without a query string. Tokens do the rest. -->
     <script is:inline define:vars={{ brands }}>
-      const requested = new URLSearchParams(location.search).get('brand');
-      if (brands.includes(requested)) document.documentElement.dataset.brand = requested;
+      let brand = new URLSearchParams(location.search).get('brand');
+      try {
+        if (brands.includes(brand)) sessionStorage.setItem('jt-brand', brand);
+        else brand = sessionStorage.getItem('jt-brand');
+      } catch {}
+      if (brands.includes(brand)) document.documentElement.dataset.brand = brand;
     </script>
     <slot name="head" />
   </head>
