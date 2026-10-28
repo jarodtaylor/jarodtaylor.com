@@ -1,0 +1,10 @@
+Test email sent and replied from contact@ (works fine). 
+
+
+
+<pasted_content id="ba41">
+DNS Host name (TXT record name):
+google._domainkey
+TXT record value:
+v=DKIM1; k=rsa; REDACTED
+</pasted_content id="ba41">
