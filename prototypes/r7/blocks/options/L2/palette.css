@@ -1,0 +1,53 @@
+/*
+ * Building blocks, light option L2: BOTTLE GREEN + HOT MAGENTA ON WHITE.
+ * A fresh, complementary pair. A deep bottle green builds the T and sets the ink; a hot magenta is the J,
+ * the accent words and the dot. Green reads as craft and calm, magenta as the one loud thing, and the two sit
+ * opposite on the wheel so the assembled JT clicks into one figure from two clearly different parts.
+ *
+ * Palette only: the live layout, untouched; this file sets colour roles and nothing else.
+ * Knobs: color.ramp.neutral hue 266 to 160 (green, chroma up), color.ramp.accent hue 41 to 350 (magenta).
+ * The steps used are written out here as the primitives derive() would make.
+ * Contrast (WCAG 2.2): measured in Chromium: green ink on white 17.9:1; magenta 450 (accent words) on white 6.6:1; white on magenta 450 (fills) 6.6:1.
+ */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --color-green-150: oklch(0.2 0.035 165);
+    --color-green-250: oklch(0.3 0.06 162);
+    --color-green-300: oklch(0.36 0.08 160);
+    --color-green-475: oklch(0.48 0.12 160);
+    --color-green-650: oklch(0.66 0.13 158);
+    --color-green-900: oklch(0.92 0.025 160);
+    --color-green-975: oklch(0.98 0.008 160);
+    --color-magenta-450: oklch(0.5 0.22 352);
+    --color-magenta-600: oklch(0.6 0.25 352);
+    --color-magenta-750: oklch(0.74 0.17 350);
+    --color-magenta-400: oklch(0.42 0.18 352);
+    --color-role-bg: oklch(1 0 0);
+    --color-role-bg-next: var(--color-green-975);
+    --color-role-text: var(--color-green-150);
+    --color-role-text-lead: var(--color-green-150);
+    --color-role-text-quiet: var(--color-green-150);
+    --color-role-text-body: var(--color-green-250);
+    --color-role-text-muted: var(--color-green-300);
+    --color-role-rule: var(--color-green-900);
+    --color-role-rule-strong: var(--color-green-650);
+    --color-role-accent: var(--color-magenta-450);
+    --color-role-on-accent: oklch(1 0 0);
+    --color-role-accent-text: var(--color-magenta-450);
+    --color-role-focus: var(--color-magenta-450);
+    --color-role-menu-bg: oklch(1 0 0);
+    --color-role-menu-text: var(--color-green-150);
+    --color-role-menu-focus: var(--color-magenta-450);
+    --color-role-menu-shadow: var(--color-green-650);
+
+    /* The JT on white: three values per part (front, lit top, shaded side) and ink edges, so no face is white on white. */
+    --color-role-figure-line: var(--color-green-250);
+    --color-role-figure-edge: var(--color-green-150);
+    --color-role-figure-face: var(--color-green-475);
+    --color-role-figure-face-light: var(--color-green-650);
+    --color-role-figure-face-dark: var(--color-green-300);
+    --color-role-figure-mark: var(--color-magenta-600);
+    --color-role-figure-mark-light: var(--color-magenta-750);
+    --color-role-figure-mark-dark: var(--color-magenta-400);
+  }
+}
