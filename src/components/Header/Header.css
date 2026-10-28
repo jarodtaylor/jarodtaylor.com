@@ -240,8 +240,14 @@
       outline-color: var(--header-menu-focus);
     }
 
-    .nav-list a {
+    /* In the menu, links take the menu's foreground at rest and on hover (the inline nav's hover colour is the
+       header's, which a brand's menu surface needn't contrast with). */
+    .nav-list a,
+    .nav-list a:hover {
       color: var(--header-menu-text);
+    }
+
+    .nav-list a {
       display: block;
       font-size: var(--type-fluid-body-phone);
       padding-block: var(--space-stack-sm);
