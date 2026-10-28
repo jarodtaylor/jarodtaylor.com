@@ -14,7 +14,7 @@ Full plan: [PLAN.md](PLAN.md) · Agent lessons: [../tasks/lessons.md](../tasks/l
 | T3 | Pick 2–4 About photos (candid or working) | Phase 2 |
 | T4 | Make a list of the parts you like on each inspiration site (or just narrate during the walk) | Phase 1 |
 | T5 | Case studies, on your own schedule (I can interview you when ready) | Later |
-| T6 | Figma round-trip spike: import `tokens/knobs/{default,blocks,clean}.json` into one Variables collection (a mode per brand) via native DTCG import, export the modes, run `pnpm tokens`, diff. Then make role picks native Figma aliases once ramps are variables | Phase 4 |
+| T6 | Figma round-trip spike: import `tokens/knobs/{backstage,blocks,clean}.json` into one Variables collection (a mode per brand) via native DTCG import, export the modes, run `pnpm tokens`, diff. Then make role picks native Figma aliases once ramps are variables | Phase 4 |
 
 ## 🟡 Open questions
 
