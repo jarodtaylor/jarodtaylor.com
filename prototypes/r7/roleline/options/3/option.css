@@ -1,0 +1,7 @@
+/* Option 3: the roles live in the bio. Each role is a <strong> in the tagline's accent, so the four still scan. */
+@layer components {
+  .bio-role {
+    color: var(--hero-lead-accent);
+    font-weight: inherit;
+  }
+}

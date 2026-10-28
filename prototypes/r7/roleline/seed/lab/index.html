@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="clean">
+  <head>
+    <meta charset="utf-8">
+    <style>/* Cascade layer order, inlined first in <head> because stylesheet bundle order isn't guaranteed. */
+@layer reset, tokens, base, components, utilities;
+</style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Token lab · Jarod Taylor</title>
+    <meta name="description" content="Jarod Taylor is a Frisco, TX engineering leader with 18 years in design systems, frontend platforms, and developer experience at Estée Lauder, JCPenney, and Aetna.">
+    <link rel="canonical" href="https://jarodtaylor.com/lab/">
+    <link rel="preload" href="/fonts/funnel-display.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="/fonts/funnel-sans.woff2" as="font" type="font/woff2" crossorigin>
+    <meta name="robots" content="noindex">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jarod Taylor","jobTitle":"Engineering Leader","url":"https://jarodtaylor.com/","address":{"@type":"PostalAddress","addressLocality":"Frisco","addressRegion":"TX","addressCountry":"US"},"sameAs":["https://www.linkedin.com/in/jarodtaylor","https://x.com/jarodtaylor","https://github.com/jarodtaylor"]}</script><!-- Brand switch, before first paint: ?brand=<name> wins and is remembered for this tab (sessionStorage), so
+         internal links keep the brand without a query string. Tokens do the rest. -->
+    <script>(function(){const brands = ["backstage","blocks","clean"];
+
+      let brand = new URLSearchParams(location.search).get('brand');
+      try {
+        if (brands.includes(brand)) sessionStorage.setItem('jt-brand', brand);
+        else brand = sessionStorage.getItem('jt-brand');
+      } catch {}
+      if (brands.includes(brand)) document.documentElement.dataset.brand = brand;
+    })();</script>
+  <link rel="stylesheet" href="/_astro/lab.OPXntNKb.css">
+<link rel="stylesheet" href="/_astro/SectionShell.BLoc453i.css">
+<link rel="stylesheet" href="/_astro/Base.BHz5aSBZ.css"></head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <!-- Each page owns its <main id="main"> (the skip link's target), so a page can frame it, e.g. the home stage. -->
+    
+  <main id="main">
+    <section class="section section--default"><div class="section__inner"><h2 class="section__title">Jarod Taylor</h2>
+      <p>Placeholder shell. Same markup, different tokens. Pick a brand:</p>
+      <p>
+        <a class="button" href="?brand=backstage">backstage</a> <a class="button" href="?brand=blocks">blocks</a> <a class="button" href="?brand=clean">clean</a> 
+      </p>
+    </div></section>
+
+    <section class="section section--raised"><div class="section__inner"><h2 class="section__title">What I write about</h2><article class="card"><p class="card__eyebrow">experience</p><h3 class="card__title">Design engineering and frontend systems</h3><div class="card__body">
+          <p>Design systems, design-to-code pipelines, and frontend performance. What it takes to build a system people actually adopt, and what changes now that AI can generate UI.</p>
+        </div></article><article class="card"><p class="card__eyebrow">experience</p><h3 class="card__title">Developer experience</h3><div class="card__body">
+          <p>Docs, tooling, and onboarding that make a whole org faster. Like letting engineers run local changes against real production data instead of mocks, or getting a new hire to a first PR in a day or two.</p>
+        </div></article><article class="card"><p class="card__eyebrow">experience</p><h3 class="card__title">Leading engineering orgs</h3><div class="card__body">
+          <p>Growing leaders, building culture, and keeping teams steady through acquisitions, bankruptcy, and reorgs. The parts of the job that don&#39;t show up on the org chart.</p>
+        </div></article><article class="card"><p class="card__eyebrow">learning</p><h3 class="card__title">Learning AI in public</h3><div class="card__body">
+          <p>What I&#39;m trying with AI agents, what works, and what breaks. A lab notebook, not a playbook.</p>
+        </div></article></div></section>
+
+    <section class="section section--inverse"><div class="section__inner"><h2 class="section__title">Inverse surface</h2>
+      <p>Text, <a href="#main">a link</a>, and a <button class="button" type="button">button</button> on the inverse role.</p>
+    </div></section>
+
+    <section class="section section--accent"><div class="section__inner"><h2 class="section__title">Accent surface</h2>
+      <p>Text and <a href="#main">a link</a> on the accent role.</p>
+    </div></section>
+  </main>
+
+  </body>
+</html>
