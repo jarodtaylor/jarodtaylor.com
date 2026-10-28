@@ -1,0 +1,63 @@
+{
+  "cli_version": "0.12.2",
+  "checkpoint_id": "01M60CB6QPC9B6YH5QPZKE9PH5",
+  "strategy": "manual-commit",
+  "branch": "feat/remix-hero",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "PRODUCT.md",
+    "scripts/derive.ts",
+    "src/components/Hero/Hero.css",
+    "src/components/Hero/Hero.tsx",
+    "src/components/InfoStrip/InfoStrip.css",
+    "src/components/InfoStrip/InfoStrip.tsx",
+    "src/pages/index.astro",
+    "tokens/component/header.json",
+    "tokens/component/hero.json",
+    "tokens/generated/backstage.json",
+    "tokens/generated/blocks.json",
+    "tokens/generated/clean.json",
+    "tokens/knobs/backstage.json",
+    "tokens/knobs/blocks.json",
+    "tokens/knobs/clean.json",
+    "tokens/semantic/color.json",
+    "tokens/semantic/type.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 18,
+    "cache_creation_tokens": 11864,
+    "cache_read_tokens": 2003249,
+    "output_tokens": 3359,
+    "api_call_count": 7,
+    "subagent_tokens": {
+      "input_tokens": 58,
+      "cache_creation_tokens": 953135,
+      "cache_read_tokens": 11729251,
+      "output_tokens": 7227,
+      "api_call_count": 27
+    }
+  },
+  "redaction": {
+    "replacements": 101,
+    "layers": {
+      "betterleaks": 0,
+      "connection_string": 0,
+      "credential_key": 0,
+      "credential_value": 0,
+      "credentialed_uri": 0,
+      "entropy": 266,
+      "key_context": 0,
+      "provider_token": 0,
+      "shell_stdin": 0
+    }
+  }
+}
