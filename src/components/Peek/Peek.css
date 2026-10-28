@@ -144,7 +144,8 @@
     bottom: calc(100% + var(--space-stack-xs));
     clip-path: inset(0 0 calc((1 - var(--_lab)) * 100%) 0);
     color: var(--spec-label-text);
-    content: attr(data-spec);
+    /* An empty alternative keeps the label out of the accessibility tree: it describes the layout, it isn't content. */
+    content: attr(data-spec) / "";
     left: 0;
     padding: var(--space-stack-xs) var(--space-inset-sm);
     text-transform: none;
