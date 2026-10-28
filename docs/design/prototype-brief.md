@@ -1,5 +1,7 @@
 # Prototype brief: Backstage × 3 intensities
 
+> Rounds 1 to 5 and the Assembly Manual (`prototypes/whisper`, `blueprint`, `exposed`, `exposed-dark`, `round3`, `round4`, `round5`, `assembly`) moved off the main line to the `archive/prototypes` branch on 2026-10-28. Paths below refer to that branch.
+
 The shared, binding brief for the three Phase 1 prototypes. Read with `PRODUCT.md`, `docs/design/directions.md` (section A), `docs/design/inspiration.md`.
 
 ## The concept
