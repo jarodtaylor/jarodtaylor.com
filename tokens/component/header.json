@@ -12,10 +12,6 @@
       "$type": "color",
       "$value": "{surface.default.border}"
     },
-    "nav-mode": {
-      "$type": "string",
-      "$value": "{choice.nav-mode}"
-    },
     "mark-size": {
       "$type": "string",
       "$value": "{layout.mark-header-phone}"
@@ -161,10 +157,6 @@
       "$type": "string",
       "$value": "{choice.nav-align}"
     },
-    "menu-label": {
-      "$type": "string",
-      "$value": "{choice.menu-label}"
-    },
     "nav-gap": {
       "$type": "string",
       "$value": "{layout.nav-gap-phone}"
@@ -172,69 +164,6 @@
     "nav-gap-wide": {
       "$type": "string",
       "$value": "{layout.nav-gap-wide}"
-    }
-  },
-  "talk": {
-    "$description": "The Let's talk button. talk-style picks pill-fill (accent fill) or outline (text-colored border; fills with accent on hover)",
-    "style": {
-      "$type": "string",
-      "$value": "{choice.talk-style}"
-    },
-    "bg": {
-      "$type": "color",
-      "$value": "{surface.accent.bg}"
-    },
-    "text": {
-      "$type": "color",
-      "$value": "{surface.accent.text}"
-    },
-    "outline-text": {
-      "$type": "color",
-      "$value": "{surface.default.text}"
-    },
-    "outline-border": {
-      "$type": "color",
-      "$value": "{surface.default.text}"
-    },
-    "radius": {
-      "$type": "dimension",
-      "$value": "{shape.radius.pill}"
-    },
-    "border-width": {
-      "$type": "dimension",
-      "$value": "{shape.border-width.default}"
-    },
-    "font-family": {
-      "$type": "fontFamily",
-      "$value": "{type.family.control}"
-    },
-    "font-weight": {
-      "$type": "fontWeight",
-      "$value": "{type.weight.control}"
-    },
-    "font-size": {
-      "$type": "string",
-      "$value": "{type.fluid.control-phone}"
-    },
-    "tracking": {
-      "$type": "string",
-      "$value": "{type.tracking.control}"
-    },
-    "duration": {
-      "$type": "duration",
-      "$value": "{motion.duration.fast}"
-    },
-    "easing": {
-      "$type": "cubicBezier",
-      "$value": "{motion.easing.out}"
-    },
-    "font-size-wide": {
-      "$type": "string",
-      "$value": "{type.fluid.control-wide}"
-    },
-    "outline-radius": {
-      "$type": "dimension",
-      "$value": "{shape.radius.control}"
     }
   }
 }

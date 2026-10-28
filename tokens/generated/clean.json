@@ -2286,23 +2286,14 @@
     "hero-intro": {
       "$value": "none"
     },
-    "nav-mode": {
-      "$value": "wrap"
-    },
     "hero-cue": {
       "$value": "labelled"
-    },
-    "talk-style": {
-      "$value": "outline"
     },
     "label-case": {
       "$value": "none"
     },
     "nav-align": {
       "$value": "start"
-    },
-    "menu-label": {
-      "$value": "text"
     },
     "info-layout": {
       "$value": "stack-phone"

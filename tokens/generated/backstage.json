@@ -2282,23 +2282,14 @@
     "hero-intro": {
       "$value": "peek"
     },
-    "nav-mode": {
-      "$value": "toggle"
-    },
     "hero-cue": {
       "$value": "none"
-    },
-    "talk-style": {
-      "$value": "pill-fill"
     },
     "label-case": {
       "$value": "upper"
     },
     "nav-align": {
       "$value": "center"
-    },
-    "menu-label": {
-      "$value": "text"
     },
     "info-layout": {
       "$value": "stack"

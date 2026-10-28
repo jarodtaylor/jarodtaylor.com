@@ -63,23 +63,14 @@
     "hero-intro": {
       "$value": "{knob.hero-intro}"
     },
-    "nav-mode": {
-      "$value": "{knob.nav-mode}"
-    },
     "hero-cue": {
       "$value": "{knob.hero-cue}"
-    },
-    "talk-style": {
-      "$value": "{knob.talk-style}"
     },
     "label-case": {
       "$value": "{knob.label-case}"
     },
     "nav-align": {
       "$value": "{knob.nav-align}"
-    },
-    "menu-label": {
-      "$value": "{knob.menu-label}"
     },
     "info-layout": {
       "$value": "{knob.info-layout}"

@@ -49,14 +49,10 @@ export const ENUMS = {
   'hero-figure': ['construction', 'isometric', 'lattice'],
   'hero-layout': ['stack', 'name-over-details'],
   'hero-intro': ['peek', 'assemble', 'none'],
-  'nav-mode': ['toggle', 'wrap'],
   'hero-cue': ['none', 'icon', 'labelled'],
-  'talk-style': ['pill-fill', 'outline'],
   'label-case': ['upper', 'none'],
   /** Wide screens: the nav packed beside the mark (start), on the page's centre line (center), or beside the actions (end). */
   'nav-align': ['start', 'center', 'end'],
-  /** The phone menu button: the word Menu with two bars (text), or the bars alone, named for assistive tech (icon). */
-  'menu-label': ['text', 'icon'],
   /** The info strip's two halves: stacked at the left below 64rem (stack) or below 48rem (stack-phone), or role left and place right, wrapping, at every width (split). */
   'info-layout': ['stack', 'stack-phone', 'split'],
   /** How glyphs are rasterised where the platform allows a choice: the platform default, or grayscale antialiasing (lighter). */

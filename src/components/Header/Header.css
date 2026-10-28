@@ -7,7 +7,6 @@
     --_nav-gap: var(--header-nav-gap);
     --_control-h: var(--layout-control-h-phone);
     --_control-size: var(--header-control-font-size);
-    --_talk-size: var(--talk-font-size);
     --_mark: var(--header-mark-size);
 
     align-items: center;
@@ -29,15 +28,13 @@
       --_nav-gap: var(--header-nav-gap-wide);
       --_control-h: var(--layout-control-h-wide);
       --_control-size: var(--header-control-font-size-wide);
-      --_talk-size: var(--talk-font-size-wide);
       --_mark: var(--header-mark-size-wide);
     }
   }
 
   /* Every control speaks in one small style; nav links can sit lighter than the buttons. */
   .nav,
-  .nav-toggle,
-  .peek-toggle {
+  .tool {
     font-family: var(--header-control-font-family);
     font-size: var(--_control-size);
     font-variation-settings: var(--header-control-font-variation);
@@ -52,9 +49,7 @@
 
   @container style(--header-control-label-case: upper) {
     .nav,
-    .nav-toggle,
-    .peek-toggle,
-    .talk {
+    .tool {
       text-transform: uppercase;
     }
   }
@@ -78,21 +73,6 @@
     color: var(--surface-default-accent);
   }
 
-  /* The list: inline on wide screens, so the popover's own box is undone there. */
-  .nav-list {
-    background: none;
-    border: 0;
-    color: inherit;
-    display: flex;
-    gap: var(--_nav-gap);
-    inline-size: auto;
-    inset: auto;
-    margin: 0;
-    overflow: visible;
-    padding: 0;
-    position: static;
-  }
-
   .nav-list li {
     list-style: none;
   }
@@ -113,125 +93,8 @@
     text-underline-offset: calc(var(--_control-size) * 0.22);
   }
 
-  .nav-toggle {
-    display: none;
-  }
-
-  /* Phones: the toggle mode folds the list behind a Menu button; the wrap mode lays it out as a second row. */
-  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-  @media (max-width: 47.99rem) {
-    @container style(--header-nav-mode: toggle) {
-      .nav-toggle {
-        align-items: center;
-        background: none;
-        border: 0;
-        color: var(--header-text);
-        cursor: pointer;
-        display: inline-flex;
-        gap: var(--space-inset-sm);
-        min-block-size: var(--_control-h);
-        padding: 0 var(--space-inset-sm);
-      }
-
-      /* Two bars that close to one while the menu is open. */
-      .nav-toggle::after {
-        block-size: calc(var(--_control-size) * 0.45);
-        border-block: var(--shape-border-width-strong) solid currentcolor;
-        content: "";
-        inline-size: calc(var(--_control-size) * 0.9);
-        transition: block-size var(--motion-duration-fast) var(--motion-easing-out);
-      }
-
-      .nav:has(.nav-list:popover-open) .nav-toggle::after {
-        block-size: 0;
-        border-block-end: 0;
-      }
-
-      /* icon: the bars alone, larger; the word stays the button's name for assistive tech. */
-      @container style(--header-menu-label: icon) {
-        .nav-toggle {
-          justify-content: center;
-          min-inline-size: var(--_control-h);
-          padding: 0;
-        }
-
-        .nav-toggle-label {
-          clip-path: inset(50%);
-          overflow: hidden;
-          position: absolute;
-          white-space: nowrap;
-        }
-
-        .nav-toggle::after {
-          block-size: calc(var(--_control-size) * 0.5);
-          inline-size: calc(var(--_control-size) * 1.4);
-        }
-      }
-
-      .nav-list:not(:popover-open) {
-        display: none;
-      }
-
-      .nav-list:popover-open {
-        background: var(--header-menu-bg);
-        border-block-end: var(--shape-border-width-default) solid var(--header-menu-border);
-        color: var(--header-menu-text);
-        flex-direction: column;
-        gap: 0;
-        inset: var(--_h) 0 auto;
-        padding: var(--space-inset-sm) var(--_x) var(--space-inset-md);
-        position: fixed;
-      }
-
-      /* card: a small raised card hung from the header's right end, instead of the full-width panel. */
-      @container style(--header-menu-shape: card) {
-        .nav-list:popover-open {
-          border: 0;
-          border-radius: var(--header-menu-radius);
-          box-shadow: 0 var(--space-stack-sm) var(--space-inset-lg) calc(var(--space-inset-sm) * -1) var(--header-menu-shadow);
-          inset: calc(var(--_h) - var(--space-inset-sm)) var(--_x) auto auto;
-          min-inline-size: calc(var(--space-stack-xl) * 3);
-          padding: var(--space-inset-sm) 0;
-        }
-
-        .nav-list:popover-open a {
-          font-weight: var(--header-control-font-weight);
-          padding: var(--space-inset-sm) var(--space-stack-md);
-        }
-      }
-
-      .nav-list:popover-open :focus-visible {
-        outline-color: var(--header-menu-focus);
-      }
-
-      .nav-list:popover-open a {
-        color: var(--header-menu-text);
-        display: block;
-        font-size: var(--type-fluid-body-phone);
-        padding-block: var(--space-stack-sm);
-      }
-    }
-
-    @container style(--header-nav-mode: wrap) {
-      .masthead {
-        block-size: auto;
-        flex-wrap: wrap;
-        min-block-size: var(--_h);
-        padding-block: var(--space-stack-sm);
-      }
-
-      .nav {
-        flex-basis: 100%;
-        order: 1;
-      }
-
-      .nav-list {
-        justify-content: space-between;
-      }
-    }
-  }
-
-  .peek-toggle {
+  /* Peek and Remix: outlined tools, icon only below 64rem (each keeps its name in aria-label), icon and word above. */
+  .tool {
     align-items: center;
     background: transparent;
     border: var(--shape-border-width-default) solid var(--header-control-border);
@@ -244,6 +107,7 @@
     min-block-size: var(--_control-h);
     min-inline-size: var(--_control-h);
     padding: 0 var(--space-inset-sm);
+    text-decoration: none;
     transition:
       background-color var(--motion-duration-fast) var(--motion-easing-out),
       color var(--motion-duration-fast) var(--motion-easing-out),
@@ -251,17 +115,24 @@
     white-space: nowrap;
   }
 
-  .peek-toggle:hover {
+  .tool:hover {
     border-color: var(--header-text);
     color: var(--header-text);
   }
 
-  .peek-toggle svg {
+  .tool svg {
     block-size: calc(var(--_control-size) * 1.1);
     fill: none;
     inline-size: calc(var(--_control-size) * 1.1);
     stroke: currentcolor;
     stroke-width: var(--shape-border-width-strong);
+  }
+
+  .tool-label {
+    display: none;
+  }
+
+  .peek-toggle svg {
     transition: rotate calc(var(--motion-duration-beat) * 6) var(--motion-easing-out);
   }
 
@@ -281,65 +152,155 @@
     rotate: 45deg;
   }
 
-  .peek-word {
-    display: none;
-  }
-
   /* Peek needs JS; without it the button would do nothing, so it isn't shown. */
   :root:not(.js) .peek-toggle {
     display: none;
   }
 
-  .talk {
+  /* The slider knobs sit on the page's ground, so the tracks read as passing behind them. */
+  .remix circle {
+    fill: var(--header-bg);
+  }
+
+  .remix svg path,
+  .remix svg circle {
+    transition: translate var(--motion-duration-base) var(--motion-easing-out);
+  }
+
+  .remix:hover svg circle:nth-of-type(1) {
+    translate: calc(var(--shape-border-width-default) * 6) 0;
+  }
+
+  .remix:hover svg circle:nth-of-type(2) {
+    translate: calc(var(--shape-border-width-default) * -6) 0;
+  }
+
+  /* The menu button: below 64rem only, at the far right. */
+  .nav-toggle {
     align-items: center;
-    border: var(--talk-border-width) solid transparent;
-    border-radius: var(--talk-radius);
-    display: inline-flex;
-    font-family: var(--talk-font-family);
-    font-size: var(--_talk-size);
-    font-weight: var(--talk-font-weight);
-    letter-spacing: var(--talk-tracking);
-    line-height: var(--header-control-leading);
+    background: none;
+    border: 0;
+    color: var(--header-text);
+    cursor: pointer;
+    display: none;
+    justify-content: center;
     min-block-size: var(--_control-h);
-    padding-inline: var(--space-inset-md);
-    text-decoration: none;
-    transition:
-      background-color var(--talk-duration) var(--talk-easing),
-      border-color var(--talk-duration) var(--talk-easing),
-      color var(--talk-duration) var(--talk-easing);
-    white-space: nowrap;
+    min-inline-size: var(--_control-h);
+    padding: 0;
   }
 
-  @container style(--talk-style: pill-fill) {
-    .talk {
-      background: var(--talk-bg);
-      color: var(--talk-text);
-    }
-
-    .talk:hover {
-      background: var(--header-text);
-      color: var(--header-bg);
-    }
+  .nav-toggle svg {
+    block-size: calc(var(--_control-size) * 1.5);
+    fill: none;
+    inline-size: calc(var(--_control-size) * 1.5);
+    stroke: currentcolor;
+    stroke-width: var(--shape-border-width-strong);
   }
 
-  @container style(--talk-style: outline) {
-    .talk {
-      border-color: var(--talk-outline-border);
-      border-radius: var(--talk-outline-radius);
-      color: var(--talk-outline-text);
-    }
-
-    .talk:hover {
-      background: var(--talk-bg);
-      border-color: var(--talk-bg);
-      color: var(--talk-text);
-    }
-  }
-
-  /* nav-align. end (the default flow): the mark's auto margin packs nav, Peek and Let's talk to the right.
-     start: the nav follows the mark a column gap on, and the auto margin moves to the nav. */
+  /* Below 64rem: one menu in every brand. The list is a popover that slides in from the right edge
+     (reduced motion makes it a cut). menu-shape styles it: a panel down the right side, or a raised card. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-  @media (min-width: 48rem) {
+  @media (max-width: 63.99rem) {
+    .nav-toggle {
+      display: inline-flex;
+    }
+
+    .nav-list {
+      background: var(--header-menu-bg);
+      border: 0;
+      color: var(--header-menu-text);
+      flex-direction: column;
+      gap: 0;
+      margin: 0;
+      overflow: auto;
+      position: fixed;
+      transition:
+        translate var(--motion-duration-base) var(--motion-easing-out),
+        display var(--motion-duration-base) allow-discrete,
+        overlay var(--motion-duration-base) allow-discrete;
+      translate: calc(100% + var(--_x)) 0;
+    }
+
+    .nav-list:popover-open {
+      display: flex;
+      translate: 0 0;
+    }
+
+    @starting-style {
+      .nav-list:popover-open {
+        translate: calc(100% + var(--_x)) 0;
+      }
+    }
+
+    .nav-list:not(:popover-open) {
+      display: none;
+    }
+
+    .nav-list :focus-visible {
+      outline-color: var(--header-menu-focus);
+    }
+
+    .nav-list a {
+      color: var(--header-menu-text);
+      display: block;
+      font-size: var(--type-fluid-body-phone);
+      padding-block: var(--space-stack-sm);
+    }
+
+    @container style(--header-menu-shape: panel) {
+      .nav-list {
+        border-inline-start: var(--shape-border-width-default) solid var(--header-menu-border);
+        inline-size: min(calc(var(--space-stack-xl) * 5), 100%);
+        inset: var(--_h) 0 0 auto;
+        padding: var(--space-inset-md) var(--_x);
+      }
+    }
+
+    @container style(--header-menu-shape: card) {
+      .nav-list {
+        border-radius: var(--header-menu-radius);
+        box-shadow: 0 var(--space-stack-sm) var(--space-inset-lg) calc(var(--space-inset-sm) * -1) var(--header-menu-shadow);
+        inline-size: auto;
+        inset: calc(var(--_h) - var(--space-inset-sm)) var(--_x) auto auto;
+        min-inline-size: calc(var(--space-stack-xl) * 3);
+        padding: var(--space-inset-sm) 0;
+      }
+
+      .nav-list a {
+        font-weight: var(--header-control-font-weight);
+        padding: var(--space-inset-sm) var(--space-stack-md);
+      }
+    }
+  }
+
+  /* 64rem and up: the list sits inline (the popover's own box undone) and the tools show their words. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 64rem) {
+    .nav-list {
+      background: none;
+      border: 0;
+      color: inherit;
+      display: flex;
+      gap: var(--_nav-gap);
+      inline-size: auto;
+      inset: auto;
+      margin: 0;
+      overflow: visible;
+      padding: 0;
+      position: static;
+    }
+
+    .tool {
+      padding: 0 var(--space-stack-sm) 0 var(--space-inset-sm);
+    }
+
+    .tool-label {
+      display: inline;
+    }
+
+    /* nav-align. end (the default flow): the mark's auto margin packs nav and tools to the right.
+       start: the nav follows the mark a column gap on, and the auto margin moves to the nav.
+       center: three zones, with the nav on the page's centre line. */
     @container style(--header-nav-align: start) {
       .mark {
         margin-inline-end: 0;
@@ -349,25 +310,13 @@
         margin-inline: calc(var(--_gap) - var(--space-stack-sm)) auto;
       }
     }
-  }
 
-  /* Wide screens. center: three zones, with the nav on the page's centre line. */
-  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-  @media (min-width: 64rem) {
     @container style(--header-nav-align: center) {
       .nav {
         left: 50%;
         position: absolute;
         translate: -50% 0;
       }
-    }
-
-    .peek-toggle {
-      padding: 0 var(--space-stack-sm) 0 var(--space-inset-sm);
-    }
-
-    .peek-word {
-      display: inline;
     }
   }
 }

@@ -2283,23 +2283,14 @@
     "hero-intro": {
       "$value": "assemble"
     },
-    "nav-mode": {
-      "$value": "toggle"
-    },
     "hero-cue": {
       "$value": "icon"
-    },
-    "talk-style": {
-      "$value": "outline"
     },
     "label-case": {
       "$value": "none"
     },
     "nav-align": {
       "$value": "end"
-    },
-    "menu-label": {
-      "$value": "icon"
     },
     "info-layout": {
       "$value": "split"

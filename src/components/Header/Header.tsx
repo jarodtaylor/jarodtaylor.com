@@ -6,12 +6,14 @@ const NAV = [
   { label: 'Writing', href: '#writing' },
   { label: 'About', href: '#about' },
   { label: 'Colophon', href: '#colophon' },
+  { label: 'Contact', href: 'mailto:contact@jarodtaylor.com' },
 ];
 
 /**
- * Masthead: the monogram, the nav, the Peek toggle and Let's talk.
- * One phone nav for every brand: the list is a popover opened by its button, so it works from the keyboard
- * with no JS. --header-nav-mode decides whether phones get the button (toggle) or the list as a second row (wrap).
+ * Masthead: the monogram, the nav, and two tools on the right: Peek (shows the spec layer) and Remix (restyles the
+ * site; links to the token lab until the Remix panel exists). Below 64rem every brand folds the nav into one menu:
+ * the list is a popover opened by the icon button at the far right, so it works from the keyboard with no JS.
+ * The button comes last in the DOM so the tab order matches what you see.
  */
 export function Header() {
   return (
@@ -24,9 +26,6 @@ export function Header() {
         </svg>
       </a>
       <nav className="nav" aria-label="Primary">
-        <button className="nav-toggle" type="button" popoverTarget="nav-list">
-          <span className="nav-toggle-label">Menu</span>
-        </button>
         <ul className="nav-list" id="nav-list" popover="auto">
           {NAV.map(({ label, href }) => (
             <li key={label}>
@@ -35,19 +34,32 @@ export function Header() {
           ))}
         </ul>
       </nav>
-      {/* Peek backstage: shows the spec layer the page is built on. JS only (hidden without it); state lives on <html>. */}
-      <button className="peek-toggle" type="button" aria-pressed="false" aria-label="Peek backstage" data-peek-toggle data-remix-ui>
+      {/* Peek backstage: JS only (hidden without it); state lives on <html>. */}
+      <button className="tool peek-toggle" type="button" aria-pressed="false" aria-label="Peek backstage" data-peek-toggle data-remix-ui>
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <circle cx="12" cy="12" r="5.5" />
           <path d="M12 0v24M0 12h24" />
         </svg>
-        <span className="peek-word" aria-hidden="true">
+        <span className="tool-label" aria-hidden="true">
           Peek
         </span>
       </button>
-      <a className="talk" href="mailto:contact@jarodtaylor.com">
-        Let's talk
+      <a className="tool remix" href="/lab/" aria-label="Remix">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M3 6h18M3 12h18M3 18h18" />
+          <circle cx="8" cy="6" r="2.25" />
+          <circle cx="16" cy="12" r="2.25" />
+          <circle cx="10" cy="18" r="2.25" />
+        </svg>
+        <span className="tool-label" aria-hidden="true">
+          Remix
+        </span>
       </a>
+      <button className="nav-toggle" type="button" popoverTarget="nav-list" aria-label="Menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M3 8h18M3 16h18" />
+        </svg>
+      </button>
     </header>
   );
 }
