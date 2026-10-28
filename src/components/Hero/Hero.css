@@ -351,8 +351,7 @@
 
   /* Peek covers the corners with its own measurements; the cue steps aside while it's on. */
   :root[data-peek-state] .cue {
-    opacity: 0;
-    pointer-events: none;
+    visibility: hidden; /* out of the focus order too, not just out of sight */
   }
 
   @container style(--hero-cue: labelled) {
