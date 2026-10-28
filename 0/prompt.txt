@@ -1,0 +1,5 @@
+I think using the screen height with all of the text would also be best if we maybe try not having the "Hero" section be so horizontal and use more vertical space (e.g. Jarod Taylor, Tagline, paragraph, CTAs). Right now we have the paragraph to the right of it, and I am wondering if it would read better by keeping things more vertical? The 4 stats (18 years exp, etc) don't need to be bunched up with this. We could treat the main landing as one large hero pushing the next section below. Thoughts? 
+
+Also, we don't have to have Jarod Taylor super massive either if it needs to adjust with the changes above.
+
+Oh, and I have created a jt-logo-icon.svg file that is a monogram of JT. It's in the src/assets directory if we want to use it.
