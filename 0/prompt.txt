@@ -1,0 +1,116 @@
+<task-notification>
+<task-id>a5474744fb9619fd7</task-id>
+<tool-use-id>toolu_012adMBMfi9rAufCffTkqc7U</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jarod-Code-personal-jarodtaylor-com/e071936d-eecf-4712-8180-225a10b3edb2/tasks/a5474744fb9619fd7.output</output-file>
+<status>completed</status>
+<summary>Agent "Research token/site tooling state" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>I checked everything below on 2026-10-13. Version numbers come from the npm registry (`npm view &lt;pkg&gt; time`). Browser support comes from webstatus.dev, which publishes the web-features Baseline data.
+
+**Gaps:** I didn't look for token tools beyond Style Dictionary and Terrazzo. I also didn't check Tokens Studio's current plans or prices. The Figma facts about its JSON export come from forum posts, not from Figma's help docs.
+
+## 1. DTCG spec status
+- **Stable.** The Format Module 2025.10 and the Resolver Module 2025.10 were both published as W3C Community Group final reports on 2025-10-28. Each says "This specification is considered stable." (The drafts on designtokens.org still carry a "preview" warning, but they are the drafts, not the final versions.)
+- **Format 2025.10 covers what you need:** aliases (`{group.token}`), group inheritance via `$extends`, and colours as objects (`colorSpace`, `components`, `alpha`, optional `hex`).
+- **Resolver = multi-brand.** You define sets and modifiers, for example a `brand` modifier, and the result is one token set per combination (the spec calls these "permutations"). There's an official JSON Schema and a playground (added Dec 2025).
+- Sources: https://www.w3.org/community/reports/design-tokens/CG-FINAL-format-20251028/ · https://www.w3.org/community/reports/design-tokens/CG-FINAL-resolver-20251028/ · https://www.designtokens.org/tr/2025.10/
+- **Recommendation:** Write tokens in 2025.10 format and use a resolver file with a `brand` modifier (plus a `scheme` modifier if you want light/dark).
+
+## 2. Token build tools
+- **Terrazzo `@terrazzo/cli` 2.8.0** (released 2026-10-13; 2.0.0 came out 2026-03-17):
+  - 2.0 added full 2025.10 support, including resolvers. It errors on the older draft format, so colours and dimensions must be objects.
+  - The CSS plugin takes a `permutations: [{ input: { brand: "x" }, prepare: (c) =&gt; \`[data-brand="x"] { ${c} }\` }]` option. All brands end up in one CSS file, wrapped in whatever selectors you write.
+  - It can also limit each output block to certain sets or modifiers, and it warns when your modifiers overlap (the docs call this a "non-orthogonal" resolver).
+  - The old Terrazzo-only "modes" still work (`modeSelectors`), but the docs call resolvers their successor.
+  - It has a built-in Figma importer. As of 2.8.0 it keeps each variable's key so tokens still match after you republish the library.
+  - Sources: https://terrazzo.app/docs/integrations/css/ · https://terrazzo.app/docs/guides/resolvers/ · https://raw.githubusercontent.com/terrazzoapp/terrazzo/main/packages/cli/CHANGELOG.md
+- **Style Dictionary 5.6.1** (released 2026-10-10; 5.0.0 came out 2025-05):
+  - **2025.10 support is partial.** Colour objects landed in 5.3.0 (all 14 colour spaces, OKLCH output). Dimension objects landed in 5.4.0, and border/shadow updates in 5.3.1.
+  - Issue #1590 is still open: the resolver isn't implemented and no PR exists (design discussion as of 2026-10-12). `$extends` isn't tracked there, and gradient and duration are still in progress.
+  - Multi-brand works by looping: you create one `StyleDictionary` instance per brand with different `source` globs.
+  - The `css/variables` format takes a `selector` option (string or array), so `[data-brand="x"]` is possible, but you have to set up the brand loop yourself.
+  - Sources: https://github.com/style-dictionary/style-dictionary/issues/1590 · https://raw.githubusercontent.com/style-dictionary/style-dictionary/main/CHANGELOG.md · Context7 `/style-dictionary/style-dictionary` (multi-brand-multi-platform example)
+- **Recommendation:** Use Terrazzo. It's the only one that reads 2025.10 resolver files natively and outputs per-brand `[data-brand]` blocks from config alone.
+
+## 3. Figma Variables and DTCG
+- **Correction:** Native import/export was announced at Figma Schema 2025 (Nov 2025), not at Config. Forum users report it reaching accounts gradually from early Dec 2025.
+- **What Figma's help docs say:**
+  - Import: drag DTCG JSON into a collection. Each file becomes one mode. A variable is only created if the token is in every file with the same `$type`.
+  - Export: right-click a mode and choose "Export mode", or right-click the collection and choose "Export modes".
+- **Import limits:**
+  - Colours must be HSL or sRGB, so OKLCH or P3 tokens won't import cleanly.
+  - Dimensions must be px; durations must be in seconds.
+  - Font family must be a single string, not an array.
+  - Booleans need the `com.figma.type` extension.
+  - Typography and other composite tokens aren't supported.
+  - Names are flattened to slash paths.
+  - Aliases across collections need `com.figma.aliasData`.
+- **Export (forum reports only):** The help doc doesn't say the export is DTCG. Users who got the feature say it is, but that it leaves out `$description`.
+- **Plans** (from Figma's plans page):
+
+  | Plan | Modes per collection |
+  |---|---|
+  | Starter | None (so "modes = brands" doesn't work) |
+  | Professional | Up to 10 |
+  | Organization | Up to 20 |
+  | Enterprise | Unlimited, plus extended collections |
+
+- **Variables REST API:** requires a full seat in an Enterprise org. Reading needs `file_variables:read`; writing needs an admin. Terrazzo's Figma variable import uses this API, so it is Enterprise-only too.
+- **Alternatives:** Tokens Studio, which turns each mode into a token set (https://docs.tokens.studio/figma/import/variables/), or community plugins.
+- Sources: https://help.figma.com/hc/en-us/articles/15343816063383-Modes-for-variables · https://help.figma.com/hc/en-us/articles/360040328273-Figma-plans-and-features · https://developers.figma.com/docs/rest-api/variables/ · https://forum.figma.com/ask-the-community-7/native-variable-export-feature-47831
+- **Recommendation:** Treat the repo JSON as the source of truth and use native import/export on the Professional plan.
+  - Keep a parallel sRGB colour value for Figma if you write OKLCH.
+  - Keep typography as separate token types in code only.
+  - Don't plan around the REST API unless you're on Enterprise.
+
+## 4. Astro
+- **Astro 7.3.8 is current** (7.0.0 released 2026-06-22; 6.0.0 released 2026-03-10).
+- **What changed in 7:**
+  - Vite 8 and a Rust compiler (stricter HTML: unclosed tags are now errors).
+  - The default Markdown processor no longer runs remark/rehype plugins; you have to opt back in.
+  - `compressHTML` now defaults to `'jsx'`, which can remove whitespace between inline elements.
+  - Some `astro:transitions` internal helpers were removed.
+  - `getContainerRenderer()` moved to a `/container-renderer` import.
+- **`@astrojs/react` 7.0.1** supports React 17, 18 and 19, and is fine for server-rendered `.tsx` plus islands.
+- **Content collections:** defined in `src/content.config.ts` with the `glob()`/`file()` loaders. Live collections (fetched at request time, in `src/live.config.ts`) need an adapter.
+- **View transitions:** `&lt;ClientRouter /&gt;` isn't deprecated, but the docs say it "will increasingly become unnecessary" now that browsers support native cross-document transitions.
+- **Cloudflare:** a fully static site doesn't need the adapter. You need a `wrangler.jsonc` with `assets.directory: "./dist"`, and `not_found_handling: "404-page"` if you want a custom 404 page. `@astrojs/cloudflare` 14.3.4 is only for server rendering.
+- **Storybook for Astro:** I found no official first-party framework, only a community one (`@storybook-astro/renderer` 1.7.x).
+- Sources: https://docs.astro.build/en/guides/upgrade-to/v7/ · https://docs.astro.build/en/guides/view-transitions/ · https://docs.astro.build/en/guides/content-collections/ · https://docs.astro.build/en/guides/deploy/cloudflare/
+- **Recommendation:** Astro 7 with React components rendered on the server, native cross-document view transitions rather than ClientRouter, and `@storybook/react-vite` for the `.tsx` components.
+
+## 5. Storybook
+- **Storybook 10.6.2 is current** (10.0 released 2025-10-28). It is ESM-only and supports Vite 8. Use `@storybook/react-vite`.
+- **Brand switching:**
+  - `@storybook/addon-themes` 10.6.2 provides `withThemeByDataAttribute({ themes, defaultTheme, attributeName: 'data-brand', parentSelector: 'html' })`. It handles one setting per decorator.
+  - For a second toolbar (for example light/dark), add your own `globalTypes` toolbar entry plus a decorator that sets the attribute from `context.globals`.
+  - A story can pin its brand with `globals: { brand: 'x' }`.
+- Sources: https://storybook.js.org/docs/essentials/toolbars-and-globals · https://raw.githubusercontent.com/storybookjs/storybook/next/code/addons/themes/docs/api.md
+- **Recommendation:** Use addon-themes with `attributeName: 'data-brand'`, and add a small custom toolbar entry if you need a second setting.
+
+## 6. CSS support (webstatus.dev)
+
+| Feature | Status | Notes |
+|---|---|---|
+| `color-mix()` | Baseline, widely available | Fully supported since 2025-11 |
+| `oklab()` / `oklch()` | Baseline, widely available | Fully supported since 2025-11 |
+| Relative colour syntax | Baseline, newly available | Since 2024-09 (Chrome 125, Firefox 128, Safari 18) |
+| `@property` | Baseline, newly available | Since 2024-07 |
+| Same-document view transitions | Baseline, newly available | Since 2025-10-14 (Firefox 144) |
+| Container style queries (custom properties) | Baseline, newly available | Since 2026-05-19 (Firefox 151) |
+| Scroll-driven animations (`animation-timeline`) | Not Baseline | Chrome 115, Safari 26; not in Firefox stable |
+| Cross-document view transitions | Not Baseline | Chrome 126, Safari 18.2; not in Firefox |
+| `if()` | Not Baseline | Chrome 137 only |
+| Typed `attr()` | Not Baseline | Chrome 133, Firefox 155 (2026-09); not in Safari |
+
+- Source: `https://api.webstatus.dev/v1/features/&lt;id&gt;` (ids used: color-mix, oklab, relative-color, registered-custom-properties, view-transitions, container-style-queries, scroll-driven-animations, cross-document-view-transitions, if, attr)
+- **Recommendation:** Build the brand-swap core on the supported features (custom properties, OKLCH, relative colour, `color-mix()`, `@property`, style queries). Treat scroll-driven animations, cross-document transitions, `if()` and `attr()` as optional extras inside `@supports`, with a fallback when `prefers-reduced-motion` is set.
+
+## 7. Cloudflare Pages vs Workers
+- Cloudflare's own Pages docs now say "Start new projects with Workers" in a callout titled "Are you sure you want to use Pages?". It calls Workers its main application platform with a broader feature set. Astro's deploy guide says the same.
+- Pages isn't deprecated, and static asset requests on Workers are free, as they are on Pages.
+- Setup: `npx astro build &amp;&amp; npx wrangler deploy`, with a `wrangler.jsonc` that has no `main` field.
+- Sources: https://developers.cloudflare.com/pages/ · https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/ · https://developers.cloudflare.com/workers/static-assets/migrate-from-pages/
+- **Recommendation:** Host on Cloudflare Workers static assets, not Pages.</result>
+<usage><subagent_tokens>77968</subagent_tokens><tool_uses>58</tool_uses><duration_ms>335994</duration_ms></usage>
+</task-notification>
