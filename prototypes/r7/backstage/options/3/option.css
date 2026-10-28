@@ -1,0 +1,129 @@
+/*
+ * Option 3: Artboard. Static ground, CSS only; pointer guides with a tiny JS (option.js, ~1 KB).
+ *
+ * The page as the design tool shows it: the layout grid's columns as faint fills (the 4 / 12 columns, their
+ * real gutters), a ruler hanging off the header rule with a major tick at every column edge and a minor tick
+ * every base unit (--space-inset-sm), and a vertical ruler down the left margin (minor every base unit, major
+ * every --space-inset-lg). Move a mouse over the stage and two guides follow it, snapping: the vertical one
+ * to the nearest column edge, the horizontal one to the base unit; their ends light up on the rulers.
+ * Touch and keyboard see the static artboard. Reduced motion: guides jump instead of gliding.
+ * Peek hides the guides and draws the column edges down from the ruler's major ticks.
+ *
+ * Knobs if ported:
+ *   --hero-ground: none | registration | plotter | rulers   (enum)
+ *   --ground-ink (= --spec-guide), --ground-fill (number, 0.035 here), --ground-guide (= --figure-mark)
+ *   --ground-unit (length alias, = --space-inset-sm): the minor tick and the guides' vertical snap.
+ */
+@import "../figure.css";
+
+@layer components {
+  .cols {
+    --_n: 4;
+    --_g: var(--space-col-gap-phone);
+    --_h: var(--layout-header-h-phone);
+    --_unit: var(--space-inset-sm);
+
+    container-type: inline-size;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .cols {
+      --_n: 12;
+      --_g: var(--space-col-gap-wide);
+      --_h: var(--layout-header-h-wide);
+    }
+  }
+
+  .cols::before,
+  .cols::after {
+    --_p: calc((100cqw + var(--_g)) / var(--_n));
+    --_c: calc(var(--_p) - var(--_g));
+
+    content: "";
+    inset-inline: 0;
+    position: absolute;
+  }
+
+  /* Column fills, from under the header to the floor, fading as they go down. */
+  .cols::before {
+    background: linear-gradient(to right, var(--spec-guide) 0 var(--_c), transparent 0) 0 0 / var(--_p) 100%;
+    inset-block: var(--_h) 0;
+    mask: linear-gradient(to bottom, rgb(0 0 0 / 0.032), rgb(0 0 0 / 0.012) 75%, transparent);
+  }
+
+  /* Top ruler: majors at both edges of every column, minors every base unit. */
+  .cols::after {
+    background:
+      linear-gradient(to right, var(--spec-guide) 0 1px, transparent 0 calc(var(--_c) - 1px), var(--spec-guide) 0 var(--_c), transparent 0)
+        0 0 / var(--_p) var(--_unit) repeat-x,
+      repeating-linear-gradient(to right, var(--spec-guide) 0 1px, transparent 0 var(--_unit)) 0 0 / 100% calc(var(--_unit) * 0.4) no-repeat;
+    block-size: var(--_unit);
+    opacity: 0.55;
+    top: var(--_h);
+  }
+
+  /* Left ruler, in the page margin, down the hero. */
+  .hero::before {
+    background:
+      repeating-linear-gradient(to bottom, var(--spec-guide) 0 1px, transparent 0 var(--space-inset-lg)) 0 0 / calc(var(--space-inset-sm) * 1.25) 100% no-repeat,
+      repeating-linear-gradient(to bottom, var(--spec-guide) 0 1px, transparent 0 var(--space-inset-sm)) 0 0 / calc(var(--space-inset-sm) * 0.5) 100% no-repeat;
+    content: "";
+    inset: 0 auto 0 0;
+    inline-size: var(--space-inset-sm);
+    opacity: 0.5;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* Guides: html carries data-guides and --_gx / --_gy (option.js) while a mouse is over the stage. */
+  .stage::before,
+  .stage::after {
+    --_k: color-mix(in oklch, var(--spec-guide) 38%, transparent);
+
+    content: "";
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    transition:
+      opacity calc(var(--_beat) * 2) var(--motion-easing-out),
+      translate calc(var(--_beat) * 1.6) var(--motion-easing-out);
+    z-index: 0;
+  }
+
+  .stage::before {
+    background: linear-gradient(to bottom, var(--figure-mark) 0 var(--space-inset-sm), var(--_k) 0);
+    block-size: 100%;
+    inline-size: var(--figure-stroke-width);
+    margin-block-start: var(--layout-header-h-phone);
+    translate: var(--_gx, 0) 0;
+  }
+
+  .stage::after {
+    background: linear-gradient(to right, var(--figure-mark) 0 var(--space-inset-sm), var(--_k) 0);
+    block-size: var(--figure-stroke-width);
+    inline-size: 100%;
+    translate: 0 var(--_gy, 0);
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .stage::before {
+      margin-block-start: var(--layout-header-h-wide);
+    }
+  }
+
+  :root[data-guides]:not([data-peek-state]) .stage::before,
+  :root[data-guides]:not([data-peek-state]) .stage::after {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stage::before,
+    .stage::after {
+      transition: opacity calc(var(--_beat) * 2) linear;
+    }
+  }
+}

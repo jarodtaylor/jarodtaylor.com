@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jarod Taylor</title>
+  <meta name="description" content="Jarod Taylor, engineering leader in design engineering, frontend systems and developer experience. Frisco, TX.">
+  <!-- Before first paint: decide whether the intro plays. The intro is Peek backstage, played once on arrival:
+       the spec layer draws in, its construction runs out to the edges of the screen, then everything folds back
+       into the monogram. Once per session, never under reduced motion, never without JS (no class, no hidden
+       content). ?intro forces it. If hero.js never arrives, the 4 s failsafe hands the page back. -->
+  <script>
+    (() => {
+      const root = document.documentElement;
+      root.classList.add('js');
+      let seen = false;
+      try { seen = sessionStorage.getItem('jt-intro') === '1'; } catch {}
+      if (new URLSearchParams(location.search).has('intro')) seen = false;
+      if (!seen && matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        root.classList.add('intro');
+        root.dataset.peekState = 'arm';
+        setTimeout(() => { if (root.dataset.peekState === 'arm') { root.classList.remove('intro'); delete root.dataset.peekState; } }, 4000);
+      }
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <svg width="0" height="0" class="defs" aria-hidden="true" focusable="false">
+    <symbol id="reg" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="5.5" />
+      <path d="M12 0v24M0 12h24" />
+    </symbol>
+    <!-- The JT monogram, exactly as drawn in src/assets/jt-logo-icon.svg. Two filled paths on a 60° lattice. -->
+    <symbol id="jt" viewBox="0 0 575.65 502.31">
+      <path d="M286.22 164.31h.08l-41.1-71.17H78.25l-27.43.18 41 70.99 112.27-.08 97.9 169.64-15.14 26.21-76.5-132.55-41.06 71.09 117.56 203.69 97.26-168.44z" />
+      <path d="m230.41 73.72 26.52.12 138.66 240.14 41.05-71.11-97.57-169.02 195.02.25L575.65 0H0l40.31 73.45z" />
+    </symbol>
+  </svg>
+
+  <!-- The page is one stage: header, info strip and hero share a frame, so Peek's construction can run edge to edge. -->
+  <div class="stage">
+    <!-- Peek: the column grid everything is set on, full height. Each column's edges draw down in turn. -->
+    <div class="cols" aria-hidden="true">
+      <i style="--i: 0"></i><i style="--i: 1"></i><i style="--i: 2"></i><i style="--i: 3"></i>
+      <i style="--i: 4"></i><i style="--i: 5"></i><i style="--i: 6"></i><i style="--i: 7"></i>
+      <i style="--i: 8"></i><i style="--i: 9"></i><i style="--i: 10"></i><i style="--i: 11"></i>
+    </div>
+
+    <header class="masthead">
+      <a class="mark" href="#main" aria-label="Jarod Taylor, home">
+        <svg viewBox="0 0 575.65 502.31" aria-hidden="true"><use href="#jt" /></svg>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list" data-nav-toggle>Menu</button>
+        <ul id="nav-list">
+          <li><a href="#">Work</a></li>
+          <li><a href="#">Writing</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Colophon</a></li>
+        </ul>
+      </nav>
+      <button class="peek-toggle" type="button" aria-pressed="false" aria-label="Peek backstage" data-peek-toggle>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#reg" /></svg>
+        <span class="peek-word" aria-hidden="true">Peek</span>
+      </button>
+      <a class="talk" href="mailto:contact@jarodtaylor.com">Let's talk</a>
+    </header>
+
+    <p class="info" data-peek data-spec="--type-annot · {f} · sentence case">
+      <span class="role">Engineering Leader <span class="sep">|</span> Design Engineering, Frontend Systems &amp; Developer Experience</span>
+      <span class="loc">Frisco, TX<span class="dot" aria-hidden="true">·</span><span class="status">Open to new roles</span></span>
+    </p>
+
+    <main id="main">
+      <section class="hero" aria-label="Introduction">
+        <!-- The monogram: the hero's resting visual, a lime line drawing over faint construction. In Peek it shows
+             how it was built: construction draws, runs out past the mark to the screen's edges, the outline is traced
+             at constant speed with each vertex marked as the pen passes. Every guide is an extension of its own edges. -->
+        <figure class="figure" aria-hidden="true">
+          <svg class="mono" viewBox="-40 -40 655.65 582.31">
+            <!-- Filled by hero.js: each guide below continued from both of its ends, out past the screen edge. -->
+            <g class="mono-bleed"></g>
+            <g class="mono-guides">
+              <path class="g-tri" pathLength="1" style="--d: -1" d="M0 0H575.65L287.8 498.5Z" />
+              <path class="g-h" pathLength="1" style="--d: 0" d="M-40 0H615.65" />
+              <path class="g-h" pathLength="1" style="--d: 1" d="M-40 73.6H615.65" />
+              <path class="g-h" pathLength="1" style="--d: 2" d="M-40 93.2H615.65" />
+              <path class="g-h" pathLength="1" style="--d: 3" d="M-40 164.3H615.65" />
+              <path class="g-h" pathLength="1" style="--d: 4" d="M-40 333.9H615.65" />
+              <path class="g-h" pathLength="1" style="--d: 5" d="M-40 502.3H615.65" />
+              <path class="g-d" pathLength="1" style="--d: 0" d="M-26.2 -40L310.1 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 1" d="M55.9 -40L392 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 2" d="M86.2 -40L422.3 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 3" d="M168.3 -40L504.6 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 4" d="M191.2 -40L527.4 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 5" d="M273.3 -40L609.5 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 2" d="M600 -40L263.8 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 3" d="M518 -40L181.6 542.3" />
+              <path class="g-d" pathLength="1" style="--d: 4" d="M364.9 -40L28.5 542.3" />
+              <path class="g-axis" pathLength="1" style="--d: 6" d="M287.8 -40V542.3" />
+            </g>
+            <g class="mono-line">
+              <path pathLength="1" d="M286.22 164.31h.08l-41.1-71.17H78.25l-27.43.18 41 70.99 112.27-.08 97.9 169.64-15.14 26.21-76.5-132.55-41.06 71.09 117.56 203.69 97.26-168.44z" />
+              <path pathLength="1" d="m230.41 73.72 26.52.12 138.66 240.14 41.05-71.11-97.57-169.02 195.02.25L575.65 0H0l40.31 73.45z" />
+            </g>
+            <g class="mono-marks">
+              <path class="g-arc" pathLength="1" d="M256.85 450.35A60 60 0 0 1 316.85 450.35" />
+              <text class="g-deg" x="286.85" y="434" text-anchor="middle">60°</text>
+              <text class="g-size" x="590" y="-14" text-anchor="end">575.65 × 502.31</text>
+              <g class="g-pts">
+                <circle cx="0" cy="0" r="3.5" /><circle cx="575.65" cy="0" r="3.5" /><circle cx="40.31" cy="73.45" r="3.5" />
+                <circle cx="534.09" cy="74.1" r="3.5" /><circle cx="230.41" cy="73.72" r="3.5" /><circle cx="256.93" cy="73.84" r="3.5" />
+                <circle cx="339.07" cy="73.85" r="3.5" /><circle cx="78.25" cy="93.14" r="3.5" /><circle cx="50.82" cy="93.32" r="3.5" />
+                <circle cx="245.2" cy="93.14" r="3.5" /><circle cx="91.82" cy="164.31" r="3.5" /><circle cx="204.09" cy="164.23" r="3.5" />
+                <circle cx="286.22" cy="164.31" r="3.5" /><circle cx="210.35" cy="227.53" r="3.5" /><circle cx="436.64" cy="242.87" r="3.5" />
+                <circle cx="169.29" cy="298.62" r="3.5" /><circle cx="395.59" cy="313.98" r="3.5" /><circle cx="301.99" cy="333.87" r="3.5" />
+                <circle cx="384.11" cy="333.87" r="3.5" /><circle cx="286.85" cy="360.08" r="3.5" /><circle cx="286.85" cy="502.31" r="3.5" />
+              </g>
+            </g>
+          </svg>
+        </figure>
+
+        <div class="stack">
+          <div class="name-block" data-peek data-spec="h1 · --type-display · {f} · lh 0.82">
+            <h1 class="name"><span>Jarod</span> <span>Taylor</span></h1>
+            <div class="dims" aria-hidden="true">
+              <span class="dim dim--cap"><b>cap</b></span>
+              <span class="dim dim--base"><b>baseline</b></span>
+              <span class="dim dim--size"><b><span data-readout="display">--</span> = --type-display</b></span>
+            </div>
+          </div>
+
+          <p class="tagline" data-build data-peek data-spec="--type-lead · {f} · lh 1.1">I build the work <span class="hl">behind the work.</span></p>
+
+          <p class="bio" data-build data-peek data-spec="--type-body · {f} · measure 44ch">Designer turned engineer turned engineering leader. For 18 years I've built design systems, frontend platforms, and developer experience, and led the teams that build them.</p>
+
+          <ul class="social" data-build data-peek data-spec="--type-label · {f} · gap --space-6" aria-label="Elsewhere">
+            <li><a href="https://linkedin.com/in/jarodtaylor">LinkedIn</a></li>
+            <li><a href="https://github.com/jarodtaylor">GitHub</a></li>
+            <li><a href="https://x.com/jarodtaylor">X</a></li>
+            <li><a href="mailto:contact@jarodtaylor.com">Email</a></li>
+          </ul>
+        </div>
+
+        <!-- Peek only: the hero's whole type scale and grid, read live from the computed layout. -->
+        <dl class="spec" aria-hidden="true">
+          <div class="spec-head" style="--r: 0"><dt>Hero scale</dt><dd>3 steps + 1 label</dd></div>
+          <div style="--r: 1"><dt>--type-display</dt><dd data-readout="display">--</dd></div>
+          <div style="--r: 2"><dt>--type-lead</dt><dd data-readout="lead">--</dd></div>
+          <div style="--r: 3"><dt>--type-body</dt><dd data-readout="body">--</dd></div>
+          <div style="--r: 4"><dt>--type-label</dt><dd data-readout="label">--</dd></div>
+          <div style="--r: 5"><dt>--page-x</dt><dd data-readout="page-x">--</dd></div>
+          <div style="--r: 6"><dt>columns</dt><dd data-readout="cols">--</dd></div>
+        </dl>
+      </section>
+    </main>
+  </div>
+
+  <button class="skip-intro" type="button" data-skip-intro>Skip intro</button>
+
+  <script src="hero.js" defer></script>
+</body>
+</html>

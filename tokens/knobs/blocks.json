@@ -1,0 +1,241 @@
+{
+  "color": {
+    "ramp": {
+      "neutral": {
+        "hue": { "$type": "number", "$value": 266.1 },
+        "hue-shift": { "$type": "number", "$value": -0.9 },
+        "chroma": { "$type": "number", "$value": 0.209 },
+        "peak": { "$type": "number", "$value": 0.396 },
+        "taper": { "$type": "number", "$value": 1.06 }
+      },
+      "accent": {
+        "hue": { "$type": "number", "$value": 41.1 },
+        "hue-shift": { "$type": "number", "$value": 27 },
+        "chroma": { "$type": "number", "$value": 0.195 },
+        "peak": { "$type": "number", "$value": 0.763 },
+        "taper": { "$type": "number", "$value": 0.48 }
+      },
+      "guide": {
+        "hue": { "$type": "number", "$value": 232 },
+        "hue-shift": { "$type": "number", "$value": 0 },
+        "chroma": { "$type": "number", "$value": 0.1 },
+        "peak": { "$type": "number", "$value": 0.6 },
+        "taper": { "$type": "number", "$value": 1 }
+      },
+      "redline": {
+        "hue": { "$type": "number", "$value": 20 },
+        "hue-shift": { "$type": "number", "$value": 0 },
+        "chroma": { "$type": "number", "$value": 0.2 },
+        "peak": { "$type": "number", "$value": 0.75 },
+        "taper": { "$type": "number", "$value": 1.2 }
+      }
+    },
+    "role": {
+      "bg": { "$type": "string", "$value": "neutral.1000" },
+      "bg-next": { "$type": "string", "$value": "neutral.975" },
+      "text": { "$type": "string", "$value": "neutral.150" },
+      "text-muted": { "$type": "string", "$value": "neutral.400" },
+      "text-body": { "$type": "string", "$value": "neutral.225" },
+      "text-quiet": { "$type": "string", "$value": "neutral.150" },
+      "rule": { "$type": "string", "$value": "neutral.900" },
+      "rule-strong": { "$type": "string", "$value": "neutral.700" },
+      "text-lead": { "$type": "string", "$value": "neutral.150" },
+      "menu-bg": { "$type": "string", "$value": "neutral.1000" },
+      "menu-text": { "$type": "string", "$value": "neutral.150" },
+      "menu-focus": { "$type": "string", "$value": "neutral.400" },
+      "menu-shadow": { "$type": "string", "$value": "neutral.700" },
+      "accent": { "$type": "string", "$value": "accent.675" },
+      "on-accent": { "$type": "string", "$value": "neutral.150" },
+      "inverse-link": { "$type": "string", "$value": "accent.775" },
+      "accent-text": { "$type": "string", "$value": "neutral.400" },
+      "focus": { "$type": "string", "$value": "neutral.400" },
+      "figure-line": { "$type": "string", "$value": "neutral.250" },
+      "figure-mark": { "$type": "string", "$value": "accent.675" },
+      "figure-mark-light": { "$type": "string", "$value": "accent.775" },
+      "figure-mark-dark": { "$type": "string", "$value": "accent.500" },
+      "figure-face": { "$type": "string", "$value": "neutral.400" },
+      "figure-face-light": { "$type": "string", "$value": "neutral.625" },
+      "figure-face-dark": { "$type": "string", "$value": "neutral.250" },
+      "figure-edge": { "$type": "string", "$value": "neutral.150" },
+      "figure-guide": { "$type": "string", "$value": "guide.700" },
+      "figure-guide-ink": { "$type": "string", "$value": "guide.450" },
+      "figure-redline": { "$type": "string", "$value": "redline.700" },
+      "figure-on-redline": { "$type": "string", "$value": "redline.175" }
+    }
+  },
+  "type": {
+    "base": { "$type": "dimension", "$value": { "value": 16, "unit": "px" } },
+    "ratio": { "$type": "number", "$value": 1.25 },
+    "family": {
+      "display": { "$type": "fontFamily", "$value": "Bricolage Grotesque" },
+      "text": { "$type": "fontFamily", "$value": "Atkinson Hyperlegible Next" },
+      "label": { "$type": "fontFamily", "$value": "Atkinson Hyperlegible Next" },
+      "lead": { "$type": "string", "$value": "display" },
+      "control": { "$type": "string", "$value": "text" }
+    },
+    "fallback": {
+      "display": { "$type": "string", "$value": "Bricolage Grotesque Fallback, Arial Narrow, sans-serif" },
+      "text": { "$type": "string", "$value": "Atkinson Hyperlegible Next Fallback, Helvetica Neue, sans-serif" },
+      "label": { "$type": "string", "$value": "Atkinson Hyperlegible Next Fallback, Helvetica Neue, sans-serif" }
+    },
+    "weight": {
+      "display": { "$type": "number", "$value": 800 },
+      "text": { "$type": "number", "$value": 400 },
+      "label": { "$type": "number", "$value": 600 },
+      "lead": { "$type": "number", "$value": 700 },
+      "control": { "$type": "number", "$value": 700 },
+      "nav": { "$type": "number", "$value": 400 }
+    },
+    "variation": {
+      "display": { "$type": "string", "$value": "\"wdth\" 86, \"opsz\" 96" },
+      "text": { "$type": "string", "$value": "normal" },
+      "label": { "$type": "string", "$value": "normal" },
+      "lead": { "$type": "string", "$value": "\"wdth\" 86, \"opsz\" 96" },
+      "control": { "$type": "string", "$value": "normal" }
+    },
+    "leading": {
+      "display": { "$type": "number", "$value": 0.88 },
+      "text": { "$type": "number", "$value": 1.5 },
+      "label": { "$type": "number", "$value": 1.3 },
+      "lead": { "$type": "number", "$value": 1.08 },
+      "control": { "$type": "number", "$value": 1 }
+    },
+    "tracking": {
+      "display": { "$type": "string", "$value": "-0.035em" },
+      "text": { "$type": "string", "$value": "0" },
+      "label": { "$type": "string", "$value": "0.02em" },
+      "lead": { "$type": "string", "$value": "-0.015em" },
+      "control": { "$type": "string", "$value": "0" }
+    },
+    "descent": {
+      "display": { "$type": "number", "$value": 0 }
+    },
+    "metrics": {
+      "display": {
+        "ascent": { "$type": "number", "$value": 0.93 },
+        "descender": { "$type": "number", "$value": 0.27 },
+        "cap": { "$type": "number", "$value": 0.66 }
+      }
+    }
+  },
+  "space": {
+    "base": { "$type": "dimension", "$value": { "value": 16, "unit": "px" } },
+    "density": { "$type": "number", "$value": 1 }
+  },
+  "shape": {
+    "radius": { "$type": "dimension", "$value": { "value": 6.0, "unit": "px" } },
+    "border-width": { "$type": "dimension", "$value": { "value": 1, "unit": "px" } }
+  },
+  "fluid": {
+    "page-x": {
+      "phone": { "$type": "string", "$value": "clamp(1.25rem, 4vw, 7rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.25rem, 4vw, 7rem)" }
+    },
+    "col-gap": {
+      "phone": { "$type": "string", "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" }
+    },
+    "header-h": {
+      "phone": { "$type": "string", "$value": "clamp(3.75rem, 3rem + 1.4vw, 5.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(3.75rem, 3rem + 1.4vw, 5.5rem)" }
+    },
+    "control-h": {
+      "phone": { "$type": "string", "$value": "calc(2.75 * clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem))" },
+      "wide": { "$type": "string", "$value": "calc(2.75 * clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem))" }
+    },
+    "rhythm": {
+      "phone": { "$type": "string", "$value": "clamp(2rem, 1.2rem + 2vw, 4.5rem)" },
+      "wide": { "$type": "string", "$value": "clamp(2rem, 1.2rem + 2vw, 4.5rem)" }
+    },
+    "stage-h": {
+      "phone": { "$type": "string", "$value": "100svh" },
+      "wide": { "$type": "string", "$value": "100svh" }
+    },
+    "mark-header": {
+      "phone": { "$type": "string", "$value": "clamp(1.418rem, 1.134rem + 0.524vw, 2.181rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.418rem, 1.134rem + 0.524vw, 2.181rem)" }
+    },
+    "text-body": {
+      "phone": { "$type": "string", "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)" }
+    },
+    "text-label": {
+      "phone": { "$type": "string", "$value": "clamp(0.8125rem, 0.68rem + 0.22vw, 1.0625rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.8125rem, 0.68rem + 0.22vw, 1.0625rem)" }
+    },
+    "text-small": {
+      "phone": { "$type": "string", "$value": "clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.75rem, 0.68rem + 0.12vw, 0.9375rem)" }
+    },
+    "nav-gap": {
+      "phone": { "$type": "string", "$value": "calc(1.125 * clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem))" },
+      "wide": { "$type": "string", "$value": "calc(1.125 * clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem))" }
+    },
+    "text-control": {
+      "phone": { "$type": "string", "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.0625rem, 0.78rem + 0.42vw, 1.45rem)" }
+    },
+    "stack-gap": {
+      "phone": { "$type": "string", "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem)" }
+    },
+    "stack-gap-tight": {
+      "phone": { "$type": "string", "$value": "clamp(0.75rem, 0.55rem + 0.35vw, 1.25rem)" },
+      "wide": { "$type": "string", "$value": "clamp(0.75rem, 0.55rem + 0.35vw, 1.25rem)" }
+    },
+    "rule-bleed": {
+      "phone": { "$type": "string", "$value": "0rem" },
+      "wide": { "$type": "string", "$value": "0rem" }
+    },
+    "measure": {
+      "phone": { "$type": "string", "$value": "46ch" },
+      "wide": { "$type": "string", "$value": "46ch" }
+    },
+    "hero-display": {
+      "phone": { "$type": "string", "$value": "max(3.5rem, min(9.6vw, 19svh))" },
+      "wide": { "$type": "string", "$value": "max(3.5rem, min(9.6vw, 19svh))" }
+    },
+    "hero-lead": {
+      "phone": { "$type": "string", "$value": "clamp(1.5rem, 0.95rem + 1.5vw, 3.4rem)" },
+      "wide": { "$type": "string", "$value": "clamp(1.5rem, 0.95rem + 1.5vw, 3.4rem)" }
+    },
+    "hero-figure": {
+      "phone": { "$type": "string", "$value": "calc(100vw - 2 * clamp(1.25rem, 4vw, 7rem))" },
+      "wide": { "$type": "string", "$value": "54vw" }
+    }
+  },
+  "motion": {
+    "duration": {
+      "beat": { "$type": "duration", "$value": { "value": 0.1, "unit": "s" } },
+      "fast": { "$type": "duration", "$value": { "value": 0.16, "unit": "s" } },
+      "base": { "$type": "duration", "$value": { "value": 0.3, "unit": "s" } },
+      "slow": { "$type": "duration", "$value": { "value": 0.76, "unit": "s" } }
+    },
+    "easing": {
+      "out": { "$type": "string", "$value": "0.16, 1, 0.3, 1" },
+      "in": { "$type": "string", "$value": "0.5, 0, 0.75, 0" },
+      "draw": { "$type": "string", "$value": "0.22, 0.7, 0.2, 1" },
+      "pop": { "$type": "string", "$value": "0.3, 1.5, 0.6, 1" }
+    }
+  },
+  "enum": {
+    "decoration": { "$type": "string", "$value": "none" },
+    "hero-figure": { "$type": "string", "$value": "isometric" },
+    "hero-layout": { "$type": "string", "$value": "stack" },
+    "hero-intro": { "$type": "string", "$value": "assemble" },
+    "hero-cue": { "$type": "string", "$value": "icon" },
+    "label-case": { "$type": "string", "$value": "none" },
+    "nav-align": { "$type": "string", "$value": "end" },
+    "info-align": { "$type": "string", "$value": "end" },
+    "font-smoothing": { "$type": "string", "$value": "auto" },
+    "link-underline": { "$type": "string", "$value": "always" },
+    "menu-shape": { "$type": "string", "$value": "card" },
+    "hero-ground": { "$type": "string", "$value": "none" }
+  },
+  "figure": {
+    "lattice-drop": {
+      "phone": { "$type": "number", "$value": 0 },
+      "wide": { "$type": "number", "$value": 0 }
+    }
+  }
+}

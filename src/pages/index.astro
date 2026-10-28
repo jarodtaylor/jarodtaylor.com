@@ -1,29 +1,54 @@
 ---
-// Pre-launch home. Replaced by the real homepage in Phase 2.
-import { Button } from '../components/Button/Button';
-import { SectionShell } from '../components/SectionShell/SectionShell';
+// Home: the first viewport (header, info strip, hero). One markup for every brand; tokens do the rest.
+import { Header } from '../components/Header/Header';
+import { Hero } from '../components/Hero/Hero';
+import { InfoStrip } from '../components/InfoStrip/InfoStrip';
+import { PeekColumns, SkipIntro } from '../components/Peek/Peek';
+import { Stage } from '../components/Stage/Stage';
 import Base from '../layouts/Base.astro';
 ---
 <Base
-  title="Jarod Taylor · Engineering Leader | Design Engineering, Frontend Systems & Developer Experience"
+  title="Jarod Taylor · Engineering Leader | Frontend Architecture, Design Engineering & Developer Experience"
   description="Jarod Taylor is a Frisco, TX engineering leader with 18 years in design systems, frontend platforms, and developer experience at Estée Lauder, JCPenney, and Aetna."
 >
-  <SectionShell title="Jarod Taylor" level={1}>
-    <p>Engineering Leader | Design Engineering, Frontend Systems & Developer Experience</p>
-    <p>Frisco, TX</p>
-    <p><strong>I build the work behind the work.</strong></p>
-    <p>
-      Designer turned engineer turned engineering leader. For 18 years I've built design systems,
-      frontend platforms, and developer experience that make whole engineering orgs faster, and led
-      the teams that build them.
-    </p>
-    <p>
-      This site is being built in the open, starting with its design tokens.
-      <a href="https://github.com/jarodtaylor/jarodtaylor.com">Watch it come together on GitHub.</a>
-    </p>
-    <p>
-      <Button href="mailto:contact@jarodtaylor.com">Let's talk</Button>{" "}
-      <Button href="https://www.linkedin.com/in/jarodtaylor">LinkedIn</Button>
-    </p>
-  </SectionShell>
+  <!-- Before first paint: decide whether the intro plays. Once per session, never under reduced motion, never without
+       JS (no class, no hidden content); ?intro forces it. Every intro is armed here and CSS applies only the one the
+       brand's --hero-intro names; runtime.ts runs that one and drops the rest. If runtime.ts never arrives, the 4 s failsafe
+       hands the page back. -->
+  <script is:inline slot="head">
+    (() => {
+      const root = document.documentElement;
+      root.classList.add('js');
+      let seen = false;
+      try { seen = sessionStorage.getItem('jt-intro') === '1'; } catch {}
+      if (new URLSearchParams(location.search).has('intro')) seen = false;
+      if (seen || !matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+      root.classList.add('intro', 'building');
+      root.dataset.peekState = 'arm';
+      setTimeout(() => {
+        if (root.dataset.peekState !== 'arm') return;
+        root.classList.remove('intro', 'building');
+        delete root.dataset.peekState;
+      }, 4000);
+    })();
+  </script>
+
+  <Stage>
+    <PeekColumns />
+    <Header />
+    <InfoStrip />
+    <main id="main">
+      <Hero />
+    </main>
+  </Stage>
+  <!-- Landing spots for the nav and the cue until the sections below the fold are built. Same in every brand. -->
+  <div id="work"></div>
+  <div id="writing"></div>
+  <div id="about"></div>
+  <div id="colophon"></div>
+  <SkipIntro />
 </Base>
+
+<script>
+  import '../components/Hero/runtime.ts';
+</script>

@@ -1,0 +1,38 @@
+/*
+ * Option 2: Plotter. Animated: ~2 KB of canvas JS (option.js), no library.
+ *
+ * The ground is the hero's real grid, faint: a line down every gutter of the 4 / 12 columns and one every
+ * module (column + gutter) across, with a cross where they meet. A plotter head, a registration target in the
+ * brand lime, walks it gutter to gutter, only along the lines, and its trail fades behind it; at each stop it
+ * reads out where it is (gutter · module). It keeps to the figure's side of the sheet, off the text.
+ * Peek takes the sheet away and draws the real column edges and redlines: rest is the machine idling, Peek is
+ * the spec. Reduced motion: the grid and a parked head, no movement. Paused off-screen and in hidden tabs.
+ *
+ * Knobs if ported:
+ *   --hero-ground: none | registration | plotter | rulers   (enum; the runtime attaches the painter for
+ *     "plotter" the way it does the lattice for --hero-figure: lattice)
+ *   --ground-ink (= --spec-guide), --ground-pen (= --figure-guide-ink), --ground-head (= --figure-mark)
+ *   --ground-speed (number, px/ms) if brands should differ.
+ */
+@import "../figure.css";
+
+@layer components {
+  @container style(--hero-figure: construction) {
+    .field {
+      display: block;
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+      z-index: 0;
+      block-size: 100%;
+      inline-size: 100%;
+      transition: opacity calc(var(--_beat) * 6) var(--motion-easing-out);
+    }
+
+    /* Peek is the reveal: the idle sheet steps aside while it draws, and comes back after. */
+    :root[data-peek-state] .field {
+      opacity: 0;
+      transition-duration: calc(var(--_beat) * 3);
+    }
+  }
+}

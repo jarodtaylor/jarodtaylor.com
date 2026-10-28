@@ -1,0 +1,568 @@
+@layer components {
+  /*
+   * Peek backstage: one layer, four states, set by runtime.ts on <html> as data-peek-state:
+   *   arm      reset: everything undrawn, no transitions (the intro starts here, before first paint)
+   *   on       everything draws in on the choreography below
+   *   leaving  drawn, while the construction retracts and --_layer fades the rest
+   *   (none)   rest
+   * The intro is arm, on, a hold, leaving. The Peek button is arm, on; pressing it again is leaving.
+   *
+   * The choreography, in beats from the moment it starts (runtime.ts reads --_peek-settled, --_peek-hold and
+   * --_peek-leave to keep its clock; the hero's construction figure reads the build and trace beats).
+   * Each beat starts while the one before is still finishing, so it reads as one gesture, not a list.
+   */
+  :root {
+    --_beat: var(--spec-beat);
+    --_peek-cols-step: calc(var(--_beat) * 0.35); /* 1. grid columns draw down, left to right */
+    --_peek-cols-dur: calc(var(--_beat) * 7);
+    --_peek-build-at: calc(var(--_beat) * 1.8); /* 2. the monogram's construction lines draw across the mark */
+    --_peek-build-step: calc(var(--_beat) * 0.55);
+    --_peek-build-dur: calc(var(--_beat) * 7.5);
+    --_peek-bleed-dur: calc(var(--_beat) * 8); /* 2b. ...and keep going, out of both ends, to the screen edges */
+    --_peek-trace-at: calc(var(--_beat) * 6); /* 3. outline traced at constant speed; corners pop as the pen passes */
+    --_peek-trace-dur: calc(var(--_beat) * 8);
+    --_peek-box-at: calc(var(--_beat) * 4); /* 4. redline boxes draw their perimeter; labels slide out of the edge */
+    --_peek-box-step: calc(var(--_beat) * 0.9);
+    --_peek-box-dur: calc(var(--_beat) * 4.6);
+    --_peek-label-dur: calc(var(--_beat) * 3.8);
+    --_peek-card-at: calc(var(--_beat) * 10.2); /* 5. the hero-scale card types in, row by row */
+    --_peek-card-step: calc(var(--_beat) * 0.55);
+    --_peek-card-dur: calc(var(--_beat) * 3);
+    --_peek-settled: calc(var(--_beat) * 18.5); /* everything above has landed */
+    --_peek-hold: calc(var(--_beat) * 6); /* intro only: the layer holds, fully drawn */
+    --_peek-leave: calc(var(--_beat) * 5.5); /* the construction folds back; the rest of the layer fades */
+    --_annot: var(--spec-font-size);
+    --_x: var(--space-page-x-phone);
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    :root {
+      --_annot: var(--spec-font-size-wide);
+      --_x: var(--space-page-x-wide);
+    }
+  }
+
+  @property --_layer {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 1;
+  }
+
+  @property --_box {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+  }
+
+  @property --_lab {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+  }
+
+  :root[data-peek-state="leaving"] {
+    --_layer: calc(0);
+
+    transition: --_layer var(--_peek-leave) var(--figure-draw-easing) calc(var(--_beat) * 0.6);
+  }
+
+  /* 1. Columns: each one's edges draw down the whole stage, left to right. */
+  .cols {
+    column-gap: var(--space-col-gap-phone);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    inset: 0 var(--_x);
+    opacity: var(--_layer);
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+  }
+
+  .cols i {
+    border-inline: var(--shape-border-width-default) solid var(--spec-guide);
+    opacity: 0.22;
+    transform: scaleY(0);
+    transform-origin: 50% 0;
+  }
+
+  .cols i:nth-child(n + 5) {
+    display: none;
+  }
+
+  :root[data-peek-state="on"] .cols i {
+    transform: none;
+    transition: transform var(--_peek-cols-dur) var(--figure-draw-easing) calc(var(--_i) * var(--_peek-cols-step));
+  }
+
+  /* Leaving, the columns don't fade: each one's edges retract back up along their length, left to right,
+     all home inside the leave window. */
+  :root[data-peek-state="leaving"] .cols {
+    opacity: 1;
+  }
+
+  :root[data-peek-state="leaving"] .cols i {
+    transition: transform calc(var(--_peek-leave) * 0.8) var(--figure-draw-easing) calc(var(--_i) * var(--_peek-cols-step) * 0.3);
+  }
+
+  /* 4. Redline boxes. Each block's box draws its perimeter as two pens from the top-left corner, meeting at the
+     bottom-right (--_box runs 0 to 2: first the top and left edges, then the right and bottom). Then its spec label
+     slides out of the box edge, clipped at that edge, so it reads as coming from the box rather than appearing. */
+  [data-peek] {
+    --_at: calc(var(--_peek-box-at) + var(--_b) * var(--_peek-box-step));
+  }
+
+  :where([data-peek]) {
+    position: relative;
+  }
+
+  [data-peek]::before,
+  [data-peek]::after {
+    opacity: var(--_layer);
+    pointer-events: none;
+    position: absolute;
+    z-index: 6;
+  }
+
+  [data-peek]::before {
+    background:
+      repeating-linear-gradient(to right, var(--spec-line) 0 calc(var(--shape-border-width-default) * 5), transparent 0 calc(var(--shape-border-width-default) * 9))
+        left top / calc(clamp(0, var(--_box), 1) * 100%) var(--shape-border-width-default) no-repeat,
+      repeating-linear-gradient(to bottom, var(--spec-line) 0 calc(var(--shape-border-width-default) * 5), transparent 0 calc(var(--shape-border-width-default) * 9))
+        left top / var(--shape-border-width-default) calc(clamp(0, var(--_box), 1) * 100%) no-repeat,
+      repeating-linear-gradient(to bottom, var(--spec-line) 0 calc(var(--shape-border-width-default) * 5), transparent 0 calc(var(--shape-border-width-default) * 9))
+        right top / var(--shape-border-width-default) calc(clamp(0, var(--_box) - 1, 1) * 100%) no-repeat,
+      repeating-linear-gradient(to right, var(--spec-line) 0 calc(var(--shape-border-width-default) * 5), transparent 0 calc(var(--shape-border-width-default) * 9))
+        left bottom / calc(clamp(0, var(--_box) - 1, 1) * 100%) var(--shape-border-width-default) no-repeat;
+    content: "";
+    inset: 0;
+  }
+
+  /* Labels hang above their box by default and rise out of its top edge. */
+  [data-peek]::after {
+    background: var(--spec-label-bg);
+    bottom: calc(100% + var(--space-stack-xs));
+    clip-path: inset(0 0 calc((1 - var(--_lab)) * 100%) 0);
+    color: var(--spec-label-text);
+    /* An empty alternative keeps the label out of the accessibility tree: it describes the layout, it isn't content. */
+    content: attr(data-spec) / "";
+    left: 0;
+    padding: var(--space-stack-xs) var(--space-inset-sm);
+    text-transform: none;
+    translate: 0 calc((1 - var(--_lab)) * 100%);
+    white-space: nowrap;
+  }
+
+  /* below: hangs under its box in open space, so no label sits on a glyph. */
+  [data-peek="below"]::after {
+    bottom: auto;
+    clip-path: inset(calc((1 - var(--_lab)) * 100%) 0 0 0);
+    top: calc(100% + var(--space-stack-xs));
+    translate: 0 calc((var(--_lab) - 1) * 100%);
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (max-width: 47.99rem) {
+    [data-peek]::after {
+      max-inline-size: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    [data-peek="side-below"]::after {
+      bottom: auto;
+      clip-path: inset(calc((1 - var(--_lab)) * 100%) 0 0 0);
+      top: calc(100% + var(--space-stack-xs));
+      translate: 0 calc((var(--_lab) - 1) * 100%);
+    }
+  }
+
+  /* side: blocks with open space on their right put the label off that edge, and it slides out sideways.
+     The info strip's label hangs from its right end, clear of the name's label on the left. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    [data-peek="below"]::after {
+      left: auto;
+      right: 0;
+    }
+
+    /* Only the stack layout leaves open space on the right; in columns the labels keep to their default, above. */
+    @container style(--hero-layout: stack) {
+      :is([data-peek="side"], [data-peek="side-below"])::after {
+        bottom: auto;
+        clip-path: inset(0 0 0 calc((1 - var(--_lab)) * 100%));
+        left: calc(100% + var(--space-inset-sm));
+        top: 0;
+        translate: calc((var(--_lab) - 1) * 100%) 0;
+      }
+    }
+  }
+
+  :root:is([data-peek-state="on"], [data-peek-state="leaving"]) [data-peek]::before {
+    --_box: calc(2);
+  }
+
+  :root[data-peek-state="on"] [data-peek]::after {
+    --_lab: calc(1);
+  }
+
+  /* Leaving, the labels retract into their box edges first (an ease-in, quick), then the lines fade. Text never
+     fades through its own background: a half-transparent label reads as mud. */
+  :root[data-peek-state="leaving"] [data-peek]::after {
+    transition: --_lab calc(var(--_peek-leave) * 0.5) var(--motion-easing-in);
+  }
+
+  :root[data-peek-state="on"] [data-peek]::before {
+    transition: --_box var(--_peek-box-dur) var(--figure-draw-easing) var(--_at);
+  }
+
+  :root[data-peek-state="on"] [data-peek]::after {
+    transition: --_lab var(--_peek-label-dur) var(--spec-easing) calc(var(--_at) + var(--_peek-box-dur) * 0.6);
+  }
+
+  /* Hovering or focusing a block outside Peek is a small peek of its own. */
+  @media (hover: hover) {
+    :root:not([data-peek-state]) [data-peek]:hover::before {
+      --_box: calc(2);
+
+      transition: --_box calc(var(--_beat) * 4) var(--figure-draw-easing);
+    }
+
+    :root:not([data-peek-state]) [data-peek]:hover::after {
+      --_lab: calc(1);
+
+      transition: --_lab calc(var(--_beat) * 3) var(--spec-easing) calc(var(--_beat) * 2.2);
+    }
+  }
+
+  :root:not([data-peek-state]) [data-peek]:focus-within::before {
+    --_box: calc(2);
+
+    transition: --_box calc(var(--_beat) * 4) var(--figure-draw-easing);
+  }
+
+  :root:not([data-peek-state]) [data-peek]:focus-within::after {
+    --_lab: calc(1);
+
+    transition: --_lab calc(var(--_beat) * 3) var(--spec-easing) calc(var(--_beat) * 2.2);
+  }
+
+  /* The intro (peek brands only): the blocks under the name arrive with their boxes. The name is there from first paint. */
+  @container style(--hero-intro: peek) {
+    :root.intro[data-peek-state="arm"] [data-build] {
+      opacity: 0;
+    }
+
+    :root.intro[data-peek-state="on"] [data-build] {
+      transition: opacity calc(var(--_beat) * 5) var(--spec-easing) calc(var(--_at) + var(--_beat));
+    }
+  }
+
+  /* The name's measurements: cap height and baseline rules draw across, the size bar draws down beside it.
+     The box is the name's own em, so every offset is a share of the display size. */
+  .dims {
+    --_display: var(--hero-name-size-phone);
+
+    inset: 0;
+    opacity: var(--_layer);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .dim {
+    border-block-start: var(--shape-border-width-default) solid var(--spec-guide);
+    left: 0;
+    position: absolute;
+    right: 0;
+    transform: scaleX(0);
+    transform-origin: 0 0;
+  }
+
+  .dim b,
+  .spec,
+  [data-peek]::after {
+    font-family: var(--spec-font-family);
+    font-size: var(--_annot);
+    font-weight: var(--type-weight-label);
+    letter-spacing: var(--type-tracking-text);
+    line-height: var(--type-leading-snug);
+  }
+
+  .dim b {
+    background: var(--surface-default-bg);
+    bottom: var(--space-stack-xs);
+    color: var(--spec-guide-ink);
+    opacity: 0;
+    padding-inline-start: var(--space-inset-sm);
+    position: absolute;
+    right: 0;
+  }
+
+  /* From the face's metrics: the first line's cap height from the top, the last line's baseline from the bottom
+     (half the leading's slack sits above the ascender and below the descender). */
+  .dim--cap {
+    top: calc(var(--_display) * ((var(--hero-name-leading) - var(--hero-name-ascent) - var(--hero-name-descender)) / 2 + var(--hero-name-ascent) - var(--hero-name-cap)));
+  }
+
+  .dim--base {
+    bottom: calc(var(--_display) * (var(--hero-name-leading) - var(--hero-name-ascent) + var(--hero-name-descender)) / 2);
+  }
+
+  .dim--base b {
+    bottom: auto;
+    top: var(--space-stack-xs);
+  }
+
+  .dim--size {
+    bottom: 0;
+    border-block-start: 0;
+    border-inline-start: var(--shape-border-width-default) solid var(--spec-line);
+    left: calc(var(--_x) * -0.4);
+    right: auto;
+    top: 0;
+    transform: scaleY(0);
+  }
+
+  .dim--size::before,
+  .dim--size::after {
+    border-block-start: var(--shape-border-width-default) solid var(--spec-line);
+    content: "";
+    inline-size: calc(var(--shape-border-width-default) * 7);
+    left: calc(var(--shape-border-width-default) * -4);
+    position: absolute;
+  }
+
+  .dim--size::before {
+    top: 0;
+  }
+
+  .dim--size::after {
+    bottom: 0;
+  }
+
+  .dim--size b {
+    display: none;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .cols {
+      column-gap: var(--space-col-gap-wide);
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+
+    .cols i:nth-child(n + 5) {
+      display: block;
+    }
+
+    .dims {
+      --_display: var(--hero-name-size-wide);
+    }
+
+    .dim--size b {
+      background: none;
+      bottom: 0;
+      color: var(--spec-line);
+      display: block;
+      left: auto;
+      padding: 0;
+      right: calc(100% + var(--space-stack-xs));
+      /* stylelint-disable-next-line unit-allowed-list -- geometry: vertical text reads bottom to top */
+      rotate: 180deg;
+      top: auto;
+      white-space: nowrap;
+      writing-mode: vertical-rl;
+    }
+  }
+
+  :root[data-peek-state="on"] .dim {
+    transform: none;
+  }
+
+  /* Leaving, the rules retract along their length too (no fade); only their labels fade, quickly. */
+  :root[data-peek-state="leaving"] .dims {
+    opacity: 1;
+  }
+
+  :root[data-peek-state="leaving"] .dim {
+    transition: transform calc(var(--_peek-leave) * 0.8) var(--figure-draw-easing);
+  }
+
+  :root[data-peek-state="leaving"] .dim b {
+    opacity: 0;
+    transition: opacity calc(var(--_peek-leave) * 0.4) var(--motion-easing-in);
+  }
+
+  :root[data-peek-state="on"] .dim b {
+    opacity: 1;
+  }
+
+  :root[data-peek-state="on"] .dim {
+    transition: transform calc(var(--_beat) * 7) var(--figure-draw-easing) calc(var(--_peek-box-at) + var(--_beat) * 1.2);
+  }
+
+  :root[data-peek-state="on"] .dim--base {
+    transition-delay: calc(var(--_peek-box-at) + var(--_beat) * 2);
+  }
+
+  :root[data-peek-state="on"] .dim b {
+    transition: opacity calc(var(--_beat) * 3) var(--spec-easing) calc(var(--_peek-box-at) + var(--_beat) * 7.5);
+  }
+
+  @media (hover: hover) {
+    :root:not([data-peek-state]) [data-peek]:hover .dim {
+      transform: none;
+      transition: transform calc(var(--_beat) * 5) var(--figure-draw-easing);
+    }
+
+    :root:not([data-peek-state]) [data-peek]:hover .dim b {
+      opacity: 1;
+      transition: opacity calc(var(--_beat) * 3) var(--spec-easing) calc(var(--_beat) * 3);
+    }
+  }
+
+  /* 5. The hero-scale card: bottom right, beside the figure's narrow foot, typed in one row at a time. Wide screens only. */
+  .spec {
+    display: none;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 64rem) {
+    .spec {
+      bottom: var(--space-rhythm-wide);
+      color: var(--spec-guide-ink);
+      display: grid;
+      gap: var(--space-stack-xs);
+      margin: 0;
+      min-inline-size: calc(var(--space-stack-xl) * 3.75);
+      opacity: var(--_layer);
+      position: absolute;
+      right: var(--_x);
+      z-index: 3;
+    }
+
+    .spec div {
+      clip-path: inset(0 100% 0 0);
+      display: flex;
+      gap: var(--space-stack-md);
+      justify-content: space-between;
+    }
+
+    .spec dt {
+      color: var(--spec-card-text-muted);
+    }
+
+    .spec dd {
+      margin: 0;
+    }
+
+    .spec .spec-head {
+      border-block-end: var(--shape-border-width-default) solid var(--spec-guide);
+      margin-block-end: var(--space-stack-xs);
+      padding-block-end: var(--space-inset-sm);
+    }
+
+    .spec .spec-head dt {
+      color: var(--spec-card-text);
+      font-weight: var(--type-weight-control);
+    }
+
+    .spec .spec-head dd {
+      color: var(--surface-default-accent);
+    }
+  }
+
+  /* The isometric figure's rail runs the full page, under the card: while Peek is up the card gets the page's ground
+     behind it (as a spread shadow, so its layout doesn't move). At rest the empty card box must not cover the rail. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 64rem) {
+    @container style(--hero-figure: isometric) {
+      :root:is([data-peek-state="on"], [data-peek-state="leaving"]) .spec {
+        background: var(--hero-bg);
+        box-shadow: 0 0 0 var(--space-stack-sm) var(--hero-bg);
+      }
+    }
+  }
+
+  /* In columns the details fill the hero's floor, so the card rises to the open band under the header. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 64rem) {
+    @container style(--hero-layout: name-over-details) {
+      /* The socials end the row, so their label hangs from its right edge. */
+      [data-peek="side-below"]::after {
+        left: auto;
+        right: 0;
+      }
+
+      .spec {
+        bottom: auto;
+        top: calc(var(--layout-header-h-wide) + var(--space-section));
+      }
+    }
+  }
+
+  :root[data-peek-state="on"] .spec div {
+    clip-path: inset(0);
+    transition: clip-path var(--_peek-card-dur) steps(18, end) calc(var(--_peek-card-at) + var(--_r, 0) * var(--_peek-card-step));
+  }
+
+  :root[data-peek-state="leaving"] .spec div {
+    transition: clip-path calc(var(--_peek-leave) * 0.5) steps(10, end);
+  }
+
+  /* Arm: no transitions, so every part snaps back to undrawn before it draws again. */
+  :root[data-peek-state="arm"] :is(.cols i, .dim, .dim b, .spec div, [data-peek]::before, [data-peek]::after) {
+    transition: none;
+  }
+
+  /* The intro's skip button: only while the intro plays. */
+  .skip-intro {
+    background: var(--surface-default-bg);
+    border: var(--shape-border-width-default) solid var(--header-control-border);
+    border-radius: var(--shape-radius-pill);
+    bottom: var(--space-inset-md);
+    color: var(--header-control-muted);
+    cursor: pointer;
+    display: none;
+    font-family: var(--header-control-font-family);
+    font-size: var(--header-control-font-size);
+    font-weight: var(--header-control-font-weight);
+    letter-spacing: var(--header-control-tracking);
+    min-block-size: var(--layout-control-h-phone);
+    left: 50%;
+    padding: 0 var(--space-stack-sm);
+    position: fixed;
+    translate: -50% 0;
+    z-index: 40;
+  }
+
+  .skip-intro:hover {
+    border-color: var(--surface-default-text);
+    color: var(--surface-default-text);
+  }
+
+  @container style(--header-control-label-case: upper) {
+    .skip-intro {
+      text-transform: uppercase;
+    }
+  }
+
+  /* Only the peek intro offers a button; the assemble intro is skipped by any key, click or scroll. */
+  @container style(--hero-intro: peek) {
+    /* In the open middle of the floor, clear of the text block (the right corner belongs to Peek's spec card).
+       Phones have no room beside the socials; there a tap anywhere skips, as does any key or scroll everywhere. */
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      :root.intro .skip-intro {
+        display: block;
+      }
+    }
+  }
+
+  /* One frame without transitions, so a skip lands on the resting state instead of animating to it. */
+  :root.settling *,
+  :root.settling *::before,
+  :root.settling *::after {
+    transition: none !important;
+  }
+}

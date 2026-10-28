@@ -1,0 +1,61 @@
+/* Option 2: the roles sit right under the name, before the tagline, as the name's own subtitle.
+   Label type in capitals (the socials' voice), square bullets in the tagline's accent; Engineering Leader in full text colour. */
+@layer components {
+  .roles {
+    color: var(--hero-small-color);
+    column-gap: calc(var(--_small) * 1.8);
+    display: flex;
+    flex-wrap: wrap;
+    font-family: var(--hero-small-font-family);
+    font-size: var(--_small);
+    font-variation-settings: var(--hero-small-font-variation);
+    font-weight: var(--hero-small-font-weight);
+    letter-spacing: var(--hero-small-tracking);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    row-gap: var(--space-stack-xs);
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  .roles li {
+    align-items: center;
+    display: inline-flex;
+    gap: calc(var(--_small) * 0.65);
+    white-space: nowrap;
+  }
+
+  .roles li::before {
+    background: var(--hero-lead-accent);
+    block-size: calc(var(--_small) * 0.45);
+    content: "";
+    flex: none;
+    inline-size: calc(var(--_small) * 0.45);
+  }
+
+  .roles li:first-child {
+    color: var(--surface-default-text);
+  }
+
+  @container style(--hero-layout: stack) {
+    .roles {
+      margin-block-start: calc(var(--_display) * var(--hero-name-descent) + var(--_stack-gap-tight));
+    }
+
+    .tagline {
+      margin-block-start: var(--_stack-gap);
+    }
+  }
+
+  @container style(--hero-layout: name-over-details) {
+    .roles {
+      margin-block-start: calc(var(--_display) * var(--hero-name-descent) + var(--_stack-gap-tight));
+    }
+
+    .details {
+      margin-block-start: var(--_stack-gap);
+    }
+  }
+}

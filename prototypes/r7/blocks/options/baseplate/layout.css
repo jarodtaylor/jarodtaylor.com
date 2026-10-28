@@ -1,0 +1,373 @@
+/*
+ * Building blocks, Baseplate round 3: the tiles are blocks (shared by options A, B and C; each adds palette.css).
+ *
+ * Every tile gets the JT's own depth: a side face offset along the monogram's extrusion vector (+20.56, −35.61 in
+ * the mark's units, i.e. up and to the right along the 60° axis: unit vector 0.5, −0.866), drawn as a stack of hard
+ * shadows so it costs no pseudo-element (the tiles' ::before/::after belong to Peek). On the assemble intro the
+ * tiles travel in along that same axis at constant speed and land on the JT's click beat (13.4 beats), with the same
+ * settle; reduced motion never arms the intro, so they are simply placed. Bricks (links, nav) lift on hover by
+ * growing their depth, and press home on click.
+ *
+ * Same HTML as the live site. Component CSS keyed only on knobs; colours come from the palette's tile tokens.
+ *
+ * Knobs and tokens this layout needs:
+ *   --knob-hero-layout: tiles               existing knob, NEW value (grid areas: name+roles | fig, tag | bio | fig, social | fig)
+ *   --knob-tile-depth:  flat | extruded     NEW enum: tiles as cards or as blocks with the mark's side face
+ *   --knob-nav-hover:   underline | brick   NEW enum
+ *   --knob-hero-cue:    none                existing knob, new value (no rule matches it, so the cue stays off)
+ *   --tile-depth                            NEW dimension token: the side face's length at depth 1
+ *   --tile-<part>-face | -ink | -accent | -side | -edge | -depth
+ *                                           NEW component tokens for part = name, tag, bio, brick (and brick-hover-*)
+ *                                           (aliases of surface roles; check:contrast would pair face with ink and accent)
+ *   --fluid-hero-display-*                  existing fluid knobs, sized to the name tile
+ */
+
+/* 1. TOKENS (layout knobs; colours live in each option's palette.css) ---------------------------------------- */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --knob-hero-layout: tiles;
+    --knob-tile-depth: extruded;
+    --knob-nav-hover: brick;
+    --knob-hero-cue: none;
+    --fluid-hero-display-phone: 17vw;
+    --fluid-hero-display-wide: min(11.5vw, 20svh);
+
+    --choice-tile-depth: var(--knob-tile-depth);
+    --choice-nav-hover: var(--knob-nav-hover);
+    --hero-tile-depth: var(--choice-tile-depth);
+    --header-nav-hover: var(--choice-nav-hover);
+    --tile-depth: var(--space-stack-sm);
+  }
+}
+
+/* 2. COMPONENTS ------------------------------------------------------------------------------------------------ */
+@layer components {
+  /* A tile reads its part's tokens into five private props; the side face is built from them below. */
+  .name-block,
+  .roles {
+    --_face: var(--tile-name-face);
+    --_ink: var(--tile-name-ink);
+    --_accent: var(--tile-name-accent);
+    --_side: var(--tile-name-side);
+    --_edge: var(--tile-name-edge);
+    --_depth: var(--tile-name-depth);
+  }
+
+  .tagline {
+    --_face: var(--tile-tag-face);
+    --_ink: var(--tile-tag-ink);
+    --_accent: var(--tile-tag-accent);
+    --_side: var(--tile-tag-side);
+    --_edge: var(--tile-tag-edge);
+    --_depth: var(--tile-tag-depth);
+  }
+
+  .bio {
+    --_face: var(--tile-bio-face);
+    --_ink: var(--tile-bio-ink);
+    --_accent: var(--tile-bio-accent);
+    --_side: var(--tile-bio-side);
+    --_edge: var(--tile-bio-edge);
+    --_depth: var(--tile-bio-depth);
+  }
+
+  .social a,
+  .nav-list a {
+    --_face: var(--tile-brick-face);
+    --_ink: var(--tile-brick-ink);
+    --_accent: var(--tile-brick-accent);
+    --_side: var(--tile-brick-side);
+    --_edge: var(--tile-brick-edge);
+    --_depth: var(--tile-brick-depth);
+  }
+
+  /* The side face: twelve hard shadows stepping along (0.5, −0.866), then one in the edge colour that outlines the
+     back. One length (--_u) scales the whole block, so depth is a single number per tile. */
+  @container style(--hero-tile-depth: extruded) {
+    .name-block,
+    .roles,
+    .tagline,
+    .bio,
+    .social a,
+    .nav-list a {
+      --_u: calc(var(--tile-depth) * var(--_depth) / 12);
+
+      box-shadow:
+        calc(var(--_u) * 0.5) calc(var(--_u) * -0.866) 0 var(--_side),
+        calc(var(--_u) * 1) calc(var(--_u) * -1.732) 0 var(--_side),
+        calc(var(--_u) * 1.5) calc(var(--_u) * -2.598) 0 var(--_side),
+        calc(var(--_u) * 2) calc(var(--_u) * -3.464) 0 var(--_side),
+        calc(var(--_u) * 2.5) calc(var(--_u) * -4.33) 0 var(--_side),
+        calc(var(--_u) * 3) calc(var(--_u) * -5.196) 0 var(--_side),
+        calc(var(--_u) * 3.5) calc(var(--_u) * -6.062) 0 var(--_side),
+        calc(var(--_u) * 4) calc(var(--_u) * -6.928) 0 var(--_side),
+        calc(var(--_u) * 4.5) calc(var(--_u) * -7.794) 0 var(--_side),
+        calc(var(--_u) * 5) calc(var(--_u) * -8.66) 0 var(--_side),
+        calc(var(--_u) * 5.5) calc(var(--_u) * -9.526) 0 var(--_side),
+        calc(var(--_u) * 6) calc(var(--_u) * -10.392) 0 var(--_side),
+        calc(var(--_u) * 6) calc(var(--_u) * -10.392) 0 var(--shape-border-width-default) var(--_edge);
+    }
+  }
+
+  /* hero-layout: tiles -------------------------------------------------------------------------------------- */
+  @container style(--hero-layout: tiles) {
+    .stack,
+    .details {
+      display: contents;
+    }
+
+    .hero {
+      --_pad: var(--space-inset-md);
+      --_tile-gap: var(--space-stack-md);
+
+      align-content: stretch;
+      gap: var(--_tile-gap);
+      grid-template-areas:
+        "fig"
+        "name"
+        "roles"
+        "tag"
+        "bio"
+        "social";
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: var(--space-stack-lg) var(--_x);
+    }
+
+    .name-block,
+    .roles,
+    .tagline,
+    .bio {
+      background: var(--_face);
+      border: var(--shape-border-width-default) solid var(--_edge);
+      border-radius: var(--shape-radius-control);
+      color: var(--_ink);
+      padding: var(--_pad);
+    }
+
+    /* The name tile is two cells read as one block: the name, then the roles under it. The roles pull up over the
+       grid gap; the name paints above the roles' side face, so the two show one continuous side. */
+    .name-block {
+      --hero-name-color: var(--_ink);
+
+      align-content: end;
+      border-block-end: 0;
+      border-end-end-radius: 0;
+      border-end-start-radius: 0;
+      display: grid;
+      grid-area: name;
+      padding-block-end: calc(var(--_display) * var(--hero-name-descender) * 0.4);
+      z-index: 2;
+    }
+
+    .roles {
+      --hero-lead-accent: var(--_accent);
+      --hero-name-color: var(--_ink);
+      --hero-small-color: var(--_ink);
+
+      border-block-start: 0;
+      border-start-end-radius: 0;
+      border-start-start-radius: 0;
+      grid-area: roles;
+      margin-block-start: calc(var(--_tile-gap) * -1);
+      padding-block-start: var(--_stack-gap-tight);
+    }
+
+    /* The figure stands on the baseplate itself: no bay, so the JT is the biggest block on the page. */
+    .figure {
+      aspect-ratio: 1.15;
+      block-size: auto;
+      grid-area: fig;
+      inline-size: auto;
+      inset: auto;
+      margin: 0;
+      position: relative;
+    }
+
+    .figure > .build {
+      block-size: 100%;
+      top: 0;
+    }
+
+    .tagline {
+      --hero-lead-accent: var(--_accent);
+      --hero-lead-color: var(--_ink);
+
+      align-content: end;
+      display: grid;
+      grid-area: tag;
+      text-wrap: balance;
+      z-index: 1;
+    }
+
+    .bio {
+      --hero-body-color: var(--_ink);
+
+      align-content: end;
+      display: grid;
+      grid-area: bio;
+      max-inline-size: none;
+    }
+
+    /* The links: four bricks. */
+    .social {
+      display: grid;
+      gap: var(--_tile-gap);
+      grid-area: social;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .social li {
+      display: flex;
+    }
+
+    .social a {
+      align-items: flex-start;
+      flex: 1;
+      flex-direction: column;
+      gap: var(--space-stack-sm);
+      justify-content: space-between;
+      padding: var(--_pad);
+    }
+
+    .social svg {
+      block-size: calc(var(--_small) * 1.8);
+      inline-size: calc(var(--_small) * 1.8);
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .hero {
+        --_pad: var(--space-inset-lg);
+        --_tile-gap: var(--space-stack-md);
+
+        grid-template-areas:
+          "name  name  name  name  name  name  name  fig fig fig fig fig"
+          "roles roles roles roles roles roles roles fig fig fig fig fig"
+          "tag   tag   tag   bio   bio   bio   bio   fig fig fig fig fig"
+          "social social social social social social social fig fig fig fig fig";
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        /* The name tile takes the spare height: it is the dominant block. */
+        grid-template-rows: 1fr auto auto auto;
+        padding-block: var(--space-stack-lg) var(--_rhythm);
+      }
+
+      .figure {
+        align-self: center;
+        aspect-ratio: auto;
+        block-size: 100%;
+      }
+
+      .name {
+        white-space: nowrap;
+      }
+
+      /* Low bricks, icon and label side by side; four in a row once the row is wide enough for the handle. */
+      /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+      @media (min-width: 90rem) {
+        .social {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+
+      .social a {
+        align-items: center;
+        flex-direction: row;
+        gap: var(--space-inset-sm);
+        justify-content: flex-start;
+        padding: var(--_pad) var(--space-inset-md);
+      }
+    }
+  }
+
+  /* Bricks: the four links and (with nav-hover: brick) the nav. A brick grows taller when you reach for it (its
+     front comes down-left, its back stays put) and presses into the plate on click. */
+  .social a,
+  .nav-list a {
+    background: var(--_face);
+    border: var(--shape-border-width-default) solid var(--_edge);
+    border-radius: var(--shape-radius-control);
+    color: var(--_ink);
+    text-decoration: none;
+    transition:
+      translate var(--motion-duration-base) var(--motion-easing-pop),
+      box-shadow var(--motion-duration-base) var(--motion-easing-pop),
+      background-color var(--motion-duration-fast) var(--motion-easing-out),
+      color var(--motion-duration-fast) var(--motion-easing-out);
+  }
+
+  .social a:is(:hover, :focus-visible),
+  .nav-list a:is(:hover, :focus-visible) {
+    --_face: var(--tile-brick-hover-face);
+    --_ink: var(--tile-brick-hover-ink);
+    --_side: var(--tile-brick-hover-side);
+
+    text-decoration: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .social a:is(:hover, :focus-visible),
+    .nav-list a:is(:hover, :focus-visible) {
+      --_depth: calc(var(--tile-brick-depth) * 2);
+
+      translate: calc(var(--tile-depth) * var(--tile-brick-depth) * -0.5) calc(var(--tile-depth) * var(--tile-brick-depth) * 0.866);
+    }
+
+    .social a:active,
+    .nav-list a:active {
+      --_depth: calc(var(--tile-brick-depth) * 0.3);
+
+      translate: calc(var(--tile-depth) * var(--tile-brick-depth) * 0.35) calc(var(--tile-depth) * var(--tile-brick-depth) * -0.606);
+    }
+  }
+
+  @container style(--header-nav-hover: brick) {
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 64rem) {
+      .nav-list {
+        gap: var(--space-stack-sm);
+      }
+
+      .nav-list a {
+        padding: var(--space-inset-sm) var(--space-stack-sm);
+      }
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (max-width: 63.99rem) {
+      .nav-list {
+        gap: var(--space-stack-sm);
+        padding: var(--space-stack-md) var(--space-stack-md) var(--space-inset-md) var(--space-inset-md);
+      }
+    }
+  }
+
+  /* The click-in. The tiles ride in along the extrusion axis at constant speed, like the JT's parts on their rail,
+     and every one lands on the JT's click (13.4 beats) and settles with it. */
+  @container style(--hero-intro: assemble) {
+    :root.building :is(.name-block, .roles, .tagline, .bio, .social li) {
+      --_far: calc(var(--tile-depth) * 14);
+      animation:
+        tile-in var(--_dur) linear calc(var(--_beat) * 13.4 - var(--_dur)) both,
+        settle calc(var(--_beat) * 1.6) var(--motion-easing-out) calc(var(--_beat) * 13.4) both;
+    }
+
+    :root.building :is(.name-block, .roles) { --_dur: calc(var(--_beat) * 7); }
+    :root.building .tagline { --_dur: calc(var(--_beat) * 6); }
+    :root.building .bio { --_dur: calc(var(--_beat) * 5.4); }
+    :root.building .social li { --_dur: calc(var(--_beat) * 4.8); }
+    :root.building .social li:nth-child(2) { --_dur: calc(var(--_beat) * 4.4); }
+    :root.building .social li:nth-child(3) { --_dur: calc(var(--_beat) * 4); }
+    :root.building .social li:nth-child(4) { --_dur: calc(var(--_beat) * 3.6); }
+  }
+
+  @keyframes tile-in {
+    from {
+      opacity: 0;
+      translate: calc(var(--_far) * 0.5) calc(var(--_far) * -0.866);
+    }
+
+    20% {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "hero": {
+    "bg": {
+      "$type": "color",
+      "$value": "{surface.default.bg}"
+    },
+    "layout": {
+      "$type": "string",
+      "$value": "{choice.hero-layout}"
+    },
+    "intro": {
+      "$type": "string",
+      "$value": "{choice.hero-intro}"
+    },
+    "figure": {
+      "$type": "string",
+      "$value": "{choice.hero-figure}"
+    },
+    "ground": {
+      "$type": "string",
+      "$value": "{choice.hero-ground}"
+    },
+    "cue": {
+      "$type": "string",
+      "$value": "{choice.hero-cue}"
+    },
+    "name": {
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.display}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.display}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.display}"
+      },
+      "leading": {
+        "$type": "number",
+        "$value": "{type.leading.display}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.display}"
+      },
+      "size-phone": {
+        "$type": "string",
+        "$value": "{type.fluid.display-phone}"
+      },
+      "size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.display-wide}"
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{surface.default.text}"
+      },
+      "descent": {
+        "$type": "number",
+        "$value": "{type.descent.display}"
+      },
+      "ascent": {
+        "$type": "number",
+        "$value": "{type.metrics.display-ascent}"
+      },
+      "descender": {
+        "$type": "number",
+        "$value": "{type.metrics.display-descender}"
+      },
+      "cap": {
+        "$type": "number",
+        "$value": "{type.metrics.display-cap}"
+      }
+    },
+    "lead": {
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.lead}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.lead}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.lead}"
+      },
+      "leading": {
+        "$type": "number",
+        "$value": "{type.leading.lead}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.lead}"
+      },
+      "size-phone": {
+        "$type": "string",
+        "$value": "{type.fluid.lead-phone}"
+      },
+      "size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.lead-wide}"
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{surface.default.text-lead}"
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "{surface.default.accent}"
+      }
+    },
+    "body": {
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.text}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.text}"
+      },
+      "leading": {
+        "$type": "number",
+        "$value": "{type.leading.body}"
+      },
+      "size": {
+        "$type": "string",
+        "$value": "{type.fluid.body-phone}"
+      },
+      "color": {
+        "$type": "color",
+        "$value": "{surface.default.text-body}"
+      },
+      "size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.body-wide}"
+      },
+      "measure": {
+        "$type": "string",
+        "$value": "{layout.measure-phone}"
+      },
+      "measure-wide": {
+        "$type": "string",
+        "$value": "{layout.measure-wide}"
+      }
+    },
+    "small": {
+      "$description": "Socials and small print",
+      "color": {
+        "$type": "color",
+        "$value": "{surface.default.text-quiet}"
+      },
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.label}"
+      },
+      "font-size": {
+        "$type": "string",
+        "$value": "{type.fluid.label-phone}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.label}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.label}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.label}"
+      },
+      "font-size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.label-wide}"
+      }
+    },
+    "cue-color": {
+      "$type": "color",
+      "$value": "{surface.default.text-muted}"
+    },
+    "figure-size-phone": {
+      "$type": "string",
+      "$value": "{layout.figure-phone}"
+    },
+    "figure-size-wide": {
+      "$type": "string",
+      "$value": "{layout.figure-wide}"
+    },
+    "lattice-drop-phone": {
+      "$type": "number",
+      "$value": "{layout.lattice-drop-phone}"
+    },
+    "lattice-drop-wide": {
+      "$type": "number",
+      "$value": "{layout.lattice-drop-wide}"
+    },
+    "roles": {
+      "$description": "The role list under the name: one type step under the socials",
+      "font-size": {
+        "$type": "string",
+        "$value": "{type.fluid.small-phone}"
+      },
+      "font-size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.small-wide}"
+      }
+    }
+  }
+}

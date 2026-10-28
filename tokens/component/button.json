@@ -30,11 +30,11 @@
     },
     "font-family": {
       "$type": "fontFamily",
-      "$value": "{type.family.body}"
+      "$value": "{type.family.text}"
     },
     "font-weight": {
       "$type": "fontWeight",
-      "$value": "{type.weight.heading}"
+      "$value": "{type.weight.display}"
     },
     "font-size": {
       "$type": "dimension",

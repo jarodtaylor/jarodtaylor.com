@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R7 Backstage ground</title>
+<style>
+  :root { color-scheme: dark; --bg: #0b1119; --fg: #e8eef5; --muted: #a3b0bf; --lime: #d4f45a; }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, sans-serif; margin: 0; padding: 2rem 1rem; }
+  main { margin: 0 auto; max-width: 46rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 .25rem; }
+  p { color: var(--muted); margin: 0 0 1.5rem; }
+  ol { padding-left: 1.25rem; }
+  li { margin-bottom: 1rem; }
+  a { color: var(--lime); }
+  code { font-size: .9em; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Backstage-lite: resting ground and figure (R7, B2 + B6)</h1>
+  <p>Same live markup in every option (<code>seed/</code> is <code>pnpm build</code> output); each adds only <code>option.css</code> (and a small <code>option.js</code>). All share <code>options/figure.css</code>: the mark rests without its construction lines, and phones get a full-strength, heavier mark behind the name with knocked-out crossings. Press Peek on each.</p>
+  <ol>
+    <li><a href="options/1/?brand=backstage">Registration sheet</a>: static, CSS only. A registration cross in every column gutter, one module apart, plus crop marks at the hero's trim. Peek's column edges land on the crosses' arms.</li>
+    <li><a href="options/2/?brand=backstage">Plotter</a>: animated, ~2 KB canvas. The real gutter grid, faint, walked by a lime plotter head along the lines, with a fading trail and a gutter · module readout. Steps aside for Peek.</li>
+    <li><a href="options/3/?brand=backstage">Artboard</a>: static CSS ground plus ~1 KB pointer JS. Faint layout-grid column fills, rulers off the header rule and down the margin; mouse guides snap to column edges and the base unit.</li>
+    <li><a href="options/0/?brand=backstage">Baseline</a>: the live site today, for comparison.</li>
+  </ol>
+  <p>Screenshots: <code>shots/</code> (390 and 1440 per option).</p>
+</main>
+</body>
+</html>

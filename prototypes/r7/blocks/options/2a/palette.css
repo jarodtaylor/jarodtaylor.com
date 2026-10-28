@@ -1,0 +1,48 @@
+/*
+ * Baseplate 2a: WARM PAPER, PERSIMMON LEAD.
+ * A warm paper baseplate with near-white tiles and ink type. Persimmon leads: the tagline's accent, the role bullets,
+ * the brick hover and the J. Cobalt is the second colour: the T, the muted text.
+ *
+ * Only role mappings (color.role.* in tokens/knobs/blocks.json) plus one NEW ramp:
+ *   color.ramp.paper   NEW ramp knob (hue 85, low chroma). derive() would make it like the others; the three steps
+ *                      used here are written out as its primitives.
+ * Contrast (WCAG 2.2): ink #06155e on paper 950 about 15:1; accent-text 500 on paper 950 about 5.4:1;
+ * paper on ink (bio tile) about 15:1; ink #030d43 on persimmon 675 (hover) about 5.8:1.
+ */
+@layer tokens {
+  html[data-brand="blocks"] {
+    /* color.ramp.paper (derived primitives) */
+    --color-paper-990: oklch(0.99 0.006 85);
+    --color-paper-950: oklch(0.945 0.018 85);
+    --color-paper-820: oklch(0.82 0.03 80);
+
+    --color-role-bg: var(--color-paper-950);
+    --color-role-bg-next: var(--color-paper-990);
+    --color-role-text: var(--color-neutral-250);
+    --color-role-text-body: var(--color-neutral-275);
+    --color-role-text-lead: var(--color-neutral-250);
+    --color-role-text-muted: var(--color-neutral-400);
+    --color-role-text-quiet: var(--color-neutral-250);
+    --color-role-rule: var(--color-paper-820);
+    --color-role-rule-strong: var(--color-neutral-700);
+    --color-role-separator: var(--color-neutral-700);
+    --color-role-accent: var(--color-accent-675);
+    --color-role-on-accent: var(--color-neutral-200);
+    --color-role-accent-text: var(--color-accent-500);
+    --color-role-focus: var(--color-accent-500);
+    --color-role-menu-bg: var(--color-paper-990);
+    --color-role-menu-text: var(--color-neutral-250);
+    --color-role-menu-focus: var(--color-neutral-400);
+    --color-role-menu-shadow: var(--color-neutral-700);
+
+    /* The JT on light: a cobalt T with ink edges, the persimmon J. */
+    --color-role-figure-line: var(--color-neutral-250);
+    --color-role-figure-edge: var(--color-neutral-200);
+    --color-role-figure-face: var(--color-neutral-400);
+    --color-role-figure-face-light: var(--color-neutral-575);
+    --color-role-figure-face-dark: var(--color-neutral-300);
+    --color-role-figure-mark: var(--color-accent-675);
+    --color-role-figure-mark-light: var(--color-accent-750);
+    --color-role-figure-mark-dark: var(--color-accent-525);
+  }
+}

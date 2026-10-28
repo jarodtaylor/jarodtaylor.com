@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>R7 · Building blocks layouts</title>
+  <style>
+    body { background: #1530b4; color: #f4f7fd; font: 1.125rem/1.5 system-ui, sans-serif; margin: 0; padding: clamp(1.25rem, 4vw, 5rem); }
+    h2 { font-size: 1.5rem; margin: 2.5rem 0 0; }
+    h1 { font-size: clamp(2rem, 5vw, 4rem); line-height: 1; margin: 0 0 0.5em; }
+    p { max-width: 60ch; }
+    ol { display: grid; gap: 1rem; list-style: none; margin: 2rem 0; padding: 0; }
+    a { color: #ffb08a; font-weight: 700; }
+    li span { color: #c7d0f4; display: block; }
+    code { font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>Building blocks: three layouts</h1>
+  <p>Same HTML as the live site (seeded from <code>pnpm build</code>, in <code>seed/</code>). Each option adds one override sheet written as knobs; its header comment lists the knobs it would need.</p>
+  <h2>Round 4: the original Blocks layout, light (palette only)</h2>
+  <p>The live <code>?brand=blocks</code> layout, untouched; each option is one <code>palette.css</code> of colour roles. White ground, ink type, two saturated colours on the JT, the accent words and the dot. Shots include the click frame.</p>
+  <ol>
+    <li><a href="options/L1/?brand=blocks&amp;intro">L1. Cobalt + persimmon</a><span>The brand's own pair on white: cobalt T and accent words, persimmon J.</span></li>
+    <li><a href="options/L2/?brand=blocks&amp;intro">L2. Bottle green + hot magenta</a><span>A fresh complementary pair: green T and ink, magenta J, accent words and dot.</span></li>
+    <li><a href="options/L3/?brand=blocks&amp;intro">L3. Signal yellow + red</a><span>The bold one: a yellow T with an ochre side, a red J and red accent words, everything else black on white.</span></li>
+  </ol>
+  <h2>Round 3: Baseplate, tiles as blocks (dropped: the extruded angles look off)</h2>
+  <p>Every tile gets the JT's own depth (its side face runs along the monogram's 60° extrusion vector), and on load the tiles ride in and click into place on the JT's beat. Shared layout in <code>options/baseplate/layout.css</code>; each option adds a <code>palette.css</code>.</p>
+  <ol>
+    <li><a href="options/A/?brand=blocks&amp;intro">A. Extruded bricks</a><span>Crisp white plate; white blocks with the T's cobalt side faces; the bio is the one ink block; persimmon only in the J.</span></li>
+    <li><a href="options/B/?brand=blocks&amp;intro">B. Primary toy box</a><span>Cobalt name block, yellow tagline block, persimmon link bricks, white bio, each with a darker side of its own colour.</span></li>
+    <li><a href="options/C/?brand=blocks&amp;intro">C. Back to cobalt</a><span>The original cobalt field; deep-cobalt name block with lit sides, a paper bio, persimmon as the accent.</span></li>
+  </ol>
+  <h2>Round 2: Baseplate on light (rejected: drab)</h2>
+  <p>Same markup with the new roles list under the name (from <code>r7/roleline/options/2</code>). Shared layout in <code>options/2-light/baseplate.css</code>; each variant adds a <code>palette.css</code> of role mappings.</p>
+  <ol>
+    <li><a href="options/2a/?brand=blocks">2a. Warm paper, persimmon lead</a><span>Warm paper baseplate with near-white tiles. Persimmon leads (tagline accent, role bullets, brick hover, the J); the T turns cobalt.</span></li>
+    <li><a href="options/2b/?brand=blocks">2b. Cool white, cobalt lead</a><span>Cool white baseplate with pale-blue tiles. Cobalt leads (accent, bullets, hover); persimmon is kept for the J only; the T is paper-white with ink edges.</span></li>
+  </ol>
+  <h2>Round 1</h2>
+  <ol>
+    <li><a href="options/1/?brand=blocks">1. Monument</a><span>One centre line: the JT stands on a giant name like a block on a plinth, tagline and bio flank it, the info strip is the baseplate. Nav centred; links snap up into paper blocks.</span></li>
+    <li><a href="options/2/?brand=blocks">2. Baseplate</a><span>The hero is built from tiles: name on a persimmon slab, JT in a deep-cobalt bay, bio on paper, links as four bricks. Nav is a tray of bricks that lift on hover.</span></li>
+    <li><a href="options/3/?brand=blocks">3. Spine</a><span>The header becomes a left rail with the info strip as a vertical spine; JT on the left page, name stacked on the right. Nav is always a full-height drawer whose links fall in and stack.</span></li>
+  </ol>
+  <p>Screenshots at 390 and 1440 in <a href="shots/">shots/</a>.</p>
+</body>
+</html>

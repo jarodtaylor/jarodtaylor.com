@@ -1,0 +1,35 @@
+{
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "beat": {
+        "$value": "{duration.beat}",
+        "$description": "The unit sequenced motion is written in (every Peek delay is a multiple of it)"
+      },
+      "fast": {
+        "$value": "{duration.fast}"
+      },
+      "base": {
+        "$value": "{duration.base}"
+      },
+      "slow": {
+        "$value": "{duration.slow}"
+      }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "out": {
+        "$value": "{easing.out}"
+      },
+      "in": {
+        "$value": "{easing.in}"
+      },
+      "draw": {
+        "$value": "{easing.draw}"
+      },
+      "pop": {
+        "$value": "{easing.pop}"
+      }
+    }
+  }
+}

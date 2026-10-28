@@ -19,3 +19,6 @@ playwright-report/
 .lighthouseci/
 .codex/
 .cursor/
+
+# r7 prototype seeds: build output, rebuilt by prototypes/r7/<folder>/seed.sh
+prototypes/r7/*/seed/

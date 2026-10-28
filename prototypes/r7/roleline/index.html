@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R7 Role Line</title>
+<style>
+  :root { color-scheme: light dark; --bg: #fafaf7; --fg: #1b1b18; --muted: #66665f; --link: #1d4ed8; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #121211; --fg: #ecece6; --muted: #9a9a92; --link: #8ab4ff; } }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.5 system-ui, sans-serif; margin: 0; padding: 32px 16px; }
+  main { max-width: 46rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  p { margin: 0 0 24px; color: var(--muted); }
+  ol { padding-left: 1.2rem; }
+  li { margin-bottom: 20px; }
+  li strong { display: block; }
+  a { color: var(--link); margin-right: 12px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>G1 role line: 4 options</h1>
+  <p>Each option is one markup change plus CSS that only reads existing tokens. Shots: <code>shots/&lt;option&gt;-&lt;brand&gt;-&lt;width&gt;.png</code>.</p>
+  <ol>
+    <li><strong>Refined strip.</strong> The info strip stays; the role becomes a list of four on square bullets, Engineering Leader in full text colour.
+      <a href="options/1/?brand=clean">clean</a><a href="options/1/?brand=backstage">backstage</a><a href="options/1/?brand=blocks">blocks</a></li>
+    <li><strong>Under the name (pick).</strong> The four roles sit right under the h1 as its subtitle, in label caps with accent squares. The strip keeps only "Open to new roles".
+      <a href="options/2/?brand=clean">clean</a><a href="options/2/?brand=backstage">backstage</a><a href="options/2/?brand=blocks">blocks</a></li>
+    <li><strong>In the bio.</strong> A bio variant names all four roles, marked in the accent colour so they scan.
+      <a href="options/3/?brand=clean">clean</a><a href="options/3/?brand=backstage">backstage</a><a href="options/3/?brand=blocks">blocks</a></li>
+    <li><strong>Labelled list.</strong> A small "Roles" list in the details row: under the tagline in Clean, between tagline and bio in the stack brands.
+      <a href="options/4/?brand=clean">clean</a><a href="options/4/?brand=backstage">backstage</a><a href="options/4/?brand=blocks">blocks</a></li>
+  </ol>
+  <p><a href="seed/?brand=clean">Current (seed)</a></p>
+</main>
+</body>
+</html>

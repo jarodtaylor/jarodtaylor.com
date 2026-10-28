@@ -12,9 +12,10 @@ export default defineConfig({
   plugins: [
     css({
       filename: 'src/styles/tokens.css',
-      // One block per brand. The default brand also claims :root so the page is styled before any attribute is set.
+      // One block per brand. The default brand also claims :root so the page is styled before any attribute is set,
+      // through :where() so that claim has no specificity and any [data-brand] wins, whatever order the blocks come in.
       permutations: brands.all.map((brand) => {
-        const selector = brand === brands.default ? `:root,\n  [data-brand="${brand}"]` : `[data-brand="${brand}"]`;
+        const selector = brand === brands.default ? `:where(:root),\n  [data-brand="${brand}"]` : `[data-brand="${brand}"]`;
         return {
           input: { brand },
           prepare: (contents: string) => `@layer tokens {\n  ${selector} {\n    ${contents}\n  }\n}`,

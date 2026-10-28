@@ -1,0 +1,99 @@
+{
+  "layout": {
+    "$type": "string",
+    "$description": "The page frame and figure sizes, fluid: phone below 48rem, wide above. Components pick the band in a media query.",
+    "header-h-phone": {
+      "$value": "{fluid.header-h.phone}"
+    },
+    "header-h-wide": {
+      "$value": "{fluid.header-h.wide}"
+    },
+    "control-h-phone": {
+      "$value": "{fluid.control-h.phone}"
+    },
+    "control-h-wide": {
+      "$value": "{fluid.control-h.wide}"
+    },
+    "stage-h-phone": {
+      "$value": "{fluid.stage-h.phone}"
+    },
+    "stage-h-wide": {
+      "$value": "{fluid.stage-h.wide}"
+    },
+    "mark-header-phone": {
+      "$value": "{fluid.mark-header.phone}"
+    },
+    "mark-header-wide": {
+      "$value": "{fluid.mark-header.wide}"
+    },
+    "figure-phone": {
+      "$value": "{fluid.hero-figure.phone}"
+    },
+    "figure-wide": {
+      "$value": "{fluid.hero-figure.wide}"
+    },
+    "measure-phone": {
+      "$value": "{fluid.measure.phone}"
+    },
+    "measure-wide": {
+      "$value": "{fluid.measure.wide}"
+    },
+    "rule-bleed-phone": {
+      "$value": "{fluid.rule-bleed.phone}"
+    },
+    "rule-bleed-wide": {
+      "$value": "{fluid.rule-bleed.wide}"
+    },
+    "nav-gap-phone": {
+      "$value": "{fluid.nav-gap.phone}"
+    },
+    "nav-gap-wide": {
+      "$value": "{fluid.nav-gap.wide}"
+    },
+    "lattice-drop-phone": {
+      "$type": "number",
+      "$value": "{size.lattice-drop.phone}"
+    },
+    "lattice-drop-wide": {
+      "$type": "number",
+      "$value": "{size.lattice-drop.wide}"
+    }
+  },
+  "choice": {
+    "$type": "string",
+    "$description": "Enumerated knobs, read by container style queries. Never key CSS on a brand name.",
+    "hero-figure": {
+      "$value": "{knob.hero-figure}"
+    },
+    "hero-layout": {
+      "$value": "{knob.hero-layout}"
+    },
+    "hero-intro": {
+      "$value": "{knob.hero-intro}"
+    },
+    "hero-cue": {
+      "$value": "{knob.hero-cue}"
+    },
+    "label-case": {
+      "$value": "{knob.label-case}"
+    },
+    "nav-align": {
+      "$value": "{knob.nav-align}"
+    },
+    "info-align": {
+      "$value": "{knob.info-align}"
+    },
+    "font-smoothing": {
+      "$value": "{knob.font-smoothing}"
+    },
+    "link-underline": {
+      "$value": "{knob.link-underline}"
+    },
+    "menu-shape": {
+      "$value": "{knob.menu-shape}"
+    },
+    "hero-ground": {
+      "$value": "{knob.hero-ground}"
+    }
+  }
+}

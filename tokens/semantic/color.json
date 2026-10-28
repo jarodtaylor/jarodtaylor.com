@@ -1,92 +1,181 @@
 {
   "surface": {
     "$type": "color",
-    "$description": "Surface roles. Each role declares the foregrounds used on it, so every pair a contrast check needs sits side by side. focus is the focus indicator on that surface (3:1, SC 1.4.11).",
+    "$description": "Surface roles, all aliases of the brand's color.role picks. Each role declares the foregrounds used on it, so every pair a contrast check needs sits side by side. focus is the focus indicator on that surface (3:1, SC 1.4.11).",
     "default": {
       "bg": {
-        "$value": "{color.neutral.50}"
+        "$value": "{color.role.bg}"
       },
       "text": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.role.text}"
       },
       "text-muted": {
-        "$value": "{color.neutral.600}"
+        "$value": "{color.role.text-muted}"
       },
       "border": {
-        "$value": "{color.neutral.200}"
+        "$value": "{color.role.rule}"
       },
       "link": {
-        "$value": "{color.accent.700}"
+        "$value": "{color.role.accent-text}"
       },
       "focus": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.role.focus}"
+      },
+      "text-quiet": {
+        "$value": "{color.role.text-quiet}"
+      },
+      "accent": {
+        "$value": "{color.role.accent-text}"
+      },
+      "text-body": {
+        "$value": "{color.role.text-body}"
+      },
+      "text-lead": {
+        "$value": "{color.role.text-lead}"
       }
     },
     "raised": {
       "bg": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.role.bg-next}"
       },
       "text": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.role.text}"
       },
       "text-muted": {
-        "$value": "{color.neutral.600}"
+        "$value": "{color.role.text-muted}"
       },
       "border": {
-        "$value": "{color.neutral.200}"
+        "$value": "{color.role.rule}"
       },
       "link": {
-        "$value": "{color.accent.700}"
+        "$value": "{color.role.accent-text}"
       },
       "focus": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.role.focus}"
       }
     },
     "inverse": {
       "bg": {
-        "$value": "{color.neutral.900}"
+        "$value": "{color.role.text}"
       },
       "text": {
-        "$value": "{color.neutral.50}"
+        "$value": "{color.role.bg}"
       },
       "text-muted": {
-        "$value": "{color.neutral.300}"
+        "$value": "{color.role.bg-next}"
       },
       "border": {
-        "$value": "{color.neutral.700}"
+        "$value": "{color.role.text-muted}"
       },
       "link": {
-        "$value": "{color.accent.300}"
+        "$value": "{color.role.inverse-link}"
       },
       "focus": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.role.bg}"
       }
     },
     "accent": {
       "bg": {
-        "$value": "{color.accent.700}"
+        "$value": "{color.role.accent}"
       },
       "text": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.role.on-accent}"
       },
       "text-muted": {
-        "$value": "{color.accent.100}"
+        "$value": "{color.role.on-accent}"
       },
       "border": {
-        "$value": "{color.accent.500}"
+        "$value": "{color.role.accent}"
       },
       "link": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.role.on-accent}"
       },
       "focus": {
-        "$value": "{color.neutral.0}"
+        "$value": "{color.role.on-accent}"
+      }
+    },
+    "annotation": {
+      "$description": "Spec labels in the figure layer (the Peek redlines)",
+      "bg": {
+        "$value": "{color.role.figure-redline}"
+      },
+      "text": {
+        "$value": "{color.role.figure-on-redline}"
+      },
+      "focus": {
+        "$value": "{color.role.figure-on-redline}"
+      }
+    },
+    "menu": {
+      "$description": "The phone nav popover",
+      "bg": {
+        "$value": "{color.role.menu-bg}"
+      },
+      "text": {
+        "$value": "{color.role.menu-text}"
+      },
+      "border": {
+        "$value": "{color.role.rule}"
+      },
+      "focus": {
+        "$value": "{color.role.menu-focus}"
       }
     }
   },
   "focus": {
     "$type": "color",
     "ring": {
-      "$value": "{color.accent.500}"
+      "$value": "{color.role.focus}"
+    }
+  },
+  "graphic": {
+    "$type": "color",
+    "$description": "Decorative figure colors (all figures are aria-hidden). Each brand fills every role; a figure uses the ones it needs.",
+    "line": {
+      "$value": "{color.role.figure-line}"
+    },
+    "mark": {
+      "$value": "{color.role.figure-mark}"
+    },
+    "mark-light": {
+      "$value": "{color.role.figure-mark-light}"
+    },
+    "mark-dark": {
+      "$value": "{color.role.figure-mark-dark}"
+    },
+    "face": {
+      "$value": "{color.role.figure-face}"
+    },
+    "face-light": {
+      "$value": "{color.role.figure-face-light}"
+    },
+    "face-dark": {
+      "$value": "{color.role.figure-face-dark}"
+    },
+    "edge": {
+      "$value": "{color.role.figure-edge}"
+    },
+    "guide": {
+      "$value": "{color.role.figure-guide}"
+    },
+    "guide-ink": {
+      "$value": "{color.role.figure-guide-ink}"
+    },
+    "redline": {
+      "$value": "{color.role.figure-redline}"
+    },
+    "on-redline": {
+      "$value": "{color.role.figure-on-redline}"
+    },
+    "shadow": {
+      "$value": "{color.role.menu-shadow}"
+    }
+  },
+  "line": {
+    "$type": "color",
+    "$description": "Decorative lines that are not a surface's border: control outlines whose text or icon already identifies them, so no contrast minimum applies.",
+    "strong": {
+      "$value": "{color.role.rule-strong}"
     }
   }
 }

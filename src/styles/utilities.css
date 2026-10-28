@@ -1,20 +1,40 @@
 @layer utilities {
+  /* Skip link: in every brand's own accent and control type, over the header's left end. */
   .skip-link {
-    background: var(--surface-inverse-bg);
-    color: var(--surface-inverse-text);
-    left: var(--space-inset-sm);
+    background: var(--surface-accent-bg);
+    border-radius: var(--shape-radius-control);
+    color: var(--surface-accent-text);
+    font-family: var(--header-control-font-family);
+    font-size: var(--header-control-font-size);
+    font-weight: var(--header-control-font-weight);
+    left: var(--space-page-x-phone);
+    letter-spacing: var(--header-control-tracking);
+    line-height: var(--header-control-leading);
     padding: var(--space-inset-sm) var(--space-inset-md);
     position: absolute;
+    text-decoration: none;
     top: var(--space-inset-sm);
-    z-index: 1;
+    z-index: 50;
   }
 
-  /* Hidden until keyboard focus lands on it. */
-  .skip-link:not(:focus) {
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .skip-link {
+      left: var(--space-page-x-wide);
+    }
+  }
+
+  .skip-link:focus-visible {
+    outline-color: var(--surface-accent-focus);
+  }
+
+  /* Hidden until keyboard focus lands on it: :focus-visible, so a pointer or a script moving focus never shows it. */
+  .skip-link:not(:focus-visible) {
     clip-path: inset(50%);
     /* stylelint-disable-next-line unit-allowed-list -- visually-hidden idiom: a 1px box, not a design value */
     height: 1px;
     overflow: hidden;
+    padding: 0;
     white-space: nowrap;
     /* stylelint-disable-next-line unit-allowed-list -- visually-hidden idiom: a 1px box, not a design value */
     width: 1px;

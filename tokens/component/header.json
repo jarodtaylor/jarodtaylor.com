@@ -1,0 +1,161 @@
+{
+  "header": {
+    "bg": {
+      "$type": "color",
+      "$value": "{surface.default.bg}"
+    },
+    "text": {
+      "$type": "color",
+      "$value": "{surface.default.text}"
+    },
+    "rule": {
+      "$type": "color",
+      "$value": "{surface.default.border}"
+    },
+    "mark-size": {
+      "$type": "string",
+      "$value": "{layout.mark-header-phone}"
+    },
+    "mark-size-wide": {
+      "$type": "string",
+      "$value": "{layout.mark-header-wide}"
+    },
+    "control": {
+      "$description": "Nav links, the menu and Peek buttons. label-case (upper | none) is read by a style query.",
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.control}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.control}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.control}"
+      },
+      "leading": {
+        "$type": "number",
+        "$value": "{type.leading.control}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.control}"
+      },
+      "font-size": {
+        "$type": "string",
+        "$value": "{type.fluid.control-phone}"
+      },
+      "font-size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.control-wide}"
+      },
+      "label-case": {
+        "$type": "string",
+        "$value": "{choice.label-case}"
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "{surface.default.text-quiet}"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{line.strong}"
+      },
+      "nav-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.nav}"
+      }
+    },
+    "info": {
+      "$description": "The info strip: role, location, status",
+      "text": {
+        "$type": "color",
+        "$value": "{surface.default.text-muted}"
+      },
+      "status": {
+        "$type": "color",
+        "$value": "{surface.default.accent}"
+      },
+      "font-family": {
+        "$type": "fontFamily",
+        "$value": "{type.family.label}"
+      },
+      "font-weight": {
+        "$type": "fontWeight",
+        "$value": "{type.weight.text}"
+      },
+      "font-variation": {
+        "$type": "string",
+        "$value": "{type.variation.label}"
+      },
+      "font-size": {
+        "$type": "string",
+        "$value": "{type.fluid.small-phone}"
+      },
+      "tracking": {
+        "$type": "string",
+        "$value": "{type.tracking.label}"
+      },
+      "font-size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.small-wide}"
+      },
+      "align": {
+        "$type": "string",
+        "$value": "{choice.info-align}"
+      },
+      "rule-bleed": {
+        "$type": "string",
+        "$value": "{layout.rule-bleed-phone}"
+      },
+      "rule-bleed-wide": {
+        "$type": "string",
+        "$value": "{layout.rule-bleed-wide}"
+      }
+    },
+    "menu": {
+      "$description": "The phone nav popover",
+      "bg": {
+        "$type": "color",
+        "$value": "{surface.menu.bg}"
+      },
+      "text": {
+        "$type": "color",
+        "$value": "{surface.menu.text}"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "{surface.menu.border}"
+      },
+      "focus": {
+        "$type": "color",
+        "$value": "{surface.menu.focus}"
+      },
+      "shape": {
+        "$type": "string",
+        "$value": "{choice.menu-shape}"
+      },
+      "shadow": {
+        "$type": "color",
+        "$value": "{graphic.shadow}"
+      },
+      "radius": {
+        "$type": "dimension",
+        "$value": "{shape.radius.control}"
+      }
+    },
+    "nav-align": {
+      "$type": "string",
+      "$value": "{choice.nav-align}"
+    },
+    "nav-gap": {
+      "$type": "string",
+      "$value": "{layout.nav-gap-phone}"
+    },
+    "nav-gap-wide": {
+      "$type": "string",
+      "$value": "{layout.nav-gap-wide}"
+    }
+  }
+}

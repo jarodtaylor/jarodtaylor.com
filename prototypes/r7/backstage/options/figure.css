@@ -1,0 +1,57 @@
+/*
+ * Shared by every option: the resting figure (B2, B6). Written as it would be ported: inside
+ * @layer components, scoped to the construction figure, reading only existing tokens.
+ *
+ * 1. At rest the monogram is the mark alone (outline + the lapping pen). The construction guides and the
+ *    triangle are Peek's: they draw in with it and, leaving, retract along their length (lessons: guides never
+ *    fade). That also removes B4's double lines at rest.
+ * 2. Phones (B6): the root cause is scale, not just the 0.3 opacity. .mono-line strokes in user units, so a
+ *    1.5-unit stroke on a ~300px mark renders ~0.7px, then ×0.3 reads olive. Full strength, a heavier
+ *    stroke, the mark bled off the right edge behind the name, and the name knocks the lines out where they
+ *    cross (paint-order halo in the ground colour), like a drawing breaking a line at a crossing.
+ *
+ * Knobs if ported: --figure-stroke-scale-phone (number, 2.6 here) replaces the hard-coded multiplier;
+ * --figure-opacity-phone (1, was 0.3 in CSS); --hero-name-knockout (length, 0.05em) or derive it from the
+ * stroke. No new colours.
+ */
+@layer components {
+  @container style(--hero-figure: construction) {
+    :root:not([data-peek-state]) .mono-guides path {
+      stroke-dashoffset: 1;
+    }
+
+    :root[data-peek-state="leaving"] .mono-guides {
+      opacity: 1;
+    }
+
+    /* Back the way they came, staggered like the build, home inside the leave window. */
+    :root[data-peek-state="leaving"] .mono-guides path {
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset calc(var(--_peek-leave) * 0.7) var(--figure-draw-easing)
+        calc(var(--_d, 0) * var(--_beat) * 0.4);
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (max-width: 47.99rem) {
+      .figure {
+        inline-size: calc(var(--_fig) * 1.18);
+        opacity: 1;
+        right: calc(var(--_fig) * -0.34);
+        top: calc(var(--_rhythm) * 0.25);
+      }
+
+      .mono-line {
+        stroke-width: calc(var(--figure-stroke-width) * 2.6);
+      }
+
+      .mono-pen {
+        stroke-width: calc(var(--figure-stroke-width) * 4.4);
+      }
+
+      .name {
+        -webkit-text-stroke: 0.05em var(--surface-default-bg);
+        paint-order: stroke fill;
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+/* Option 1: the strip stays, the role becomes four list items on square bullets.
+   Engineering Leader reads in the full text colour; the three disciplines stay muted. Items wrap whole. */
+@layer components {
+  .info-roles {
+    column-gap: calc(var(--_size) * 1.8);
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    row-gap: var(--space-stack-xs);
+  }
+
+  .info-roles li {
+    align-items: center;
+    display: inline-flex;
+    gap: calc(var(--_size) * 0.65);
+    white-space: nowrap;
+  }
+
+  .info-roles li::before {
+    background: var(--header-info-sep);
+    block-size: calc(var(--_size) * 0.42);
+    content: "";
+    flex: none;
+    inline-size: calc(var(--_size) * 0.42);
+  }
+
+  .info-roles li:first-child {
+    color: var(--surface-default-text);
+  }
+
+  /* Phones: the status drops a little lower, so its dot doesn't read as a fifth bullet. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (max-width: 47.99rem) {
+    .info-place {
+      margin-block-start: var(--space-stack-xs);
+    }
+  }
+}

@@ -1,0 +1,329 @@
+@layer components {
+  /* Fluid sizes come in two bands; each is picked once here and read below. */
+  .masthead {
+    --_h: var(--layout-header-h-phone);
+    --_x: var(--space-page-x-phone);
+    --_gap: var(--space-col-gap-phone);
+    --_nav-gap: var(--header-nav-gap);
+    --_control-h: var(--layout-control-h-phone);
+    --_control-size: var(--header-control-font-size);
+    --_mark: var(--header-mark-size);
+
+    align-items: center;
+    block-size: var(--_h);
+    color: var(--header-text);
+    display: flex;
+    gap: var(--space-stack-sm);
+    padding-inline: var(--_x);
+    position: relative;
+    z-index: 5;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .masthead {
+      --_h: var(--layout-header-h-wide);
+      --_x: var(--space-page-x-wide);
+      --_gap: var(--space-col-gap-wide);
+      --_nav-gap: var(--header-nav-gap-wide);
+      --_control-h: var(--layout-control-h-wide);
+      --_control-size: var(--header-control-font-size-wide);
+      --_mark: var(--header-mark-size-wide);
+    }
+  }
+
+  /* Every control speaks in one small style; nav links can sit lighter than the buttons. */
+  .nav,
+  .tool {
+    font-family: var(--header-control-font-family);
+    font-size: var(--_control-size);
+    font-variation-settings: var(--header-control-font-variation);
+    font-weight: var(--header-control-font-weight);
+    letter-spacing: var(--header-control-tracking);
+    line-height: var(--header-control-leading);
+  }
+
+  .nav {
+    font-weight: var(--header-control-nav-weight);
+  }
+
+  @container style(--header-control-label-case: upper) {
+    .nav,
+    .tool {
+      text-transform: uppercase;
+    }
+  }
+
+  .mark {
+    color: var(--header-text);
+    display: inline-flex;
+    margin-inline-end: auto;
+    padding-block: var(--space-inset-sm);
+    transition: color var(--motion-duration-fast) var(--motion-easing-out);
+  }
+
+  .mark svg {
+    block-size: var(--_mark);
+    display: block;
+    fill: currentcolor;
+    inline-size: auto;
+  }
+
+  .mark:hover {
+    color: var(--surface-default-accent);
+  }
+
+  .nav-list li {
+    list-style: none;
+  }
+
+  .nav-list a {
+    color: var(--header-control-muted);
+    display: inline-block;
+    padding-block: var(--space-inset-sm);
+    text-decoration: none;
+    transition: color var(--motion-duration-fast) var(--motion-easing-out);
+  }
+
+  .nav-list a:hover {
+    color: var(--header-text);
+    text-decoration: underline;
+    text-decoration-color: var(--surface-default-accent);
+    text-decoration-thickness: var(--shape-border-width-default);
+    text-underline-offset: calc(var(--_control-size) * 0.22);
+  }
+
+  /* Peek and Remix: outlined tools, icon only below 64rem (each keeps its name in aria-label), icon and word above. */
+  .tool {
+    align-items: center;
+    background: transparent;
+    border: var(--shape-border-width-default) solid var(--header-control-border);
+    border-radius: var(--shape-radius-pill);
+    color: var(--header-control-muted);
+    cursor: pointer;
+    display: inline-flex;
+    gap: var(--space-inset-sm);
+    justify-content: center;
+    min-block-size: var(--_control-h);
+    min-inline-size: var(--_control-h);
+    padding: 0 var(--space-inset-sm);
+    text-decoration: none;
+    transition:
+      background-color var(--motion-duration-fast) var(--motion-easing-out),
+      color var(--motion-duration-fast) var(--motion-easing-out),
+      border-color var(--motion-duration-fast) var(--motion-easing-out);
+    white-space: nowrap;
+  }
+
+  .tool:hover {
+    border-color: var(--header-text);
+    color: var(--header-text);
+  }
+
+  .tool svg {
+    block-size: calc(var(--_control-size) * 1.1);
+    fill: none;
+    inline-size: calc(var(--_control-size) * 1.1);
+    stroke: currentcolor;
+    stroke-width: var(--shape-border-width-strong);
+  }
+
+  .tool-label {
+    display: none;
+  }
+
+  .peek-toggle svg {
+    transition: rotate calc(var(--motion-duration-beat) * 6) var(--motion-easing-out);
+  }
+
+  .peek-toggle:hover svg {
+    /* stylelint-disable-next-line unit-allowed-list -- geometry: a quarter turn of the registration mark, not a design value */
+    rotate: 90deg;
+  }
+
+  .peek-toggle[aria-pressed="true"] {
+    background: var(--spec-label-bg);
+    border-color: var(--spec-label-bg);
+    color: var(--spec-label-text);
+  }
+
+  .peek-toggle[aria-pressed="true"] svg {
+    /* stylelint-disable-next-line unit-allowed-list -- geometry: the mark turns into an x while Peek is on */
+    rotate: 45deg;
+  }
+
+  /* Peek needs JS; without it the button would do nothing, so it isn't shown. */
+  :root:not(.js) .peek-toggle {
+    display: none;
+  }
+
+  /* The slider knobs sit on the page's ground, so the tracks read as passing behind them. */
+  .remix circle {
+    fill: var(--header-bg);
+  }
+
+  .remix svg path,
+  .remix svg circle {
+    transition: translate var(--motion-duration-base) var(--motion-easing-out);
+  }
+
+  .remix:hover svg circle:nth-of-type(1) {
+    translate: calc(var(--shape-border-width-default) * 6) 0;
+  }
+
+  .remix:hover svg circle:nth-of-type(2) {
+    translate: calc(var(--shape-border-width-default) * -6) 0;
+  }
+
+  /* The menu button: below 64rem only, at the far right. */
+  .nav-toggle {
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--header-text);
+    cursor: pointer;
+    display: none;
+    justify-content: center;
+    min-block-size: var(--_control-h);
+    min-inline-size: var(--_control-h);
+    padding: 0;
+  }
+
+  .nav-toggle svg {
+    block-size: calc(var(--_control-size) * 1.5);
+    fill: none;
+    inline-size: calc(var(--_control-size) * 1.5);
+    stroke: currentcolor;
+    stroke-width: var(--shape-border-width-strong);
+  }
+
+  /* Below 64rem: one menu in every brand. The list is a popover that slides in from the right edge
+     (reduced motion makes it a cut). menu-shape styles it: a panel down the right side, or a raised card. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (max-width: 63.99rem) {
+    .nav-toggle {
+      display: inline-flex;
+    }
+
+    .nav-list {
+      background: var(--header-menu-bg);
+      border: 0;
+      color: var(--header-menu-text);
+      flex-direction: column;
+      gap: 0;
+      margin: 0;
+      overflow: auto;
+      position: fixed;
+      transition:
+        translate var(--motion-duration-base) var(--motion-easing-out),
+        display var(--motion-duration-base) allow-discrete,
+        overlay var(--motion-duration-base) allow-discrete;
+      translate: calc(100% + var(--_x)) 0;
+    }
+
+    .nav-list:popover-open {
+      display: flex;
+      translate: 0 0;
+    }
+
+    @starting-style {
+      .nav-list:popover-open {
+        translate: calc(100% + var(--_x)) 0;
+      }
+    }
+
+    .nav-list:not(:popover-open) {
+      display: none;
+    }
+
+    .nav-list :focus-visible {
+      outline-color: var(--header-menu-focus);
+    }
+
+    /* In the menu, links take the menu's foreground at rest and on hover (the inline nav's hover colour is the
+       header's, which a brand's menu surface needn't contrast with). */
+    .nav-list a,
+    .nav-list a:hover {
+      color: var(--header-menu-text);
+    }
+
+    .nav-list a {
+      display: block;
+      font-size: var(--type-fluid-body-phone);
+      padding-block: var(--space-stack-sm);
+    }
+
+    @container style(--header-menu-shape: panel) {
+      .nav-list {
+        block-size: auto; /* undo the popover's fit-content height, so it runs to the bottom */
+        border-inline-start: var(--shape-border-width-default) solid var(--header-menu-border);
+        inline-size: min(calc(var(--space-stack-xl) * 5), 100%);
+        inset: var(--_h) 0 0 auto;
+        padding: var(--space-inset-md) var(--_x);
+      }
+    }
+
+    @container style(--header-menu-shape: card) {
+      .nav-list {
+        border-radius: var(--header-menu-radius);
+        box-shadow: 0 var(--space-stack-sm) var(--space-inset-lg) calc(var(--space-inset-sm) * -1) var(--header-menu-shadow);
+        inline-size: auto;
+        inset: calc(var(--_h) - var(--space-inset-sm)) var(--_x) auto auto;
+        min-inline-size: calc(var(--space-stack-xl) * 3);
+        padding: var(--space-inset-sm) 0;
+      }
+
+      .nav-list a {
+        font-weight: var(--header-control-font-weight);
+        padding: var(--space-inset-sm) var(--space-stack-md);
+      }
+    }
+  }
+
+  /* 64rem and up: the list sits inline (the popover's own box undone) and the tools show their words. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 64rem) {
+    .nav-list {
+      background: none;
+      border: 0;
+      color: inherit;
+      display: flex;
+      gap: var(--_nav-gap);
+      inline-size: auto;
+      inset: auto;
+      margin: 0;
+      overflow: visible;
+      padding: 0;
+      position: static;
+    }
+
+    .tool {
+      padding: 0 var(--space-stack-sm) 0 var(--space-inset-sm);
+    }
+
+    .tool-label {
+      display: inline;
+    }
+
+    /* nav-align. end (the default flow): the mark's auto margin packs nav and tools to the right.
+       start: the nav follows the mark a column gap on, and the auto margin moves to the nav.
+       center: three zones, with the nav on the page's centre line. */
+    @container style(--header-nav-align: start) {
+      .mark {
+        margin-inline-end: 0;
+      }
+
+      .nav {
+        margin-inline: calc(var(--_gap) - var(--space-stack-sm)) auto;
+      }
+    }
+
+    @container style(--header-nav-align: center) {
+      .nav {
+        left: 50%;
+        position: absolute;
+        translate: -50% 0;
+      }
+    }
+  }
+}

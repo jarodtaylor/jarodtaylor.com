@@ -1,0 +1,146 @@
+{
+  "title": "Choose the visual world",
+  "question": "Systems thinker with personality. The roll assigned the Assembly Manual. Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Assembly Manual",
+      "kicker": "THE ROLL",
+      "lineage": "Wordless building-set and flat-pack instruction booklets",
+      "thesis": "Jarod builds the parts other teams assemble products from; the site is the instruction booklet.",
+      "palette": ["#2341d6", "#ffc928", "#e63b2e", "#f4f6f9", "#13151b"],
+      "materials": ["isometric line drawing on your monogram's 60° grid", "numbered steps", "parts callout boxes", "set-box badges"],
+      "viewport": "A full-width Step 1 page: name as the set title with an \"18+\" box badge (18 years), a parts box holding the bio pills as labeled pieces, CTAs as the next step, and the JT monogram exploded into isometric parts that slide together and click on load.",
+      "risk": "Could tip toward toy and cost seniority if drawn cartoonish; it has to stay technically precise.",
+      "raised": [
+        {"from": "challenger-binding", "raise": "Structure is the only ornament: every graphic on the page is a real part, step or assembly line, nothing decorative."},
+        {"from": "challenger-vu", "raise": "One identical parts-callout module repeats on every step, so the system reads as a ruler."},
+        {"from": "challenger-manga", "raise": "Full saturation is reserved for the decisive beat: the click when the monogram locks together."},
+        {"from": "challenger-botanical", "raise": "Every step keeps the same grid and part scale, so progress down the page reads like turning pages."}
+      ],
+      "wireframe": {"cols": 12, "rows": 10, "regions": [
+        {"label": "step 1", "x": 0, "y": 0, "w": 1, "h": 1},
+        {"label": "set title: Jarod Taylor  18+", "x": 0, "y": 1, "w": 7, "h": 2},
+        {"label": "role + Frisco", "x": 0, "y": 3, "w": 7, "h": 1},
+        {"label": "parts box: tagline, bio pills", "x": 0, "y": 4, "w": 6, "h": 3},
+        {"label": "next step: CTAs", "x": 0, "y": 8, "w": 5, "h": 1},
+        {"label": "exploded JT monogram, isometric", "x": 7, "y": 1, "w": 5, "h": 8, "accent": true}
+      ]}
+    },
+    {
+      "id": "model-pick",
+      "label": "Standards Manual",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "1970 transit-authority graphics standards manual",
+      "thesis": "The site is Jarod's own standards manual, the ancestor of every design system he has founded.",
+      "palette": ["#111111", "#ffffff", "#ee352e", "#0039a6", "#fccc0a"],
+      "materials": ["the black header band", "spec sheets", "colored route bullets", "strict modular grid"],
+      "viewport": "A black band across the top with the name set in it, a spec sheet below with the role, three colored bullets for the pillars, and the bio and CTAs set like manual body copy.",
+      "risk": "Familiar to designers (the reissued manual is a staple) and can read corporate or cold, which you flagged.",
+      "wireframe": {"cols": 12, "rows": 10, "regions": [
+        {"label": "black band: Jarod Taylor", "x": 0, "y": 0, "w": 12, "h": 3, "accent": true},
+        {"label": "spec: role, Frisco", "x": 0, "y": 3, "w": 4, "h": 2},
+        {"label": "tagline", "x": 4, "y": 3, "w": 8, "h": 2},
+        {"label": "3 route bullets: pillars", "x": 0, "y": 5, "w": 12, "h": 2},
+        {"label": "bio", "x": 0, "y": 7, "w": 6, "h": 2},
+        {"label": "CTAs", "x": 6, "y": 8, "w": 6, "h": 1}
+      ]}
+    },
+    {
+      "id": "challenger-specimen",
+      "label": "Living Type Specimen",
+      "verdict": "competitive",
+      "lineage": "interactive variable-font specimens",
+      "thesis": "Your name is the specimen; drag one axis and the whole page re-tokens live.",
+      "palette": ["#f2f2ee", "#101010", "#ff4f1f"],
+      "materials": ["giant display letterforms", "tiny mono readouts", "axis sliders"],
+      "viewport": "The name fills the width; a slider under it morphs weight and width live while a readout counts token values, previewing Remix.",
+      "case": "Engineers will love it and it proves the tokens directly; loses on recruiter clarity and personality.",
+      "risk": "Reads as a font demo, not a person, and can feel cold.",
+      "hero": "https://impeccable.style/worlds/cards/variable-font-specimen-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/variable-font-specimen.webp"
+    },
+    {
+      "id": "challenger-automata",
+      "label": "Paper Automaton",
+      "verdict": "competitive",
+      "lineage": "hand-cranked cut-paper automata",
+      "thesis": "Humble parts and linkages produce surprising motion: systems with personality, literally.",
+      "palette": ["#fbfaf7", "#c9a77c", "#2b2b2b", "#c8102e"],
+      "materials": ["cut white paper on kraft", "pinned joints", "cast shadow", "one crimson moving part"],
+      "viewport": "A cut-paper machine beside the name; turning its crank (drag or scroll) drives linkages that raise the three pillars as figures.",
+      "case": "Strongest personality on the table; loses on clarity and costs real illustration work.",
+      "risk": "Gimmick risk: a recruiter has to play with it to get it.",
+      "hero": "https://impeccable.style/worlds/cards/kinetic-sculpture-automata-crank-paper-menagerie-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/kinetic-sculpture-automata-crank-paper-menagerie.webp"
+    },
+    {
+      "id": "challenger-binding",
+      "label": "Exposed Binding",
+      "verdict": "declined",
+      "lineage": "Coptic exposed-spine bookbinding",
+      "thesis": "Nothing hidden: the stitching that holds it together is the ornament.",
+      "palette": ["#d9cbb0", "#7a5a3a", "#f2ead9"],
+      "materials": ["linen thread", "wooden boards"],
+      "viewport": "A flat-open book with a stitched spine as navigation.",
+      "case": "Too close to Backstage and too quiet; loses both axes.",
+      "risk": "Cream and craft-fair warm.",
+      "kept": "Structure as the only ornament.",
+      "hero": "https://impeccable.style/worlds/cards/craft-making-coptic-exposed-binding-hero.webp"
+    },
+    {
+      "id": "challenger-vu",
+      "label": "VU Meter Bridge",
+      "verdict": "declined",
+      "lineage": "recording desk meter bridges",
+      "thesis": "Stats as a row of needles leaning into the red.",
+      "palette": ["#efe6cf", "#111111", "#d0342c", "#5a3a22"],
+      "materials": ["meter glass", "walnut"],
+      "viewport": "Four meters for the four stats.",
+      "case": "Recruiters don't identify with a mixing desk; clarity drops.",
+      "risk": "Studio costume.",
+      "kept": "Identical repeated units as a ruler.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-vu-meter-bridge-hero.webp"
+    },
+    {
+      "id": "challenger-manga",
+      "label": "Manga Page",
+      "verdict": "declined",
+      "lineage": "weekly manga screentone pages",
+      "thesis": "The career as panels with speed lines.",
+      "palette": ["#ffffff", "#111111", "#8a8a8a"],
+      "materials": ["screentone", "speed lines"],
+      "viewport": "Panels with the name breaking the gutter.",
+      "case": "Personality without the systems; clarity drops.",
+      "risk": "Costume, monochrome.",
+      "kept": "Reserve the solid beat for one decisive moment.",
+      "hero": "https://impeccable.style/worlds/cards/pop-culture-shelf-manga-screentone-page-hero.webp"
+    },
+    {
+      "id": "challenger-botanical",
+      "label": "Botanical Folio",
+      "verdict": "declined",
+      "lineage": "botanical life-cycle plates",
+      "thesis": "Career stages as plates of one plant.",
+      "palette": ["#efe6cf", "#4f7a3a", "#b3261e", "#1a1a1a"],
+      "materials": ["engraved plates", "sepia rules"],
+      "viewport": "Five plates on one baseline.",
+      "case": "Soft and literary; loses both axes.",
+      "risk": "Cream editorial default.",
+      "kept": "Fixed scale and registration across every plate.",
+      "hero": "https://impeccable.style/worlds/cards/editorial-sequence-montage-botanical-folio-season-hero.webp"
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "code", "toggle": false},
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "Big name, short bio, dark ground, one accent, work list below, executed impeccably.",
+    "palette": ["#0b0f17", "#e6edf3", "#c4f252"],
+    "materials": ["clean grid", "subtle ambient motion"],
+    "viewport": "Name huge at left, role and bio beneath, socials, a quiet animated field (like aarronwalter.com).",
+    "risk": "Indistinguishable from the best of the competition by design."
+  },
+  "steer": true
+}

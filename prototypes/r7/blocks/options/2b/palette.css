@@ -1,0 +1,42 @@
+/*
+ * Baseplate 2b: COOL WHITE, COBALT LEAD.
+ * A cool white baseplate with pale-blue tiles and ink type. Cobalt leads: the tagline's accent, the role bullets,
+ * the brick hover. Persimmon is kept for one thing only, the J, so the assembly is still the one moment of heat.
+ * The T turns paper-white with ink edges, so it reads on the pale tile.
+ *
+ * Only role mappings (color.role.* in tokens/knobs/blocks.json); no new knobs beyond the layout's.
+ * Contrast (WCAG 2.2): ink #030d43 on neutral 975 about 18:1; cobalt 400 (accent text) on 975 about 8:1;
+ * neutral 975 on cobalt 400 (hover) about 8:1; neutral 975 on ink (bio tile) about 18:1.
+ */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --color-role-bg: var(--color-neutral-975);
+    --color-role-bg-next: var(--color-neutral-950);
+    --color-role-text: var(--color-neutral-200);
+    --color-role-text-body: var(--color-neutral-250);
+    --color-role-text-lead: var(--color-neutral-200);
+    --color-role-text-muted: var(--color-neutral-400);
+    --color-role-text-quiet: var(--color-neutral-200);
+    --color-role-rule: var(--color-neutral-850);
+    --color-role-rule-strong: var(--color-neutral-600);
+    --color-role-separator: var(--color-neutral-600);
+    --color-role-accent: var(--color-neutral-400);
+    --color-role-on-accent: var(--color-neutral-975);
+    --color-role-accent-text: var(--color-neutral-400);
+    --color-role-focus: var(--color-neutral-400);
+    --color-role-menu-bg: var(--color-neutral-975);
+    --color-role-menu-text: var(--color-neutral-200);
+    --color-role-menu-focus: var(--color-neutral-400);
+    --color-role-menu-shadow: var(--color-neutral-700);
+
+    /* The JT on light: a paper T with ink edges, the persimmon J. */
+    --color-role-figure-line: var(--color-neutral-250);
+    --color-role-figure-edge: var(--color-neutral-250);
+    --color-role-figure-face: var(--color-neutral-975);
+    --color-role-figure-face-light: var(--color-neutral-875);
+    --color-role-figure-face-dark: var(--color-neutral-725);
+    --color-role-figure-mark: var(--color-accent-675);
+    --color-role-figure-mark-light: var(--color-accent-750);
+    --color-role-figure-mark-dark: var(--color-accent-525);
+  }
+}

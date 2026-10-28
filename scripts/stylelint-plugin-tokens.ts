@@ -5,7 +5,8 @@
  *                          (or a private --_ prop). Primitives and unknown names (typos) are rejected.
  *                          Declaring a custom property is allowed only for private --_ props: redefining
  *                          a token in component CSS would fork it per component. A private prop's value must
- *                          be var() references only (fallbacks included), so it can't smuggle in a literal.
+ *                          be var() references (fallbacks included), or calc/clamp/min/max math over var()
+ *                          references and unitless numbers, so it can't smuggle in a literal.
  *   tokens/no-brand-keys   no selector, @container/@scope/@supports condition, or style query keyed on the brand.
  *
  * The allowed names come from the token sources themselves (the semantic and component sets in
@@ -35,27 +36,38 @@ const resolver = readJson('resolver.json');
 const tierSources: { $ref: string }[] = [...resolver.sets.semantic.sources, ...resolver.sets.component.sources];
 const allowed = new Set(tierSources.flatMap(({ $ref }) => tokenIds(readJson($ref))).map((id) => `--${id.replaceAll('.', '-')}`));
 // Primitive groups are whatever derive() emits (color, size, font, knob, …); named only for a clearer message.
-const primitiveGroups = Object.keys(readJson('generated/default.json')).filter((key) => !key.startsWith('$'));
+const primitiveGroups = Object.keys(readJson('generated/clean.json')).filter((key) => !key.startsWith('$'));
 
 const tierVars = 'tokens/tier-vars';
 const tierMessages = ruleMessages(tierVars, {
   primitive: (name: string) =>
     `"${name}" is a primitive. Components consume only semantic or component tokens (--surface-*, --space-*, --type-*, --button-*, …).`,
   declared: (name: string) => `Declares "${name}". Component CSS may only declare private --_ props; tokens live in tokens/.`,
-  literal: (name: string) => `Private prop "${name}" must be assigned only from token var() references, with no literal values or fallbacks.`,
+  literal: (name: string) =>
+    `Private prop "${name}" must be assigned from token var() references, or calc/clamp/min/max math over them and unitless numbers. No literal values.`,
   unknown: (name: string) =>
     `"${name}" is not a semantic or component token. Add it to tokens/semantic or tokens/component, or use a private --_ prop.`,
 });
 
-/** True when a value is nothing but var() references, including any fallbacks. */
-function onlyVarRefs(nodes: Node[]): boolean {
+const MATH = new Set(['calc', 'clamp', 'min', 'max']);
+const UNITLESS = /^[+-]?(\d+\.?\d*|\.\d+)$/;
+
+/** True when a value is nothing but var() references (fallbacks included), or math over var()s and unitless numbers. */
+function onlyVarRefs(nodes: Node[], inMath = false): boolean {
   const parts = nodes.filter((node) => node.type !== 'space' && node.type !== 'comment');
   return (
     parts.length > 0 &&
     parts.every((node) => {
-      if (node.type !== 'function' || node.value !== 'var') return false;
-      const comma = node.nodes.findIndex((child) => child.type === 'div' && child.value === ',');
-      return comma === -1 || onlyVarRefs(node.nodes.slice(comma + 1));
+      if (node.type === 'function' && node.value === 'var') {
+        const comma = node.nodes.findIndex((child) => child.type === 'div' && child.value === ',');
+        return comma === -1 || onlyVarRefs(node.nodes.slice(comma + 1));
+      }
+      // A function named '' is a bare parenthesized group, e.g. calc((var(--a) + var(--b)) / 2).
+      if (node.type === 'function' && (MATH.has(node.value) || (inMath && node.value === ''))) return onlyVarRefs(node.nodes, true);
+      // Inside math, postcss-value-parser gives operators and numbers as words and commas as divs.
+      if (!inMath) return false;
+      if (node.type === 'word') return UNITLESS.test(node.value) || ['+', '-', '*', '/'].includes(node.value);
+      return node.type === 'div' && (node.value === ',' || node.value === '/');
     })
   );
 }

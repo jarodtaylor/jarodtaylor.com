@@ -1,0 +1,84 @@
+@layer components {
+  /* A step under the control labels and muted, on a hairline that can run past the gutter toward the screen edges
+     (an outset border image, --header-info-rule-bleed wide, so it costs no pseudo-element). */
+  .info {
+    --_x: var(--space-page-x-phone);
+    --_size: var(--header-info-font-size);
+    --_bleed: var(--header-info-rule-bleed);
+
+    border-block-start: var(--shape-border-width-default) solid;
+    border-image: conic-gradient(var(--header-rule) 0 0) 1 / var(--shape-border-width-default) 0 0 0 / 0 var(--_bleed);
+    color: var(--header-info-text);
+    display: flex;
+    font-family: var(--header-info-font-family);
+    font-size: var(--_size);
+    font-variation-settings: var(--header-info-font-variation);
+    font-weight: var(--header-info-font-weight);
+    gap: var(--space-stack-xs);
+    letter-spacing: var(--header-info-tracking);
+    line-height: var(--type-leading-label);
+    margin-inline: var(--_x);
+    padding-block: var(--space-stack-sm);
+    position: relative;
+    z-index: 5;
+  }
+
+  /* Open to new roles: a small dot with a ring breathing out of it. Still under reduced motion. */
+  .status {
+    align-items: center;
+    display: inline-flex;
+    gap: calc(var(--_size) * 0.6);
+  }
+
+  .status-dot {
+    background: var(--header-info-status);
+    block-size: calc(var(--_size) * 0.6);
+    border-radius: 50%;
+    inline-size: calc(var(--_size) * 0.6);
+    position: relative;
+  }
+
+  .status-dot::after {
+    animation: status-ring calc(var(--motion-duration-beat) * 24) var(--motion-easing-out) infinite;
+    background: inherit;
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    position: absolute;
+  }
+
+  @keyframes status-ring {
+    from {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+
+    70%,
+    to {
+      opacity: 0;
+      transform: scale(2.8);
+    }
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .info {
+      --_x: var(--space-page-x-wide);
+      --_size: var(--header-info-font-size-wide);
+      --_bleed: var(--header-info-rule-bleed-wide);
+    }
+  }
+
+  /* info-align: the availability note at the start of the line, or at its end. */
+  @container style(--header-info-align: end) {
+    .info {
+      justify-content: flex-end;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .status-dot::after {
+      display: none;
+    }
+  }
+}

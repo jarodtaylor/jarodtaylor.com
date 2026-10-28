@@ -1,0 +1,26 @@
+/* The type pairing, and nothing else. Swap this file to change the fonts; styles.css only ever reads the three properties.
+   Provisional pairing (from the Assembly Manual): Bricolage Grotesque 600-800, wdth 75-100; Atkinson Hyperlegible Next 400-700.
+   Self-hosted latin subsets, both variable. */
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 600 800;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url("fonts/bricolage-grotesque-latin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("fonts/atkinson-hyperlegible-next-latin.woff2") format("woff2");
+}
+
+:root {
+  --font-display: "Bricolage Grotesque", "Arial Narrow", sans-serif;
+  --font-text: "Atkinson Hyperlegible Next", "Helvetica Neue", sans-serif;
+  --font-label: var(--font-text);
+  /* Variable axes the display face is set on; another face ignores what it doesn't have. */
+  --font-display-axes: "wdth" 86, "opsz" 96;
+}
