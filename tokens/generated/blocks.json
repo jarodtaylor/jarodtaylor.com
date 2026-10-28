@@ -410,6 +410,18 @@
           "alpha": 1,
           "hex": "#f4f7fc"
         }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0,
+            265.56
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
+        }
       }
     },
     "accent": {
@@ -819,6 +831,18 @@
           ],
           "alpha": 1,
           "hex": "#fff4ef"
+        }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0,
+            47.5
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
         }
       }
     },
@@ -1230,6 +1254,18 @@
           "alpha": 1,
           "hex": "#f3f8fa"
         }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0,
+            232
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
+        }
       }
     },
     "redline": {
@@ -1640,89 +1676,104 @@
           "alpha": 1,
           "hex": "#fff4f3"
         }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0,
+            20
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
+        }
       }
     },
     "role": {
       "bg": {
-        "$value": "{color.neutral.400}"
+        "$value": "{color.neutral.1000}"
       },
       "bg-next": {
-        "$value": "{color.neutral.350}"
+        "$value": "{color.neutral.975}"
       },
       "text": {
-        "$value": "{color.neutral.975}"
+        "$value": "{color.neutral.150}"
       },
       "text-muted": {
-        "$value": "{color.neutral.800}"
+        "$value": "{color.neutral.400}"
       },
       "text-body": {
-        "$value": "{color.neutral.850}"
+        "$value": "{color.neutral.225}"
       },
       "text-quiet": {
-        "$value": "{color.neutral.975}"
+        "$value": "{color.neutral.150}"
       },
       "rule": {
-        "$value": "{color.neutral.525}"
+        "$value": "{color.neutral.900}"
       },
       "rule-strong": {
-        "$value": "{color.neutral.650}"
+        "$value": "{color.neutral.700}"
       },
       "text-lead": {
-        "$value": "{color.neutral.975}"
+        "$value": "{color.neutral.150}"
       },
       "menu-bg": {
-        "$value": "{color.neutral.975}"
+        "$value": "{color.neutral.1000}"
       },
       "menu-text": {
-        "$value": "{color.neutral.400}"
+        "$value": "{color.neutral.150}"
       },
       "menu-focus": {
         "$value": "{color.neutral.400}"
       },
       "menu-shadow": {
-        "$value": "{color.neutral.150}"
+        "$value": "{color.neutral.700}"
       },
       "accent": {
         "$value": "{color.accent.675}"
       },
       "on-accent": {
-        "$value": "{color.neutral.275}"
+        "$value": "{color.neutral.150}"
+      },
+      "inverse-link": {
+        "$value": "{color.accent.775}"
       },
       "accent-text": {
-        "$value": "{color.accent.775}"
+        "$value": "{color.neutral.400}"
       },
       "focus": {
-        "$value": "{color.accent.775}"
+        "$value": "{color.neutral.400}"
       },
       "figure-line": {
-        "$value": "{color.neutral.975}"
+        "$value": "{color.neutral.250}"
       },
       "figure-mark": {
         "$value": "{color.accent.675}"
       },
       "figure-mark-light": {
-        "$value": "{color.accent.600}"
+        "$value": "{color.accent.775}"
       },
       "figure-mark-dark": {
         "$value": "{color.accent.500}"
       },
       "figure-face": {
-        "$value": "{color.neutral.975}"
+        "$value": "{color.neutral.400}"
       },
       "figure-face-light": {
-        "$value": "{color.neutral.850}"
+        "$value": "{color.neutral.625}"
       },
       "figure-face-dark": {
-        "$value": "{color.neutral.750}"
+        "$value": "{color.neutral.250}"
       },
       "figure-edge": {
-        "$value": "{color.neutral.275}"
+        "$value": "{color.neutral.150}"
       },
       "figure-guide": {
-        "$value": "{color.guide.675}"
+        "$value": "{color.guide.700}"
       },
       "figure-guide-ink": {
-        "$value": "{color.guide.750}"
+        "$value": "{color.guide.450}"
       },
       "figure-redline": {
         "$value": "{color.redline.700}"

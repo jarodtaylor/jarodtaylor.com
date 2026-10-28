@@ -51,7 +51,7 @@ describe.each(brands)('derive(%s knobs)', (brand) => {
     const colors = values<OklchColor>(tokens.color[name]);
     expect(Object.keys(tokens.color[name])).toEqual(Object.keys(RAMP));
     colors.slice(1).forEach((c, i) => expect(c.components[0]).toBeGreaterThan(colors[i]!.components[0]));
-    Object.entries(tokens.color[name]).forEach(([step, { $value }]) => expect($value.components[0]).toBe(Number(step) / 1000));
+    Object.entries(tokens.color[name]).forEach(([step, { $value }]) => expect($value.components[0]).toBeCloseTo(Number(step) / 1000, 3));
   });
 
   it.each(RAMPS)('every %s color is inside sRGB, with a matching hex fallback', (name) => {

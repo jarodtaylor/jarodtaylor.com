@@ -843,7 +843,7 @@
 
   .click path {
     fill: none;
-    stroke: var(--hero-lead-accent);
+    stroke: var(--figure-mark);
     stroke-linecap: round;
     stroke-width: calc(var(--figure-stroke-width) * 2);
   }

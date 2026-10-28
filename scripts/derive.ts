@@ -244,9 +244,12 @@ const NOT_FOR_FIGMA = { 'com.jarodtaylor.export': { figma: false } } as const;
  * Ramp step → OKLCH lightness. Steps are named by lightness × 1000 (`neutral.760` is L 0.76), every
  * 0.025 from 0.15 to 0.975: fine enough that any color a brand designs is within ΔE00 2 of a step.
  */
-export const RAMP: Record<string, number> = Object.fromEntries(
-  Array.from({ length: 34 }, (_, i) => [String(150 + 25 * i), round(0.15 + 0.025 * i, 3)]),
-);
+export const RAMP: Record<string, number> = Object.fromEntries([
+  ...Array.from({ length: 34 }, (_, i) => [String(150 + 25 * i), round(0.15 + 0.025 * i, 3)]),
+  // The white endpoint, for light brands' grounds: chroma falls to zero at the top, and L stays a hair under 1 so the
+  // colour clears the gamut margin. It still serialises as #ffffff.
+  ['1000', 0.9999],
+]);
 export type RampStep = string;
 
 /** Type step → exponent on the modular scale. */

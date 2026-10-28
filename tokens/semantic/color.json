@@ -68,7 +68,7 @@
         "$value": "{color.role.text-muted}"
       },
       "link": {
-        "$value": "{color.role.on-accent}"
+        "$value": "{color.role.inverse-link}"
       },
       "focus": {
         "$value": "{color.role.bg}"

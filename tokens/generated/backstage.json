@@ -410,6 +410,18 @@
           "alpha": 1,
           "hex": "#f0f8ff"
         }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0,
+            241.29
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
+        }
       }
     },
     "accent": {
@@ -819,6 +831,18 @@
           ],
           "alpha": 1,
           "hex": "#f1fdd7"
+        }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0.0001,
+            121.39
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
         }
       }
     },
@@ -1230,6 +1254,18 @@
           "alpha": 1,
           "hex": "#eff8ff"
         }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0,
+            236.96
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
+        }
       }
     },
     "redline": {
@@ -1640,6 +1676,18 @@
           "alpha": 1,
           "hex": "#fff4f3"
         }
+      },
+      "1000": {
+        "$value": {
+          "colorSpace": "oklch",
+          "components": [
+            0.9999,
+            0,
+            19.71
+          ],
+          "alpha": 1,
+          "hex": "#ffffff"
+        }
       }
     },
     "role": {
@@ -1686,6 +1734,9 @@
         "$value": "{color.accent.900}"
       },
       "on-accent": {
+        "$value": "{color.accent.225}"
+      },
+      "inverse-link": {
         "$value": "{color.accent.225}"
       },
       "accent-text": {

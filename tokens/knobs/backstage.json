@@ -46,6 +46,7 @@
       "menu-shadow": { "$type": "string", "$value": "neutral.150" },
       "accent": { "$type": "string", "$value": "accent.900" },
       "on-accent": { "$type": "string", "$value": "accent.225" },
+      "inverse-link": { "$type": "string", "$value": "accent.225" },
       "accent-text": { "$type": "string", "$value": "accent.900" },
       "focus": { "$type": "string", "$value": "accent.900" },
       "figure-line": { "$type": "string", "$value": "neutral.975" },
