@@ -1,0 +1,38 @@
+Okay, so I have some feedback. Took me a while to go through things. Here's what I got. You probably wanna take this and distill it in a document in the project so we don't lose it, because it's a good bit. 
+
+General Thoughts:
+
+    •    Let’s change the top to be “Engineering Leader | Frontend Architecture, Design Engineering, & Developer Experience”. Or do you think that it should be all 4 of those simply separated by “bullets” or the square type bullets? It reads similar to what shows on my LinkedIn headline, but really, the idea is I’m all 4 of those things. I’m just not sure how I feel about this part. I like the idea of having those 4 things on the page, because it immediately tells them what my role has been, but from a design perspective, I don’t love it. Especially on mobile. Maybe it’s something we can have some agents explore as far as options. Maybe it belongs with my name and the text below? Maybe we just need to rewrite the sentence below to include these things in it? Not sure. Something to think about.
+    •    I actually am starting to think my favorite design is #3 (clean and sharp). I’m assuming it doesn’t matter which one I land on, right? It’s a matter of choosing my default/base brand and that is what would load first. Something that I have wondered is since we aren’t saving the users choice… if they click on Writing, Work, About, Colophon, etc… they will end up switching back to the default brand, right? If that’s the case, I wonder if should save their choice in the browser until they close the tab? I don’t think it needs to persist in their browser or anything. Would like your thoughts.
+    •    There’s a bullet between Frisco, TX and Open to new roles. I think we can actually ditch “Frisco, TX” from this. I’ll have this information on the About and most jobs are either remote today and/or they likely found me through LinkedIn etc. and already know where I live.
+    •    For the socials, let’s make sure we get the icons for each (LinkedIn, Github, X, email/mail). Let’s also use text-transform: uppercase on these. We’ll have the icon to the left of each label. For X, we can do the X icon with @jarodtaylor as the text next to it, so we aren’t just showing an X icon with X text next to it. 
+    •    The text that is at the bottom… the double “ands” bothers me and just doesn’t flow nicely. I was thinking we could change it to something like: “Designer turned engineer turned engineering leader. For 18 years, I’ve built frontend platforms, design systems, and developer experiences. I’ve also led the teams behind them.” Or we rewrite it in another way, just something that flows better. What do you think?
+    •    I feel like the CTAs in the top right of the headers are a bit much. Especially, considering we’ll be adding another one for remixing and switching themes. Plus it’s just too much on mobile web. I’m wondering if we should either change Let’s Talk button to just a mail icon, or simply add the contact link to the main menu. Then, we would be left with Peek and Remix. Another option is to simply use icon only buttons (the peek one and then an icon for remix - maybe a sliders/adjust icon or something). Open to any ideas. Even just the Peek and Remix buttons with the text and icon would be better than 3 of them up there. Especially on mobile. 
+
+Backstage Lite:
+
+    •    Refreshing the page doesn’t reshow the animation
+    •    Is it just me or does this one feel like the background is sort of bare? Like, I don’t know there’s just something that feels missing with the JT Monogram (with its diagonal lines) and nothing else compared to the other two designs (Blocks having the dots and clean having the lattice). Wondering if we should remove the monogram extra lines that we have and maybe put some other subtle animated background or something here. I don’t know. Just seems off. Let me know what you think. SEE SCREENSHOT. 
+    •    The lines in the animation (diagonal and horizontal) that extend from the JT monogram still do not transition out. They just go away while everything else transitions out. In fact the “grid” lines actually transition out by height so I would expect these other lines to do the same, if they can. 
+    •    Also, there looks to be a double line on the left and right of the JT monogram so it looks as if the lines don’t align with the monogram (mainly because of this weird double line happening). SEE SCREENSHOT.
+    •    There’s an ugly Skip To Content button that appears and disappears here and there. I’m assuming this was for a11y but not sure why it would ever show up at all. SEE SCREENSHOT. 
+    •    On mobile sizes is the monogram’s lines supposed to be faint (almost invisible)? Again, if we do away with these lines due to my comments above, it won't matter, but just in case  SEE SCREENSHOT.
+    •    The hamburger menu is to the left of the Peek and Let’s Talk button (which I think we should remove as stated above. It also has the words Menu showing. It should be just the hamburger with no label (might be from a11y). SEE SCREENSHOT
+    •    The hamburger menu items just show/hide. No transition. A slide out would be a little more polished. 
+
+Building Blocks:
+
+    •    Just like the Backstage Lite, the animation does not re-animate when you refresh the page.
+    •    The colors are bright and I love the animation of the JT monogram. I am a little bothered by how close the layout is to Backstage Lite. It’s pretty much identical with a font/color palette change (with the different monogram animation). It might be nice to have some agents keep the same concept of building blocks (again, I love the animation) but try some other layouts or configurations. I love how different Building Blocks is from Clean and Sharp. 
+    •    I don’t love how the navigation is is right aligned and bumped right up to the Peek and Let’s Talk buttons. I know I mentioned above just removing the Let’s Talk button anyway, but still not wild about the nav menu on this one. Maybe this one could have the nav always as a hamburger menu (slides out from the right - full height)? Or, move it to the center and change up the navigation appearance a little. It’s the same text with a hover/underline as all of the themes. Maybe something a little more fun that plays on “building blocks” with a hover animation or something. No clue, just spitballing here. Open to ideas. 
+    •    I don’t really have a ton more to say about this one, mainly because any “gripes” I would have would likely go away if we ended up with a different layout. 
+
+
+Clean & Sharp:
+
+    •    As I said, I really like this one. The layout, fonts, everything. I even like the colors. 
+    •     The JT monogram probably needs to come down on desktop (mobile web is fine) Right now it goes above the header’s bottom border. Should probably drop down one level of the lattice so it’s not overlapping with the header border. SEE SCREENSHOT. 
+    •    This one doesn’t have a hamburger menu on mobile. The menu items fit where they’re at, but if we add any others it’ll get pretty tight. So we should go ahead and add the hamburger. 
+    •    Everything else looks great. 
+
+[Image #22] [Image #23] [Image #24] [Image #25] [Image #26] [Image #27]
