@@ -1,0 +1,80 @@
+/*
+ * Option 1: Registration sheet. Static, CSS only.
+ *
+ * The ground is the page's own modular grid, printed the way a press sheet carries it: a registration cross
+ * in every column gutter, one module (column pitch) apart down the stage, so the field is the real 4 / 12
+ * column grid, sized from --space-page-x-* and --space-col-gap-*. Crop marks sit outside the hero's trim (its
+ * --_x / --_rhythm content box). Each cross spans its gutter exactly, so when Peek draws the column edges they
+ * land on the crosses' arms: rest shows the sheet, Peek shows the build.
+ *
+ * Knobs if ported:
+ *   --hero-ground: none | registration | plotter | rulers   (enum, read with @container style())
+ *   --ground-ink (colour alias, = --spec-guide) and --ground-strength (number, 0.42 here)
+ *   --ground-focus-x / --ground-focus-y (percent): where the field is strongest, behind the figure.
+ */
+@import "../figure.css";
+
+@layer components {
+  .cols {
+    --_n: 4;
+    --_g: var(--space-col-gap-phone);
+    --_ink: color-mix(in oklch, var(--spec-guide) 42%, transparent);
+
+    container-type: inline-size;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .cols {
+      --_n: 12;
+      --_g: var(--space-col-gap-wide);
+    }
+  }
+
+  /* Module p = one column + one gutter. Background draws full lines through every gutter centre; the mask
+     keeps only a gutter-wide square around each module corner, so what's left is a cross. */
+  .cols::before {
+    --_p: calc((100cqw + var(--_g)) / var(--_n));
+    --_c: calc(var(--_p) - var(--_g) / 2);
+    --_a: calc(var(--_g) / 2);
+
+    background:
+      linear-gradient(to right, transparent calc(var(--_c) - 0.5px), var(--_ink) 0 calc(var(--_c) + 0.5px), transparent 0),
+      linear-gradient(to bottom, transparent calc(var(--_c) - 0.5px), var(--_ink) 0 calc(var(--_c) + 0.5px), transparent 0);
+    background-size: var(--_p) var(--_p);
+    content: "";
+    inset: 0;
+    mask:
+      linear-gradient(to right, transparent calc(var(--_c) - var(--_a)), #000 0 calc(var(--_c) + var(--_a)), transparent 0) 0 0 / var(--_p) var(--_p),
+      linear-gradient(to bottom, transparent calc(var(--_c) - var(--_a)), #000 0 calc(var(--_c) + var(--_a)), transparent 0) 0 0 / var(--_p) var(--_p),
+      radial-gradient(ellipse 75% 85% at 72% 48%, #000 30%, rgb(0 0 0 / 0.35) 100%);
+    mask-composite: intersect;
+    position: absolute;
+  }
+
+  /* Crop marks: two hairlines at each corner of the hero's trim, set off from it. */
+  .hero::after {
+    --_l: min(calc(var(--_x) * 0.5), var(--space-inset-lg));
+    --_o: calc(var(--_l) * 0.5);
+    --_k: linear-gradient(var(--spec-guide), var(--spec-guide));
+    --_h: var(--_l) var(--figure-stroke-width);
+    --_v: var(--figure-stroke-width) var(--_l);
+    --_e: calc(var(--_l) + var(--_o));
+
+    background:
+      var(--_k) left 0 top var(--_e) / var(--_h),
+      var(--_k) left var(--_e) top 0 / var(--_v),
+      var(--_k) right 0 top var(--_e) / var(--_h),
+      var(--_k) right var(--_e) top 0 / var(--_v),
+      var(--_k) left 0 bottom var(--_e) / var(--_h),
+      var(--_k) left var(--_e) bottom 0 / var(--_v),
+      var(--_k) right 0 bottom var(--_e) / var(--_h),
+      var(--_k) right var(--_e) bottom 0 / var(--_v);
+    background-repeat: no-repeat;
+    content: "";
+    inset: calc(var(--_rhythm) - var(--_e)) calc(var(--_x) - var(--_e));
+    opacity: 0.55;
+    pointer-events: none;
+    position: absolute;
+  }
+}
