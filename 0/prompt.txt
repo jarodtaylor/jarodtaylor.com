@@ -1,0 +1,1 @@
+We can move DNS to Cloudflare. Also, you're right. I thought I had set up the SPF/DMARC stuff.
