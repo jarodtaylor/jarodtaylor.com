@@ -56,3 +56,4 @@ Each item has a status:
 - **G1:** option 2 (roles under the name), one type step smaller.
 - **K2/K3:** Baseplate (option 2), light theme, with no big orange backgrounds. Roles go in the name tile.
 - **B2/B6:** Plotter (option 2).
+- **Blocks (revised):** Baseplate dropped. R6 layout as a light theme, palette L1 (cobalt + persimmon on white).
