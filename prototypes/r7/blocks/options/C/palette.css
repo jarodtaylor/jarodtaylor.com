@@ -1,0 +1,42 @@
+/*
+ * Baseplate C: BACK TO COBALT (dark).
+ * The original Baseplate on the cobalt field, now with block depth. The name block is deep cobalt (no persimmon
+ * slab), its side faces a lighter, lit cobalt, like the T's top face; the tagline and bricks are a step deeper than
+ * the field; the bio is paper. Persimmon stays where it was: the J, the tagline's accent, the role bullets and the
+ * brick hover.
+ *
+ * The roles are the brand's own (no role remapping); only tile tokens (see ../baseplate/layout.css).
+ * Contrast (WCAG 2.2): neutral 975 on neutral 275 about 15:1; accent 775 on 275 about 7:1 and on 350 about 6:1;
+ * ink 250 on neutral 975 about 15:1; ink 200 on persimmon 675 (hover) about 5.8:1.
+ */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --tile-name-face: var(--color-neutral-275);
+    --tile-name-ink: var(--color-neutral-975);
+    --tile-name-accent: var(--color-accent-775);
+    --tile-name-side: var(--color-neutral-550);
+    --tile-name-edge: var(--color-neutral-200);
+    --tile-name-depth: 2.2;
+    --tile-tag-face: var(--color-neutral-350);
+    --tile-tag-ink: var(--color-neutral-975);
+    --tile-tag-accent: var(--color-accent-775);
+    --tile-tag-side: var(--color-neutral-550);
+    --tile-tag-edge: var(--color-neutral-200);
+    --tile-tag-depth: 1;
+    --tile-bio-face: var(--color-neutral-975);
+    --tile-bio-ink: var(--color-neutral-250);
+    --tile-bio-accent: var(--color-neutral-400);
+    --tile-bio-side: var(--color-neutral-750);
+    --tile-bio-edge: var(--color-neutral-200);
+    --tile-bio-depth: 1;
+    --tile-brick-face: var(--color-neutral-300);
+    --tile-brick-ink: var(--color-neutral-975);
+    --tile-brick-accent: var(--color-accent-775);
+    --tile-brick-side: var(--color-neutral-550);
+    --tile-brick-edge: var(--color-neutral-200);
+    --tile-brick-depth: 0.6;
+    --tile-brick-hover-face: var(--color-accent-675);
+    --tile-brick-hover-ink: var(--color-neutral-200);
+    --tile-brick-hover-side: var(--color-accent-500);
+  }
+}

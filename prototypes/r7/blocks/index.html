@@ -18,7 +18,14 @@
 <body>
   <h1>Building blocks: three layouts</h1>
   <p>Same HTML as the live site (seeded from <code>pnpm build</code>, in <code>seed/</code>). Each option adds one override sheet written as knobs; its header comment lists the knobs it would need.</p>
-  <h2>Round 2: Baseplate on light (Jarod's pick)</h2>
+  <h2>Round 3: Baseplate, tiles as blocks</h2>
+  <p>Every tile gets the JT's own depth (its side face runs along the monogram's 60° extrusion vector), and on load the tiles ride in and click into place on the JT's beat. Shared layout in <code>options/baseplate/layout.css</code>; each option adds a <code>palette.css</code>.</p>
+  <ol>
+    <li><a href="options/A/?brand=blocks&amp;intro">A. Extruded bricks</a><span>Crisp white plate; white blocks with the T's cobalt side faces; the bio is the one ink block; persimmon only in the J.</span></li>
+    <li><a href="options/B/?brand=blocks&amp;intro">B. Primary toy box</a><span>Cobalt name block, yellow tagline block, persimmon link bricks, white bio, each with a darker side of its own colour.</span></li>
+    <li><a href="options/C/?brand=blocks&amp;intro">C. Back to cobalt</a><span>The original cobalt field; deep-cobalt name block with lit sides, a paper bio, persimmon as the accent.</span></li>
+  </ol>
+  <h2>Round 2: Baseplate on light (rejected: drab)</h2>
   <p>Same markup with the new roles list under the name (from <code>r7/roleline/options/2</code>). Shared layout in <code>options/2-light/baseplate.css</code>; each variant adds a <code>palette.css</code> of role mappings.</p>
   <ol>
     <li><a href="options/2a/?brand=blocks">2a. Warm paper, persimmon lead</a><span>Warm paper baseplate with near-white tiles. Persimmon leads (tagline accent, role bullets, brick hover, the J); the T turns cobalt.</span></li>

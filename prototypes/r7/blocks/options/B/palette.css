@@ -1,0 +1,86 @@
+/*
+ * Baseplate B: PRIMARY TOY BOX (light).
+ * White plate, a few blocks in solid primaries, all extruded, each with a darker side of its own colour and an ink
+ * edge. Cobalt is the name block, warm yellow the tagline, persimmon the link bricks; the bio stays white so there
+ * is still a calm place to read. Kept CV-grade by the ink type, the strict grid and only three colour blocks.
+ * Why yellow: cobalt and persimmon are already blue and red-orange; yellow completes the primary triad (the
+ * Bauhaus set, and the colours of a box of toy bricks), and ink on it is the highest-contrast pair on the page.
+ *
+ * Role mappings plus tile tokens (see ../baseplate/layout.css). NEW: --color-white (ramp endpoint) and
+ * color.ramp.yellow (NEW ramp knob, hue about 90; two steps written out here as its primitives).
+ * Contrast (WCAG 2.2): white on cobalt 400 about 8.6:1; ink 200 on yellow 870 about 13:1; cobalt 400 on yellow 870
+ * about 6.5:1 (the tagline's accent); ink 200 on persimmon 675 about 5.8:1; ink on white about 19:1.
+ */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --color-white: oklch(1 0 0);
+    --color-yellow-870: oklch(0.87 0.165 92);
+    --color-yellow-680: oklch(0.68 0.14 72);
+
+    --color-role-bg: var(--color-white);
+    --color-role-bg-next: var(--color-neutral-975);
+    --color-role-text: var(--color-neutral-200);
+    --color-role-text-body: var(--color-neutral-250);
+    --color-role-text-lead: var(--color-neutral-200);
+    --color-role-text-muted: var(--color-neutral-400);
+    --color-role-text-quiet: var(--color-neutral-200);
+    --color-role-rule: var(--color-neutral-875);
+    --color-role-rule-strong: var(--color-neutral-600);
+    --color-role-separator: var(--color-neutral-600);
+    --color-role-accent: var(--color-accent-675);
+    --color-role-on-accent: var(--color-neutral-200);
+    --color-role-accent-text: var(--color-neutral-400);
+    --color-role-focus: var(--color-neutral-400);
+    --color-role-menu-bg: var(--color-white);
+    --color-role-menu-text: var(--color-neutral-200);
+    --color-role-menu-focus: var(--color-neutral-400);
+    --color-role-menu-shadow: var(--color-neutral-700);
+
+    /* The JT: a cobalt T and the persimmon J, ink edges. */
+    --color-role-figure-line: var(--color-neutral-250);
+    --color-role-figure-edge: var(--color-neutral-200);
+    --color-role-figure-face: var(--color-neutral-400);
+    --color-role-figure-face-light: var(--color-neutral-575);
+    --color-role-figure-face-dark: var(--color-neutral-275);
+    --color-role-figure-mark: var(--color-accent-675);
+    --color-role-figure-mark-light: var(--color-accent-750);
+    --color-role-figure-mark-dark: var(--color-accent-500);
+
+    /* Tiles */
+    --tile-name-face: var(--color-neutral-400);
+    --tile-name-ink: var(--color-white);
+    --tile-name-accent: var(--color-yellow-870);
+    --tile-name-side: var(--color-neutral-250);
+    --tile-name-edge: var(--color-neutral-200);
+    --tile-name-depth: 2.2;
+    --tile-tag-face: var(--color-yellow-870);
+    --tile-tag-ink: var(--color-neutral-200);
+    --tile-tag-accent: var(--color-neutral-400);
+    --tile-tag-side: var(--color-yellow-680);
+    --tile-tag-edge: var(--color-neutral-200);
+    --tile-tag-depth: 1.2;
+    --tile-bio-face: var(--color-white);
+    --tile-bio-ink: var(--color-neutral-200);
+    --tile-bio-accent: var(--color-neutral-400);
+    --tile-bio-side: var(--color-neutral-400);
+    --tile-bio-edge: var(--color-neutral-200);
+    --tile-bio-depth: 1;
+    --tile-brick-face: var(--color-accent-675);
+    --tile-brick-ink: var(--color-neutral-200);
+    --tile-brick-accent: var(--color-neutral-200);
+    --tile-brick-side: var(--color-accent-500);
+    --tile-brick-edge: var(--color-neutral-200);
+    --tile-brick-depth: 0.7;
+    --tile-brick-hover-face: var(--color-yellow-870);
+    --tile-brick-hover-ink: var(--color-neutral-200);
+    --tile-brick-hover-side: var(--color-yellow-680);
+  }
+}
+
+/* The nav keeps quiet: white bricks with cobalt sides, so the three colour blocks stay in the hero. */
+@layer components {
+  .nav-list a {
+    --_face: var(--color-white);
+    --_side: var(--color-neutral-400);
+  }
+}
