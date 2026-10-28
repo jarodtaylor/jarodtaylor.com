@@ -2337,8 +2337,8 @@
     "nav-align": {
       "$value": "start"
     },
-    "info-layout": {
-      "$value": "stack-phone"
+    "info-align": {
+      "$value": "start"
     },
     "font-smoothing": {
       "$value": "antialiased"

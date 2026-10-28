@@ -2333,8 +2333,8 @@
     "nav-align": {
       "$value": "center"
     },
-    "info-layout": {
-      "$value": "stack"
+    "info-align": {
+      "$value": "start"
     },
     "font-smoothing": {
       "$value": "auto"

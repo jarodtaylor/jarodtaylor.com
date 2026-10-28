@@ -101,9 +101,9 @@
         "$type": "string",
         "$value": "{type.fluid.small-wide}"
       },
-      "layout": {
+      "align": {
         "$type": "string",
-        "$value": "{choice.info-layout}"
+        "$value": "{choice.info-align}"
       },
       "rule-bleed": {
         "$type": "string",

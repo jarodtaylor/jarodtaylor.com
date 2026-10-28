@@ -53,8 +53,8 @@ export const ENUMS = {
   'label-case': ['upper', 'none'],
   /** Wide screens: the nav packed beside the mark (start), on the page's centre line (center), or beside the actions (end). */
   'nav-align': ['start', 'center', 'end'],
-  /** The info strip's two halves: stacked at the left below 64rem (stack) or below 48rem (stack-phone), or role left and place right, wrapping, at every width (split). */
-  'info-layout': ['stack', 'stack-phone', 'split'],
+  /** Where the info strip's availability note sits: the start of the line or its end. */
+  'info-align': ['start', 'end'],
   /** How glyphs are rasterised where the platform allows a choice: the platform default, or grayscale antialiasing (lighter). */
   'font-smoothing': ['auto', 'antialiased'],
   /** Small links (the socials): underlined at rest (always), or only on hover and focus (hover). */

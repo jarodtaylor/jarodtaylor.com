@@ -226,7 +226,7 @@
     "hero-cue": { "$type": "string", "$value": "none" },
     "label-case": { "$type": "string", "$value": "upper" },
     "nav-align": { "$type": "string", "$value": "center" },
-    "info-layout": { "$type": "string", "$value": "stack" },
+    "info-align": { "$type": "string", "$value": "start" },
     "font-smoothing": { "$type": "string", "$value": "auto" },
     "link-underline": { "$type": "string", "$value": "always" },
     "menu-shape": { "$type": "string", "$value": "panel" },

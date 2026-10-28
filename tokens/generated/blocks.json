@@ -2334,8 +2334,8 @@
     "nav-align": {
       "$value": "end"
     },
-    "info-layout": {
-      "$value": "split"
+    "info-align": {
+      "$value": "end"
     },
     "font-smoothing": {
       "$value": "auto"

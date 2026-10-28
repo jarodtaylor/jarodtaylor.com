@@ -10,7 +10,6 @@
     border-image: conic-gradient(var(--header-rule) 0 0) 1 / var(--shape-border-width-default) 0 0 0 / 0 var(--_bleed);
     color: var(--header-info-text);
     display: flex;
-    flex-direction: column;
     font-family: var(--header-info-font-family);
     font-size: var(--_size);
     font-variation-settings: var(--header-info-font-variation);
@@ -70,37 +69,10 @@
     }
   }
 
-  /* stack-phone: one row from 48rem. */
-  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-  @media (min-width: 48rem) {
-    @container style(--header-info-layout: stack-phone) {
-      .info {
-        flex-direction: row;
-        gap: var(--space-inset-lg);
-        justify-content: space-between;
-      }
-    }
-  }
-
-  /* split: role left, place right, wrapping, at every width. */
-  @container style(--header-info-layout: split) {
+  /* info-align: the availability note at the start of the line, or at its end. */
+  @container style(--header-info-align: end) {
     .info {
-      flex-flow: row wrap;
-      justify-content: space-between;
-    }
-
-    .info-place {
-      margin-inline-start: auto;
-      text-align: end;
-    }
-  }
-
-  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-  @media (min-width: 64rem) {
-    .info {
-      flex-direction: row;
-      gap: var(--space-inset-lg);
-      justify-content: space-between;
+      justify-content: flex-end;
     }
   }
 

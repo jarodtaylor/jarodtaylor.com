@@ -80,8 +80,8 @@
     "nav-align": {
       "$value": "{knob.nav-align}"
     },
-    "info-layout": {
-      "$value": "{knob.info-layout}"
+    "info-align": {
+      "$value": "{knob.info-align}"
     },
     "font-smoothing": {
       "$value": "{knob.font-smoothing}"
