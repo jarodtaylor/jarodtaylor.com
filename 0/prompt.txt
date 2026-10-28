@@ -1,0 +1,16 @@
+[Image #13]
+
+1. The gaps in the text look off. Honestly, I would borrow from the building block layout [Image #14] how the text is mostly at the bottom and the JT monogram is more centered
+2. The header text should probably "space between" so the navigation is centered. 
+3. Maybe instead of having the Engineering Leader text at the top such large and bright text we can mute it a bit, lower the font size, and ditch the Frisco, TX (I'll have this information in the About page or later on in the about section of the homepage). Should we have right aligned another text like "Open To Work" or "Looking for new role" or something similar to that? 
+4. I think we can ditch the replay intro. They could either refresh the page... or click the Peek if they really wanna see the details. 
+
+[Image #15]
+
+Not a ton that I would really change on this one. I think it's pretty great as is. Other than similar thoughts on the text below my logo icon, location, etc. I do see some issues/artifacts in the JT monogram [Image #16] but that is likely an SVG issue. 
+
+[Image #17]
+
+Similar to the last one, not a ton I would change. I love this one too. Very different from the first two (layout wise). I actually love the font choices too! 
+
+As for the text below the header (Engineering Leader, Frisco, TX, etc), we could keep the Frisco, TX if it will right align on the Backstage lite. Also, wondering if we should have anywhere here that is showing "hey, I'm free for a new gig. Please hire me!" haha
