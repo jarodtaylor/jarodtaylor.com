@@ -101,10 +101,6 @@
         "$type": "string",
         "$value": "{type.fluid.small-wide}"
       },
-      "sep": {
-        "$type": "color",
-        "$value": "{surface.default.separator}"
-      },
       "layout": {
         "$type": "string",
         "$value": "{choice.info-layout}"
@@ -116,10 +112,6 @@
       "rule-bleed-wide": {
         "$type": "string",
         "$value": "{layout.rule-bleed-wide}"
-      },
-      "sep-gap": {
-        "$type": "number",
-        "$value": "{type.separator-gap.pipe}"
       }
     },
     "menu": {

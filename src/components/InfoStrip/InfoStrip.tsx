@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import './InfoStrip.css';
 
-/** The small print under the header: role on the left, availability on the right. */
+/** The small print under the header: availability. (The roles moved under the name.) */
 export function InfoStrip() {
   return (
     <p
@@ -9,9 +9,6 @@ export function InfoStrip() {
       style={{ '--_b': 0 } as CSSProperties}
       data-peek="below"
       data-spec="--type-small · sentence case" data-tpl="--type-small · {small} · sentence case">
-      <span className="info-role">
-        Engineering Leader <span className="info-sep">|</span> Design Engineering, Frontend Systems &amp; Developer Experience
-      </span>
       <span className="info-place">
         <span className="status">
           <span className="status-dot" aria-hidden="true" />

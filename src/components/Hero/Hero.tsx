@@ -4,6 +4,8 @@ import { Construction } from './Construction';
 import { Isometric } from './Isometric';
 import './Hero.css';
 
+const ROLES = ['Engineering Leader', 'Frontend Architecture', 'Design Engineering', 'Developer Experience'];
+
 /** Icons are 24-unit glyphs in the text colour; decorative, so the label stays each link's name. */
 const SOCIAL = [
   {
@@ -65,6 +67,12 @@ export function Hero() {
           </h1>
           <PeekDims />
         </div>
+        {/* The name's subtitle: what he does, in four roles. */}
+        <ul className="roles" aria-label="Roles" style={box(1.5)} data-build>
+          {ROLES.map((role) => (
+            <li key={role}>{role}</li>
+          ))}
+        </ul>
 
         <div className="details">
           <p className="tagline" style={box(2)} data-build data-peek="side" data-spec="--type-lead" data-tpl="--type-lead · {lead} · lh {lead-lh}">

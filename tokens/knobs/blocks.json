@@ -39,7 +39,6 @@
       "text-quiet": { "$type": "string", "$value": "neutral.975" },
       "rule": { "$type": "string", "$value": "neutral.525" },
       "rule-strong": { "$type": "string", "$value": "neutral.650" },
-      "separator": { "$type": "string", "$value": "neutral.800" },
       "text-lead": { "$type": "string", "$value": "neutral.975" },
       "menu-bg": { "$type": "string", "$value": "neutral.975" },
       "menu-text": { "$type": "string", "$value": "neutral.400" },
@@ -116,9 +115,6 @@
         "descender": { "$type": "number", "$value": 0.27 },
         "cap": { "$type": "number", "$value": 0.66 }
       }
-    },
-    "separator-gap": {
-      "pipe": { "$type": "number", "$value": 0 }
     }
   },
   "space": {

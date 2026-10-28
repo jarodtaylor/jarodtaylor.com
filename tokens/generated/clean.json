@@ -1667,9 +1667,6 @@
       "rule-strong": {
         "$value": "{color.neutral.600}"
       },
-      "separator": {
-        "$value": "{color.neutral.850}"
-      },
       "text-lead": {
         "$value": "{color.accent.800}"
       },
@@ -1865,12 +1862,6 @@
         "cap": {
           "$value": 0.675
         }
-      }
-    },
-    "separator-gap": {
-      "$type": "number",
-      "pipe": {
-        "$value": 0
       }
     },
     "size": {

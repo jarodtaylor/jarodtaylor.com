@@ -49,7 +49,7 @@ Humanized, direct, first person. **No em-dashes anywhere in site copy.** AI is f
 
 ## Brand commitments
 
-- Role line: **Engineering Leader**, plus Frontend Architecture, Design Engineering and Developer Experience (placement being explored, 2026-10-27). Location: Frisco, TX, shown on About only, not in the hero.
+- Role line: **Engineering Leader | Frontend Architecture, Design Engineering & Developer Experience**. In the hero the four roles are listed under the name (2026-10-28). Location: Frisco, TX, shown on About only, not in the hero.
 - No headshot in the hero (photos only in About).
 - No target role, level or location preferences on the site (that's LinkedIn's job).
 - Direction: locked 2026-10-24; default changed 2026-10-27. Default brand **Clean and sharp** (`prototypes/r6-clean/`: pine + apricot, Funnel Display / Funnel Sans, 60° lattice). Remix brands: **Backstage-lite** (`prototypes/r6-backstage/`) and **Building blocks** (`prototypes/r6-blocks/`), each with its own fonts. All three run on one markup in `src/`; the prototypes are reference only. Round 7 feedback: `docs/design/feedback-r7.md`.

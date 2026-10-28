@@ -24,18 +24,6 @@
     z-index: 5;
   }
 
-  /* stack balances the role's lines; the other layouts let it run on as far as it fits. */
-  @container style(--header-info-layout: stack) {
-    .info-role {
-      text-wrap: balance;
-    }
-  }
-
-  .info-sep {
-    color: var(--header-info-sep);
-    padding-inline: calc(var(--_size) * var(--header-info-sep-gap));
-  }
-
   /* Open to new roles: a small dot with a ring breathing out of it. Still under reduced motion. */
   .status {
     align-items: center;
@@ -113,10 +101,6 @@
       flex-direction: row;
       gap: var(--space-inset-lg);
       justify-content: space-between;
-    }
-
-    .info-role {
-      text-wrap: wrap;
     }
   }
 

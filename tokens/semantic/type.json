@@ -183,12 +183,6 @@
       "display-cap": {
         "$value": "{font.metrics.display.cap}"
       }
-    },
-    "separator-gap": {
-      "$type": "number",
-      "pipe": {
-        "$value": "{font.separator-gap.pipe}"
-      }
     }
   }
 }

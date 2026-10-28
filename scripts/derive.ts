@@ -183,8 +183,6 @@ export interface Knobs {
     descent: { display: Token<number> };
     /** The display face's vertical metrics in em (OS/2 typo ascender, descender, cap height), for Peek's measurements. */
     metrics: { display: Record<'ascent' | 'descender' | 'cap', Token<number>> };
-    /** Extra space either side of the info strip's separator (|), in em of the strip's size. */
-    'separator-gap': Record<'pipe', Token<number>>;
   };
   /** base and radius are authored in px and emitted in rem; border-width stays px. */
   space: { base: Token<PxDimension>; density: Token<number> };
@@ -218,7 +216,6 @@ export interface Primitives {
     tracking: { $type: 'string' } & Record<TypeRole, Leaf<string>>;
     descent: { $type: 'number'; display: Leaf<number> };
     metrics: { $type: 'number'; display: Record<'ascent' | 'descender' | 'cap', Leaf<number>> };
-    'separator-gap': { $type: 'number' } & Record<'pipe', Leaf<number>>;
     size: { $type: 'dimension' } & Record<TypeStep, Leaf<Dimension>>;
     'line-height': { $type: 'number' } & Record<LineHeight, Leaf<number>>;
   };
@@ -306,7 +303,6 @@ export function derive(knobs: Knobs): Primitives {
       tracking: { $type: 'string', ...pick(TYPE_ROLES, (r) => type.tracking[r].$value) },
       descent: { $type: 'number', display: { $value: type.descent.display.$value } },
       metrics: { $type: 'number', display: pick(['ascent', 'descender', 'cap'] as const, (m) => type.metrics.display[m].$value) },
-      'separator-gap': { $type: 'number', pipe: { $value: type['separator-gap'].pipe.$value } },
       size: {
         $type: 'dimension',
         ...mapScale(TYPE_SCALE, (exp) => scaleDim(toRem(type.base.$value), type.ratio.$value ** exp)),
@@ -395,7 +391,6 @@ function validate(k: Knobs): void {
     if (typeof axes !== 'string' || !VARIATION.test(axes))
       errors.push(`type.variation.${r} must be normal or a list like "wdth" 62, "opsz" 96 (got ${JSON.stringify(axes)})`);
   }
-  num('type.separator-gap.pipe', k.type?.['separator-gap']?.pipe?.$value, (n) => n >= 0 && n <= 2, 'in [0, 2]');
   for (const m of ['ascent', 'descender', 'cap'] as const)
     num(`type.metrics.display.${m}`, k.type?.metrics?.display?.[m]?.$value, (n) => n >= 0 && n <= 2, 'in [0, 2]');
   num('type.descent.display', k.type?.descent?.display?.$value, (n) => n >= 0 && n <= 1, 'in [0, 1]');

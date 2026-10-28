@@ -200,6 +200,17 @@
     "lattice-drop-wide": {
       "$type": "number",
       "$value": "{layout.lattice-drop-wide}"
+    },
+    "roles": {
+      "$description": "The role list under the name: one type step under the socials",
+      "font-size": {
+        "$type": "string",
+        "$value": "{type.fluid.small-phone}"
+      },
+      "font-size-wide": {
+        "$type": "string",
+        "$value": "{type.fluid.small-wide}"
+      }
     }
   }
 }
