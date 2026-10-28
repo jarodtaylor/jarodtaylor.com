@@ -1,0 +1,1 @@
+One thing I want to make sure we're thinking about when building the tokens is that we plan to go Figma -> Token (i forget the name, its the alternative to Style Dictionary) -> CSS/Code
