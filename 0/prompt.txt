@@ -1,0 +1,7 @@
+<task-notification>
+<task-id>b87zdsnea</task-id>
+<tool-use-id>toolu_011FhcWSocBXEFeZWRAqEbev</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jarod-Code-personal-jarodtaylor-com/e071936d-eecf-4712-8180-225a10b3edb2/tasks/b87zdsnea.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait until jarodtaylor.com serves the new site" completed (exit code 0)</summary>
+</task-notification>
