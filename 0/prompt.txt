@@ -1,0 +1,1 @@
+Drop anything unnecessary. Commit as often as you'd like.
