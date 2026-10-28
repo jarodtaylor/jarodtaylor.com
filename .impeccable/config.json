@@ -4,7 +4,8 @@
     "ignoreRules": [],
     "ignoreFiles": [
       "prototypes/r6-clean/index.html",
-      "prototypes/r6-blocks/index.html"
+      "prototypes/r6-blocks/index.html",
+      "prototypes/fonts/fonts.css"
     ],
     "ignoreValues": []
   }
