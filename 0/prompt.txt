@@ -1,0 +1,11 @@
+Okay, so a couple of things. I don't like the constrained (boxed in main content with the left and right sides. It gives it a very dated feel to me (like old 960px grid days). [Image #9] 
+
+I really liked the animation when transitioning the "Peek Backstage" (especially the animation of my logo icon). That is the kind of stuff that I was hoping to add in a couple parts to make it just stand out from a typical static boring informational website. If you look at this site (https://piergorelli.com/) this developer does something a little similar to what we're doing, but what's kind of nice is that it transitions in on load and than transitions out. I'm wondering if we could do something similar to that. 
+
+I still want to make sure we're using the browser width. If you remember looking at Aarron Walter's site (https://aarronwalter.com/) he did a good job of this. 
+
+I also thing that the font sizes (see the screenshot I sent above [Image #9]) are not right. There's just too much on the screen and the typography doesn't flow very well. Also, we can ditch the location/time in the top header. 
+
+I was looking into some of the threejs backgrounds people do that are subtle and more constrained to a "Hero" or full browser before the "fold". I would still like to consider if there's a possibility there for us to get creative. I'm not sure if we do that if we should focus on that separately, like... focus on the Hero/Full Page before the fold before moving on to the next sections. Maybe that would give us time to nail that part, love the look/feel, and it gives us direction before we move on to the  next sections. 
+
+What are your thoughts?
