@@ -598,10 +598,10 @@
     transition: scale calc(var(--_beat) * 3.2) var(--figure-pop-easing) calc(var(--_peek-trace-at) + var(--_f) * var(--_peek-trace-dur));
   }
 
-  /* Leaving: the construction that ran off-screen is pulled back into the mark (an ease-in, so it accelerates home),
-     the mark's own guides settle to their resting strength, and the rest of the layer fades on the same clock. */
+  /* Leaving: the construction that ran off-screen is pulled back into the mark along its length. An ease-out spends
+     the window on the visible part: the off-screen tail goes first, then the lines on screen retract home. */
   :root[data-peek-state="leaving"] .mono-bleed path {
-    transition: stroke-dashoffset var(--_peek-leave) var(--motion-easing-in);
+    transition: stroke-dashoffset var(--_peek-leave) var(--motion-easing-out);
   }
 
   /* Isometric: the monogram built from its two parts --------------------------------------------------------- */

@@ -68,8 +68,12 @@ export function penFraction([px, py]: Point): number {
   return best.at;
 }
 
-/** A construction line continued out of both ends, far past any screen edge: two paths that grow away from the mark. */
-export function bleed([x1, y1, x2, y2]: [number, number, number, number], reach = 5000): string[] {
+/**
+ * A construction line continued out of both ends, just past any screen edge: two paths that grow away from the mark.
+ * The reach is kept short (2500 units clears the farthest corner from 390 to 2560 wide), so most of each path is on
+ * screen and drawing or retracting it reads along its whole length instead of in its last few frames.
+ */
+export function bleed([x1, y1, x2, y2]: [number, number, number, number], reach = 2500): string[] {
   const k = reach / Math.hypot(x2 - x1, y2 - y1);
   const f = (n: number) => +n.toFixed(1);
   return [
