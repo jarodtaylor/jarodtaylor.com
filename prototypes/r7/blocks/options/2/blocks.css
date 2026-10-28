@@ -1,0 +1,260 @@
+/*
+ * Building blocks, layout option 2: BASEPLATE.
+ * The hero is built out of blocks. Every part is its own tile on a cobalt baseplate: the name on a persimmon
+ * slab, the assembled JT in a deep-cobalt bay, the tagline in an outlined tile, the bio on paper, and the four
+ * links as four deep-cobalt bricks that turn persimmon. The nav is a tray of bricks that lift on hover, showing their side.
+ *
+ * Same HTML as the live site. Part 1 is what would go in tokens/knobs/blocks.json (the only place the brand is named,
+ * like the generated tokens.css). Part 2 is component CSS keyed only on knobs, using only semantic tokens.
+ * Every tile colour is an existing surface role (accent, raised, inverse), so check:contrast already covers it.
+ *
+ * Knobs this option needs:
+ *   --knob-hero-layout: tiles               existing knob, NEW value (grid areas: name | fig, tag | bio | fig, social | fig)
+ *   --knob-hero-tile-*: <surface role>      NEW enum per part (name, figure, tag, bio, social): accent | raised | inverse | outline
+ *                                           (this prototype fixes them; a brand would pick roles)
+ *   --knob-nav-hover:   underline | snap | brick   NEW enum (shared with option 1; this is "brick")
+ *   --knob-hero-cue:    none                existing knob, new value (no rule matches it, so the cue stays off)
+ *   --fluid-hero-display-*                  existing fluid knobs, sized to the name slab
+ */
+
+/* 1. TOKENS ---------------------------------------------------------------------------------------------------- */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --knob-hero-layout: tiles;
+    --knob-nav-hover: brick;
+    --knob-hero-cue: none;
+    --fluid-hero-display-phone: 17vw;
+    --fluid-hero-display-wide: min(11.5vw, 20svh);
+
+    --choice-nav-hover: var(--knob-nav-hover);
+    --header-nav-hover: var(--choice-nav-hover);
+  }
+}
+
+/* 2. COMPONENTS ------------------------------------------------------------------------------------------------ */
+@layer components {
+  /* hero-layout: tiles -------------------------------------------------------------------------------------- */
+  @container style(--hero-layout: tiles) {
+    .stack,
+    .details {
+      display: contents;
+    }
+
+    .hero {
+      --_pad: var(--space-inset-md);
+
+      align-content: stretch;
+      gap: var(--space-inset-sm);
+      grid-template-areas:
+        "fig"
+        "name"
+        "tag"
+        "bio"
+        "social";
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: var(--space-inset-sm) var(--_x);
+    }
+
+    /* Every tile: a block with a little radius, padded from its own edges. */
+    .name-block,
+    .tagline,
+    .bio,
+    .figure {
+      border-radius: var(--shape-radius-container);
+      padding: var(--_pad);
+    }
+
+    /* The name slab: persimmon, the name in dark cobalt, sitting on the slab's floor. */
+    .name-block {
+      --hero-name-color: var(--surface-accent-text);
+
+      align-content: end;
+      background: var(--surface-accent-bg);
+      display: grid;
+      grid-area: name;
+    }
+
+    /* The figure bay: deep cobalt; the drawing and its dots stay inside it. */
+    .figure {
+      aspect-ratio: 1.2;
+      background: var(--surface-raised-bg);
+      block-size: auto;
+      grid-area: fig;
+      inline-size: auto;
+      inset: auto;
+      margin: 0;
+      overflow: clip;
+      position: relative;
+    }
+
+    .figure > .build {
+      block-size: calc(100% - var(--_pad) * 2);
+      inline-size: calc(100% - var(--_pad) * 2);
+      inset: var(--_pad);
+    }
+
+    /* The tagline: an outlined tile on the baseplate, so the persimmon accent keeps its ground. */
+    .tagline {
+      align-content: end;
+      border: var(--shape-border-width-default) solid var(--surface-default-border);
+      display: grid;
+      grid-area: tag;
+      text-wrap: balance;
+    }
+
+    /* The bio: on paper. */
+    .bio {
+      --hero-body-color: var(--surface-inverse-text);
+
+      align-content: end;
+      background: var(--surface-inverse-bg);
+      display: grid;
+      grid-area: bio;
+      max-inline-size: none;
+    }
+
+    /* The links: four bricks. */
+    .social {
+      display: grid;
+      gap: var(--space-inset-sm);
+      grid-area: social;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .social li {
+      display: flex;
+    }
+
+    .social a {
+      align-items: flex-start;
+      background: var(--surface-raised-bg);
+      border-radius: var(--shape-radius-container);
+      color: var(--surface-raised-text);
+      flex: 1;
+      flex-direction: column;
+      gap: var(--space-stack-sm);
+      justify-content: space-between;
+      padding: var(--_pad);
+      text-decoration: none;
+      transition:
+        background-color var(--motion-duration-fast) var(--motion-easing-out),
+        color var(--motion-duration-fast) var(--motion-easing-out);
+    }
+
+    .social svg {
+      block-size: calc(var(--_small) * 1.8);
+      inline-size: calc(var(--_small) * 1.8);
+    }
+
+    .social a:is(:hover, :focus-visible) {
+      background: var(--surface-accent-bg);
+      color: var(--surface-accent-text);
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .hero {
+        --_pad: var(--space-inset-lg);
+
+        gap: var(--space-inset-md);
+        grid-template-areas:
+          "name name name name name name name fig fig fig fig fig"
+          "tag  tag  tag  tag  bio  bio  bio  fig fig fig fig fig"
+          "social social social social social social social fig fig fig fig fig";
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        /* The slab takes the spare height; the reading tiles size to their words. */
+        grid-template-rows: 1fr auto auto;
+        padding-block: var(--space-inset-md) var(--_x);
+      }
+
+      .figure {
+        aspect-ratio: auto;
+      }
+
+      /* One row of four bricks under the reading pair. */
+      .social {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .name {
+        white-space: nowrap;
+      }
+
+      .tagline {
+        font-size: calc(var(--_lead) * 1.35);
+      }
+    }
+  }
+
+  /* nav-hover: brick. The links are a tray of bricks; the one you reach for lifts and shows its persimmon side,
+     and presses home on click. Reduced motion keeps the colour, drops the lift. */
+  @container style(--header-nav-hover: brick) {
+    .nav-list a {
+      --_d: var(--space-stack-xs);
+
+      text-decoration: none;
+      transition:
+        translate var(--motion-duration-base) var(--motion-easing-pop),
+        box-shadow var(--motion-duration-base) var(--motion-easing-pop),
+        background-color var(--motion-duration-fast) var(--motion-easing-out),
+        color var(--motion-duration-fast) var(--motion-easing-out);
+    }
+
+    .nav-list a:hover {
+      text-decoration: none;
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 64rem) {
+      .nav-list {
+        gap: var(--space-stack-xs);
+      }
+
+      .nav-list a {
+        background: var(--surface-raised-bg);
+        border-radius: var(--shape-radius-control);
+        color: var(--surface-raised-text);
+        padding: var(--space-inset-sm) var(--space-stack-sm);
+      }
+
+      .nav-list a:is(:hover, :focus-visible) {
+        background: var(--surface-inverse-bg);
+        color: var(--surface-inverse-text);
+      }
+    }
+
+    /* Below 64rem the menu card holds the same bricks, stacked. */
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (max-width: 63.99rem) {
+      .nav-list {
+        gap: var(--space-stack-xs);
+        padding: var(--space-inset-sm);
+      }
+
+      .nav-list a {
+        background: var(--surface-raised-bg);
+        border-radius: var(--shape-radius-control);
+        color: var(--surface-raised-text);
+      }
+
+      .nav-list a:is(:hover, :focus-visible) {
+        background: var(--surface-accent-bg);
+        color: var(--surface-accent-text);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .nav-list a:is(:hover, :focus-visible) {
+        box-shadow:
+          0 calc(var(--_d) * 0.5) 0 var(--surface-accent-bg),
+          0 var(--_d) 0 var(--surface-accent-bg);
+        translate: 0 calc(var(--_d) * -1);
+      }
+
+      .nav-list a:active {
+        box-shadow: none;
+        translate: 0 0;
+      }
+    }
+  }
+}

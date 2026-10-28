@@ -1,0 +1,332 @@
+/*
+ * Building blocks, layout option 3: SPINE.
+ * The header leaves the top. It becomes a rail down the left edge (mark, menu, then Peek and Remix at the foot), with
+ * the info strip as a vertical spine beside it, like the spine of an instruction booklet. The page is a spread: the
+ * assembled JT on the left page, the name stacked in two lines on the right page, the rest hanging off its foot.
+ * The nav is always a menu: a full-height drawer from the right in which the links fall in and stack, bottom first.
+ *
+ * Same HTML as the live site. Part 1 is what would go in tokens/knobs/blocks.json (the only place the brand is named,
+ * like the generated tokens.css). Part 2 is component CSS keyed only on knobs, using only semantic tokens.
+ *
+ * Knobs this option needs:
+ *   --knob-header-place: top | rail        NEW enum: the masthead as a top bar or a left rail (stage grid areas)
+ *   --knob-info-place:   top | foot | spine   NEW enum (shared with option 1; this is "spine": vertical, wide only)
+ *   --knob-nav-mode:     inline | drawer   NEW enum: drawer = the menu at every width
+ *   --knob-menu-shape:   drawer            existing knob, NEW value: full height, links as stacking blocks
+ *   --knob-hero-layout:  spread            existing knob, NEW value (grid areas: fig | name, then tag, bio, social)
+ *   --knob-name-lines:   one | stacked     NEW enum: the name as one line or one word per line
+ *   --knob-hero-cue:     none              existing knob, new value (no rule matches it, so the cue stays off)
+ *   --fluid-hero-display-*                 existing fluid knobs, sized for two lines
+ */
+
+/* 1. TOKENS ---------------------------------------------------------------------------------------------------- */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --knob-header-place: rail;
+    --knob-info-place: spine;
+    --knob-nav-mode: drawer;
+    --knob-menu-shape: drawer;
+    --knob-hero-layout: spread;
+    --knob-name-lines: stacked;
+    --knob-hero-cue: none;
+    --fluid-hero-display-phone: 29vw;
+    --fluid-hero-display-wide: min(14vw, 22svh);
+
+    --choice-header-place: var(--knob-header-place);
+    --choice-info-place: var(--knob-info-place);
+    --choice-nav-mode: var(--knob-nav-mode);
+    --choice-name-lines: var(--knob-name-lines);
+    --header-place: var(--choice-header-place);
+    --header-info-place: var(--choice-info-place);
+    --header-nav-mode: var(--choice-nav-mode);
+    --hero-name-lines: var(--choice-name-lines);
+  }
+}
+
+/* 2. COMPONENTS ------------------------------------------------------------------------------------------------ */
+@layer components {
+  /* header-place: rail -------------------------------------------------------------------------------------- */
+  @container style(--header-place: rail) {
+    .stage {
+      grid-template-areas:
+        "rail info"
+        "rail main";
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+    }
+
+    .stage > main {
+      grid-area: main;
+    }
+
+    .info {
+      grid-area: info;
+    }
+
+    /* The rail: mark and menu at the head, the two tools at the foot, a hairline down its edge. It stays in view. */
+    .masthead {
+      align-self: start;
+      block-size: var(--layout-stage-h-phone);
+      border-inline-end: var(--shape-border-width-default) solid var(--header-rule);
+      flex-direction: column;
+      grid-area: rail;
+      padding: var(--space-inset-md) var(--space-inset-sm);
+      position: sticky;
+      top: 0;
+    }
+
+    .mark {
+      margin-inline-end: 0;
+      order: -2;
+    }
+
+    .nav-toggle {
+      margin-block-end: auto;
+      order: -1;
+    }
+
+    /* Icon-only tools at every width; each keeps its name in aria-label. */
+    .tool {
+      padding: 0;
+    }
+
+    .tool-label {
+      display: none;
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .masthead {
+        block-size: var(--layout-stage-h-wide);
+        padding-block: var(--space-stack-md);
+      }
+    }
+  }
+
+  /* info-place: spine. From 48rem the strip turns on its side next to the rail and reads bottom to top. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    @container style(--header-info-place: spine) {
+      .stage {
+        grid-template-areas: "rail info main";
+        grid-template-columns: auto auto minmax(0, 1fr);
+        grid-template-rows: 1fr;
+      }
+
+      /* In vertical writing the inline size is the height. */
+      .info {
+        align-self: start;
+        border: 0;
+        border-image: none;
+        inline-size: var(--layout-stage-h-wide);
+        /* After the half turn, inline-start is the side facing the page. */
+        border-inline-start: var(--shape-border-width-default) solid var(--header-rule);
+        margin: 0;
+        padding: var(--space-stack-md) var(--space-inset-sm);
+        position: sticky;
+        rotate: 180deg; /* stylelint-disable-line unit-allowed-list -- geometry: vertical text reads bottom to top */
+        top: 0;
+        writing-mode: vertical-rl;
+      }
+    }
+  }
+
+  /* nav-mode: drawer. The menu at every width: a full-height paper panel from the right. ------------------------ */
+  @container style(--header-nav-mode: drawer) {
+    .nav-toggle {
+      display: inline-flex;
+    }
+
+    .nav-list {
+      background: var(--header-menu-bg);
+      block-size: auto;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      color: var(--header-menu-text);
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      inline-size: min(calc(var(--space-stack-xl) * 10), calc(100% - var(--layout-control-h-wide) - var(--space-inset-sm) * 2));
+      inset: 0 0 0 auto;
+      justify-content: flex-end;
+      margin: 0;
+      overflow: auto;
+      padding: var(--space-stack-lg) var(--space-stack-md);
+      position: fixed;
+      transition:
+        translate var(--motion-duration-base) var(--motion-easing-out),
+        display var(--motion-duration-base) allow-discrete,
+        overlay var(--motion-duration-base) allow-discrete;
+      translate: 100% 0;
+    }
+
+    .nav-list:popover-open {
+      translate: 0 0;
+    }
+
+    @starting-style {
+      .nav-list:popover-open {
+        translate: 100% 0;
+      }
+    }
+
+    .nav-list:not(:popover-open) {
+      display: none;
+    }
+
+    .nav-list::backdrop {
+      background: var(--surface-default-bg);
+      opacity: 0.6;
+    }
+
+    .nav-list :focus-visible {
+      outline-color: var(--header-menu-focus);
+    }
+
+    /* Each link is a block: display type, a hairline on top, the whole row its target. */
+    .nav-list li {
+      border-block-start: var(--shape-border-width-default) solid var(--header-menu-border);
+    }
+
+    .nav-list a {
+      --_d: var(--space-stack-xs);
+
+      color: var(--header-menu-text);
+      display: block;
+      font-family: var(--type-family-display);
+      font-size: calc(var(--type-fluid-lead-wide) * 1.5);
+      font-variation-settings: var(--type-variation-display);
+      font-weight: var(--type-weight-display);
+      letter-spacing: var(--type-tracking-lead);
+      line-height: var(--type-leading-display);
+      padding: var(--space-stack-sm) var(--space-inset-md);
+      text-decoration: none;
+      transition:
+        translate var(--motion-duration-base) var(--motion-easing-pop),
+        box-shadow var(--motion-duration-base) var(--motion-easing-pop),
+        background-color var(--motion-duration-fast) var(--motion-easing-out),
+        color var(--motion-duration-fast) var(--motion-easing-out);
+    }
+
+    .nav-list a:is(:hover, :focus-visible) {
+      background: var(--surface-accent-bg);
+      color: var(--surface-accent-text);
+      text-decoration: none;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      /* Hover: the block slides out of the stack, its cobalt side showing. */
+      .nav-list a:is(:hover, :focus-visible) {
+        box-shadow:
+          calc(var(--_d) * 0.5) 0 0 var(--surface-inverse-text),
+          var(--_d) 0 0 var(--surface-inverse-text);
+        translate: calc(var(--_d) * -2) 0;
+      }
+
+      /* Opening: the links fall in from above and stack on the drawer's floor, the bottom one first. */
+      .nav-list li {
+        transition:
+          translate var(--motion-duration-slow) var(--motion-easing-pop),
+          opacity var(--motion-duration-fast) var(--motion-easing-out);
+      }
+
+      .nav-list li:nth-child(5) { transition-delay: calc(var(--motion-duration-beat) * 1); }
+      .nav-list li:nth-child(4) { transition-delay: calc(var(--motion-duration-beat) * 2); }
+      .nav-list li:nth-child(3) { transition-delay: calc(var(--motion-duration-beat) * 3); }
+      .nav-list li:nth-child(2) { transition-delay: calc(var(--motion-duration-beat) * 4); }
+      .nav-list li:nth-child(1) { transition-delay: calc(var(--motion-duration-beat) * 5); }
+
+      @starting-style {
+        .nav-list:popover-open li {
+          opacity: 0;
+          translate: 0 calc(var(--layout-stage-h-wide) * -1);
+        }
+      }
+    }
+  }
+
+  /* hero-layout: spread ------------------------------------------------------------------------------------- */
+  @container style(--hero-layout: spread) {
+    .stack,
+    .details {
+      display: contents;
+    }
+
+    .hero {
+      align-content: stretch;
+      grid-template-areas:
+        "fig"
+        "name"
+        "tag"
+        "bio"
+        "social";
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--_stack-gap-tight);
+    }
+
+    .figure {
+      aspect-ratio: 1.1045;
+      block-size: auto;
+      grid-area: fig;
+      inline-size: 100%;
+      inset: auto;
+      margin: 0 0 var(--_stack-gap);
+      position: relative;
+    }
+
+    .figure > .build {
+      block-size: 100%;
+      top: 0;
+    }
+
+    .name-block {
+      grid-area: name;
+    }
+
+    .tagline {
+      grid-area: tag;
+      margin-block-start: var(--_stack-gap-tight);
+    }
+
+    .bio {
+      grid-area: bio;
+    }
+
+    .social {
+      grid-area: social;
+      margin-block-start: var(--_stack-gap-tight);
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .hero {
+        grid-template-areas:
+          "fig fig fig fig fig fig name name name name name name"
+          "fig fig fig fig fig fig .    .    .    .    .    .   "
+          "fig fig fig fig fig fig tag  tag  tag  tag  tag  tag "
+          "fig fig fig fig fig fig bio  bio  bio  bio  bio  bio "
+          "fig fig fig fig fig fig social social social social social social";
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        grid-template-rows: auto 1fr auto auto auto;
+      }
+
+      /* The left page: the drawing fits its cell, centred. */
+      .figure {
+        aspect-ratio: auto;
+        margin: 0;
+      }
+    }
+  }
+
+  /* name-lines: stacked. One word per line. */
+  @container style(--hero-name-lines: stacked) {
+    .name {
+      white-space: normal;
+    }
+
+    .name span {
+      display: block;
+    }
+  }
+}

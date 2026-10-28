@@ -1,0 +1,234 @@
+/*
+ * Building blocks, layout option 1: MONUMENT.
+ * One centre line. The assembled JT stands on the name like a block on a plinth; the tagline and bio flank it,
+ * the socials sit on the axis, and the info strip drops to the foot of the stage as the baseplate.
+ * The nav centres in the header and each link snaps up into a paper block with a persimmon side on hover.
+ *
+ * Same HTML as the live site. Part 1 is what would go in tokens/knobs/blocks.json (the only place the brand is named,
+ * like the generated tokens.css). Part 2 is component CSS keyed only on knobs, using only semantic tokens.
+ *
+ * Knobs this option needs:
+ *   --knob-hero-layout: monument      existing knob, NEW value (grid areas: tag | fig | bio, then social, then name)
+ *   --knob-info-place:  top | foot    NEW enum: where the info strip sits in the stage
+ *   --knob-nav-hover:   underline | snap   NEW enum: the nav link's hover treatment
+ *   --knob-nav-align:   center        existing knob, existing value
+ *   --knob-hero-cue:    none          existing knob, new value (no rule matches it, so the cue stays off)
+ *   --fluid-hero-display-*            existing fluid knobs, bigger values (the name is the plinth)
+ */
+
+/* 1. TOKENS ---------------------------------------------------------------------------------------------------- */
+@layer tokens {
+  html[data-brand="blocks"] {
+    --knob-hero-layout: monument;
+    --knob-info-place: foot;
+    --knob-nav-hover: snap;
+    --knob-nav-align: center;
+    --knob-hero-cue: none;
+    --fluid-hero-display-phone: 20vw;
+    --fluid-hero-display-wide: min(19vw, 30svh);
+
+    /* tier 2/3 aliases for the new knobs */
+    --choice-info-place: var(--knob-info-place);
+    --choice-nav-hover: var(--knob-nav-hover);
+    --header-info-place: var(--choice-info-place);
+    --header-nav-hover: var(--choice-nav-hover);
+  }
+}
+
+/* 2. COMPONENTS ------------------------------------------------------------------------------------------------ */
+@layer components {
+  /* info-place: foot. The strip leaves the top and becomes the line the whole composition stands on. */
+  @container style(--header-info-place: foot) {
+    .stage {
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .masthead {
+      grid-row: 1;
+    }
+
+    .stage > main {
+      grid-row: 2;
+    }
+
+    .info {
+      grid-row: 3;
+    }
+  }
+
+  /* hero-layout: monument ------------------------------------------------------------------------------------ */
+  @container style(--hero-layout: monument) {
+    /* The wrappers step aside so every part is a cell of the hero grid (DOM order untouched). */
+    .stack,
+    .details {
+      display: contents;
+    }
+
+    .hero {
+      align-content: stretch;
+      grid-template-areas:
+        "fig"
+        "name"
+        "tag"
+        "bio"
+        "social";
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: minmax(calc(var(--_fig) * 0.62), 1fr) auto auto auto auto;
+      justify-items: center;
+      text-align: center;
+    }
+
+    /* The figure is a cell, not an overlay: the drawing fits it (SVG meet), centred. */
+    .figure {
+      block-size: auto;
+      grid-area: fig;
+      inline-size: 100%;
+      inset: auto;
+      margin: 0 0 var(--_stack-gap);
+      position: relative;
+    }
+
+    .figure > .build {
+      block-size: 100%;
+      top: 0;
+    }
+
+    .name-block {
+      grid-area: name;
+    }
+
+    .tagline {
+      grid-area: tag;
+      margin-block-start: var(--_stack-gap);
+    }
+
+    .bio {
+      grid-area: bio;
+      margin-block-start: var(--_stack-gap-tight);
+    }
+
+    .social {
+      grid-area: social;
+      justify-content: center;
+      margin-block-start: var(--_stack-gap);
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 48rem) {
+      .hero {
+        grid-template-areas:
+          "tag tag tag tag fig fig fig fig bio bio bio bio"
+          "social social social social social social social social social social social social"
+          "name name name name name name name name name name name name";
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        grid-template-rows: 1fr auto auto;
+        row-gap: var(--_stack-gap);
+      }
+
+      .figure {
+        margin: 0;
+      }
+
+      /* The tagline and bio flank the figure, each set against the centre line, both on the figure's floor. */
+      /* Two balanced lines at every width, so the two flanks weigh the same. */
+      .tagline {
+        align-self: end;
+        justify-self: end;
+        margin: 0;
+        max-inline-size: calc(var(--_lead) * 8);
+        text-align: end;
+      }
+
+      .bio {
+        align-self: end;
+        justify-self: start;
+        margin: 0;
+        text-align: start;
+      }
+
+      .social {
+        margin: 0;
+      }
+
+      .name {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  /* nav-hover: snap. A link is a flat label until you reach for it: then it snaps up into a paper block, its
+     persimmon side showing, and presses flat on click. Reduced motion keeps the colours, drops the lift. */
+  @container style(--header-nav-hover: snap) {
+    .nav-list a {
+      --_d: var(--space-stack-xs);
+
+      border-radius: var(--shape-radius-control);
+      transition:
+        translate var(--motion-duration-base) var(--motion-easing-pop),
+        box-shadow var(--motion-duration-base) var(--motion-easing-pop),
+        background-color var(--motion-duration-fast) var(--motion-easing-out),
+        color var(--motion-duration-fast) var(--motion-easing-out);
+    }
+
+    .nav-list a:is(:hover, :focus-visible) {
+      text-decoration: none;
+    }
+
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (min-width: 64rem) {
+      .nav-list {
+        gap: var(--space-inset-sm);
+      }
+
+      .nav-list a {
+        padding: var(--space-inset-sm) var(--space-stack-sm);
+      }
+
+      .nav-list a:is(:hover, :focus-visible) {
+        background: var(--surface-inverse-bg);
+        color: var(--surface-inverse-text);
+      }
+    }
+
+    /* Below 64rem the menu card is already paper, so its blocks are persimmon with a cobalt side. */
+    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+    @media (max-width: 63.99rem) {
+      .nav-list {
+        gap: var(--space-stack-xs);
+        padding: var(--space-inset-sm);
+      }
+
+      .nav-list a:is(:hover, :focus-visible) {
+        background: var(--surface-accent-bg);
+        color: var(--surface-accent-text);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .nav-list a:is(:hover, :focus-visible) {
+        box-shadow:
+          calc(var(--_d) * 0.25) calc(var(--_d) * 0.25) 0 var(--surface-accent-bg),
+          calc(var(--_d) * 0.5) calc(var(--_d) * 0.5) 0 var(--surface-accent-bg),
+          calc(var(--_d) * 0.75) calc(var(--_d) * 0.75) 0 var(--surface-accent-bg),
+          var(--_d) var(--_d) 0 var(--surface-accent-bg);
+        translate: calc(var(--_d) * -1) calc(var(--_d) * -1);
+      }
+
+      .nav-list a:active {
+        box-shadow: none;
+        translate: 0 0;
+      }
+
+      /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+      @media (max-width: 63.99rem) {
+        .nav-list a:is(:hover, :focus-visible) {
+          box-shadow:
+            calc(var(--_d) * 0.25) calc(var(--_d) * 0.25) 0 var(--surface-inverse-text),
+            calc(var(--_d) * 0.5) calc(var(--_d) * 0.5) 0 var(--surface-inverse-text),
+            calc(var(--_d) * 0.75) calc(var(--_d) * 0.75) 0 var(--surface-inverse-text),
+            var(--_d) var(--_d) 0 var(--surface-inverse-text);
+        }
+      }
+    }
+  }
+}

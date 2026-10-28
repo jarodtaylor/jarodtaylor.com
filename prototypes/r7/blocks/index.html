@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>R7 · Building blocks layouts</title>
+  <style>
+    body { background: #1530b4; color: #f4f7fd; font: 1.125rem/1.5 system-ui, sans-serif; margin: 0; padding: clamp(1.25rem, 4vw, 5rem); }
+    h1 { font-size: clamp(2rem, 5vw, 4rem); line-height: 1; margin: 0 0 0.5em; }
+    p { max-width: 60ch; }
+    ol { display: grid; gap: 1rem; list-style: none; margin: 2rem 0; padding: 0; }
+    a { color: #ffb08a; font-weight: 700; }
+    li span { color: #c7d0f4; display: block; }
+    code { font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h1>Building blocks: three layouts</h1>
+  <p>Same HTML as the live site (seeded from <code>pnpm build</code>, in <code>seed/</code>). Each option adds one override sheet written as knobs; its header comment lists the knobs it would need.</p>
+  <ol>
+    <li><a href="options/1/?brand=blocks">1. Monument</a><span>One centre line: the JT stands on a giant name like a block on a plinth, tagline and bio flank it, the info strip is the baseplate. Nav centred; links snap up into paper blocks.</span></li>
+    <li><a href="options/2/?brand=blocks">2. Baseplate</a><span>The hero is built from tiles: name on a persimmon slab, JT in a deep-cobalt bay, bio on paper, links as four bricks. Nav is a tray of bricks that lift on hover.</span></li>
+    <li><a href="options/3/?brand=blocks">3. Spine</a><span>The header becomes a left rail with the info strip as a vertical spine; JT on the left page, name stacked on the right. Nav is always a full-height drawer whose links fall in and stack.</span></li>
+  </ol>
+  <p>Screenshots at 390 and 1440 in <a href="shots/">shots/</a>.</p>
+</body>
+</html>
