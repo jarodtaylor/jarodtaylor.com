@@ -118,8 +118,7 @@
       }
     },
     "separator-gap": {
-      "pipe": { "$type": "number", "$value": 0 },
-      "dot": { "$type": "number", "$value": 0.25 }
+      "pipe": { "$type": "number", "$value": 0 }
     }
   },
   "space": {

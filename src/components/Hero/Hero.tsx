@@ -50,8 +50,8 @@ export function Hero() {
             I build the work <span className="tagline-accent">behind the work.</span>
           </p>
           <p className="bio" style={box(3)} data-build data-peek="side" data-spec="--type-body" data-tpl="--type-body · {body} · measure {measure}">
-            Designer turned engineer turned engineering leader. For 18 years I've built design systems, frontend platforms, and developer
-            experience, and led the teams that build them.
+            Designer turned engineer turned engineering leader. For 18 years, I've built frontend platforms, design systems, and developer
+            experiences. I've also led the teams behind them.
           </p>
           <ul
             className="social"

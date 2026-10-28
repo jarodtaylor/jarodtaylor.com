@@ -1868,9 +1868,6 @@
       "$type": "number",
       "pipe": {
         "$value": 0
-      },
-      "dot": {
-        "$value": 0.5
       }
     },
     "size": {

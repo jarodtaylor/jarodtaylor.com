@@ -124,10 +124,6 @@
       "sep-gap": {
         "$type": "number",
         "$value": "{type.separator-gap.pipe}"
-      },
-      "dot-gap": {
-        "$type": "number",
-        "$value": "{type.separator-gap.dot}"
       }
     },
     "menu": {
