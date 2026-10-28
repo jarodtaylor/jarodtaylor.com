@@ -2304,5 +2304,16 @@
     "menu-shape": {
       "$value": "card"
     }
+  },
+  "figure": {
+    "$type": "number",
+    "lattice-drop": {
+      "phone": {
+        "$value": 0
+      },
+      "wide": {
+        "$value": 0
+      }
+    }
   }
 }

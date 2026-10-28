@@ -192,6 +192,14 @@
     "intro-easing": {
       "$type": "cubicBezier",
       "$value": "{motion.easing.draw}"
+    },
+    "lattice-drop-phone": {
+      "$type": "number",
+      "$value": "{layout.lattice-drop-phone}"
+    },
+    "lattice-drop-wide": {
+      "$type": "number",
+      "$value": "{layout.lattice-drop-wide}"
     }
   }
 }

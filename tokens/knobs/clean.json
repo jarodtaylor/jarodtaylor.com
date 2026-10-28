@@ -233,5 +233,11 @@
     "font-smoothing": { "$type": "string", "$value": "antialiased" },
     "link-underline": { "$type": "string", "$value": "hover" },
     "menu-shape": { "$type": "string", "$value": "panel" }
+  },
+  "figure": {
+    "lattice-drop": {
+      "phone": { "$type": "number", "$value": 0 },
+      "wide": { "$type": "number", "$value": 1 }
+    }
   }
 }

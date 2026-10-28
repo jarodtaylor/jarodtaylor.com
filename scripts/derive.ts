@@ -193,6 +193,8 @@ export interface Knobs {
   /** Easings are strings of four numbers, "x1, y1, x2, y2". */
   motion: { duration: Record<DurationStep, Token<Seconds>>; easing: Record<EasingName, Token<string>> };
   enum: Record<EnumKnob, Token<string>>;
+  /** Figure placement: `lattice-drop` moves the lattice mark down by whole lattice rows, phone and wide. */
+  figure: { 'lattice-drop': Record<FluidBand, Token<number>> };
 }
 
 export interface OklchColor {
@@ -229,6 +231,7 @@ export interface Primitives {
   duration: { $type: 'duration' } & Record<DurationStep, Leaf<Duration>>;
   easing: { $type: 'cubicBezier' } & Record<EasingName, Leaf<CubicBezier>>;
   knob: { $type: 'string' } & { [K in EnumKnob]: Leaf<(typeof ENUMS)[K][number]> };
+  figure: { $type: 'number'; 'lattice-drop': Record<FluidBand, Leaf<number>> };
 }
 
 /** Figma variables can't hold CSS expressions; the Figma export skips groups carrying this. */
@@ -339,6 +342,7 @@ export function derive(knobs: Knobs): Primitives {
     duration: { $type: 'duration', ...pick(DURATIONS, (d) => ({ value: round(knobs.motion.duration[d].$value.value * 1000, 3), unit: 'ms' as const })) },
     easing: { $type: 'cubicBezier', ...pick(EASINGS, (e) => list(knobs.motion.easing[e].$value).map(Number) as CubicBezier) },
     knob: { $type: 'string', ...pick(Object.keys(ENUMS) as EnumKnob[], (e) => knobs.enum[e].$value) } as Primitives['knob'],
+    figure: { $type: 'number', 'lattice-drop': pick(FLUID_BANDS, (b) => knobs.figure['lattice-drop'][b].$value) },
   };
 }
 
@@ -423,6 +427,9 @@ function validate(k: Knobs): void {
     if (!allowed.includes(knob?.$value as string))
       errors.push(`enum.${name} must be one of ${allowed.join(' | ')} (got ${JSON.stringify(knob?.$value)})`);
   }
+
+  for (const b of FLUID_BANDS)
+    num(`figure.lattice-drop.${b}`, k.figure?.['lattice-drop']?.[b]?.$value, (n) => Number.isInteger(n) && n >= 0 && n <= 6, 'a whole number of rows in [0, 6]');
 
   if (errors.length) throw new Error(`Invalid knobs:\n  - ${errors.join('\n  - ')}`);
 }

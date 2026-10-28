@@ -2303,5 +2303,16 @@
     "menu-shape": {
       "$value": "panel"
     }
+  },
+  "figure": {
+    "$type": "number",
+    "lattice-drop": {
+      "phone": {
+        "$value": 0
+      },
+      "wide": {
+        "$value": 0
+      }
+    }
   }
 }

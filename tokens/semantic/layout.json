@@ -49,6 +49,14 @@
     },
     "nav-gap-wide": {
       "$value": "{fluid.nav-gap.wide}"
+    },
+    "lattice-drop-phone": {
+      "$type": "number",
+      "$value": "{figure.lattice-drop.phone}"
+    },
+    "lattice-drop-wide": {
+      "$type": "number",
+      "$value": "{figure.lattice-drop.wide}"
     }
   },
   "choice": {

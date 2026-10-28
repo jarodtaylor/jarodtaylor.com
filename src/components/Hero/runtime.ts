@@ -193,8 +193,9 @@ function lattice(canvas: HTMLCanvasElement): () => void {
     const s = W / DIV;
     const r = (s * Math.sqrt(3)) / 2;
     const x0 = phone ? w - W * 0.88 : w - W * 0.9;
-    // Wide screens: one lattice row below the top band, so the mark starts under the header's rule.
-    const y0 = phone ? h * 0.2 : h * 0.06 + r;
+    // The brand can drop the mark by whole lattice rows (e.g. clear of the header's rule), per band.
+    const drop = parseFloat(token(phone ? '--hero-lattice-drop-phone' : '--hero-lattice-drop-wide')) || 0;
+    const y0 = (phone ? h * 0.2 : h * 0.06) + drop * r;
     const cx = x0 + W / 2;
     const cy = y0 + W * 0.36;
     reach = Math.hypot(Math.max(cx, w - cx), Math.max(cy, h - cy)) + s * 3;
