@@ -411,7 +411,7 @@ function validate(k: Knobs): void {
     for (const b of FLUID_BANDS) {
       const v = k.fluid?.[f]?.[b]?.$value;
       if (!isFluidLength(v))
-        errors.push(`fluid.${f}.${b} must be a length in vw/svh/rem/ch/em, optionally with clamp/min/max/calc (got ${JSON.stringify(v)})`);
+        errors.push(`fluid.${f}.${b} must be a length (rem, em, ch, vw, vh, svh, %), optionally with calc/min/max/clamp (got ${JSON.stringify(v)})`);
     }
   }
   for (const d of DURATIONS) {
@@ -451,20 +451,77 @@ function toRem(d: PxDimension): Dimension {
 const VARIATION = /^(normal|"[a-zA-Z0-9]{4}" -?\d*\.?\d+(, "[a-zA-Z0-9]{4}" -?\d*\.?\d+)*)$/;
 
 /**
- * A fluid length: numbers in vw, svh, rem, or the element-relative ch and em (for a measure), with unitless
- * ones only as factors, joined by + - * / inside clamp(), min(), max() or calc(). At least one number must carry a unit.
+ * A fluid length: a single length (rem, em, ch, vw, vh, svh or %), or a calc(), min(), max() or clamp() whose
+ * result is a length. A small recursive-descent parser over that grammar, with CSS typing rules: + and - need
+ * spaces around them and operands of one type; * needs at least one plain number; / needs a plain-number divisor;
+ * min()/max() take one or more arguments and clamp() exactly three, all the same type. px is left out on purpose:
+ * fluid sizes should follow the reader's font size or the viewport.
  */
 function isFluidLength(v: unknown): boolean {
   if (typeof v !== 'string') return false;
-  const tokens = v.match(/\d*\.?\d+(?:vw|svh|rem|ch|em)?|clamp\(|min\(|max\(|calc\(|[(),+\-*/]|\s+|./g) ?? [];
-  let depth = 0;
-  for (const t of tokens) {
-    if (t.endsWith('(')) depth++;
-    else if (t === ')') depth--;
-    else if (!/^(\d*\.?\d+(vw|svh|rem|ch|em)?|[,+\-*/]|\s+)$/.test(t) || (t === ',' && depth === 0)) return false;
-    if (depth < 0) return false;
-  }
-  return depth === 0 && tokens.some((t) => /\d(vw|svh|rem|ch|em)$/.test(t));
+  const src = v.trim();
+  let i = 0;
+  type Kind = 'length' | 'number' | null;
+  const ws = () => {
+    while (src[i] === ' ') i++;
+  };
+  const eat = (text: string) => (src.startsWith(text, i) ? ((i += text.length), true) : false);
+
+  // value := number unit? | (calc|min|max|clamp)( args ) | ( sum ), the last only inside math
+  const value = (inMath: boolean): Kind => {
+    const num = /^[+-]?(\d+\.?\d*|\.\d+)(rem|em|ch|svh|vh|vw|%)?/.exec(src.slice(i));
+    if (num) {
+      i += num[0].length;
+      if (/^[a-z]/i.test(src[i] ?? '')) return null; // e.g. 12px
+      return num[2] ? 'length' : 'number';
+    }
+    const fn = /^(calc|min|max|clamp)\(/.exec(src.slice(i));
+    if (fn || (inMath && src[i] === '(')) {
+      i += fn ? fn[0].length : 1;
+      const args: Kind[] = [];
+      do {
+        ws();
+        args.push(sum());
+        ws();
+      } while (eat(','));
+      if (!eat(')')) return null;
+      const arity = !fn || fn[1] === 'calc' ? args.length === 1 : fn[1] === 'clamp' ? args.length === 3 : args.length >= 1;
+      return arity && args.every((a) => a && a === args[0]) ? args[0]! : null;
+    }
+    return null;
+  };
+  // product := value (* value | / number)*
+  const product = (): Kind => {
+    let kind = value(true);
+    for (;;) {
+      const at = i;
+      ws();
+      const op = src[i];
+      if (op !== '*' && op !== '/') return ((i = at), kind);
+      i++;
+      ws();
+      const right = value(true);
+      if (!kind || !right) return null;
+      if (op === '*') kind = kind === 'number' ? right : right === 'number' ? kind : null;
+      else kind = right === 'number' ? kind : null;
+    }
+  };
+  // sum := product ( (" + " | " - ") product )*
+  const sum = (): Kind => {
+    let kind = product();
+    for (;;) {
+      const at = i;
+      if (!/^ +[+-] +/.test(src.slice(i))) return ((i = at), kind);
+      ws();
+      i++;
+      ws();
+      const right = product();
+      kind = kind && kind === right ? kind : null;
+    }
+  };
+
+  const kind = value(false);
+  return kind === 'length' && i === src.length;
 }
 
 function mapScale<K extends string, V, R>(scale: Record<K, V>, fn: (v: V) => R): Record<K, Leaf<R>> {

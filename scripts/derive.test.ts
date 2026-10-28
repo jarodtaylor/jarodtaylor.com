@@ -153,14 +153,52 @@ describe('validation', () => {
     expect(broken((k) => (k.type.fallback.label.$value = 'Menlo'))).toThrow(/type\.fallback\.label/);
   });
 
-  it.each(['35vw', 'min(12.5vw, 21svh)', 'max(3.5rem, min(9.6vw, 19svh))', 'clamp(4.5rem, 0.6rem + 16.4vw, 32rem)', 'calc(100svh - 4rem)'])(
+  it.each([
+    '35vw',
+    '0rem',
+    '44ch',
+    '50%',
+    'min(12.5vw, 21svh)',
+    'max(3.5rem, min(9.6vw, 19svh))',
+    'clamp(4.5rem, 0.6rem + 16.4vw, 32rem)',
+    'calc(100svh - 4rem)',
+    'calc(100vw - 2 * clamp(1.25rem, 4vw, 7rem))',
+    'calc(1.125 * clamp(1.25rem, 0.85rem + 0.75vw, 2.25rem))',
+    'calc((1rem + 2vw) / 2)',
+    'calc(-1 * 2rem)',
+  ])(
     'accepts the fluid length %s',
     (v) => {
       expect(broken((k) => (k.fluid['hero-display'].wide.$value = v))).not.toThrow();
     },
   );
 
-  it.each(['12px', '2', 'var(--x)', 'min(12vw, 20svh', 'min(12vw), 20svh)', '12vw, 20svh', 'url(x.png)', ''])(
+  it.each([
+    '12px',
+    '2',
+    'var(--x)',
+    'min(12vw, 20svh',
+    'min(12vw), 20svh)',
+    '12vw, 20svh',
+    'url(x.png)',
+    '',
+    'clamp(1rem)',
+    'clamp(1rem, 2vw)',
+    'clamp(1rem, 2vw, 3rem, 4rem)',
+    'calc(1rem +)',
+    'calc(1rem+2vw)',
+    'calc(1rem -2vw)',
+    '1rem 2rem',
+    'min()',
+    'calc(1rem * 2rem)',
+    'calc(2 / 1rem)',
+    'calc(1rem + 2)',
+    'calc(2 * 3)',
+    'min(1rem, 2)',
+    '(1rem)',
+    '1rem + 2rem',
+    'calc()',
+  ])(
     'rejects the fluid length %j',
     (v) => {
       expect(broken((k) => (k.fluid['hero-lead'].phone.$value = v))).toThrow(/fluid\.hero-lead\.phone/);
