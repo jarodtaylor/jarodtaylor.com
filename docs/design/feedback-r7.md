@@ -49,3 +49,10 @@ Each item has a status:
 | C1 | He loves it: layout, fonts, colours. | This is the candidate default (G2). | — |
 | C2 | On desktop the monogram rises above the header's bottom border. Drop it one lattice row. Mobile is fine. [06](feedback/r7/06.png) | Agreed. Change the knob for the mark's vertical offset on desktop, snapped to the lattice row height. | Do |
 | C3 | No hamburger on phones. | Covered by G8. | Do |
+
+
+## Picks (2026-10-28)
+
+- **G1:** option 2 (roles under the name), one type step smaller.
+- **K2/K3:** Baseplate (option 2), light theme, with no big orange backgrounds. Roles go in the name tile.
+- **B2/B6:** Plotter (option 2).
