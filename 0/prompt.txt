@@ -1,0 +1,1 @@
+<bash-input> rm -rf .impeccable/decisions .impeccable/mocks .impeccable/questions .DS_Store</bash-input>
