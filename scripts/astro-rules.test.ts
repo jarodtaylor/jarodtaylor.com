@@ -35,4 +35,9 @@ describe('checkAstro', () => {
     const src = '<script>\n  const markup = "<style>p{}</style><Hero client:load />";\n</script>\n<p>ok</p>\n<style>\n</style>\n';
     expect(checkAstro('a.astro', src, {})).toMatchObject([{ line: 5, kind: 'scoped-style' }]);
   });
+
+  it('still flags client: on a tag too nested to parse', () => {
+    const src = '<Hero style={{ a: { b: 1 } }} client:load />';
+    expect(checkAstro('a.astro', src, {})).toMatchObject([{ line: 1, kind: 'client-directive', detail: '(unknown) uses client:load' }]);
+  });
 });

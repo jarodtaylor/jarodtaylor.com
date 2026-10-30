@@ -53,5 +53,11 @@ export function checkAstro(
     }
   }
 
-  return violations;
+  // A tag the scan couldn't parse (deeper brace nesting) must still fail loudly, not pass silently.
+  const unparsed = text.replace(OPENING_TAG, keepNewlines);
+  for (const d of unparsed.matchAll(/\sclient:(\w+)/g)) {
+    violations.push({ file, line: lineAt(d.index), kind: 'client-directive', detail: `(unknown) uses client:${d[1]}` });
+  }
+
+  return violations.sort((a, b) => a.line - b.line);
 }
