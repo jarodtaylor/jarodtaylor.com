@@ -10,7 +10,7 @@ You are given this file and a diff (`git diff main...HEAD`). Read the surroundin
 
 These already fail the build. Don't re-report them unless you can show the check passing while the rule is broken:
 
-- Raw values, primitives (`--color-*`, `--size-*`, `--font-*`, `--knob-*`) or `[data-brand]` selectors in CSS: `pnpm check:tokens-only` (stylelint).
+- Raw values, primitives (`--color-*`, `--size-*`, `--font-*`, `--knob-*`) or `[data-brand]` selectors in `src/**/*.css`: `pnpm check:tokens-only` (stylelint). Stylelint never reads `.astro` or `.tsx`, so styles written there are yours (target 4).
 - Contrast of every `surface.<role>.*` pair in every brand: `pnpm check:contrast`.
 - Stale `tokens/generated/`: `pnpm check:tokens-fresh`.
 - Generic AI-design tells: `pnpm check:slop`.
@@ -40,6 +40,7 @@ Also ignore the wording of `*.md` files (but read `docs/DECISIONS.md` for target
 4. **Component encapsulation.**
    - A component styling another component's internals, or a page reaching into a component's classes.
    - CSS not co-located with its `.tsx`, not inside `@layer components`, or a `--_` private prop assigned from anything but token vars and math over them.
+   - Styles no check reads: `<style is:inline>` blocks in `.astro` (the only legitimate one inlines `src/styles/layers.css` in `Base.astro`) and `style` props in `.astro` or `.tsx`. They may only set `--_` props from token vars or unitless numbers, or SVG geometry. Any raw colour, length or font there is a finding.
    - Props that exist for one brand's look. A brand difference is a token, never a prop.
 5. **Accessibility beyond axe.**
    - Keyboard: every interactive element reachable, operable and escapable in a sensible order; popovers and menus return focus where they came from; nothing focusable while visually hidden.
