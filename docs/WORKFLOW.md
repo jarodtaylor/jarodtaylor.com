@@ -1,6 +1,8 @@
 # Workflow map
 
-Answers Q10–Q12 in `DECISIONS.md` (approved 2026-10-28). The default loop is Compound Engineering (CE). Impeccable and Emil Kowalski's skills plug into it at fixed steps. Repo rules (`CLAUDE.md`) beat every skill.
+Answers Q10–Q12 in `DECISIONS.md` (approved 2026-10-28). The default loop is Compound Engineering (CE). Impeccable and Emil Kowalski's skills plug into it at fixed steps. Repo rules (`AGENTS.md`) beat every skill.
+
+**No skills installed?** Every step has a "By hand" path in the loop table: what to produce and the repo files or commands that do it. Sections 2 and 5 apply to everyone; sections 3 and 4 are for Claude with skills installed.
 
 **Manual-only** (`disable-model-invocation`, so the agent can't start them): Jarod runs `/ce-polish`, `/ce-dogfood`, `/review-animations`, `/codex:adversarial-review`.
 
@@ -10,18 +12,18 @@ Answers Q10–Q12 in `DECISIONS.md` (approved 2026-10-28). The default loop is C
 
 ## 1. The loop
 
-| Step | CE skill | Design / motion at this step | Output | Gate to next step |
-|---|---|---|---|---|
-| 0. Brainstorm (only if the what is unclear) | `ce-brainstorm` | `/impeccable shape` for any new surface or section: discovery interview, then a design brief with no code | Requirements doc + shape brief | Jarod approves the brief |
-| 1. Plan | `ce-plan` | Name the Impeccable commands each unit will run. Motion units get a motion thesis (from `/impeccable animate`: focal moment, continuity, feedback, budget); `find-animation-opportunities` (read-only) lists what should and shouldn't move. `animation-vocabulary` names effects when briefing. For a new section inside the site, use `new-work` "extend an existing surface": no concept tournament, no DESIGN.md change | Plan in `docs/plans/` | Plan states brands touched, tokens added, checks to run |
-| 2. Work | `ce-work` | Build with `/impeccable <command>` for the unit (`layout`, `typeset`, `colorize`, `adapt`, `harden`) and Emil `/animate` for each motion piece. Detector hook runs on every edit. Live tweaking: Jarod runs `/ce-polish` (dev server up, not on main), and inside it `/impeccable live` or `/impeccable generate` | Code on a feature branch | `pnpm test && pnpm typecheck && pnpm check` green. Each page checked at 390 / 1440 / 1920 / 2560 in all 3 brands |
-| 3. Design review (new step, every UI PR; an agent runs it and Jarod sees only P0/P1) | none | `/impeccable critique <page>` (two isolated subagents + detector, saves a snapshot), then `/impeccable audit`. Motion changed: Jarod runs `/review-animations`. Frames drop: `animation-performance` | Critique snapshot in `.impeccable/critique/`, audit report | No open P0/P1 findings, or Jarod waives them |
-| 4. Polish | none (`/ce-polish` if live work with Jarod) | `/impeccable polish` reads the critique snapshot as its backlog. `break-ui` for long names, empty lists, huge counts. `remove-animations` if motion feels like too much | Fix commits | Guardrails green again |
-| 5. Simplify | `ce-simplify-code` | none (behaviour-preserving; must not change output CSS) | Tidy commit | Guardrails green |
-| 6. Code review | `ce-code-review` | none. Design is already reviewed in step 3 | Review fixes | No open blocking findings |
-| 7. Adversarial review | Jarod runs `/codex:adversarial-review` | Brief it like `docs/design/codex-review-brief.md` | Findings list | Material findings fixed or logged in DECISIONS |
-| 8. Ship | `ce-commit-push-pr`, then `ce-resolve-pr-feedback` | none | PR | CI green |
-| 9. Compound | `ce-compound` | Design lessons also go to `tasks/lessons.md` and DECISIONS | Learning under `<root>/solutions/` | none |
+| Step | By hand (no skills) | CE skill | Design / motion at this step | Output | Gate to next step |
+|---|---|---|---|---|---|
+| 0. Brainstorm (only if the what is unclear) | Write the requirements: problem, who it's for, what's in and out of scope, open questions. For a new surface, a design brief (layout, content, motion intent, how each brand differs) with no code. Log decisions in `docs/DECISIONS.md` | `ce-brainstorm` | `/impeccable shape` for any new surface or section: discovery interview, then a design brief with no code | Requirements doc + shape brief | Jarod approves the brief |
+| 1. Plan | Write `docs/plans/YYYY-MM-DD-<slug>-plan.md`: goal, requirements, key decisions, implementation units (files, approach, tests, verification), and the answer to "where would the other brands differ?" | `ce-plan` | Name the Impeccable commands each unit will run. Motion units get a motion thesis (from `/impeccable animate`: focal moment, continuity, feedback, budget); `find-animation-opportunities` (read-only) lists what should and shouldn't move. `animation-vocabulary` names effects when briefing. For a new section inside the site, use `new-work` "extend an existing surface": no concept tournament, no DESIGN.md change | Plan in `docs/plans/` | Plan states brands touched, tokens added, checks to run |
+| 2. Work | Build on a feature branch by `AGENTS.md`: tokens only, all 3 brands. Run `pnpm test && pnpm typecheck && pnpm check`. Check each page at 390 / 1440 / 1920 / 2560 in clean, backstage and blocks | `ce-work` | Build with `/impeccable <command>` for the unit (`layout`, `typeset`, `colorize`, `adapt`, `harden`) and Emil `/animate` for each motion piece. Detector hook runs on every edit. Live tweaking: Jarod runs `/ce-polish` (dev server up, not on main), and inside it `/impeccable live` or `/impeccable generate` | Code on a feature branch | `pnpm test && pnpm typecheck && pnpm check` green. Each page checked at 390 / 1440 / 1920 / 2560 in all 3 brands |
+| 3. Design review (new step, every UI PR; an agent runs it and Jarod sees only P0/P1) | Perform `docs/review/design-system.md` on `git diff main...HEAD`. Check motion with reduced motion on and off | none | `/impeccable critique <page>` (two isolated subagents + detector, saves a snapshot), then `/impeccable audit`. Motion changed: Jarod runs `/review-animations`. Frames drop: `animation-performance` | Critique snapshot in `.impeccable/critique/`, audit report | No open P0/P1 findings, or Jarod waives them |
+| 4. Polish | Fix the review's findings. Try long names, empty lists, huge counts, 200% zoom. Rerun the checks | none (`/ce-polish` if live work with Jarod) | `/impeccable polish` reads the critique snapshot as its backlog. `break-ui` for long names, empty lists, huge counts. `remove-animations` if motion feels like too much | Fix commits | Guardrails green again |
+| 5. Simplify | Reread the diff for duplication and dead code; simplify without changing output CSS or behaviour. Rerun the checks | `ce-simplify-code` | none (behaviour-preserving; must not change output CSS) | Tidy commit | Guardrails green |
+| 6. Code review | Perform `docs/review/architecture.md` on the diff, then review it for correctness bugs (file:line, failure scenario, fix) | `ce-code-review` | none. Design is already reviewed in step 3 | Review fixes | No open blocking findings |
+| 7. Adversarial review | A different model than the author performs both roles in `docs/review/` (`pnpm council` runs them). Fix or log material findings | Jarod runs `/codex:adversarial-review` | Give it the role files in `docs/review/` | Findings list | Material findings fixed or logged in DECISIONS |
+| 8. Ship | Push the branch, open a PR that says why, and answer every review comment. Jarod merges | `ce-commit-push-pr`, then `ce-resolve-pr-feedback` | none | PR | CI green |
+| 9. Compound | Add the lesson to `tasks/lessons.md` and any decision to `docs/DECISIONS.md` | `ce-compound` | Design lessons also go to `tasks/lessons.md` and DECISIONS | Learning under `<root>/solutions/` | none |
 
 Notes:
 - CE has no Impeccable hook of its own. `ce-work` only does a desktop + mobile browser check for UI. Steps 3 and 4 exist because of that gap.
@@ -42,7 +44,7 @@ Notes:
 | DESIGN.md | Generated from `public/tokens/<brand>.json` (PLAN Phase 0). Generator gets built in Phase 1 step 5 | Don't use `/impeccable document` or `impeccable-documenter` | Both write one brand's literal values. That's a second source of truth |
 | Anti-slop | `impeccable detect` (`check:slop` + hook) and Impeccable's craft floor | `/impeccable critique` for what a detector can't see | Mechanical in CI, judgment in review |
 
-## 3. What Impeccable gives us that we skipped last time
+## 3. What Impeccable gives us that we skipped last time (Claude with skills installed)
 
 - **A critique of the hero.** `.impeccable/` has no `critique/` folder, so no snapshot exists. `/impeccable critique src/pages/index.astro` gives a scored review and a snapshot that `polish` uses as its backlog.
 - **Palette strategy before hand-fitting ramps.** `/impeccable colorize` sets roles, dosage and temperature first. It also asks to check contrast in every state (hover, focus, overlays) and to simulate colour-vision deficiencies. Our gate only checks `surface.*` pairs.
@@ -52,7 +54,7 @@ Notes:
 - **A technical audit.** `/impeccable audit` scores a11y, performance, theming, responsive and anti-patterns.
 - **A menu of next steps.** Bare `/impeccable` reads project signals and suggests the 2–3 commands worth running.
 
-## 4. Proposed passes on the shipped hero (before Phase 1 step 5)
+## 4. Proposed passes on the shipped hero (before Phase 1 step 5; Claude with skills installed)
 
 Proposal only, nothing run. Run each in all 3 brands, switching in sequence on one page (clean → backstage → blocks), not only fresh loads.
 
@@ -78,7 +80,7 @@ Left out: `impeccable-finish-reviewer`. It reviews against a direction contract.
 | Design-system drift check in the detector | Flags the other two brands as drift | Keep `--no-design-system` (already in `check:slop`) |
 | `live` / `generate` write raw HTML+CSS variants with markers into source; colorize variants use `var(--p-color-amount)` | Tokens-only CSS, readable output | Expect lint failures while markers are in. Same for copy edits written back by `impeccable-manual-edit-applier`. After accept, rewrite the variant in tokens. Switch all 3 brands before accepting: a variant that only works for one brand breaks Remix |
 | Variants or polish that change markup for one look | DOM order invariant across brands | Any markup change ships to all brands. `check:markup-invariance` must pass. Never key on `[data-brand]` |
-| Craft floor bans eyebrows. `Card` has an `eyebrow` prop (used in `lab.astro`) | Not a CLAUDE.md rule. Impeccable will push against it in craft-floor edits (unclear whether the detector flags it) | Drop the `eyebrow` prop |
+| Craft floor bans eyebrows. `Card` has an `eyebrow` prop (used in `lab.astro`) | Not an `AGENTS.md` rule. Impeccable will push against it in craft-floor edits (unclear whether the detector flags it) | Drop the `eyebrow` prop |
 | Emil's Framer Motion, `useSpring` and Tailwind sections | No client JS by default, no Tailwind | Not applicable. Use the CSS / WAAPI paths |
 | `new-work` comp-led path, image comps, `impeccable-asset-producer` | Lesson: design in code, no comps. `buildPath: "code"` | Code-led only. Say "no image comps" in every Impeccable brief |
 | `improve-animations` writes plans to `plans/` | CE plans live in `docs/plans/` | Point it at `docs/plans/` when invoking |
