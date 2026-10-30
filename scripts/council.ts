@@ -78,6 +78,7 @@ export async function runCouncil(opts: { root: string; branch: string; sha: stri
     ROLES.map(async (role) => {
       const file = join(rel, `${role.name}.md`);
       const prompt = buildPrompt(readFileSync(join(root, 'docs/review', `${role.name}.md`), 'utf8'), diff);
+      rmSync(join(root, file), { force: true }); // a rerun at the same sha must not leave the last report behind
       const error = await runRole(role, prompt, join(root, file), root, exec);
       return error ? { ok: false, message: `✖ ${error}` } : { ok: true, message: `✓ ${role.name} (${role.cli}): ${file}` };
     }),

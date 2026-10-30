@@ -93,4 +93,13 @@ describe('runCouncil', () => {
     expect(calls).not.toContain('codex exec -s');
     expect(existsSync(join(root, '.local/council/feat-x-abc1234/architecture.md'))).toBe(false);
   });
+
+  it('removes the previous report when a rerun of that role fails', async () => {
+    const dir = join(root, '.local/council/feat-x-abc1234');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, 'design-system.md'), 'old findings');
+    const { exec } = fakeExec({ claude: { code: 1, stdout: JSON.stringify({ is_error: true, result: 'Not logged in' }), stderr: '' } });
+    await runCouncil({ root, branch: 'feat/x', sha: 'abc1234', diff: DIFF, exec });
+    expect(existsSync(join(dir, 'design-system.md'))).toBe(false);
+  });
 });

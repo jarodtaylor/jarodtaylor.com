@@ -16,11 +16,18 @@ export type AstroViolation = {
   detail: string;
 };
 
+const keepNewlines = (s: string) => s.replace(/[^\n]/g, ' ');
+
+/** A quoted attribute value, or a `{…}` expression with one level of nested braces (e.g. `style={{ … }}`). */
+const VALUE = /"[^"]*"|'[^']*'|\{(?:[^{}]|\{[^{}]*\})*\}/g;
+/** An opening tag; values may contain `<` and `>`, so they are matched whole. */
+const OPENING_TAG = new RegExp(`<([A-Za-z][\\w.:-]*)((?:${VALUE.source}|[^>"'{])*)>`, 'g');
+
 function blankPreservingLines(source: string): string {
-  const keepNewlines = (s: string) => s.replace(/[^\n]/g, ' ');
   return source
     .replace(/^---[\s\S]*?\n---/, keepNewlines)
-    .replace(/<!--[\s\S]*?-->/g, keepNewlines);
+    .replace(/<!--[\s\S]*?-->/g, keepNewlines)
+    .replace(/<script\b[\s\S]*?<\/script>/g, keepNewlines);
 }
 
 export function checkAstro(
@@ -32,17 +39,19 @@ export function checkAstro(
   const lineAt = (index: number) => text.slice(0, index).split('\n').length;
   const violations: AstroViolation[] = [];
 
-  for (const m of text.matchAll(/\sclient:(\w+)/g)) {
-    const tags = [...text.slice(0, m.index).matchAll(/<([A-Za-z][\w.:-]*)/g)];
-    const name = tags.at(-1)?.[1] ?? '(unknown)';
-    if (Object.hasOwn(allowlist, name)) continue;
-    violations.push({ file, line: lineAt(m.index), kind: 'client-directive', detail: `${name} uses client:${m[1]}` });
+  for (const m of text.matchAll(OPENING_TAG)) {
+    const [, name, rawAttrs] = m as unknown as [string, string, string];
+    const attrs = rawAttrs.replace(VALUE, keepNewlines);
+    const line = lineAt(m.index);
+
+    for (const d of attrs.matchAll(/(?:^|\s)client:(\w+)/g)) {
+      if (Object.hasOwn(allowlist, name)) continue;
+      violations.push({ file, line, kind: 'client-directive', detail: `${name} uses client:${d[1]}` });
+    }
+    if (name === 'style' && !/(?:^|\s)is:inline\b/.test(attrs)) {
+      violations.push({ file, line, kind: 'scoped-style', detail: '<style> without is:inline' });
+    }
   }
 
-  for (const m of text.matchAll(/<style\b([^>]*)>/g)) {
-    if (/\bis:inline\b/.test(m[1]!)) continue;
-    violations.push({ file, line: lineAt(m.index), kind: 'scoped-style', detail: '<style> without is:inline' });
-  }
-
-  return violations.sort((a, b) => a.line - b.line);
+  return violations;
 }

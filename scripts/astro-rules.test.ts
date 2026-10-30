@@ -23,4 +23,16 @@ describe('checkAstro', () => {
     const src = '---\nconst a = "<Hero client:load />";\nconst b = "<style>";\n---\n<!-- <Hero client:load /> <style> -->\n<p>ok</p>\n';
     expect(checkAstro('a.astro', src, {})).toEqual([]);
   });
+
+  it('names the tag that carries the directive, not markup quoted in another attribute', () => {
+    const src = `<Card data-x={'<Hero>'} title="<Hero>"\n  client:load />`;
+    expect(checkAstro('a.astro', src, { Hero: 'needs JS' })).toEqual([
+      { file: 'a.astro', line: 1, kind: 'client-directive', detail: 'Card uses client:load' },
+    ]);
+  });
+
+  it('ignores <style> and client: inside <script> contents', () => {
+    const src = '<script>\n  const markup = "<style>p{}</style><Hero client:load />";\n</script>\n<p>ok</p>\n<style>\n</style>\n';
+    expect(checkAstro('a.astro', src, {})).toMatchObject([{ line: 5, kind: 'scoped-style' }]);
+  });
 });

@@ -95,7 +95,7 @@ terrazzo.config.ts             → src/styles/tokens.css + public/tokens/<brand>
 The repo is public. It shows the signal: what was decided and the rules the site is built by. Working noise stays on the machine that made it.
 
 - **Signal (tracked):** instructions (`AGENTS.md`, `CLAUDE.md`), decisions (`docs/DECISIONS.md`), plans (`docs/PLAN.md`, `docs/plans/`), the workflow map (`docs/WORKFLOW.md`), lessons (`tasks/lessons.md`), review roles (`docs/review/`), and design references the build depends on (`.impeccable/config.json`, `.impeccable/decision/`, `.impeccable/surfaces/`, `prototypes/`).
-- **Noise (gitignored, under `.local/`):** handoffs (`.local/handoffs/`), brainstorm and research scratch (`.local/scratch/`), review and council output (`.local/council/`), session transcripts and back-and-forth. Tool session state and screenshots (`.impeccable/review/`, `.impeccable/questions/`, `.impeccable/hook.cache.json`) are ignored where the tool writes them.
+- **Noise (gitignored, under `.local/`):** handoffs (`.local/handoffs/`), brainstorm and research scratch (`.local/scratch/`), review and council output (`.local/council/`), session transcripts and back-and-forth. Tool session state and screenshots (`.impeccable/review/`, `.impeccable/critique/`, `.impeccable/questions/`, `.impeccable/hook.cache.json`) are ignored where the tool writes them.
 - **Unsure?** It's noise: put it in `.local/`. A decision found in noise goes into `docs/DECISIONS.md`; a lesson goes into `tasks/lessons.md`.
 
 ## Session handoffs

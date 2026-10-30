@@ -1,5 +1,5 @@
 /**
- * Stylelint rules that enforce the token rules in CLAUDE.md. Used by `pnpm check:tokens-only`.
+ * Stylelint rules that enforce the token rules in AGENTS.md. Used by `pnpm check:tokens-only`.
  *
  *   tokens/tier-vars       every var(--x) and style-query property must be a semantic or component token
  *                          (or a private --_ prop). Primitives and unknown names (typos) are rejected.
@@ -101,7 +101,7 @@ const tierVarsRule: Rule = (primary) => (root, result) => {
 };
 tierVarsRule.ruleName = tierVars;
 tierVarsRule.messages = tierMessages;
-tierVarsRule.meta = { url: 'https://github.com/jarodtaylor/jarodtaylor.com/blob/main/CLAUDE.md#token-rules-non-negotiable' };
+tierVarsRule.meta = { url: 'https://github.com/jarodtaylor/jarodtaylor.com/blob/main/AGENTS.md#token-rules-non-negotiable' };
 
 const noBrandKeys = 'tokens/no-brand-keys';
 const brandMessages = ruleMessages(noBrandKeys, {
