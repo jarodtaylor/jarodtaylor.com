@@ -71,3 +71,18 @@ Verify every API and config against current docs before using it (`find-docs` sk
 
 ## Decisions log
 Every decision, open question, and to-do goes in `docs/DECISIONS.md` the moment it happens.
+
+## Workflow
+Compound Engineering is the default loop, with Impeccable and Emil Kowalski's skills at fixed steps. `docs/WORKFLOW.md` is the map: which skill runs at each step, who owns colour, type, layout and motion, and how skill output is turned into tokens. Read it before starting any unit of work.
+
+## Three brands
+`clean` leads: every PR brings it to approval quality. `backstage` and `blocks` ride along with considered values taken from their brand sheets, never placeholders. Each section's plan answers "where would the other brands lay this out differently?" and logs the answer in `docs/DECISIONS.md`. The alt brands get dedicated passes before v0 launch and at the start of Phase 3.
+
+## Session handoffs
+- Write every handoff to `.local/handoffs/YYYY-MM-DD-<slug>.md` (gitignored), never the `/tmp` default: a reboot wipes `/tmp`.
+- On a resume with no source given, look in `.local/handoffs/` first and offer the newest.
+
+<!-- entire-agent:begin -->
+Read .entire/agent-guide.md for this repository's workflow, source inspection, and verification guidance.
+@.entire/agent-guide.md
+<!-- entire-agent:end -->
