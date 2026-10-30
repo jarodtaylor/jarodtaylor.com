@@ -51,7 +51,7 @@ What Jarod liked or disliked on each site, in his words where possible. This fee
 - The lesson he took: creative branding that fits the owner. Not something to copy.
 
 **Worth stealing (my notes)**
-- Visible scaffolding (grid, crop marks) is the "Backstage / Redline" idea from IDEATION.md done tastefully. It's a natural fit for "the work behind the work."
+- Visible scaffolding (grid, crop marks) is the "Backstage / Redline" idea from `IDEATION.md` (deleted 2026-10-30; in git history) done tastefully. It's a natural fit for "the work behind the work."
 - Scroll-driven text fill = a local scroll effect, which is the kind he likes (vs. page hijacking). CSS scroll-driven animations can do this with no JS.
 - Type pairing: a mono for labels + a geometric display face. Technical and editorial at once.
 - Stacked panels: `position: sticky` cards. Cheap, no JS, and one fits each pillar.
@@ -84,7 +84,7 @@ What Jarod liked or disliked on each site, in his words where possible. This fee
 
 **Worth stealing (my notes)**
 - Career facts as system data ("[ OK ] design memory … 15 years") is witty. One small moment like that, not a whole OS.
-- Confirms the IDEATION.md warning: a full-site gimmick costs recruiter clarity.
+- Confirms the `IDEATION.md` warning (deleted 2026-10-30; in git history): a full-site gimmick costs recruiter clarity.
 
 ---
 

@@ -14,14 +14,16 @@
     "tokens": "node scripts/build-tokens.ts && tz build",
     "test": "vitest run",
     "typecheck": "astro check",
-    "check": "pnpm check:tokens-fresh && pnpm check:contrast && pnpm check:tokens-only && pnpm check:slop && pnpm build && pnpm check:markup-invariance && pnpm check:a11y && pnpm lighthouse",
+    "check": "pnpm check:tokens-fresh && pnpm check:contrast && pnpm check:tokens-only && pnpm check:astro && pnpm check:slop && pnpm build && pnpm check:markup-invariance && pnpm check:a11y && pnpm lighthouse",
     "check:tokens-fresh": "node scripts/check-tokens-fresh.ts",
     "check:contrast": "node scripts/check-contrast.ts",
     "check:tokens-only": "stylelint \"src/**/*.css\"",
+    "check:astro": "node scripts/check-astro.ts",
     "check:slop": "impeccable detect --no-design-system src/",
     "check:markup-invariance": "playwright test markup-invariance",
     "check:a11y": "playwright test a11y",
     "lighthouse": "lhci collect && lhci assert",
+    "council": "node scripts/council.ts",
     "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/compiler-rs": "0.5.1",
     "@axe-core/playwright": "^4.13.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.64.0",

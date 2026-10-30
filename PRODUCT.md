@@ -33,7 +33,7 @@ Success: recruiters and hiring managers reach out; peers follow the writing; eng
 
 Leading engineering orgs · Design engineering and frontend systems · Developer experience · Learning AI in public.
 
-## Evidence (only these claims; source CONTENT.md)
+## Evidence (only these claims)
 
 - 18 years (since 2008). 12+ years leading teams.
 - Founded design systems at three companies.
