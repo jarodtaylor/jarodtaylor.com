@@ -25,5 +25,8 @@ playwright-report/
 .codex/
 .cursor/
 
+# Entire's local data (Entire is no longer used; deleting it is Jarod's call)
+.entire/
+
 # r7 prototype seeds: build output, rebuilt by prototypes/r7/<folder>/seed.sh
 prototypes/r7/*/seed/
