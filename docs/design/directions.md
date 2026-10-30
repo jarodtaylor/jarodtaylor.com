@@ -1,7 +1,7 @@
 # Design directions (Phase 1, step 2)
 
 Three directions to prototype in code. Each has a **different page topology**, so they should look different even in grayscale (the failure of the old comp rounds).
-North star: **"This is Jarod. Definitely Jarod."** Sources: [inspiration.md](inspiration.md), IDEATION.md, CONTENT.md.
+North star: **"This is Jarod. Definitely Jarod."** Sources: [inspiration.md](inspiration.md), plus `IDEATION.md` and `CONTENT.md` (both deleted 2026-10-30; in git history).
 
 The two that aren't picked become **Remix candidates**. They stay candidates until the Phase 1 smoke test proves they can share the chosen markup.
 
