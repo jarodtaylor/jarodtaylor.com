@@ -96,6 +96,8 @@ const spawnExec: Exec = (cmd, args, { cwd, stdin }) =>
     child.stderr.on('data', (d) => (stderr += d));
     child.on('error', (err: NodeJS.ErrnoException) => resolve({ code: null, stdout, stderr: err.message, missing: err.code === 'ENOENT' }));
     child.on('close', (code) => resolve({ code, stdout, stderr }));
+    // A CLI that exits before reading its whole prompt raises EPIPE here; 'close' still reports its exit.
+    child.stdin.on('error', (err) => (stderr += `stdin: ${err.message}\n`));
     child.stdin.end(stdin ?? '');
   });
 

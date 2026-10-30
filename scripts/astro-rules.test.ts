@@ -36,8 +36,29 @@ describe('checkAstro', () => {
     expect(checkAstro('a.astro', src, {})).toMatchObject([{ line: 5, kind: 'scoped-style' }]);
   });
 
-  it('still flags client: on a tag too nested to parse', () => {
+  it('reads directives on tags with deeply nested attribute expressions', () => {
     const src = '<Hero style={{ a: { b: 1 } }} client:load />';
-    expect(checkAstro('a.astro', src, {})).toMatchObject([{ line: 1, kind: 'client-directive', detail: '(unknown) uses client:load' }]);
+    expect(checkAstro('a.astro', src, {})).toMatchObject([{ line: 1, kind: 'client-directive', detail: 'Hero uses client:load' }]);
+  });
+
+  it('flags a scoped <style> whose attributes nest deeply', () => {
+    const src = '<style define:vars={{ palette: { text: "red" } }}>p { color: red; }</style>';
+    expect(checkAstro('a.astro', src, {})).toMatchObject([{ line: 1, kind: 'scoped-style' }]);
+  });
+
+  it('keeps checking markup after a self-closing <script />', () => {
+    const src = '<script src="/a.js" />\n<Hero client:load />\n<style>p{}</style>\n<script></script>\n';
+    expect(checkAstro('a.astro', src, {})).toMatchObject([
+      { line: 2, kind: 'client-directive', detail: 'Hero uses client:load' },
+      { line: 3, kind: 'scoped-style' },
+    ]);
+  });
+
+  it('does not flag client: written as page text', () => {
+    expect(checkAstro('a.astro', '<p>Use client:load only for interactive islands.</p>', {})).toEqual([]);
+  });
+
+  it('reports markup it cannot parse instead of passing it', () => {
+    expect(checkAstro('a.astro', '<div><p></div>', {})).toMatchObject([{ kind: 'parse-error' }]);
   });
 });

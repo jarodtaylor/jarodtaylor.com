@@ -10,6 +10,7 @@ const files = globSync('src/**/*.astro', { cwd: root }).sort();
 const hints: Record<AstroViolation['kind'], string> = {
   'client-directive': 'Render it on the server, or add the component to CLIENT_ALLOWLIST in scripts/astro-rules.ts with a reason.',
   'scoped-style': 'Move the CSS to a co-located .css file wrapped in @layer components.',
+  'parse-error': 'Astro could not parse this file; fix the markup so the rules can be checked.',
 };
 
 let failed = 0;
