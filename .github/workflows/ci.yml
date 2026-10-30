@@ -32,6 +32,7 @@ jobs:
       - run: pnpm check:tokens-fresh
       - run: pnpm check:contrast
       - run: pnpm check:tokens-only
+      - run: pnpm check:astro
       - run: pnpm check:slop
       - run: pnpm typecheck
       - run: pnpm test

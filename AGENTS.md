@@ -17,6 +17,7 @@ This file is the canonical instructions for every agent, in any harness. It is s
 | `pnpm check:tokens-fresh` | Reruns `pnpm tokens`; fails if `tokens/generated/` changed (content compare, not git) |
 | `pnpm check:contrast` | WCAG 2.2 AA for every brand × `surface.<role>.*` pair (`scripts/contrast.ts`). Needs `pnpm tokens` first |
 | `pnpm check:tokens-only` | Stylelint (`stylelint.config.js` + `scripts/stylelint-plugin-tokens.ts`): no raw values, primitives or brand keys in CSS |
+| `pnpm check:astro` | `.astro` rules (`scripts/astro-rules.ts`): no `client:*` outside `CLIENT_ALLOWLIST`, no scoped `<style>` |
 | `pnpm check:slop` | `impeccable detect --no-design-system src/` |
 | `pnpm check:markup-invariance` / `check:a11y` | Playwright + axe on every page × brand in `dist/` (`tests/*.e2e.ts`). Needs `pnpm build` and `pnpm exec playwright install chromium` |
 | `pnpm lighthouse` | Lighthouse CI on `dist/` (`lighthouserc.json`), local only: no upload (CI uploads to temporary public storage). Budgets warn; only a11y < 0.9 or CLS > 0.1 fail. PR label `perf-tradeoff` downgrades those too |
