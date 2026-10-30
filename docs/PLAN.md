@@ -34,7 +34,7 @@ Lessons from this session are in `tasks/lessons.md`.
 | Tokens | **W3C DTCG 2025.10** format plus the **Resolver module** (a `brand` modifier). | Both have been stable W3C CG reports since 2025-10-28. The resolver *is* the multi-brand spec. |
 | Token build | **Terrazzo** (`@terrazzo/cli` 2.x). The CSS plugin uses `permutations` to emit `[data-brand="x"]` blocks. | It's the only tool with native support for 2025.10 resolvers. Style Dictionary 5.6 still has no resolver support (issue #1590 is open). |
 | Styling | **Plain CSS**: cascade layers (`reset, tokens, base, components, utilities`), co-located per component, readable class names, consuming **only** component and semantic custom properties. No Tailwind, no CSS Modules hashes. | View-source is part of the portfolio. "Tokens, not framework" stays literally true. *(Override if you want Tailwind v4.)* |
-| Components workshop | **Storybook 10** + `@storybook/react-vite` + `@storybook/addon-themes` (`withThemeByDataAttribute`, `attributeName: 'data-brand'`). | It's the standard path, and the brand toolbar comes from config alone. |
+| Components workshop | **Storybook 10** + `@storybook/react-vite`, with a small custom brand toolbar that sets `data-brand` before render (not `addon-themes`, which sets it too late for the hero; DECISIONS 2026-10-30). | The standard React path; brand and token controls come from the resolver and `ENUMS`. |
 | Figma | Repo JSON is the **source of truth**. Figma Variables get it through **native DTCG import/export**, one mode per brand. | Native import shipped in late 2025. The REST API is Enterprise-only, so skip it. |
 | Hosting | **Cloudflare Workers static assets** (`wrangler.jsonc`, `assets.directory: ./dist`, `not_found_handling: "404-page"`). Cloudflare Web Analytics. DNS moves from Route 53 to Cloudflare. **Email stays on Google Workspace (no Email Routing).** | Cloudflare now steers new projects to Workers over Pages. Static requests are free. |
 | Content | Astro content collections: `posts` (MDX), `work`, `workbench`, `career`, `testimonials`, `pillars`. | One data source feeds the homepage, the pages, the résumé, RSS and JSON-LD. |
@@ -135,6 +135,10 @@ terrazzo.config.ts       # → src/styles/tokens.css  ([data-brand] blocks) + di
    - monogram/wordmark, favicon, manifest
    - motion personality
    - the one or two **signature wow moments** (below)
+   - one **brand sheet** per brand (fonts, palette roles, figure motif, layout tendencies, motion personality), so alt-brand values come from a brief
+   - **DESIGN.md generator** from the token build
+   - **all-brand screenshots** (390 / 1440 / 2560) on every PR, checked by a reviewer agent, before Phase 2 starts
+   - first, the hero passes in `docs/WORKFLOW.md` §4
 - **Exit:** an approved direction, default-brand knobs locked, markup proven Remix-able.
 
 ### Phase 2: v0 launch (base brand, real content)
@@ -168,8 +172,8 @@ terrazzo.config.ts       # → src/styles/tokens.css  ([data-brand] blocks) + di
 - **Token export:** each brand's resolved JSON is downloadable, which feeds OG images and slides.
 - **Exit:** 3 brands live, the readout is accurate, everything is tested.
 
-### Phase 4: Storybook + Figma backfill
-- Storybook 10 for every `.tsx` component, with the brand toolbar via addon-themes. Deploy it to a subpath or subdomain, linked from the Colophon.
+### Phase 4: Figma backfill
+- Storybook moved up to Phase 1 step 5 and goes public at v0 (`docs/plans/2026-10-30-1306-feat-storybook-brand-workshop-plan.md`).
 - Figma file: Variables collections with one mode per brand, plus core components bound to variables.
   - Two ways in:
     - native DTCG import of the Figma-flavored export (the manual path, good for showing the round trip in the Colophon)
