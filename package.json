@@ -23,6 +23,7 @@
     "check:markup-invariance": "playwright test markup-invariance",
     "check:a11y": "playwright test a11y",
     "lighthouse": "lhci collect && lhci assert",
+    "council": "node scripts/council.ts",
     "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {

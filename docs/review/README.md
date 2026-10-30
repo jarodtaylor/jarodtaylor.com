@@ -23,4 +23,9 @@ Review output is private noise (`AGENTS.md`, **Public signal, private noise**). 
 
 ## Running both roles: `pnpm council`
 
-`pnpm council` runs both roles against the current branch's diff on local CLIs, read-only: Design System on Claude, Architecture on Codex. Reports go to `.local/council/<branch>-<short-sha>/<role>.md`. It's a convenience, not a merge gate.
+`pnpm council` runs both roles in parallel against the branch's committed changes (`git diff main...HEAD`), one model per role: Design System on Claude (`claude -p`, tools limited to Read, Grep and Glob, no MCP servers or skills), Architecture on Codex (`codex exec -s read-only`). Both use the CLIs' own subscription logins, so it costs no API credits.
+
+- Reports go to `.local/council/<branch>-<short-sha>/<role>.md`. Nothing is committed or posted.
+- It refuses to run on `main` or with no committed changes.
+- A CLI that is missing or logged out fails only its role, with a hint; the other role still reports.
+- It's a convenience, not a merge gate. To swap the model for a role, edit `ROLES` in `scripts/council.ts`.
