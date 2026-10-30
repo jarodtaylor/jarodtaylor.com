@@ -3,11 +3,11 @@
  */
 import { globSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { checkAstro } from './astro-rules.ts';
+import { checkAstro, type AstroViolation } from './astro-rules.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const files = globSync('src/**/*.astro', { cwd: root }).sort();
-const hints = {
+const hints: Record<AstroViolation['kind'], string> = {
   'client-directive': 'Render it on the server, or add the component to CLIENT_ALLOWLIST in scripts/astro-rules.ts with a reason.',
   'scoped-style': 'Move the CSS to a co-located .css file wrapped in @layer components.',
 };

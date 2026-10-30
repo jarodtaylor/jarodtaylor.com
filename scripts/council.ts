@@ -13,7 +13,6 @@ export type Exec = (cmd: string, args: string[], opts: { cwd: string; stdin?: st
 
 type Role = { name: string; cli: 'claude' | 'codex' };
 
-/** Role specificity over model count: one model per role, alternating. */
 const ROLES: Role[] = [
   { name: 'design-system', cli: 'claude' },
   { name: 'architecture', cli: 'codex' },
@@ -29,38 +28,38 @@ export function reportDir(branch: string, sha: string): string {
   return `.local/council/${branch.replaceAll('/', '-')}-${sha}`;
 }
 
-/** Runs one role; returns the report text, or an error message. Never writes a report for a failed run. */
-async function runRole(role: Role, prompt: string, out: string, root: string, exec: Exec): Promise<{ report?: string; error?: string }> {
+/** Writes the role's report to `path` and returns no error, or returns the error and leaves no report. */
+async function runRole(role: Role, prompt: string, path: string, root: string, exec: Exec): Promise<string | undefined> {
   const missing = `${role.name}: ${role.cli} not found on PATH. Install it, or perform the role by hand (docs/review/README.md).`;
 
   if (role.cli === 'claude') {
     // No MCP servers, skills or saved session: the role file has to stand alone, and the run stays small.
     const args = ['-p', '--output-format', 'json', '--tools', 'Read,Grep,Glob', '--strict-mcp-config', '--disable-slash-commands', '--no-session-persistence'];
     const res = await exec('claude', args, { cwd: root, stdin: prompt });
-    if (res.missing) return { error: missing };
+    if (res.missing) return missing;
     let parsed: { is_error?: boolean; result?: string } = {};
     try {
       parsed = JSON.parse(res.stdout);
     } catch {}
     if (res.code !== 0 || parsed.is_error !== false || !parsed.result) {
-      return { error: `${role.name}: claude failed (${(parsed.result ?? res.stderr).trim().slice(0, 200)}). If you're logged out, ${LOGIN_HINT.claude}.` };
+      return `${role.name}: claude failed (${(parsed.result ?? res.stderr).trim().slice(0, 200)}). If you're logged out, ${LOGIN_HINT.claude}.`;
     }
-    return { report: parsed.result };
+    writeFileSync(path, parsed.result);
+    return;
   }
 
   const status = await exec('codex', ['login', 'status'], { cwd: root });
-  if (status.missing) return { error: missing };
-  if (status.code !== 0) return { error: `${role.name}: codex is not logged in; ${LOGIN_HINT.codex}.` };
-  const res = await exec('codex', ['exec', '-s', 'read-only', '-o', out, '-'], { cwd: root, stdin: prompt });
+  if (status.missing) return missing;
+  if (status.code !== 0) return `${role.name}: codex is not logged in; ${LOGIN_HINT.codex}.`;
+  const res = await exec('codex', ['exec', '-s', 'read-only', '-o', path, '-'], { cwd: root, stdin: prompt });
   let report = '';
   try {
-    report = readFileSync(out, 'utf8');
+    report = readFileSync(path, 'utf8');
   } catch {}
-  rmSync(out, { force: true });
   if (res.code !== 0 || !report.trim()) {
-    return { error: `${role.name}: codex failed (${res.stderr.trim().split('\n').at(-1)?.slice(0, 200) ?? 'no output'}).` };
+    rmSync(path, { force: true });
+    return `${role.name}: codex failed (${res.stderr.trim().split('\n').at(-1)?.slice(0, 200) ?? 'no output'}).`;
   }
-  return { report };
 }
 
 export async function runCouncil(opts: { root: string; branch: string; sha: string; diff: string; exec: Exec }): Promise<{ code: number; messages: string[] }> {
@@ -72,24 +71,21 @@ export async function runCouncil(opts: { root: string; branch: string; sha: stri
     return { code: 1, messages: ['council: no committed changes against main to review.'] };
   }
 
-  const dir = join(root, reportDir(branch, sha));
-  mkdirSync(dir, { recursive: true });
+  const rel = reportDir(branch, sha);
+  mkdirSync(join(root, rel), { recursive: true });
 
   const results = await Promise.all(
     ROLES.map(async (role) => {
+      const file = join(rel, `${role.name}.md`);
       const prompt = buildPrompt(readFileSync(join(root, 'docs/review', `${role.name}.md`), 'utf8'), diff);
-      const path = join(dir, `${role.name}.md`);
-      const { report, error } = await runRole(role, prompt, path, root, exec);
-      if (error) return `✖ ${error}`;
-      writeFileSync(path, report!);
-      return `✓ ${role.name} (${role.cli}): ${join(reportDir(branch, sha), `${role.name}.md`)}`;
+      const error = await runRole(role, prompt, join(root, file), root, exec);
+      return error ? { ok: false, message: `✖ ${error}` } : { ok: true, message: `✓ ${role.name} (${role.cli}): ${file}` };
     }),
   );
 
-  return { code: results.some((r) => r.startsWith('✖')) ? 1 : 0, messages: results };
+  return { code: results.every((r) => r.ok) ? 0 : 1, messages: results.map((r) => r.message) };
 }
 
-/** The real CLI layer: spawns the command, feeds stdin, and reports a missing binary instead of throwing. */
 const spawnExec: Exec = (cmd, args, { cwd, stdin }) =>
   new Promise((resolve) => {
     const child = spawn(cmd, args, { cwd, stdio: ['pipe', 'pipe', 'pipe'] });
@@ -108,6 +104,6 @@ if (import.meta.main) {
   const branch = git('rev-parse', '--abbrev-ref', 'HEAD');
   console.log(`council: reviewing ${branch} against main (committed changes only), both roles in parallel…`);
   const { code, messages } = await runCouncil({ root, branch, sha: git('rev-parse', '--short', 'HEAD'), diff: git('diff', 'main...HEAD'), exec: spawnExec });
-  for (const m of messages) (m.startsWith('✖') ? console.error : console.log)(m);
+  (code ? console.error : console.log)(messages.join('\n'));
   process.exit(code);
 }

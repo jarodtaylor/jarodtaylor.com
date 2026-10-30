@@ -16,8 +16,7 @@ export type AstroViolation = {
   detail: string;
 };
 
-/** Blank out the frontmatter fence and HTML comments, keeping newlines so line numbers survive. */
-function blank(source: string): string {
+function blankPreservingLines(source: string): string {
   const keepNewlines = (s: string) => s.replace(/[^\n]/g, ' ');
   return source
     .replace(/^---[\s\S]*?\n---/, keepNewlines)
@@ -29,14 +28,14 @@ export function checkAstro(
   source: string,
   allowlist: Readonly<Record<string, string>> = CLIENT_ALLOWLIST,
 ): AstroViolation[] {
-  const text = blank(source);
+  const text = blankPreservingLines(source);
   const lineAt = (index: number) => text.slice(0, index).split('\n').length;
   const violations: AstroViolation[] = [];
 
   for (const m of text.matchAll(/\sclient:(\w+)/g)) {
     const tags = [...text.slice(0, m.index).matchAll(/<([A-Za-z][\w.:-]*)/g)];
     const name = tags.at(-1)?.[1] ?? '(unknown)';
-    if (name in allowlist) continue;
+    if (Object.hasOwn(allowlist, name)) continue;
     violations.push({ file, line: lineAt(m.index), kind: 'client-directive', detail: `${name} uses client:${m[1]}` });
   }
 
