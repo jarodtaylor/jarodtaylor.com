@@ -1,4 +1,5 @@
 import { readFileSync, globSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { ENUMS } from '../scripts/derive.ts';
 import { BRAND_DEFAULT, TOKEN_PROPERTY, tokenArgTypes, tokenStyle } from './token-controls.ts';
@@ -13,7 +14,7 @@ describe('TOKEN_PROPERTY', () => {
 
   it('maps each key to a property tokens.css declares and some component CSS reads', () => {
     const tokens = read('src/styles/tokens.css');
-    const componentCss = globSync('src/components/**/*.css', { cwd: new URL(root).pathname })
+    const componentCss = globSync('src/components/**/*.css', { cwd: fileURLToPath(root) })
       .map((file) => read(file))
       .join('\n');
     for (const [key, property] of Object.entries(TOKEN_PROPERTY)) {
