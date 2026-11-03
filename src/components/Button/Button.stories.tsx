@@ -13,7 +13,10 @@ const meta = {
   },
   render: ({ label, href }) => (
     <Stage>
-      <Button href={href || undefined}>{label}</Button>
+      {/* In normal flow, as on /lab: Stage is a grid, which would stretch the button to the viewport's width. */}
+      <p>
+        <Button href={href || undefined}>{label}</Button>
+      </p>
     </Stage>
   ),
 } satisfies Meta<Args>;
