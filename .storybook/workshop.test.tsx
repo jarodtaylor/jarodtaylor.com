@@ -87,6 +87,26 @@ describe('hero story', () => {
     expect(html.classList.contains('intro')).toBe(true);
   });
 
+  it('a brand switch mid-intro settles the intro, as on the site', async () => {
+    // Two composed stories are two component types, so swapping them would remount; the toolbar re-renders the same
+    // story and the brand decorator changes data-brand, which is what this does.
+    const Hero = hero('backstage');
+    show(<Hero />);
+    expect(html.classList.contains('intro')).toBe(true);
+    html.dataset.brand = 'blocks';
+    await new Promise((resolve) => setTimeout(resolve)); // let the runtime's MutationObserver deliver
+    expect(html.classList.contains('intro')).toBe(false);
+  });
+
+  it('changing hero-intro remounts the assembly and replays the intro', async () => {
+    const Hero = hero('backstage');
+    show(<Hero />);
+    await expect.poll(() => html.classList.contains('intro'), { timeout: 15_000 }).toBe(false);
+    show(<Hero hero-intro="assemble" />);
+    expect(html.style.getPropertyValue('--hero-intro')).toBe('assemble');
+    expect(html.classList.contains('intro')).toBe(true);
+  });
+
   it('under reduced motion the intro is never armed', () => {
     const real = window.matchMedia;
     window.matchMedia = ((query: string) => ({ ...real.call(window, query), matches: query.includes('reduce') && !query.includes('no-preference') })) as typeof window.matchMedia;
