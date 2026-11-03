@@ -31,3 +31,7 @@ playwright-report/
 
 # r7 prototype seeds: build output, rebuilt by prototypes/r7/<folder>/seed.sh
 prototypes/r7/*/seed/
+
+# Storybook build output and logs (`pnpm build-storybook`; outside dist/ so the site checks never see it)
+storybook-static/
+*storybook.log
