@@ -5,7 +5,7 @@ Jarod Taylor's personal site and portfolio. Its signature feature is **Remix**: 
 ## Requirements
 
 - Node 24 or later
-- pnpm 11 (the version is pinned in `package.json`; `corepack enable` picks it up)
+- pnpm 11 (pinned in `package.json`). If Corepack is missing (as on Node 25+), first run `npm install --global corepack`; then run `corepack enable` to use the pinned pnpm version.
 
 ```sh
 pnpm install
