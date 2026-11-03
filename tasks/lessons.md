@@ -49,3 +49,6 @@
 - **Never commit build output into prototypes.** Seeds come from a script that rebuilds a pinned commit. Abandoned design rounds go to the `archive/prototypes` branch, not main.
 - **Generated CSS `content` on real content elements is read aloud by screen readers.** Give it an empty alternative (`content: attr(x) / ""`).
 - **Don't let two tiers share a token prefix** (e.g. a primitive `figure.*` and a component `figure.*`).
+
+## 2026-10-30: check:astro review rounds (PR #6)
+- **When a second review round finds another case a hand-rolled parser misses, switch to the real parser instead of adding the case.** The `.astro` regex scanner took three rounds (Codex, advisor, Copilot) before it became `@astrojs/compiler-rs`, which removed the whole class at once.
