@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useLayoutEffect } from 'react';
-import { BRAND_DEFAULT, tokenArgTypes } from '../../../.storybook/token-controls';
+import { tokenArgs, tokenArgTypes } from '../../../.storybook/token-controls';
 import { Header } from '../Header/Header';
 import { InfoStrip } from '../InfoStrip/InfoStrip';
 import { PeekColumns, SkipIntro } from '../Peek/Peek';
@@ -19,7 +19,6 @@ type Args = Record<(typeof KNOBS)[number], string>;
  */
 function FirstViewport() {
   useLayoutEffect(() => {
-    document.documentElement.classList.add('js');
     try {
       sessionStorage.removeItem('jt-intro'); // the page plays the intro once per tab; the story plays it every mount
     } catch {}
@@ -46,8 +45,8 @@ function FirstViewport() {
 
 const meta = {
   title: 'Page/Hero',
-  args: Object.fromEntries(KNOBS.map((knob) => [knob, BRAND_DEFAULT])) as Args,
-  argTypes: tokenArgTypes([...KNOBS]),
+  args: tokenArgs(KNOBS),
+  argTypes: tokenArgTypes(KNOBS),
   // The intro is armed before first paint, so changing it remounts the assembly and plays the chosen intro.
   render: (args) => <FirstViewport key={args['hero-intro']} />,
 } satisfies Meta<Args>;

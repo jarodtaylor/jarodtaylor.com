@@ -28,8 +28,12 @@ export const TOKEN_PROPERTY: Record<EnumKnob, string> = {
   'hero-ground': '--hero-ground',
 };
 
-/** argTypes for a story's token controls: "brand default" first, then that knob's allowed values. */
-export function tokenArgTypes(keys: EnumKnob[]) {
+/** Initial args for a story's token controls: every knob at "brand default". */
+export function tokenArgs<K extends EnumKnob>(keys: readonly K[]): Record<K, string> {
+  return Object.fromEntries(keys.map((key) => [key, BRAND_DEFAULT])) as Record<K, string>;
+}
+
+export function tokenArgTypes(keys: readonly EnumKnob[]) {
   return Object.fromEntries(
     keys.map((key) => [
       key,
@@ -43,7 +47,6 @@ export function tokenArgTypes(keys: EnumKnob[]) {
   ) as Record<EnumKnob, ArgTypes[string] & { options: string[]; table: { category: string } }>;
 }
 
-/** The inline value for every mapped property: a chosen value, or null to remove it. */
 export function tokenStyle(args: Record<string, unknown>): Record<string, string | null> {
   return Object.fromEntries(
     (Object.entries(TOKEN_PROPERTY) as [EnumKnob, string][]).map(([key, property]) => {

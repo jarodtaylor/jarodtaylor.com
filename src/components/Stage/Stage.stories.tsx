@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BRAND_DEFAULT, tokenArgTypes } from '../../../.storybook/token-controls';
+import { tokenArgs, tokenArgTypes } from '../../../.storybook/token-controls';
 import { Stage } from './Stage';
 
 type Args = { 'font-smoothing': string };
 
 const meta = {
   title: 'Components/Stage',
-  args: { 'font-smoothing': BRAND_DEFAULT },
+  args: tokenArgs(['font-smoothing']),
   argTypes: tokenArgTypes(['font-smoothing']),
   render: () => (
     <Stage>

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BRAND_DEFAULT, tokenArgTypes } from '../../../.storybook/token-controls';
+import { tokenArgs, tokenArgTypes } from '../../../.storybook/token-controls';
 import { Stage } from '../Stage/Stage';
 import { SectionShell } from './SectionShell';
 
@@ -7,7 +7,7 @@ type Args = { title: string; surface: 'default' | 'raised' | 'inverse' | 'accent
 
 const meta = {
   title: 'Components/SectionShell',
-  args: { title: 'What I write about', surface: 'default', level: 2, decoration: BRAND_DEFAULT },
+  args: { title: 'What I write about', surface: 'default', level: 2, ...tokenArgs(['decoration']) },
   argTypes: {
     title: { control: 'text' },
     surface: { control: 'radio', options: ['default', 'raised', 'inverse', 'accent'] },

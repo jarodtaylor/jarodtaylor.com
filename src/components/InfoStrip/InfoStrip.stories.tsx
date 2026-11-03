@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BRAND_DEFAULT, tokenArgTypes } from '../../../.storybook/token-controls';
+import { tokenArgs, tokenArgTypes } from '../../../.storybook/token-controls';
 import { Stage } from '../Stage/Stage';
 import { InfoStrip } from './InfoStrip';
 
@@ -7,7 +7,7 @@ type Args = { 'info-align': string };
 
 const meta = {
   title: 'Components/InfoStrip',
-  args: { 'info-align': BRAND_DEFAULT },
+  args: tokenArgs(['info-align']),
   argTypes: tokenArgTypes(['info-align']),
   render: () => (
     <Stage>

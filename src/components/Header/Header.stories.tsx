@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BRAND_DEFAULT, tokenArgTypes } from '../../../.storybook/token-controls';
+import { tokenArgs, tokenArgTypes } from '../../../.storybook/token-controls';
 import { Stage } from '../Stage/Stage';
 import { Header } from './Header';
 
-type Args = { 'label-case': string; 'nav-align': string; 'menu-shape': string };
+const KNOBS = ['label-case', 'nav-align', 'menu-shape'] as const;
+type Args = Record<(typeof KNOBS)[number], string>;
 
 const meta = {
   title: 'Components/Header',
-  args: { 'label-case': BRAND_DEFAULT, 'nav-align': BRAND_DEFAULT, 'menu-shape': BRAND_DEFAULT },
-  argTypes: tokenArgTypes(['label-case', 'nav-align', 'menu-shape']),
+  args: tokenArgs(KNOBS),
+  argTypes: tokenArgTypes(KNOBS),
   render: () => (
     <Stage>
       <Header />

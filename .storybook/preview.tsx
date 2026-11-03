@@ -8,6 +8,7 @@ import { tokenStyle } from './token-controls.ts';
 const withTokens: Decorator = (Story, context) => {
   const { style } = document.documentElement;
   for (const [property, value] of Object.entries(tokenStyle(context.args))) {
+    if (style.getPropertyValue(property) === (value ?? '')) continue; // unchanged: no mutation for the runtime to react to
     if (value === null) style.removeProperty(property);
     else style.setProperty(property, value);
   }
@@ -17,7 +18,6 @@ const withTokens: Decorator = (Story, context) => {
 const preview: Preview = {
   globalTypes: brandGlobalTypes,
   initialGlobals: brandInitialGlobals,
-  // withBrand must wrap withTokens: it scrubs <html> on a story change before this story's overrides go on.
   decorators: [withTokens, withBrand],
   parameters: {
     layout: 'fullscreen',

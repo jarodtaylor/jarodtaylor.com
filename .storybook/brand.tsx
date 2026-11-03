@@ -12,7 +12,6 @@ export const brandGlobalTypes = {
 };
 export const brandInitialGlobals = { brand: defaultBrand };
 
-/** What a story can leave on <html>: token overrides, the runtime's js and intro classes, Peek state. */
 function scrubHtml(): void {
   const html = document.documentElement;
   html.removeAttribute('style');
@@ -33,6 +32,8 @@ export const withBrand: Decorator = (Story, context) => {
     lastStoryId = context.id;
   }
   const brand = context.globals.brand as string;
-  document.documentElement.dataset.brand = brands.includes(brand) ? brand : defaultBrand;
+  const next = brands.includes(brand) ? brand : defaultBrand;
+  // Rewriting the same value still queues a mutation record, which the hero runtime reads as a brand switch.
+  if (document.documentElement.dataset.brand !== next) document.documentElement.dataset.brand = next;
   return <Story />;
 };

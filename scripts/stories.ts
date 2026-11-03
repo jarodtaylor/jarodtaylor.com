@@ -10,7 +10,6 @@ export const COVERED_BY: Readonly<Record<string, string>> = {
 
 export type MissingStory = { component: string; file: string; reason: 'missing' | 'no named story' };
 
-/** `stories` maps each component directory name to its story file's source, or null when the file doesn't exist. */
 export function missingStories(stories: Readonly<Record<string, string | null>>): MissingStory[] {
   const missing: MissingStory[] = [];
   for (const [component, source] of Object.entries(stories)) {

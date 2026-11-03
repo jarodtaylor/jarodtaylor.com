@@ -4,6 +4,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import buttonMeta, { AsButton } from '../src/components/Button/Button.stories';
 import heroMeta, { FirstViewportStory } from '../src/components/Hero/Hero.stories';
+import shellMeta, { Default as ShellDefault } from '../src/components/SectionShell/SectionShell.stories';
 
 let host: HTMLDivElement;
 let root: Root;
@@ -77,6 +78,15 @@ describe('hero story', () => {
     expect(html.dataset.peekState).toBeTruthy();
   });
 
+  it('flipping a token control mid-intro does not cut the intro short', async () => {
+    const Hero = hero('backstage');
+    show(<Hero />);
+    expect(html.classList.contains('intro')).toBe(true);
+    show(<Hero hero-layout="name-over-details" />);
+    await new Promise((resolve) => setTimeout(resolve)); // let the runtime's MutationObserver deliver
+    expect(html.classList.contains('intro')).toBe(true);
+  });
+
   it('under reduced motion the intro is never armed', () => {
     const real = window.matchMedia;
     window.matchMedia = ((query: string) => ({ ...real.call(window, query), matches: query.includes('reduce') && !query.includes('no-preference') })) as typeof window.matchMedia;
@@ -109,5 +119,18 @@ describe('hero story', () => {
     expect(html.dataset.peekState).toBeUndefined();
     expect(['intro', 'building', 'settling'].filter((c) => html.classList.contains(c))).toEqual([]);
     expect(html.getAttribute('style') ?? '').toBe('');
+  });
+});
+
+describe('decorator order', () => {
+  it('scrubs <html> on a story change before the new story\'s token overrides go on', () => {
+    const Hero = hero('clean');
+    show(<Hero hero-layout="stack" />);
+    act(() => root.unmount());
+    root = createRoot(host);
+    const Shell = composeStory(ShellDefault, shellMeta);
+    show(<Shell decoration="none" />);
+    expect(html.style.getPropertyValue('--hero-layout')).toBe('');
+    expect(html.style.getPropertyValue('--section-decoration')).toBe('none');
   });
 });
