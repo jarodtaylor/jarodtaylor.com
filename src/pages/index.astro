@@ -6,6 +6,7 @@ import { InfoStrip } from '../components/InfoStrip/InfoStrip';
 import { PeekColumns, SkipIntro } from '../components/Peek/Peek';
 import { Stage } from '../components/Stage/Stage';
 import Base from '../layouts/Base.astro';
+import introArm from '../components/Hero/intro-arm.js?raw';
 ---
 <Base
   title="Jarod Taylor · Engineering Leader | Frontend Architecture, Design Engineering & Developer Experience"
@@ -15,23 +16,7 @@ import Base from '../layouts/Base.astro';
        JS (no class, no hidden content); ?intro forces it. Every intro is armed here and CSS applies only the one the
        brand's --hero-intro names; runtime.ts runs that one and drops the rest. If runtime.ts never arrives, the 4 s failsafe
        hands the page back. -->
-  <script is:inline slot="head">
-    (() => {
-      const root = document.documentElement;
-      root.classList.add('js');
-      let seen = false;
-      try { seen = sessionStorage.getItem('jt-intro') === '1'; } catch {}
-      if (new URLSearchParams(location.search).has('intro')) seen = false;
-      if (seen || !matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
-      root.classList.add('intro', 'building');
-      root.dataset.peekState = 'arm';
-      setTimeout(() => {
-        if (root.dataset.peekState !== 'arm') return;
-        root.classList.remove('intro', 'building');
-        delete root.dataset.peekState;
-      }, 4000);
-    })();
-  </script>
+  <script is:inline slot="head" set:html={introArm}></script>
 
   <Stage>
     <PeekColumns />
@@ -50,5 +35,7 @@ import Base from '../layouts/Base.astro';
 </Base>
 
 <script>
-  import '../components/Hero/runtime.ts';
+  import { init } from '../components/Hero/runtime.ts';
+
+  init();
 </script>
