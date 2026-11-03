@@ -35,3 +35,4 @@ prototypes/r7/*/seed/
 # Storybook build output and logs (`pnpm build-storybook`; outside dist/ so the site checks never see it)
 storybook-static/
 *storybook.log
+.vitest/
