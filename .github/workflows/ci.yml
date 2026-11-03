@@ -33,6 +33,7 @@ jobs:
       - run: pnpm check:contrast
       - run: pnpm check:tokens-only
       - run: pnpm check:astro
+      - run: pnpm check:stories
       - run: pnpm check:slop
       - run: pnpm typecheck
       - run: pnpm test
@@ -42,6 +43,12 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm check:markup-invariance
       - run: pnpm check:a11y
+      - run: pnpm check:hero-runtime
+
+      # Storybook: builds to storybook-static/ (outside dist/, so the checks above never see it), then every story
+      # and the workshop tests run in Chromium.
+      - run: pnpm build-storybook
+      - run: pnpm test:stories
 
       # Lighthouse reports on every run; budgets in lighthouserc.json are warnings. Only the hard floors
       # (a11y < 0.9, CLS > 0.1) fail, and a PR labelled `perf-tradeoff` downgrades even those to a report.

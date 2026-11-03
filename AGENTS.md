@@ -11,15 +11,18 @@ This file is the canonical instructions for every agent, in any harness. It is s
 | `pnpm dev` | `pnpm tokens`, then the Astro dev server |
 | `pnpm build` | `pnpm tokens`, then `astro build` → `dist/` |
 | `pnpm tokens` | `scripts/build-tokens.ts` (knobs → `tokens/generated/`), then `tz build` (→ `src/styles/tokens.css`, `public/tokens/<brand>.json`) |
-| `pnpm test` | Vitest: every `*.test.ts` (`scripts/` and `src/lib/`) |
+| `pnpm test` | `pnpm tokens`, then the Vitest `unit` project: every `*.test.ts` (`scripts/`, `src/`, `.storybook/`) |
+| `pnpm storybook` / `build-storybook` | `pnpm tokens`, then Storybook's dev server on :6006, or a build to `storybook-static/` (gitignored, outside `dist/`) |
+| `pnpm test:stories` | Every story as a render test, plus `.storybook/workshop.test.tsx` (brand switches, token controls, teardown), in Chromium |
 | `pnpm typecheck` | `astro check` (covers `.astro`, `.ts`, `.tsx`) |
 | `pnpm check` | Every guardrail below, fast first (builds in the middle, Lighthouse last). CI runs them as separate steps (`.github/workflows/ci.yml`) |
 | `pnpm check:tokens-fresh` | Reruns `pnpm tokens`; fails if `tokens/generated/` changed (content compare, not git) |
 | `pnpm check:contrast` | WCAG 2.2 AA for every brand × `surface.<role>.*` pair (`scripts/contrast.ts`). Needs `pnpm tokens` first |
 | `pnpm check:tokens-only` | Stylelint (`stylelint.config.js` + `scripts/stylelint-plugin-tokens.ts`): no raw values, primitives or brand keys in CSS |
 | `pnpm check:astro` | `.astro` rules (`scripts/astro-rules.ts`): no `client:*` outside `CLIENT_ALLOWLIST`, no scoped `<style>` |
+| `pnpm check:stories` | Every `src/components/<Name>/` has `<Name>.stories.tsx` with a named story (`scripts/stories.ts`; `COVERED_BY` for directories shown inside another story) |
 | `pnpm check:slop` | `impeccable detect --no-design-system src/` |
-| `pnpm check:markup-invariance` / `check:a11y` | Playwright + axe on every page × brand in `dist/` (`tests/*.e2e.ts`). Needs `pnpm build` and `pnpm exec playwright install chromium` |
+| `pnpm check:markup-invariance` / `check:a11y` / `check:hero-runtime` | Playwright + axe on every page × brand in `dist/`, and the hero runtime's intro, Peek and restart contracts (`tests/*.e2e.ts`). Needs `pnpm build` and `pnpm exec playwright install chromium` |
 | `pnpm lighthouse` | Lighthouse CI on `dist/` (`lighthouserc.json`), local only: no upload (CI uploads to temporary public storage). Budgets warn; only a11y < 0.9 or CLS > 0.1 fail. PR label `perf-tradeoff` downgrades those too |
 
 Run `pnpm test && pnpm typecheck && pnpm check` before committing.

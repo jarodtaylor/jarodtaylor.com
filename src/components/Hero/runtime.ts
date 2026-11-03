@@ -6,8 +6,10 @@
  *
  * The intro is decided before first paint by the inline script in index.astro (once per session, never under
  * reduced motion, ?intro forces it). That script arms every intro; this module runs the one the brand names.
+ *
+ * Nothing runs on import: init() wires the page and returns a disposer that undoes it, so the Storybook hero story
+ * can start, stop and restart the runtime on one page. One instance at a time.
  */
-export {}; // a module, so these names stay out of the global scope (window.stop exists)
 
 const root = document.documentElement;
 const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector<T>(sel);
@@ -25,7 +27,9 @@ function ms(name: string): number {
 }
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-const toggle = $('[data-peek-toggle]')!;
+let toggle: HTMLElement;
+/** Bumped by init() and by its disposer, so a callback that outlives its run (fonts.ready, a finished build) does nothing. */
+let generation = 0;
 
 // Peek: one state machine ------------------------------------------------------------------------------------
 
@@ -125,8 +129,9 @@ function settle() {
 function peekIntro() {
   root.classList.remove('building');
   skip = settle;
+  const run = generation;
   const go = () => {
-    if (root.dataset.peekState !== 'arm') return;
+    if (run !== generation || root.dataset.peekState !== 'arm') return;
     show();
     listen(true);
     later(ms('--_peek-settled') + ms('--_peek-hold'), () => {
@@ -136,7 +141,7 @@ function peekIntro() {
     });
   };
   // Boxes and readouts measure real text, so wait for the real fonts (capped, so a slow font never holds the page).
-  Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 700))]).then(go);
+  Promise.race([document.fonts.ready, new Promise<void>((r) => later(700, r))]).then(go);
 }
 
 /** assemble: the figure's parts slide together. CSS runs it; this skips it on demand and hands the page back. */
@@ -145,7 +150,9 @@ function assembleIntro() {
   seen();
   // Only the build's own, finite animations count (the status ring and the pen breathe forever).
   const build = () => document.getAnimations().filter((a) => a.effect?.getComputedTiming().endTime !== Infinity);
+  const run = generation;
   const done = () => {
+    if (run !== generation) return;
     listen(false);
     root.classList.remove('intro', 'building');
   };
@@ -154,7 +161,7 @@ function assembleIntro() {
     done();
   };
   listen(true);
-  requestAnimationFrame(() => Promise.all(build().map((a) => a.finished)).then(done, done));
+  requestAnimationFrame(() => run === generation && Promise.all(build().map((a) => a.finished)).then(done, done));
 }
 
 // The lattice: the monogram's own 60° lattice at page scale, painted on the canvas --------------------------------
@@ -488,35 +495,75 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
 // Wiring ----------------------------------------------------------------------------------------------------------
 
 let stopFigure = () => {};
+let figure = '';
+let ground = '';
 
-/** Read the brand's figure and start what it needs. Runs on load and on every brand switch. */
+/** Read the brand's figure and start what it needs. Runs on init, on every brand switch, and when an inline
+ *  --hero-figure or --hero-ground on <html> (the Storybook token controls) changes either. */
 function start() {
   stopFigure();
   stopFigure = () => {};
+  figure = token('--hero-figure');
+  ground = token('--hero-ground');
   const canvas = $<HTMLCanvasElement>('canvas.field');
-  if (canvas && token('--hero-figure') === 'lattice') stopFigure = lattice(canvas);
-  else if (canvas && token('--hero-ground') === 'plotter') stopFigure = plotter(canvas, $('.hero')!);
+  if (canvas && figure === 'lattice') stopFigure = lattice(canvas);
+  else if (canvas && ground === 'plotter') stopFigure = plotter(canvas, $('.hero')!);
   readouts();
 }
 
-toggle.addEventListener('click', () => setPeek(toggle.getAttribute('aria-pressed') !== 'true'));
-addEventListener('keydown', (e) => {
+const onToggle = () => setPeek(toggle.getAttribute('aria-pressed') !== 'true');
+const onKeydown = (e: KeyboardEvent) => {
   if (e.key === 'Escape' && toggle.getAttribute('aria-pressed') === 'true') setPeek(false);
-});
-$('[data-skip-intro]')?.addEventListener('click', () => skip());
-addEventListener('resize', readouts);
-document.fonts.ready.then(readouts);
+};
+const onSkipClick = () => skip();
 
-// A brand switch: whatever intro was running lands at rest, and the new brand's figure starts.
-new MutationObserver(() => {
-  if (root.classList.contains('intro')) settle();
+// A brand switch: whatever intro was running lands at rest, and the new brand's figure starts. An inline style
+// change restarts the figure only if it changed which one runs, and never interrupts an intro.
+const onRootChange = (records: MutationRecord[]) => {
+  if (records.some((r) => r.attributeName === 'data-brand')) {
+    if (root.classList.contains('intro')) settle();
+    start();
+  } else if (token('--hero-figure') !== figure || token('--hero-ground') !== ground) start();
+};
+
+/** Wire the hero on the current page. Returns a disposer that undoes everything init and the intro did; calling it again is a no-op. */
+export function init(): () => void {
+  const run = ++generation;
+  toggle = $('[data-peek-toggle]')!;
+  const skipButton = $('[data-skip-intro]');
+  toggle.addEventListener('click', onToggle);
+  addEventListener('keydown', onKeydown);
+  skipButton?.addEventListener('click', onSkipClick);
+  addEventListener('resize', readouts);
+  document.fonts.ready.then(() => run === generation && readouts());
+  const observer = new MutationObserver(onRootChange);
+  observer.observe(root, { attributes: true, attributeFilter: ['data-brand', 'style'] });
+
   start();
-}).observe(root, { attributes: true, attributeFilter: ['data-brand'] });
+  if (root.classList.contains('intro')) {
+    const intro = token('--hero-intro');
+    if (intro === 'peek') peekIntro();
+    else if (intro === 'assemble') assembleIntro();
+    else settle();
+  }
 
-start();
-if (root.classList.contains('intro')) {
-  const intro = token('--hero-intro');
-  if (intro === 'peek') peekIntro();
-  else if (intro === 'assemble') assembleIntro();
-  else settle();
+  let disposed = false;
+  return () => {
+    if (disposed) return;
+    disposed = true;
+    generation++;
+    stop();
+    listen(false);
+    skip = () => {};
+    toggle.removeEventListener('click', onToggle);
+    removeEventListener('keydown', onKeydown);
+    skipButton?.removeEventListener('click', onSkipClick);
+    removeEventListener('resize', readouts);
+    observer.disconnect();
+    stopFigure();
+    stopFigure = () => {};
+    root.classList.remove('intro', 'building', 'settling');
+    setState(null);
+    toggle.setAttribute('aria-pressed', 'false');
+  };
 }

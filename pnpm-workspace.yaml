@@ -9,3 +9,7 @@ minimumReleaseAgeExclude:
   - '@terrazzo/token-types@2.8.0'
   - miniflare@5.20261006.2-beta
   - wrangler@4.150.0
+# One Playwright for everything: @axe-core/playwright resolves playwright-core on its own, and a second copy breaks
+# the Page types shared with @playwright/test (and pulls a second set of browsers). Keep in step with @playwright/test.
+overrides:
+  playwright-core: 1.64.0
