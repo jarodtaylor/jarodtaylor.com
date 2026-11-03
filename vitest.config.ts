@@ -19,6 +19,16 @@ export default defineConfig({
           browser: { enabled: true, headless: true, provider: playwright({}), instances: [{ browser: 'chromium' }] },
         },
       },
+      {
+        // Behaviour that spans re-renders (brand switches, control flips, one story after another), which a story's
+        // play function can't drive: portable stories mounted with React in one document.
+        test: {
+          name: 'workshop',
+          include: ['.storybook/workshop.test.tsx'],
+          setupFiles: ['.storybook/workshop.setup.ts'],
+          browser: { enabled: true, headless: true, provider: playwright({}), instances: [{ browser: 'chromium' }] },
+        },
+      },
     ],
   },
 });
