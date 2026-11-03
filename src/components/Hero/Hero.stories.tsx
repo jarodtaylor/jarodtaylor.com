@@ -19,13 +19,24 @@ type Args = Record<(typeof KNOBS)[number], string>;
  */
 function FirstViewport() {
   useLayoutEffect(() => {
+    // The page plays the intro once per tab via the jt-intro session flag; the story plays it on every mount. Hosted
+    // on the site's origin, the story shares that flag, so it is cleared for the mount and restored after.
+    let flag: string | null = null;
     try {
-      sessionStorage.removeItem('jt-intro'); // the page plays the intro once per tab; the story plays it every mount
+      flag = sessionStorage.getItem('jt-intro');
+      sessionStorage.removeItem('jt-intro');
     } catch {}
     const arm = document.createElement('script');
     arm.textContent = introArm;
     document.head.appendChild(arm).remove();
-    return init();
+    const dispose = init();
+    return () => {
+      dispose();
+      try {
+        if (flag === null) sessionStorage.removeItem('jt-intro');
+        else sessionStorage.setItem('jt-intro', flag);
+      } catch {}
+    };
   }, []);
 
   return (
