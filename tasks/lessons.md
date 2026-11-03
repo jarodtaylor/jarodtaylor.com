@@ -52,3 +52,6 @@
 
 ## 2026-10-30: check:astro review rounds (PR #6)
 - **When a second review round finds another case a hand-rolled parser misses, switch to the real parser instead of adding the case.** The `.astro` regex scanner took three rounds (Codex, advisor, Copilot) before it became `@astrojs/compiler-rs`, which removed the whole class at once.
+
+## 2026-11-03: review order (PR #11)
+- **After `ce-work`, run `ce-simplify-code` before any review** (design review, code review, adversarial). Reviewers should see the simplified diff, not code the simplify pass would remove.
