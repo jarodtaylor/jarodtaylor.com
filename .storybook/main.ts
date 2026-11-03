@@ -4,7 +4,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 // document, where <html> token overrides and two hero runtimes would collide.
 const config: StorybookConfig = {
   stories: ['../src/components/**/*.stories.tsx'],
-  addons: [],
+  addons: ['@storybook/addon-vitest'],
   framework: '@storybook/react-vite',
   // Fonts load from root-absolute /fonts/ URLs, as on the site.
   staticDirs: ['../public'],
