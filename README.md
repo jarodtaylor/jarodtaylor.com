@@ -24,7 +24,7 @@ pnpm build      # static site in dist/
 pnpm preview    # serve dist/ locally
 ```
 
-Every command that needs tokens builds them first. Run `pnpm tokens` on its own after editing anything in `tokens/`.
+`dev`, `build`, `test`, `test:stories`, `storybook`, `build-storybook` and `check` build tokens first. The single `check:*` scripts don't: they read what's already in `public/tokens/` and `src/styles/tokens.css`, so run `pnpm tokens` before them after editing anything in `tokens/`.
 
 ## Run Storybook
 
@@ -44,7 +44,7 @@ pnpm typecheck
 pnpm check          # every guardrail CI runs: tokens, contrast, CSS rules, a11y, Storybook, Lighthouse
 ```
 
-The browser checks need Chromium once: `pnpm exec playwright install chromium`. Run `pnpm test && pnpm typecheck && pnpm check` before opening a PR.
+The browser checks need Chromium once: `pnpm exec playwright install chromium`. Lighthouse, the last step of `pnpm check`, launches its own Chrome: it needs Google Chrome installed, or `CHROME_PATH` pointing at a Chrome or Chromium binary. Run `pnpm test && pnpm typecheck && pnpm check` before opening a PR.
 
 ## Deploy
 
