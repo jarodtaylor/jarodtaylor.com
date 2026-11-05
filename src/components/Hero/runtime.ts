@@ -118,16 +118,21 @@ const onSkip = () => skip();
 const listen = (on: boolean) =>
   SKIP_ON.forEach((t) => (on ? addEventListener : removeEventListener)(t, onSkip, { capture: true, passive: true } as AddEventListenerOptions));
 
-/** Land on the resting state at once: one frame without transitions. */
+/** One frame without transitions, so whatever changes now lands at once instead of animating to it. */
+function quiet() {
+  root.classList.add('settling');
+  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('settling')));
+}
+
+/** Land on the resting state at once. */
 function settle() {
   stop();
   listen(false);
   seen();
-  root.classList.add('settling');
+  quiet();
   setState(null);
   root.classList.remove('intro', 'building');
   toggle.setAttribute('aria-pressed', 'false');
-  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('settling')));
 }
 
 /** peek: the Peek layer played once on arrival (on, hold, leave). Any key, click, wheel, touch or scroll skips it. */
@@ -522,11 +527,14 @@ const onKeydown = (e: KeyboardEvent) => {
 };
 const onSkipClick = () => skip();
 
-// A brand switch: whatever intro was running lands at rest, and the new brand's figure starts. An inline style
-// change restarts the figure only if it changed which one runs, and never interrupts an intro.
+// A brand switch: whatever intro was running lands at rest, and the new brand's figure starts. The switch itself
+// lands in one frame: otherwise the colour transitions tween to the new brand while everything else cuts, and a Peek
+// mid-build would keep drawing in the old brand's timing. An inline style change restarts the figure only if it
+// changed which one runs, and never interrupts an intro.
 const onRootChange = (records: MutationRecord[]) => {
   if (records.some((r) => r.attributeName === 'data-brand')) {
     if (root.classList.contains('intro')) settle();
+    else quiet();
     start();
   } else if (token('--hero-figure') !== figure || token('--hero-ground') !== ground) start();
 };

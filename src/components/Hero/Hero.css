@@ -291,18 +291,23 @@
     }
   }
 
-  /* The scroll cue: off, an arrow, or an arrow with its words. */
+  /* The scroll cue: off, an arrow, or an arrow with its words. Off, it leaves the flow rather than hiding, as the
+     empty figure does: Chromium doesn't re-run a style query inside an element that was display: none when the token
+     changed, so after a brand switch its words would keep the old answer. visibility keeps it out of sight, out of the
+     focus order and out of the accessibility tree. */
   .cue {
     align-items: center;
     color: var(--hero-cue-color);
-    display: none;
+    display: inline-flex;
     font-family: var(--hero-small-font-family);
     font-size: var(--_small);
     gap: var(--space-inset-sm);
     grid-column: 1 / -1;
     justify-self: start;
     margin-block-start: var(--_rhythm);
+    position: absolute;
     text-decoration: none;
+    visibility: hidden;
   }
 
   .cue svg {
@@ -325,12 +330,11 @@
     @media (min-width: 48rem) {
       .cue {
         bottom: var(--_rhythm);
-        display: inline-flex;
         grid-area: auto;
         margin: 0;
         padding-block: var(--space-inset-sm);
-        position: absolute;
         right: var(--_x);
+        visibility: visible;
         z-index: 1;
       }
 
@@ -356,8 +360,9 @@
 
   @container style(--hero-cue: labelled) {
     .cue {
-      display: inline-flex;
       margin-block-start: calc(var(--_stack-gap) * 2);
+      position: static;
+      visibility: visible;
     }
 
     .cue svg {

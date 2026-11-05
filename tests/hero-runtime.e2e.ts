@@ -133,6 +133,61 @@ const switchBrand = (page: Page, brand: Brand) =>
       .map((a) => `${(a as CSSTransition).transitionProperty} on ${(a.effect as KeyframeEffect).target?.nodeName}`);
   }, brand);
 
+/** The scroll cue as CSS resolves it: hidden or shown, in flow or not, its words clipped or not. */
+const cueState = (page: Page) =>
+  page.evaluate(() => {
+    const pick = (sel: string, props: string[]) => {
+      const cs = getComputedStyle(document.querySelector(sel)!);
+      return Object.fromEntries(props.map((p) => [p, cs.getPropertyValue(p)]));
+    };
+    return {
+      cue: pick('.cue', ['display', 'position', 'visibility']),
+      label: pick('.cue-label', ['clip-path', 'position']),
+    };
+  });
+
+/** What a fresh load of the brand resolves, at rest (reduced motion, so no intro plays first). */
+async function restingCue(page: Page, brand: Brand) {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(`/?brand=${brand}`);
+  const state = await cueState(page);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  return state;
+}
+
+const PAIRS = BRANDS.flatMap((from) => BRANDS.filter((to) => to !== from).map((to) => [from, to] as const));
+
+for (const [from, to] of PAIRS) {
+  for (const phase of ['at rest', 'mid-intro', 'mid-Peek'] as const) {
+    if (phase === 'mid-intro' && from === 'clean') continue; // clean has no intro
+    test(`live switch ${from} → ${to} ${phase}: lands like a fresh load, with nothing still tweening`, async ({ page }) => {
+      const expected = await restingCue(page, to);
+      await page.goto(`/?brand=${from}${phase === 'mid-intro' ? '&intro' : ''}`);
+      if (phase === 'mid-intro') {
+        await expect(html(page)).toHaveClass(/\bintro\b/);
+        await page.waitForTimeout(600);
+        await expect(html(page)).toHaveClass(/\bintro\b/);
+      } else {
+        await expect(html(page)).not.toHaveClass(/\bintro\b/, { timeout: 15_000 });
+      }
+      if (phase === 'mid-Peek') {
+        await page.locator('[data-peek-toggle]').click();
+        await expect(html(page)).toHaveAttribute('data-peek-state', 'on');
+        await page.waitForTimeout(300); // mid-build
+      }
+
+      expect.soft(await switchBrand(page, to), 'CSS transitions still running after the switch').toEqual([]);
+      await expect(html(page)).not.toHaveClass(/\b(intro|building|settling)\b/);
+
+      if (phase === 'mid-Peek') {
+        await page.keyboard.press('Escape');
+        await expect(html(page)).not.toHaveAttribute('data-peek-state', { timeout: 5_000 });
+      }
+      expect(await cueState(page)).toEqual(expected);
+    });
+  }
+}
+
 // The intro plays once per brand per tab ------------------------------------------------------------------------
 
 test('a brand without an intro consumes nothing: clean, then backstage plays backstage\'s intro', async ({ page }) => {
