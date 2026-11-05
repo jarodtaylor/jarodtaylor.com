@@ -177,6 +177,14 @@
       text-decoration-color var(--motion-duration-fast) var(--motion-easing-out);
   }
 
+  /* On phones and touch screens each link is a full control tall. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (max-width: 47.99rem), (pointer: coarse) {
+    .social a {
+      min-block-size: var(--layout-control-h-phone);
+    }
+  }
+
   .social svg {
     block-size: calc(var(--_small) * 1.15);
     flex: none;

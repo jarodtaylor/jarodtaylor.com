@@ -2130,7 +2130,7 @@
     },
     "control-h": {
       "phone": {
-        "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)"
+        "$value": "2.75rem"
       },
       "wide": {
         "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)"

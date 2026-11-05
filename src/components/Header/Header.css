@@ -32,6 +32,13 @@
     }
   }
 
+  /* Touch screens keep the phone's control height at any width, so every target stays a fingertip wide. */
+  @media (pointer: coarse) {
+    .masthead {
+      --_control-h: var(--layout-control-h-phone);
+    }
+  }
+
   /* Every control speaks in one small style; nav links can sit lighter than the buttons. */
   .nav,
   .tool {
@@ -55,6 +62,7 @@
   }
 
   .mark {
+    align-items: center;
     color: var(--header-text);
     display: inline-flex;
     margin-inline-end: auto;
@@ -201,6 +209,12 @@
      (reduced motion makes it a cut). menu-shape styles it: a panel down the right side, or a raised card. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (max-width: 63.99rem) {
+    /* The home link is at least a control square (a narrow mark gets a wider target), the mark at its start edge. */
+    .mark {
+      min-block-size: var(--_control-h);
+      min-inline-size: var(--_control-h);
+    }
+
     .nav-toggle {
       display: inline-flex;
     }
