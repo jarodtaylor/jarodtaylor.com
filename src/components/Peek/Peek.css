@@ -64,7 +64,7 @@
   :root[data-peek-state="leaving"] {
     --_layer: calc(0);
 
-    transition: --_layer var(--_peek-leave) var(--figure-draw-easing) calc(var(--_beat) * 0.6);
+    transition: --_layer var(--_peek-leave) var(--motion-easing-in-out) calc(var(--_beat) * 0.6);
   }
 
   /* 1. Columns: each one's edges draw down the whole stage, left to right. */
@@ -206,10 +206,10 @@
     --_lab: calc(1);
   }
 
-  /* Leaving, the labels retract into their box edges first (an ease-in, quick), then the lines fade. Text never
+  /* Leaving, the labels retract into their box edges first (in-out, quick), then the lines fade. Text never
      fades through its own background: a half-transparent label reads as mud. */
   :root[data-peek-state="leaving"] [data-peek]::after {
-    transition: --_lab calc(var(--_peek-leave) * 0.5) var(--motion-easing-in);
+    transition: --_lab calc(var(--_peek-leave) * 0.5) var(--motion-easing-in-out);
   }
 
   :root[data-peek-state="on"] [data-peek]::before {
@@ -390,7 +390,7 @@
 
   :root[data-peek-state="leaving"] .dim b {
     opacity: 0;
-    transition: opacity calc(var(--_peek-leave) * 0.4) var(--motion-easing-in);
+    transition: opacity calc(var(--_peek-leave) * 0.4) var(--motion-easing-in-out);
   }
 
   :root[data-peek-state="on"] .dim b {

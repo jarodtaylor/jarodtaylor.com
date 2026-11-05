@@ -21,8 +21,8 @@
       "out": {
         "$value": "{easing.out}"
       },
-      "in": {
-        "$value": "{easing.in}"
+      "in-out": {
+        "$value": "{easing.in-out}"
       },
       "draw": {
         "$value": "{easing.draw}"
