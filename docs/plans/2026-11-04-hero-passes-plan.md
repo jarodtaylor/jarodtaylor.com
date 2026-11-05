@@ -26,7 +26,7 @@ Minor, folded into the fixes PR or polish: Peek labels collide (390 `--type-body
 Steps in the same row run in parallel.
 
 1. [x] `/impeccable critique` (baseline above)
-2. [ ] In parallel, all read-only, findings appended to the tables here:
+2. [x] In parallel, all read-only, findings appended to the tables here:
    - `/impeccable audit` on `src/components/{Hero,Peek,Stage,Header,InfoStrip}`
    - `improve-animations deep` on the hero runtime and CSS (plans into `docs/plans/`); decides `--easing-pop`
    - `break-ui` on the header and hero (long names, missing data, zoom), report only
@@ -39,3 +39,62 @@ Steps in the same row run in parallel.
 ## Step 2 findings
 
 _Appended as each pass returns._
+
+### improve-animations deep (2026-11-04)
+
+Plans written: `2026-11-04-hero-motion-peek-repress-fade.md` (M1), `2026-11-04-hero-motion-part-release.md` (M4), `2026-11-04-hero-motion-exit-easing.md` (M2, M3). Part-release lands before exit-easing (hard dependency). Frame times fine (p95 ≤ 17.6 ms at 1440 and 2560): step 6 not needed now. `--easing-pop` kept, limited (DECISIONS 2026-11-04).
+
+| # | Sev | What | Where | Fix | Goes to |
+|---|---|---|---|---|---|
+| M1 | High | Re-pressing Peek during its leave brings it back near-invisible, then it pops (root `--_layer` fade keeps running; arm rule only stops descendants) | `Peek.css:64-68`, `:513-516`; `runtime.ts:48-54` | Plan: peek-repress-fade | Fixes PR |
+| M2 | High | Blocks' Peek leave fade pops: it fades on the draw curve, and Blocks' draw is an out curve, so the 2026-10-26 Peek exit fix never held in Blocks | `Peek.css:67`; `blocks.json:217` | Plan: exit-easing (`in` → `in-out` knob, `0.65, 0, 0.25, 1`) | Fixes PR |
+| M3 | Med | Peek labels retract and cap/baseline labels fade on ease-in: they hang, then snap | `Peek.css:212`, `:393` | Plan: exit-easing | Fixes PR |
+| M4 | Med | Isometric parts return on ease-in when the pointer leaves: lag, then lurch | `Hero.css:851` | Plan: part-release (`--motion-easing-out`) | Fixes PR |
+| M5 | Med | A live brand switch lands at two speeds: 24 colour transitions tween 160–460 ms while the rest cuts | `runtime.ts:522-527`; `Header.css:62,85,111-114`; `Hero.css:175-177` | Add the `settling` class in `onRootChange`'s `data-brand` branch before `start()`, drop it after two frames; C3 test asserts no running transitions | Fixes PR |
+| M6 | Low | Blocks' card menu slides in from off-screen instead of growing from its trigger | `Header.css:217-233`, `:266-280` | Origin top-right, small scale + fade | Blocks rethink |
+| M7 | Low | Reduced motion kills every transition, opacity and colour too, so Peek is a hard cut; `ms()` ≈ 0 under it | `reset.css:44-54`; `runtime.ts:20-27` | Keep gentle fades under reduced motion | Polish |
+| M8 | Low | Header tool hover isn't gated by `(hover: hover) and (pointer: fine)` (sticks after a tap); Peek icon hover rotation 600 ms | `Header.css:135-142`, `:165-176` | Copy the gate from `Hero.css:845` | Fixes PR |
+| M9 | Low | During the intro's leave, keys and pointer can't skip but the Skip button can | `runtime.ts:137-141` | Make them consistent | Fixes PR |
+
+C3 root cause: the cue label goes stale only on backstage → blocks, a Chromium style-query bug under `display: none` (`.cue` is `display: none` under `hero-cue: none`, `Hero.css:295-306`, `:343-349`). Fix: take `.cue` out of flow instead of hiding it, as the figure does. The amber glow didn't reproduce.
+
+C2 interaction: `intro-arm.js` can read `data-brand` (the brand script runs first) for a per-brand key. `onRootChange` calls `settle()` → `seen()` after `data-brand` changed, so with per-brand keys it would mark the new brand seen without playing its intro: mark only the brand whose intro actually ran. A live switch never starts an intro (keep).
+
+### break-ui (2026-11-04)
+
+Nothing breaks with today's data (fixed name, 4 roles, 5 nav links) in any brand from 320 to 2560 or at 200%/400% zoom. Realistic changes: roles, bio, socials, nav. Screenshots `.impeccable/critique/screens/break-*.png`.
+
+| # | Sev | Where | What | Fix | Goes to |
+|---|---|---|---|---|---|
+| B1 | P1 | blocks 768+ | The solid figure already sits under the last role ("DEVELOPER EXPERIENCE" over the orange shape); a 5th role makes it worse. Backstage milder | Cap the roles row to the text column, or a figure left-edge token | Blocks rethink |
+| B2 | P1 | all, 320–390, 400% zoom | `.roles li` is `white-space: nowrap` (`Hero.css:131`): a 40–55 char role clips and widens the row | Wrap below 48rem (`overflow-wrap: anywhere`, `min-inline-size: 0`); nowrap only from 48rem | Fixes PR |
+| B3 | P2 | Peek, clean 1024/1440 | "Hero scale" panel sits over the name; cap rule strikes `--page-x`, "cap" hits "cols" | Anchor the panel below the name block | Fixes PR |
+| B4 | P2 | Peek, blocks 768+ | Scroll cue overlaps the Hero scale panel | Move panel or cue under a Peek-only token | Blocks rethink |
+| B6 | P3 | all 768+ | `.name` nowrap from 48rem (`Hero.css:75-77`) clips a wider name. Not realistic | `overflow-wrap: anywhere` | Fixes PR, low |
+| B7 | P3 | blocks, backstage 768+ | `.tagline` nowrap from 48rem (`Hero.css:217-219`) runs under the figure at ~120 chars | Wrap with `text-wrap: balance` and a max-inline-size | Fixes PR |
+| B8 | P3 | 320 | A 35–60 char handle widens the social row (backstage) | `overflow-wrap: anywhere` on `.social a` | Fixes PR |
+| B9 | P3 | backstage 1440, text 200% | Contact overlaps Peek (CSS-emulated; real Chrome font-size likely folds the nav) | Verify with real font-size setting first | Fixes PR, verify |
+
+Held up: zoom, 320px, 2560, 7 roles (except B1), missing bio/socials/status, menu popover, Peek readouts. Not real risks: RTL, Japanese, emoji (B11), bio/social box touching at text 200% (B5, B10).
+
+### Impeccable audit (2026-11-04)
+
+18/20 (a11y 3, perf 4, responsive 3, theming 4, integrity 4). Detector 0, `check:contrast` passes, axe only two moderates. Screenshots `.impeccable/critique/screens/audit-*.png`.
+
+| # | Sev | Where | What | Fix | Goes to |
+|---|---|---|---|---|---|
+| A1 | P1 | all, phone menu | Tabbing out of the open menu leaves the popover up and focus moves behind it (WCAG 2.4.11); clean 390 hides GitHub and the handle. `Header.tsx:29,58`, `Header.css:203-284` | `hidePopover()` on a `focusout` that leaves `#nav-list` | Fixes PR |
+| A2 | P1 | backstage (`--hero-ground: plotter`), 390 | Plotter head, trail and `gNN · mNN` label walk through the bio (~9 s of every 36 s; worst pixel 1.34:1). `plan()` excludes by column fraction only (`runtime.ts:363-376`) | Exclude stops inside the `.stack` rect | Fixes PR |
+| A3 | P2 | backstage lead and name, blocks name | Viewport-only sizes ignore the user's font-size setting (WCAG 1.4.4): `backstage.json:195-196,200` (`35vw`, `min(12.5vw, 21svh)`, `min(2.6vw, 4.4svh)`); blocks' `max(3.5rem, …)` floor never binds | Add a rem term in the knobs (`clamp(Xrem, Yrem + Nvw, Zrem)`) | Fixes PR (backstage lead); blocks name → Blocks rethink |
+| A4 | P2 | clean 1440 | Lattice lines inside the mark cross the bio (worst pixel 2.15:1); in-mark alphas hard-coded (`runtime.ts:255,260`) | Knob for the in-mark alpha, or the name's halo on `.details` under `@container style(--hero-figure: lattice)` | Fixes PR |
+| A5 | P2 | all | 404 has no h1 and no header (`404.astro:7`, SectionShell renders h2) | SectionShell level prop; add `<Header/>` | Fixes PR |
+| A6 | P3 | all | "Open to new roles" sits outside every landmark (`index.astro:24`) | Move it inside `<header>` or `<main>` (same DOM for all brands) | Fixes PR |
+| A7 | P3 | backstage, blocks | Clean's two font preloads (~35 KB) download in every brand (`Base.astro:59`) | Preload from the brand script, or accept | Fixes PR, optional |
+| A8 | P3 | blocks 390 | Menu items 33px tall (others 46–47) | Blocks menu-item inset knob | Blocks rethink |
+| A9 | P3 | backstage 1440 | Plotter label at `pos.x+14` clips at the right edge (`runtime.ts:441-448`) | Flip left when there's no room | Fixes PR, with A2 |
+| A10 | P3 | code | Dead `opacity: 0.3` with a stale comment (`Hero.css:411`, overridden at `:672`) | Delete | Fixes PR |
+| A11 | P3 | all | X link is named "@jarodtaylor" with no platform; Remix doesn't say it goes to /lab/ | Visually hidden "X"; "Remix (token lab)" | Fixes PR |
+
+Critique items: C1 confirmed (36×36 tools in clean/backstage at 390, blocks 47; socials 35–36px; backstage mark 23×36). C2 confirmed. **C3 not reproduced at rest** across all 6 brand pairs: the test should switch mid-intro and mid-Peek. "Clean focus outline has no offset" **refuted** (2px everywhere, `base.css:46`).
+
+Works: reduced motion (no intro, still canvases, Peek lands), reflow at 320 and 400% zoom, keyboard and skip link, 60 fps with ≤ 4.1% main-thread busy and canvases pausing off-screen, forced colors, one h1 and aria-hidden figures. Not checked: canvas cost at DPR 2, a real screen reader, zoom on a 1920 screen.
