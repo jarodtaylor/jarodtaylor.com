@@ -8,11 +8,6 @@
     --_control-h: var(--layout-control-h-phone);
     --_control-size: var(--header-control-font-size);
     --_mark: var(--header-mark-size);
-    /* The tools' ink, rim and ground: the header's here, the menu's when they sit in it. */
-    --_tool-ink: var(--header-control-muted);
-    --_tool-ink-hover: var(--header-text);
-    --_tool-rim: var(--header-control-border);
-    --_tool-ground: var(--header-bg);
 
     align-items: center;
     block-size: var(--_h);
@@ -96,16 +91,11 @@
     color: var(--surface-default-accent);
   }
 
-  .nav-links {
-    margin: 0;
-    padding: 0;
-  }
-
-  .nav-links li {
+  .nav-list li {
     list-style: none;
   }
 
-  .nav-links a {
+  .nav-list a {
     color: var(--header-control-muted);
     display: inline-block;
     padding-block: var(--space-inset-sm);
@@ -113,7 +103,7 @@
     transition: color var(--motion-duration-fast) var(--motion-easing-out);
   }
 
-  .nav-links a:hover {
+  .nav-list a:hover {
     color: var(--header-text);
     text-decoration: underline;
     text-decoration-color: var(--surface-default-accent);
@@ -121,20 +111,20 @@
     text-underline-offset: calc(var(--_control-size) * 0.22);
   }
 
-  /* Peek and Remix: outlined tools, icon and word (each keeps its full name in aria-label). */
+  /* Peek and Remix: outlined tools, icon only below 64rem (each keeps its name in aria-label), icon and word above. */
   .tool {
     align-items: center;
     background: transparent;
-    border: var(--shape-border-width-default) solid var(--_tool-rim);
+    border: var(--shape-border-width-default) solid var(--header-control-border);
     border-radius: var(--shape-radius-pill);
-    color: var(--_tool-ink);
+    color: var(--header-control-muted);
     cursor: pointer;
     display: inline-flex;
     gap: var(--space-inset-sm);
     justify-content: center;
     min-block-size: var(--_control-h);
     min-inline-size: var(--_control-h);
-    padding: 0 var(--space-stack-sm) 0 var(--space-inset-sm);
+    padding: 0 var(--space-inset-sm);
     text-decoration: none;
     transition:
       background-color var(--motion-duration-fast) var(--motion-easing-out),
@@ -144,8 +134,8 @@
   }
 
   .tool:hover {
-    border-color: var(--_tool-ink-hover);
-    color: var(--_tool-ink-hover);
+    border-color: var(--header-text);
+    color: var(--header-text);
   }
 
   .tool svg {
@@ -154,6 +144,10 @@
     inline-size: calc(var(--_control-size) * 1.1);
     stroke: currentcolor;
     stroke-width: var(--shape-border-width-strong);
+  }
+
+  .tool-label {
+    display: none;
   }
 
   .peek-toggle svg {
@@ -186,7 +180,7 @@
 
   /* The slider knobs sit on the page's ground, so the tracks read as passing behind them. */
   .remix circle {
-    fill: var(--_tool-ground);
+    fill: var(--header-bg);
   }
 
   .remix svg path,
@@ -226,8 +220,8 @@
     stroke-width: var(--shape-border-width-strong);
   }
 
-  /* Below 64rem: one menu in every brand. The popover slides in from the right edge (reduced motion makes it a
-     cut) with the nav links, then the tools. menu-shape styles it: a panel down the right side, or a raised card. */
+  /* Below 64rem: one menu in every brand. The list is a popover that slides in from the right edge
+     (reduced motion makes it a cut). menu-shape styles it: a panel down the right side, or a raised card. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (max-width: 63.99rem) {
     .nav-toggle {
@@ -235,12 +229,6 @@
     }
 
     .nav-list {
-      --_tool-ink: var(--header-menu-text);
-      --_tool-ink-hover: var(--header-menu-text);
-      --_tool-rim: var(--header-menu-border);
-      --_tool-ground: var(--header-menu-bg);
-
-      align-items: flex-start;
       background: var(--header-menu-bg);
       border: 0;
       color: var(--header-menu-text);
@@ -277,25 +265,15 @@
 
     /* In the menu, links take the menu's foreground at rest and on hover (the inline nav's hover colour is the
        header's, which a brand's menu surface needn't contrast with). */
-    .nav-links a,
-    .nav-links a:hover {
+    .nav-list a,
+    .nav-list a:hover {
       color: var(--header-menu-text);
     }
 
-    .nav-links a {
+    .nav-list a {
       display: block;
       font-size: var(--type-fluid-body-phone);
       padding-block: var(--space-stack-sm);
-    }
-
-    /* The nav takes the menu's width, so each link's row is a full-width target; the tools follow a step down. */
-    .nav {
-      align-self: stretch;
-      margin-block-end: var(--space-stack-sm);
-    }
-
-    .nav-list .tool {
-      margin-block-end: var(--space-stack-xs);
     }
 
     @container style(--header-menu-shape: panel) {
@@ -318,27 +296,36 @@
         padding: var(--space-inset-sm) 0;
       }
 
-      .nav-links a {
+      .nav-list a {
         font-weight: var(--header-control-font-weight);
         padding: var(--space-inset-sm) var(--space-stack-md);
-      }
-
-      .nav-list .tool {
-        margin-inline: var(--space-stack-md);
       }
     }
   }
 
-  /* 64rem and up: the popover's own box is undone, so the nav and the tools sit in the masthead's row. */
+  /* 64rem and up: the list sits inline (the popover's own box undone) and the tools show their words. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 64rem) {
     .nav-list {
-      display: contents;
-    }
-
-    .nav-links {
+      background: none;
+      border: 0;
+      color: inherit;
       display: flex;
       gap: var(--_nav-gap);
+      inline-size: auto;
+      inset: auto;
+      margin: 0;
+      overflow: visible;
+      padding: 0;
+      position: static;
+    }
+
+    .tool {
+      padding: 0 var(--space-stack-sm) 0 var(--space-inset-sm);
+    }
+
+    .tool-label {
+      display: inline;
     }
 
     /* nav-align. end (the default flow): the mark's auto margin packs nav and tools to the right.
