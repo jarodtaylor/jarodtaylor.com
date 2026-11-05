@@ -47,3 +47,9 @@ for (const brand of brands) {
     await context.close();
   });
 }
+
+test('the header nav on a missing page leads back to the homepage', async ({ page }) => {
+  await page.goto('/no-such-page/');
+  await page.locator('#nav-list a', { hasText: 'Work' }).evaluate((a: HTMLAnchorElement) => a.click());
+  await expect(page).toHaveURL(/\/#work$/);
+});

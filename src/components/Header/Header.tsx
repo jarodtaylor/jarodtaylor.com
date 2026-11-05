@@ -2,10 +2,10 @@ import { PATHS, VIEWBOX } from '../../lib/monogram';
 import './Header.css';
 
 const NAV = [
-  { label: 'Work', href: '#work' },
-  { label: 'Writing', href: '#writing' },
-  { label: 'About', href: '#about' },
-  { label: 'Colophon', href: '#colophon' },
+  { label: 'Work', href: '/#work' },
+  { label: 'Writing', href: '/#writing' },
+  { label: 'About', href: '/#about' },
+  { label: 'Colophon', href: '/#colophon' },
   { label: 'Contact', href: 'mailto:contact@jarodtaylor.com' },
 ];
 
