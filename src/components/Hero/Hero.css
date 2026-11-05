@@ -1016,6 +1016,11 @@
       -webkit-text-stroke: calc(var(--_body) * 0.15) var(--surface-default-bg);
       paint-order: stroke fill;
     }
+
+    /* Peek's labels hang off these blocks and inherit the halo; they sit on their own fill, so they drop it. */
+    .details ::after {
+      -webkit-text-stroke: 0;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
