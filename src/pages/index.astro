@@ -1,5 +1,5 @@
 ---
-// Home: the first viewport (header, info strip, hero). One markup for every brand; tokens do the rest.
+// Home: the first viewport (header, then the info strip and hero in main). One markup for every brand; tokens do the rest.
 import { Header } from '../components/Header/Header';
 import { Hero } from '../components/Hero/Hero';
 import { InfoStrip } from '../components/InfoStrip/InfoStrip';
@@ -21,8 +21,8 @@ import introArm from '../components/Hero/intro-arm.js?raw';
   <Stage>
     <PeekColumns />
     <Header />
-    <InfoStrip />
     <main id="main">
+      <InfoStrip />
       <Hero />
     </main>
   </Stage>

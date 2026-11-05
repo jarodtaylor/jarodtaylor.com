@@ -1,15 +1,17 @@
 @layer components {
   .stage {
     display: grid;
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto 1fr;
     isolation: isolate;
     min-block-size: var(--layout-stage-h-phone);
     overflow: clip;
     position: relative;
   }
 
+  /* main holds the info strip (so it sits in a landmark) and the hero, which fills the rest of the frame. */
   .stage > main {
     display: grid;
+    grid-template-rows: auto 1fr;
   }
 
   @container style(--choice-font-smoothing: antialiased) {
