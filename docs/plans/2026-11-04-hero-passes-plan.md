@@ -13,6 +13,7 @@ The working list for the hero passes in `docs/WORKFLOW.md` §4. A fresh session 
 | # | Issue | Where it goes |
 |---|---|---|
 | C1 | Phone/tablet controls: Peek, Remix, Menu are 36px icon-only; socials 35px. Target ≥ 44px; tool labels inside the menu panel (same DOM) | Fixes PR |
+| C1b | Jarod, 2026-11-04: Peek and Remix stay icon-only in the phone header bar (44px). **Also** show them in the phone menu panel, apart from the nav links, button-like, icon + word, so the menu teaches what the header icons mean. Same DOM in every brand, hidden from 64rem. Needs `runtime.ts` to drive more than one Peek toggle (shared `aria-pressed`) and the menu to close when Peek opens | Follow-up PR after the two fixes PRs |
 | C2 | Intro flag: Clean (no intro) runs `settle()` → `seen()` (`src/components/Hero/runtime.ts`), so Backstage/Blocks intros never play in that tab. **Decided: once per brand per tab** | Fixes PR |
 | C3 | Stale state after a live brand switch (backstage → blocks left the cue label visible once; an amber glow only after live switches). Add a live-switch test per brand pair to `check:hero-runtime`, then fix the cause | Fixes PR |
 | C4 | Blocks composition: figure outweighs the name; dead space at 900; EMAIL below the fold at 390 | Blocks rethink |
@@ -68,7 +69,7 @@ Nothing breaks with today's data (fixed name, 4 roles, 5 nav links) in any brand
 |---|---|---|---|---|---|
 | B1 | P1 | blocks 768+ | The solid figure already sits under the last role ("DEVELOPER EXPERIENCE" over the orange shape); a 5th role makes it worse. Backstage milder | Cap the roles row to the text column, or a figure left-edge token | Blocks rethink |
 | B2 | P1 | all, 320–390, 400% zoom | `.roles li` is `white-space: nowrap` (`Hero.css:131`): a 40–55 char role clips and widens the row | Wrap below 48rem (`overflow-wrap: anywhere`, `min-inline-size: 0`); nowrap only from 48rem | Fixes PR |
-| B3 | P2 | Peek, clean 1024/1440 | "Hero scale" panel sits over the name; cap rule strikes `--page-x`, "cap" hits "cols" | Anchor the panel below the name block | Fixes PR |
+| B3 | P2 | Peek, clean 1024/1440 | "Hero scale" panel sits over the name; cap rule strikes `--page-x`, "cap" hits "cols" | No room below the name at 1440×900 (roles, then socials); above it fits only at ≥ 900 tall. Needs a layout call Jarod sees | Polish |
 | B4 | P2 | Peek, blocks 768+ | Scroll cue overlaps the Hero scale panel | Move panel or cue under a Peek-only token | Blocks rethink |
 | B6 | P3 | all 768+ | `.name` nowrap from 48rem (`Hero.css:75-77`) clips a wider name. Not realistic | `overflow-wrap: anywhere` | Fixes PR, low |
 | B7 | P3 | blocks, backstage 768+ | `.tagline` nowrap from 48rem (`Hero.css:217-219`) runs under the figure at ~120 chars | Wrap with `text-wrap: balance` and a max-inline-size | Fixes PR |
