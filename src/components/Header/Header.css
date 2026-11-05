@@ -32,6 +32,30 @@
     }
   }
 
+  /* Touch screens keep the phone's control height at any width, so every target stays a fingertip wide. */
+  @media (any-pointer: coarse) {
+    .masthead {
+      --_control-h: var(--layout-control-h-phone);
+    }
+
+    .nav-list a {
+      align-items: center;
+      display: inline-flex;
+      min-block-size: var(--_control-h);
+    }
+  }
+
+  /* With the nav folded, or on touch, the home link is a control square (a narrow mark gets a wider target), the
+     mark at its start edge. Its extra width is the first thing to give when large text crowds the bar. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (max-width: 63.99rem), (any-pointer: coarse) {
+    .mark {
+      flex: 0 1 var(--_control-h);
+      min-block-size: var(--_control-h);
+      min-inline-size: max-content;
+    }
+  }
+
   /* Every control speaks in one small style; nav links can sit lighter than the buttons. */
   .nav,
   .tool {
@@ -55,6 +79,7 @@
   }
 
   .mark {
+    align-items: center;
     color: var(--header-text);
     display: inline-flex;
     margin-inline-end: auto;
@@ -133,12 +158,15 @@
   }
 
   .peek-toggle svg {
-    transition: rotate calc(var(--motion-duration-beat) * 6) var(--motion-easing-out);
+    transition: rotate var(--motion-duration-base) var(--motion-easing-out);
   }
 
-  .peek-toggle:hover svg {
-    /* stylelint-disable-next-line unit-allowed-list -- geometry: a quarter turn of the registration mark, not a design value */
-    rotate: 90deg;
+  /* Hover motion only where hover is real: a tap would leave it stuck on. */
+  @media (hover: hover) and (pointer: fine) {
+    .peek-toggle:hover svg {
+      /* stylelint-disable-next-line unit-allowed-list -- geometry: a quarter turn of the registration mark, not a design value */
+      rotate: 90deg;
+    }
   }
 
   .peek-toggle[aria-pressed="true"] {
@@ -167,12 +195,14 @@
     transition: translate var(--motion-duration-base) var(--motion-easing-out);
   }
 
-  .remix:hover svg circle:nth-of-type(1) {
-    translate: calc(var(--shape-border-width-default) * 6) 0;
-  }
+  @media (hover: hover) and (pointer: fine) {
+    .remix:hover svg circle:nth-of-type(1) {
+      translate: calc(var(--shape-border-width-default) * 6) 0;
+    }
 
-  .remix:hover svg circle:nth-of-type(2) {
-    translate: calc(var(--shape-border-width-default) * -6) 0;
+    .remix:hover svg circle:nth-of-type(2) {
+      translate: calc(var(--shape-border-width-default) * -6) 0;
+    }
   }
 
   /* The menu button: below 64rem only, at the far right. */

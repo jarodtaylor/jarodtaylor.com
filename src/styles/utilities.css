@@ -39,4 +39,12 @@
     /* stylelint-disable-next-line unit-allowed-list -- visually-hidden idiom: a 1px box, not a design value */
     width: 1px;
   }
+
+  /* Read aloud, never seen: words a screen reader needs that the design shows another way (an icon). */
+  .visually-hidden {
+    clip-path: inset(50%);
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+  }
 }

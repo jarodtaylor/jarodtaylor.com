@@ -46,8 +46,8 @@ function FirstViewport() {
       <Stage>
         <PeekColumns />
         <Header />
-        <InfoStrip />
         <main id="main">
+          <InfoStrip />
           <Hero />
         </main>
       </Stage>

@@ -123,12 +123,21 @@
     z-index: 1;
   }
 
+  /* On phones a long role wraps inside its own item; from 48rem each role keeps to one line. */
   .roles li {
     align-items: center;
     display: inline-flex;
     gap: calc(var(--_roles) * 0.65);
     list-style: none;
-    white-space: nowrap;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .roles li {
+      white-space: nowrap;
+    }
   }
 
   .roles li::before {
@@ -166,6 +175,7 @@
     color: var(--hero-small-color);
     display: inline-flex;
     gap: calc(var(--_small) * 0.5);
+    overflow-wrap: anywhere; /* a long handle breaks rather than widening the row */
     text-transform: uppercase;
     padding-block: var(--space-inset-sm);
     text-decoration: underline;
@@ -175,6 +185,14 @@
     transition:
       color var(--motion-duration-fast) var(--motion-easing-out),
       text-decoration-color var(--motion-duration-fast) var(--motion-easing-out);
+  }
+
+  /* On phones and touch screens each link is a full control tall. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (max-width: 47.99rem), (any-pointer: coarse) {
+    .social a {
+      min-block-size: var(--layout-control-h-phone);
+    }
   }
 
   .social svg {
@@ -212,11 +230,9 @@
       margin-block-start: var(--_stack-gap);
     }
 
-    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-    @media (min-width: 48rem) {
-      .tagline {
-        white-space: nowrap;
-      }
+    /* A longer line wraps, balanced, within the body's measure rather than running under the figure. */
+    .tagline {
+      max-inline-size: var(--_measure);
     }
   }
 
@@ -409,11 +425,10 @@
 
   /* Construction: the monogram as a line drawing over faint construction ------------------------------------ */
 
-  /* Phone: the mark sits behind the name, off the right edge, at reduced strength, so it never runs under small text. */
+  /* Phone: the mark sits behind the name, off the right edge. */
   @container style(--hero-figure: construction) {
     .figure {
       inline-size: var(--_fig);
-      opacity: 0.3;
       position: absolute;
       right: calc(var(--_fig) * -0.3);
       top: calc(var(--_rhythm) * 0.5);
@@ -429,7 +444,6 @@
         inline-size: 100%;
         justify-self: center;
         max-inline-size: calc(var(--_fig) * 1.1259);
-        opacity: 1;
         position: static;
       }
     }
@@ -674,7 +688,6 @@
     @media (max-width: 47.99rem) {
       .figure {
         inline-size: calc(var(--_fig) * 1.18);
-        opacity: 1;
         right: calc(var(--_fig) * -0.34);
         top: calc(var(--_rhythm) * 0.25);
       }
@@ -1000,6 +1013,18 @@
       pointer-events: none;
       position: absolute;
       z-index: 0;
+    }
+
+    /* Where the mark's lattice runs under the details, the text knocks its lines out with a halo in the ground
+       colour (the phone name's trick), so a crossing line never touches a glyph. */
+    .details {
+      -webkit-text-stroke: calc(var(--_body) * 0.15) var(--surface-default-bg);
+      paint-order: stroke fill;
+    }
+
+    /* Peek's labels hang off these blocks and inherit the halo; they sit on their own fill, so they drop it. */
+    .details ::after {
+      -webkit-text-stroke: 0;
     }
   }
 

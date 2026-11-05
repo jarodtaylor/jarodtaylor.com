@@ -1,11 +1,19 @@
 ---
+import { Header } from '../components/Header/Header';
 import { SectionShell } from '../components/SectionShell/SectionShell';
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Not found · Jarod Taylor" description="This page doesn't exist.">
+  <Header />
   <main id="main">
-    <SectionShell title="Not found">
+    <SectionShell title="Not found" level={1}>
       <p><a href="/">Back to the homepage</a></p>
     </SectionShell>
   </main>
 </Base>
+
+<script>
+  import { initMenu } from '../components/Header/menu.ts';
+
+  initMenu();
+</script>

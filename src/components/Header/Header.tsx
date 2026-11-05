@@ -2,10 +2,10 @@ import { PATHS, VIEWBOX } from '../../lib/monogram';
 import './Header.css';
 
 const NAV = [
-  { label: 'Work', href: '#work' },
-  { label: 'Writing', href: '#writing' },
-  { label: 'About', href: '#about' },
-  { label: 'Colophon', href: '#colophon' },
+  { label: 'Work', href: '/#work' },
+  { label: 'Writing', href: '/#writing' },
+  { label: 'About', href: '/#about' },
+  { label: 'Colophon', href: '/#colophon' },
   { label: 'Contact', href: 'mailto:contact@jarodtaylor.com' },
 ];
 
@@ -44,7 +44,7 @@ export function Header() {
           Peek
         </span>
       </button>
-      <a className="tool remix" href="/lab/" aria-label="Remix">
+      <a className="tool remix" href="/lab/" aria-label="Remix (token lab)">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M3 6h18M3 12h18M3 18h18" />
           <circle cx="8" cy="6" r="2.25" />

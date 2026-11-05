@@ -140,7 +140,7 @@
       "wide": { "$type": "string", "$value": "calc(clamp(1rem, 0.6rem + 1.2vw, 2.25rem) + clamp(1.25rem, 0.8rem + 1vw, 2.25rem) + 2.6rem)" }
     },
     "control-h": {
-      "phone": { "$type": "string", "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" },
+      "phone": { "$type": "string", "$value": "clamp(2.25rem, 1rem + 8.75vw, 2.75rem)" },
       "wide": { "$type": "string", "$value": "clamp(2.25rem, 1.9rem + 0.5vw, 2.75rem)" }
     },
     "rhythm": {
