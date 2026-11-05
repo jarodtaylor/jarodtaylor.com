@@ -44,6 +44,16 @@
     }
   }
 
+  /* With the nav folded, or on touch, the home link is at least a control square (a narrow mark gets a wider
+     target), the mark at its start edge. */
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (max-width: 63.99rem), (pointer: coarse) {
+    .mark {
+      min-block-size: var(--_control-h);
+      min-inline-size: var(--_control-h);
+    }
+  }
+
   /* Every control speaks in one small style; nav links can sit lighter than the buttons. */
   .nav,
   .tool {
@@ -220,12 +230,6 @@
      cut) with the nav links, then the tools. menu-shape styles it: a panel down the right side, or a raised card. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (max-width: 63.99rem) {
-    /* The home link is at least a control square (a narrow mark gets a wider target), the mark at its start edge. */
-    .mark {
-      min-block-size: var(--_control-h);
-      min-inline-size: var(--_control-h);
-    }
-
     .nav-toggle {
       display: inline-flex;
     }
