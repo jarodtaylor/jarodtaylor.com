@@ -853,7 +853,7 @@
     }
 
     .part {
-      transition: translate calc(var(--_beat) * 2.4) var(--motion-easing-in);
+      transition: translate calc(var(--_beat) * 2.4) var(--motion-easing-out);
     }
 
     .figure:hover .part {
