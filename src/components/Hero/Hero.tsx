@@ -6,7 +6,8 @@ import './Hero.css';
 
 const ROLES = ['Engineering Leader', 'Frontend Architecture', 'Design Engineering', 'Developer Experience'];
 
-/** Icons are 24-unit glyphs in the text colour; decorative, so the label stays each link's name. */
+/** Icons are 24-unit glyphs in the text colour; decorative, so the label stays each link's name. A handle's
+ * platform (the icon says it) is read aloud before it. */
 const SOCIAL = [
   {
     label: 'LinkedIn',
@@ -24,6 +25,7 @@ const SOCIAL = [
   },
   {
     label: '@jarodtaylor',
+    platform: 'X',
     href: 'https://x.com/jarodtaylor',
     icon: <path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.59-6.64 7.59H.47l8.6-9.83L0 1.15h7.6l5.24 6.93Zm-1.29 19.5h2.04L6.49 3.24H4.3Z" />,
   },
@@ -91,12 +93,13 @@ export function Hero() {
             data-spec="--type-label"
             data-tpl="--type-label · {label}"
           >
-            {SOCIAL.map(({ label, href, icon }) => (
+            {SOCIAL.map(({ label, platform, href, icon }) => (
               <li key={label}>
                 <a href={href}>
                   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
                     {icon}
                   </svg>
+                  {platform && <span className="visually-hidden">{platform} </span>}
                   {label}
                 </a>
               </li>
