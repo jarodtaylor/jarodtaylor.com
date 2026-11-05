@@ -229,6 +229,36 @@ for (const [from, to] of PAIRS) {
   }
 }
 
+test('a live switch during Peek\'s leave lands Peek at rest at once', async ({ page }) => {
+  const expected = await restingCue(page, 'clean');
+  await page.goto('/?brand=backstage');
+  await expect(html(page)).not.toHaveClass(/\bintro\b/, { timeout: 15_000 });
+  await page.locator('[data-peek-toggle]').click();
+  await expect(html(page)).toHaveAttribute('data-peek-state', 'on');
+  await page.keyboard.press('Escape');
+  await expect(html(page)).toHaveAttribute('data-peek-state', 'leaving');
+
+  await switchBrand(page, 'clean');
+  await expect(html(page)).not.toHaveAttribute('data-peek-state', { timeout: 100 });
+  expect(await cueState(page)).toEqual(expected);
+});
+
+test('a second switch one frame after the first still lands without tweening', async ({ page }) => {
+  await page.goto('/?brand=clean');
+  await expect(html(page)).not.toHaveClass(/\bintro\b/);
+  const settlingAfterSecond = await page.evaluate(async () => {
+    const root = document.documentElement;
+    const frame = () => new Promise((r) => requestAnimationFrame(r));
+    root.dataset.brand = 'backstage';
+    await frame();
+    root.dataset.brand = 'blocks';
+    await frame();
+    await new Promise((r) => setTimeout(r)); // after every callback of that frame, the first switch's removal included
+    return root.classList.contains('settling');
+  });
+  expect(settlingAfterSecond, 'the first switch must not end the second switch\'s quiet frames').toBe(true);
+});
+
 // The intro plays once per brand per tab ------------------------------------------------------------------------
 
 test('a brand without an intro consumes nothing: clean, then backstage plays backstage\'s intro', async ({ page }) => {

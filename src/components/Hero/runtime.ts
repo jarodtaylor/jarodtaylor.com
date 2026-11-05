@@ -118,10 +118,13 @@ const onSkip = () => skip();
 const listen = (on: boolean) =>
   SKIP_ON.forEach((t) => (on ? addEventListener : removeEventListener)(t, onSkip, { capture: true, passive: true } as AddEventListenerOptions));
 
-/** One frame without transitions, so whatever changes now lands at once instead of animating to it. */
+/** One frame without transitions, so whatever changes now lands at once instead of animating to it. A later call
+ *  restarts the window: an earlier call's frames never end it. */
+let quieting = 0;
 function quiet() {
+  const run = ++quieting;
   root.classList.add('settling');
-  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('settling')));
+  requestAnimationFrame(() => requestAnimationFrame(() => run === quieting && root.classList.remove('settling')));
 }
 
 function settle() {
@@ -563,7 +566,14 @@ const onSkipClick = () => skip();
 const onRootChange = (records: MutationRecord[]) => {
   if (records.some((r) => r.attributeName === 'data-brand')) {
     if (root.classList.contains('intro')) settle();
-    else quiet();
+    else {
+      quiet();
+      // A Peek still leaving lands at rest too, rather than holding the old brand's state until its timer ends.
+      if (root.dataset.peekState === 'leaving') {
+        stop();
+        setState(null);
+      }
+    }
     start();
   } else if (token('--hero-figure') !== figure || token('--hero-ground') !== ground) start();
 };
