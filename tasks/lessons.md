@@ -58,3 +58,7 @@
 
 ## 2026-11-04: parallel builders (hero fixes)
 - **A busy subagent doesn't read messages until it stops, so a product call sent mid-run arrives too late.** The accessibility builder asked two questions, didn't see the answers, and built the options Jarod had rejected. Settle product calls before dispatch. When a builder asks mid-run, have it stop and wait for the answer, or tell it to leave that item out.
+
+## 2026-11-05: hero fixes review rounds (#14, #15)
+- **When review keeps finding new cases of one invariant, test the invariant across every state, not the case just reported.** The plotter's "never draw on the text" rule needed a fix in three rounds: the corner readout, the start point on a short phone, then the reduced-motion still frame. Each was a state the planner didn't pass through. List the states up front (start, every stop and turn, resize, reduced motion, short and narrow screens) and pin each one with a test.
+- **`/codex:adversarial-review` reviews the checkout it runs in.** For work in a separate worktree, check the branch out in the session's own folder first (remove the worktree), and pass the merge-base SHA as `--base` when the parent branch has moved on.
