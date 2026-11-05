@@ -321,7 +321,7 @@ function lattice(canvas: HTMLCanvasElement): () => void {
 // The plotter: the hero's real column grid, faint, with a plotter head walking it --------------------------------
 // Every vertical is a gutter of the 4 / 12 column grid and every row one module (column + gutter) down, read from
 // the hero's computed layout. The head, a registration target in the mark's colour, walks gutter to gutter along
-// the lines only, keeps to the figure's side of the sheet, leaves a fading trail and reads out where it stops.
+// the lines only, keeps clear of the text block, leaves a fading trail and reads out where it stops.
 // Paused off-screen and in hidden tabs; one still frame (grid and parked head) under reduced motion.
 
 function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
@@ -330,13 +330,17 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
   const SPEED = 0.07; // px per ms: unhurried, like a pen plotter
   const PAUSE = 1400;
   const TRAIL = 7000; // ms for a stroke of trail to fade out
+  const REACH = 10; // px: the target's arms
   type Stop = { c: number; r: number; x: number; y: number };
+  type Box = { l: number; t: number; r: number; b: number };
+  const hits = (a: Box, b: Box) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
   let w = 0;
   let h = 0;
   let xs: number[] = [];
   let ys: number[] = [];
   let ink = { grid: '', pen: '', head: '' };
   let font = '';
+  let label = { w: 0, h: 0 };
   let head = { c: 0, r: 0 };
   let path: Stop[] = [];
   let seg = 0;
@@ -364,23 +368,48 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
     for (let y = top; y <= h - top + 1; y += p) ys.push(y);
     ink = { grid: token('--spec-guide'), pen: token('--figure-guide-ink'), head: token('--figure-mark') };
     font = `${getComputedStyle($('.info')!).fontSize} ${token('--spec-font-family')}`;
+    ctx!.font = font;
+    label = { w: ctx!.measureText('g00 · m00').width, h: parseFloat(font) };
     head = { c: xs.length - 2, r: 0 };
     path = [];
     trail = [];
   }
 
-  // The next stop favours the figure's side of the sheet, away from the text block (bottom left).
+  /** Where the readout's baseline starts: right of the head, or left of it where the right edge would clip it. */
+  const readoutAt = (x: number, y: number) => ({ x: x + 14 + label.w > w ? x - 14 - label.w : x + 14, y: y - 10 });
+
+  // The next stop: any grid point the head can reach along the lines (via one corner) with its target, trail and
+  // readout clear of the text, measured now because the text reflows (fonts, resize). The text's own boxes, not
+  // .stack's: the stack spans the whole grid. A phone's text can leave no such stop; then the head holds where it is
+  // for a pause and looks again.
   function plan(now: number) {
-    const n = xs.length;
-    const m = ys.length;
-    let c: number;
-    let r: number;
-    do {
-      c = Math.floor(Math.random() * n);
-      r = Math.floor(Math.random() * m);
-    } while ((c < n * 0.5 && r > m * 0.35) || (c === head.c && r === head.r));
-    const turn = Math.random() < 0.5 ? { c, r: head.r } : { c: head.c, r };
-    path = [head, turn, { c, r }].map((q) => ({ ...q, x: xs[q.c]!, y: ys[q.r]! }));
+    const o = canvas.getBoundingClientRect();
+    const text = $$('.name-block, .roles, .tagline, .bio, .social').map((el): Box => {
+      const s = el.getBoundingClientRect();
+      return { l: s.left - o.left, t: s.top - o.top, r: s.right - o.left, b: s.bottom - o.top };
+    });
+    const clear = (box: Box) => !text.some((t) => hits(box, t));
+    const at = (c: number, r: number): Stop => ({ c, r, x: xs[c]!, y: ys[r]! });
+    const run = (a: Stop, b: Stop): Box => ({
+      l: Math.min(a.x, b.x) - REACH,
+      t: Math.min(a.y, b.y) - REACH,
+      r: Math.max(a.x, b.x) + REACH,
+      b: Math.max(a.y, b.y) + REACH,
+    });
+    const from = at(head.c, head.r);
+    const routes: Stop[][] = [];
+    xs.forEach((_, c) =>
+      ys.forEach((_, r) => {
+        if (c === head.c && r === head.r) return;
+        const to = at(c, r);
+        const read = readoutAt(to.x, to.y);
+        if (!clear({ l: read.x, t: read.y - label.h, r: read.x + label.w, b: read.y + label.h * 0.3 })) return;
+        for (const turn of [at(c, head.r), at(head.c, r)])
+          if (clear(run(from, turn)) && clear(run(turn, to))) routes.push([from, turn, to]);
+      }),
+    );
+    // No route: a zero-length move, so the head waits out one pause and plans again.
+    path = routes[Math.floor(Math.random() * routes.length)] ?? [from, from];
     seg = 0;
     segAt = now + PAUSE;
   }
@@ -454,7 +483,8 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
       c2.globalAlpha = 0.7;
       c2.fillStyle = ink.pen;
       c2.font = font;
-      c2.fillText(`g${String(c).padStart(2, '0')} · m${String(r).padStart(2, '0')}`, pos.x + 14, pos.y - 10);
+      const read = readoutAt(pos.x, pos.y);
+      c2.fillText(`g${String(c).padStart(2, '0')} · m${String(r).padStart(2, '0')}`, read.x, read.y);
     }
   }
 

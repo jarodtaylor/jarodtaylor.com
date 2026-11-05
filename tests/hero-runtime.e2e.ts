@@ -238,3 +238,45 @@ test('a live switch never consumes the new brand\'s intro, at rest or mid-intro'
   await expect(html(page)).not.toHaveClass(/\bintro\b/);
 });
 
+
+// The plotter ground (backstage) ----------------------------------------------------------------------------------
+
+for (const width of [390, 1440]) {
+  test(`plotter at ${width}: the head, its trail and its readout never cross the text block`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.addInitScript(() => sessionStorage.setItem('jt-intro:backstage', '1'));
+    await page.clock.install();
+    await page.goto('/?brand=backstage');
+    await page.clock.runFor(1_000); // fonts settle and the resize observer lays the sheet out
+    // Over a minute of walking, count the pixels under the text that something other than the sheet inked. The sheet
+    // is one colour (--spec-guide) at any alpha; the head, its trail and its readout are other colours.
+    let foreign = 0;
+    for (let i = 0; i < 120; i++) {
+      await page.clock.runFor(500);
+      foreign += await page.evaluate(() => {
+        const canvas = document.querySelector<HTMLCanvasElement>('canvas.field')!;
+        const swatch = document.createElement('canvas').getContext('2d')!;
+        swatch.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--spec-guide');
+        swatch.fillRect(0, 0, 1, 1);
+        const sheet = swatch.getImageData(0, 0, 1, 1).data;
+        const o = canvas.getBoundingClientRect();
+        const k = canvas.width / canvas.clientWidth;
+        let n = 0;
+        for (const el of document.querySelectorAll('.name-block, .roles, .tagline, .bio, .social')) {
+          const s = el.getBoundingClientRect();
+          const x = Math.max(0, Math.floor((s.left - o.left) * k));
+          const y = Math.max(0, Math.floor((s.top - o.top) * k));
+          const w = Math.min(canvas.width - x, Math.ceil(s.width * k));
+          const h = Math.min(canvas.height - y, Math.ceil(s.height * k));
+          if (w <= 0 || h <= 0) continue;
+          const { data } = canvas.getContext('2d')!.getImageData(x, y, w, h);
+          // Faint pixels un-premultiply with rounding error, so only count ones solid enough to read the colour of.
+          for (let i = 0; i < data.length; i += 4)
+            if (data[i + 3]! > 40 && [0, 1, 2].some((c) => Math.abs(data[i + c]! - sheet[c]!) > 24)) n++;
+        }
+        return n;
+      });
+    }
+    expect(foreign, 'pixels of the head, trail or readout under the text').toBe(0);
+  });
+}
