@@ -31,7 +31,7 @@ Steps in the same row run in parallel.
    - `/impeccable audit` on `src/components/{Hero,Peek,Stage,Header,InfoStrip}`
    - `improve-animations deep` on the hero runtime and CSS (plans into `docs/plans/`); decides `--easing-pop`
    - `break-ui` on the header and hero (long names, missing data, zoom), report only
-3. [ ] **Fixes PRs**, split in two: #14 `fix/hero-runtime` (C2, C3, M1–M5, M9, A2, A9) and #15 `fix/hero-a11y` (C1, A1, A3–A6, A10, A11, B2, B7, B8, M8). Each: (`/impeccable adapt`, `/impeccable harden`): C1–C3, plus brand-agnostic findings from step 2 that the Blocks rethink won't touch. Simplify → code review → adversarial review → ship
+3. [ ] **Fixes PRs**, split in two: #14 `fix/hero-runtime` (C2, C3, M1–M5, M9, A2, A9) and #15 `fix/hero-a11y` (C1, A1, A4–A6, A10, A11, B2, B7, B8, M8). Each: (`/impeccable adapt`, `/impeccable harden`): C1–C3, plus brand-agnostic findings from step 2 that the Blocks rethink won't touch. Simplify → code review → adversarial review → ship
 4. [ ] **Blocks rethink** (`/impeccable shape`, code-led, no image comps), own unit. Same markup as the other brands: a DOM change ships to all three, otherwise knobs and enums only. Fixes C4
 5. [ ] `/impeccable polish` across all 3 brands; Jarod runs `/review-animations` on the diff
 6. [ ] `animation-performance`, only if the plotter or lattice canvases drop frames
@@ -103,7 +103,7 @@ Works: reduced motion (no intro, still canvases, Peek lands), reflow at 320 and 
 ## Follow-ups found while building the fixes
 
 - **Clean header at 200% text on a 390 screen** cuts Menu off (header 408px; blocks 469px, which goes to the Blocks rethink). Already true on `main`.
-- **A3 exact fix:** backstage's name and lead now take a rem floor (`max(<today's value>, <rem>)`), so they follow the reader's font only above a threshold (about 21px text at 1440). `calc(<today's value> + 1rem - 16px)` would follow it everywhere but needs `derive.ts` to accept px in fluid lengths. Jarod's call.
+- **A3 (backstage type ignores the reader's font size) is not fixed: #15 tried rem floors, and review found they broke the short-screen `svh` cap and grew the type at 768–1023px, so it was reverted.** The exact fix is `calc(<today's value> + 1rem - 16px)`: identical at 16px, follows the font everywhere, keeps the cap. It needs `derive.ts` to accept px in fluid lengths. Jarod's call. Browser zoom already scales this text.
 - **B6** (a wider name clips from 48rem) skipped: wrapping would break the one-line name. **B7** partial: a 120-character tagline wraps but still reaches the figure (measure ≈ 1020px in backstage at 1440).
 - **`check:hero-runtime` takes ~1.6 min** (was ~20 s): the plotter pixel scans and the live-switch matrix's extra page loads. Caching `restingCue` per brand would cut it without weakening the tests.
 - **C1b** (Peek and Remix also in the phone menu) after both fixes PRs merge.
