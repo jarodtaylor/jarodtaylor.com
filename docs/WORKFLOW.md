@@ -56,7 +56,7 @@ Notes:
 
 ## 4. Proposed passes on the shipped hero (before Phase 1 step 5; Claude with skills installed)
 
-Proposal only, nothing run. Run each in all 3 brands, switching in sequence on one page (clean → backstage → blocks), not only fresh loads.
+In progress: tasks, order and findings in `docs/plans/2026-11-04-hero-passes-plan.md`. Run each in all 3 brands, switching in sequence on one page (clean → backstage → blocks), not only fresh loads.
 
 1. `/impeccable critique src/pages/index.astro`: baseline score and snapshot.
 2. `/impeccable audit` on `src/components/{Hero,Peek,Stage,Header,InfoStrip}`.
