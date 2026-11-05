@@ -484,7 +484,9 @@
     }
   }
 
-  /* In columns the details fill the hero's floor, so the card rises to the open band under the header. */
+  /* In columns the details fill the hero's floor, so the card rises to the open band under the header. Where anchor
+     positioning exists, its foot stops short of the name block's top (the name's own label hangs at the other end):
+     a short screen cuts the card's last rows rather than letting them cross the name. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (min-width: 64rem) {
     @container style(--hero-layout: name-over-details) {
@@ -494,9 +496,21 @@
         right: 0;
       }
 
+      .name-block {
+        anchor-name: --_name-anchor;
+      }
+
       .spec {
         bottom: auto;
         top: calc(var(--layout-header-h-wide) + var(--space-section));
+      }
+
+      @supports (anchor-name: --_name-anchor) {
+        .spec {
+          align-content: start;
+          bottom: calc(anchor(--_name-anchor top) + var(--space-stack-sm));
+          overflow: clip;
+        }
       }
     }
   }
