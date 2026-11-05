@@ -857,7 +857,7 @@
     }
   }
 
-  /* The assemble intro (assemble brands only, once per session, never under reduced motion). In beats from first
+  /* The assemble intro (assemble brands only, once per brand per tab, never under reduced motion). In beats from first
      paint: the rail draws, arrows point the parts home, both travel at constant speed along the rail (--_from, set
      on each part) and arrive on the same frame, the click colours them, and the small print rises meanwhile. */
   @container style(--hero-intro: assemble) {

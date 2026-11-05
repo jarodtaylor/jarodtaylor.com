@@ -19,12 +19,14 @@ type Args = Record<(typeof KNOBS)[number], string>;
  */
 function FirstViewport() {
   useLayoutEffect(() => {
-    // The page plays the intro once per tab via the jt-intro session flag; the story plays it on every mount. Hosted
-    // on the site's origin, the story shares that flag, so it is cleared for the mount and restored after.
+    // The page plays each brand's intro once per tab via its jt-intro:<brand> session flag; the story plays it on every
+    // mount. Hosted on the site's origin, the story shares those flags, so the mounting brand's is cleared for the
+    // mount and restored after (the runtime marks only the brand whose intro played, never one switched to live).
+    const key = `jt-intro:${document.documentElement.dataset.brand}`;
     let flag: string | null = null;
     try {
-      flag = sessionStorage.getItem('jt-intro');
-      sessionStorage.removeItem('jt-intro');
+      flag = sessionStorage.getItem(key);
+      sessionStorage.removeItem(key);
     } catch {}
     const arm = document.createElement('script');
     arm.textContent = introArm;
@@ -33,8 +35,8 @@ function FirstViewport() {
     return () => {
       dispose();
       try {
-        if (flag === null) sessionStorage.removeItem('jt-intro');
-        else sessionStorage.setItem('jt-intro', flag);
+        if (flag === null) sessionStorage.removeItem(key);
+        else sessionStorage.setItem(key, flag);
       } catch {}
     };
   }, []);

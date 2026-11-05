@@ -113,3 +113,51 @@ test('arming twice within 4 s: the second arming is not cancelled by the first f
   await expect(html(page)).not.toHaveClass(/\bintro\b/, { timeout: 5_000 });
   await expect(html(page)).not.toHaveAttribute('data-peek-state');
 });
+
+// Remix: a live brand switch (data-brand changing on a running page) -------------------------------------------
+
+const BRANDS = ['clean', 'backstage', 'blocks'] as const;
+type Brand = (typeof BRANDS)[number];
+
+/** Switch the brand live, wait past the runtime's two settling frames, and list the CSS transitions still running. */
+const switchBrand = (page: Page, brand: Brand) =>
+  page.evaluate(async (b) => {
+    document.documentElement.dataset.brand = b;
+    const frame = () => new Promise((r) => requestAnimationFrame(r));
+    await frame();
+    await frame();
+    await frame();
+    return document
+      .getAnimations()
+      .filter((a) => a instanceof CSSTransition && a.playState === 'running')
+      .map((a) => `${(a as CSSTransition).transitionProperty} on ${(a.effect as KeyframeEffect).target?.nodeName}`);
+  }, brand);
+
+// The intro plays once per brand per tab ------------------------------------------------------------------------
+
+test('a brand without an intro consumes nothing: clean, then backstage plays backstage\'s intro', async ({ page }) => {
+  await page.goto('/?brand=clean');
+  await expect(html(page)).not.toHaveClass(/\bintro\b/);
+  await page.goto('/?brand=backstage');
+  await expect(html(page)).toHaveClass(/\bintro\b/);
+  await expect(html(page)).toHaveAttribute('data-peek-state', 'on');
+});
+
+test('a live switch never consumes the new brand\'s intro, at rest or mid-intro', async ({ page }) => {
+  // At rest: clean → backstage live, then a load of backstage still plays its intro.
+  await page.goto('/?brand=clean');
+  await switchBrand(page, 'backstage');
+  await expect(html(page)).not.toHaveClass(/\bintro\b/);
+  await page.goto('/?brand=backstage');
+  await expect(html(page)).toHaveClass(/\bintro\b/);
+
+  // Mid-intro: backstage → blocks live. Backstage's intro ran (cut short), so it is spent; blocks' is not.
+  await switchBrand(page, 'blocks');
+  await expect(html(page)).not.toHaveClass(/\bintro\b/);
+  await page.goto('/?brand=blocks');
+  await expect(html(page)).toHaveClass(/\bintro\b/);
+  await expect(html(page)).not.toHaveClass(/\bintro\b/, { timeout: 15_000 });
+  await page.goto('/?brand=backstage');
+  await expect(html(page)).not.toHaveClass(/\bintro\b/);
+});
+

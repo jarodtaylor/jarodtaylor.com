@@ -4,7 +4,7 @@
  * canvas (the lattice figure, or the plotter ground). It reads the brand's choices from tokens (--hero-intro, --hero-figure), so a brand switch
  * (html[data-brand] changing) just re-reads them. Nothing here adds or removes elements in <body>.
  *
- * The intro is decided before first paint by the inline script in index.astro (once per session, never under
+ * The intro is decided before first paint by the inline script in index.astro (once per brand per tab, never under
  * reduced motion, ?intro forces it). That script arms every intro; this module runs the one the brand names.
  *
  * Nothing runs on import: init() wires the page and returns a disposer that undoes it, so the Storybook hero story
@@ -102,10 +102,15 @@ function readouts() {
 
 // Intros ----------------------------------------------------------------------------------------------------------
 
+/** The brand whose intro is playing, kept from when it started: seen() marks that brand only, never a brand without
+ *  an intro, nor one switched to live mid-intro (data-brand has already changed by the time settle() runs). */
+let playing: string | undefined;
 const seen = () => {
+  if (!playing) return;
   try {
-    sessionStorage.setItem('jt-intro', '1');
+    sessionStorage.setItem(`jt-intro:${playing}`, '1');
   } catch {}
+  playing = undefined;
 };
 const SKIP_ON = ['keydown', 'pointerdown', 'wheel', 'touchmove', 'scroll'] as const;
 let skip: () => void = () => {};
@@ -542,6 +547,7 @@ export function init(): () => void {
   start();
   if (root.classList.contains('intro')) {
     const intro = token('--hero-intro');
+    if (intro === 'peek' || intro === 'assemble') playing = root.dataset.brand;
     if (intro === 'peek') peekIntro();
     else if (intro === 'assemble') assembleIntro();
     else settle();
@@ -555,6 +561,7 @@ export function init(): () => void {
     stop();
     listen(false);
     skip = () => {};
+    playing = undefined;
     toggle.removeEventListener('click', onToggle);
     removeEventListener('keydown', onKeydown);
     skipButton?.removeEventListener('click', onSkipClick);
