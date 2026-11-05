@@ -420,11 +420,10 @@
 
   /* Construction: the monogram as a line drawing over faint construction ------------------------------------ */
 
-  /* Phone: the mark sits behind the name, off the right edge, at reduced strength, so it never runs under small text. */
+  /* Phone: the mark sits behind the name, off the right edge. */
   @container style(--hero-figure: construction) {
     .figure {
       inline-size: var(--_fig);
-      opacity: 0.3;
       position: absolute;
       right: calc(var(--_fig) * -0.3);
       top: calc(var(--_rhythm) * 0.5);
@@ -440,7 +439,6 @@
         inline-size: 100%;
         justify-self: center;
         max-inline-size: calc(var(--_fig) * 1.1259);
-        opacity: 1;
         position: static;
       }
     }
@@ -685,7 +683,6 @@
     @media (max-width: 47.99rem) {
       .figure {
         inline-size: calc(var(--_fig) * 1.18);
-        opacity: 1;
         right: calc(var(--_fig) * -0.34);
         top: calc(var(--_rhythm) * 0.25);
       }
