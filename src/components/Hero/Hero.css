@@ -123,12 +123,21 @@
     z-index: 1;
   }
 
+  /* On phones a long role wraps inside its own item; from 48rem each role keeps to one line. */
   .roles li {
     align-items: center;
     display: inline-flex;
     gap: calc(var(--_roles) * 0.65);
     list-style: none;
-    white-space: nowrap;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
+  @media (min-width: 48rem) {
+    .roles li {
+      white-space: nowrap;
+    }
   }
 
   .roles li::before {
@@ -166,6 +175,7 @@
     color: var(--hero-small-color);
     display: inline-flex;
     gap: calc(var(--_small) * 0.5);
+    overflow-wrap: anywhere; /* a long handle breaks rather than widening the row */
     text-transform: uppercase;
     padding-block: var(--space-inset-sm);
     text-decoration: underline;
@@ -220,11 +230,9 @@
       margin-block-start: var(--_stack-gap);
     }
 
-    /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-    @media (min-width: 48rem) {
-      .tagline {
-        white-space: nowrap;
-      }
+    /* A longer line wraps, balanced, within the body's measure rather than running under the figure. */
+    .tagline {
+      max-inline-size: var(--_measure);
     }
   }
 
