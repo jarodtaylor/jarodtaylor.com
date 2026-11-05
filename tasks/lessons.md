@@ -55,3 +55,6 @@
 
 ## 2026-11-03: review order (PR #11)
 - **After `ce-work`, run `ce-simplify-code` before any review** (design review, code review, adversarial). Reviewers should see the simplified diff, not code the simplify pass would remove.
+
+## 2026-11-04: parallel builders (hero fixes)
+- **A busy subagent doesn't read messages until it stops, so a product call sent mid-run arrives too late.** The accessibility builder asked two questions, didn't see the answers, and built the options Jarod had rejected. Settle product calls before dispatch. When a builder asks mid-run, have it stop and wait for the answer, or tell it to leave that item out.
