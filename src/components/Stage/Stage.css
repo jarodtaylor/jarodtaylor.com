@@ -12,7 +12,7 @@
   /* main holds the info strip (so it sits in a landmark) and the hero, which fills the rest of the frame. */
   .stage > main {
     display: grid;
-    grid-template-columns: minmax(0, 1fr); /* a header too wide for the screen (large text) can't widen the hero */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr;
   }
 
