@@ -31,7 +31,7 @@ Steps in the same row run in parallel.
    - `/impeccable audit` on `src/components/{Hero,Peek,Stage,Header,InfoStrip}`
    - `improve-animations deep` on the hero runtime and CSS (plans into `docs/plans/`); decides `--easing-pop`
    - `break-ui` on the header and hero (long names, missing data, zoom), report only
-3. [ ] **Fixes PR** (`/impeccable adapt`, `/impeccable harden`): C1–C3, plus brand-agnostic findings from step 2 that the Blocks rethink won't touch. Simplify → code review → adversarial review → ship
+3. [ ] **Fixes PRs**, split in two (built, simplified, code-reviewed; waiting on Jarod's adversarial review): `fix/hero-runtime` (C2, C3, M1–M5, M9, A2, A9) and `fix/hero-a11y` (C1, A1, A3–A6, A10, A11, B2, B7, B8, M8). Was: **Fixes PR** (`/impeccable adapt`, `/impeccable harden`): C1–C3, plus brand-agnostic findings from step 2 that the Blocks rethink won't touch. Simplify → code review → adversarial review → ship
 4. [ ] **Blocks rethink** (`/impeccable shape`, code-led, no image comps), own unit. Same markup as the other brands: a DOM change ships to all three, otherwise knobs and enums only. Fixes C4
 5. [ ] `/impeccable polish` across all 3 brands; Jarod runs `/review-animations` on the diff
 6. [ ] `animation-performance`, only if the plotter or lattice canvases drop frames
@@ -99,3 +99,12 @@ Held up: zoom, 320px, 2560, 7 roles (except B1), missing bio/socials/status, men
 Critique items: C1 confirmed (36×36 tools in clean/backstage at 390, blocks 47; socials 35–36px; backstage mark 23×36). C2 confirmed. **C3 not reproduced at rest** across all 6 brand pairs: the test should switch mid-intro and mid-Peek. "Clean focus outline has no offset" **refuted** (2px everywhere, `base.css:46`).
 
 Works: reduced motion (no intro, still canvases, Peek lands), reflow at 320 and 400% zoom, keyboard and skip link, 60 fps with ≤ 4.1% main-thread busy and canvases pausing off-screen, forced colors, one h1 and aria-hidden figures. Not checked: canvas cost at DPR 2, a real screen reader, zoom on a 1920 screen.
+
+## Follow-ups found while building the fixes
+
+- **Clean header at 200% text on a 390 screen** cuts Menu off (header 408px; blocks 469px, which goes to the Blocks rethink). Already true on `main`.
+- **A3 exact fix:** backstage's name and lead now take a rem floor (`max(<today's value>, <rem>)`), so they follow the reader's font only above a threshold (about 21px text at 1440). `calc(<today's value> + 1rem - 16px)` would follow it everywhere but needs `derive.ts` to accept px in fluid lengths. Jarod's call.
+- **B6** (a wider name clips from 48rem) skipped: wrapping would break the one-line name. **B7** partial: a 120-character tagline wraps but still reaches the figure (measure ≈ 1020px in backstage at 1440).
+- **`check:hero-runtime` takes ~1.6 min** (was ~20 s): the plotter pixel scans and the live-switch matrix's extra page loads. Caching `restingCue` per brand would cut it without weakening the tests.
+- **C1b** (Peek and Remix also in the phone menu) after both fixes PRs merge.
+
