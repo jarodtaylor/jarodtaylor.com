@@ -393,6 +393,11 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
     });
     const clear = (box: Box) => !text.some((t) => hits(box, t));
     const at = (c: number, r: number): Stop => ({ c, r, x: xs[c]!, y: ys[r]! });
+    // The readout shows wherever the head sits on a grid point, the turn included, so each one must clear the text.
+    const readClear = (s: Stop) => {
+      const read = readoutAt(s.x, s.y);
+      return clear({ l: read.x, t: read.y - label.h, r: read.x + label.w, b: read.y + label.h * 0.3 });
+    };
     const run = (a: Stop, b: Stop): Box => ({
       l: Math.min(a.x, b.x) - REACH,
       t: Math.min(a.y, b.y) - REACH,
@@ -405,10 +410,9 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
       ys.forEach((_, r) => {
         if (c === head.c && r === head.r) return;
         const to = at(c, r);
-        const read = readoutAt(to.x, to.y);
-        if (!clear({ l: read.x, t: read.y - label.h, r: read.x + label.w, b: read.y + label.h * 0.3 })) return;
+        if (!readClear(to)) return;
         for (const turn of [at(c, head.r), at(head.c, r)])
-          if (clear(run(from, turn)) && clear(run(turn, to))) routes.push([from, turn, to]);
+          if (readClear(turn) && clear(run(from, turn)) && clear(run(turn, to))) routes.push([from, turn, to]);
       }),
     );
     path = routes[Math.floor(Math.random() * routes.length)] ?? [from, from];
