@@ -141,12 +141,15 @@
   }
 
   .peek-toggle svg {
-    transition: rotate calc(var(--motion-duration-beat) * 6) var(--motion-easing-out);
+    transition: rotate var(--motion-duration-base) var(--motion-easing-out);
   }
 
-  .peek-toggle:hover svg {
-    /* stylelint-disable-next-line unit-allowed-list -- geometry: a quarter turn of the registration mark, not a design value */
-    rotate: 90deg;
+  /* Hover motion only where hover is real: a tap would leave it stuck on. */
+  @media (hover: hover) and (pointer: fine) {
+    .peek-toggle:hover svg {
+      /* stylelint-disable-next-line unit-allowed-list -- geometry: a quarter turn of the registration mark, not a design value */
+      rotate: 90deg;
+    }
   }
 
   .peek-toggle[aria-pressed="true"] {
@@ -175,12 +178,14 @@
     transition: translate var(--motion-duration-base) var(--motion-easing-out);
   }
 
-  .remix:hover svg circle:nth-of-type(1) {
-    translate: calc(var(--shape-border-width-default) * 6) 0;
-  }
+  @media (hover: hover) and (pointer: fine) {
+    .remix:hover svg circle:nth-of-type(1) {
+      translate: calc(var(--shape-border-width-default) * 6) 0;
+    }
 
-  .remix:hover svg circle:nth-of-type(2) {
-    translate: calc(var(--shape-border-width-default) * -6) 0;
+    .remix:hover svg circle:nth-of-type(2) {
+      translate: calc(var(--shape-border-width-default) * -6) 0;
+    }
   }
 
   /* The menu button: below 64rem only, at the far right. */
