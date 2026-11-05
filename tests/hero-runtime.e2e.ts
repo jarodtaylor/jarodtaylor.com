@@ -290,9 +290,10 @@ test('a live switch never consumes the new brand\'s intro, at rest or mid-intro'
 
 // The plotter ground (backstage) ----------------------------------------------------------------------------------
 
-for (const width of [390, 1440]) {
-  test(`plotter at ${width}: the head, its trail and its readout never cross the text block`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 844 });
+// 390×560: a short phone, where the head's start point sits on the text.
+for (const [width, height] of [[390, 844], [1440, 844], [390, 560]] as const) {
+  test(`plotter at ${width}×${height}: the head, its trail and its readout never cross the text block`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
     await page.addInitScript(() => sessionStorage.setItem('jt-intro:backstage', '1'));
     await page.clock.install();
     await page.goto('/?brand=backstage');

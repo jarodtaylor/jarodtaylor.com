@@ -144,6 +144,7 @@ function peekIntro() {
   const run = generation;
   const go = () => {
     if (run !== generation || root.dataset.peekState !== 'arm') return;
+    playing = root.dataset.brand; // only now: a switch while the fonts load leaves this brand's intro unplayed
     show();
     listen(true);
     later(ms('--_peek-settled') + ms('--_peek-hold'), () => {
@@ -345,6 +346,7 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
   let font = '';
   let label = { w: 0, h: 0 };
   let head = { c: 0, r: 0 };
+  let hidden = false;
   let path: Stop[] = [];
   let seg = 0;
   let segAt = 0;
@@ -384,7 +386,8 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
   // The next stop: any grid point the head can reach along the lines (via one corner) with its target, trail and
   // readout clear of the text, measured now because the text reflows (fonts, resize). The text's own boxes, not
   // .stack's: the stack spans the whole grid. A phone's text can leave no such stop; then the head holds where it is
-  // for a pause and looks again.
+  // for a pause and looks again. If it sits on the text itself (its start point on a short screen, or after a reflow),
+  // it moves to any clear point at once, or stays out of sight until there is one.
   function plan(now: number) {
     const o = canvas.getBoundingClientRect();
     const text = $$('.name-block, .roles, .tagline, .bio, .social').map((el): Box => {
@@ -404,7 +407,18 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
       r: Math.max(a.x, b.x) + REACH,
       b: Math.max(a.y, b.y) + REACH,
     });
-    const from = at(head.c, head.r);
+    const free = (s: Stop) => readClear(s) && clear(run(s, s));
+    let from = at(head.c, head.r);
+    if (!free(from)) {
+      const spots = xs.flatMap((_, c) => ys.map((_, r) => at(c, r))).filter(free);
+      const spot = spots[Math.floor(Math.random() * spots.length)];
+      hidden = !spot;
+      if (spot) {
+        head = spot;
+        from = spot;
+        trail = [];
+      }
+    } else hidden = false;
     const routes: Stop[][] = [];
     xs.forEach((_, c) =>
       ys.forEach((_, r) => {
@@ -415,7 +429,7 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
           if (readClear(turn) && clear(run(from, turn)) && clear(run(turn, to))) routes.push([from, turn, to]);
       }),
     );
-    path = routes[Math.floor(Math.random() * routes.length)] ?? [from, from];
+    path = (!hidden && routes[Math.floor(Math.random() * routes.length)]) || [from, from];
     seg = 0;
     segAt = now + PAUSE;
   }
@@ -476,6 +490,7 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
         c2.stroke();
       }
     }
+    if (hidden) return;
     // The head: a registration target, and where it sits on the grid.
     c2.globalAlpha = 0.9;
     c2.strokeStyle = ink.head;
@@ -598,7 +613,7 @@ export function init(): () => void {
   start();
   if (root.classList.contains('intro')) {
     const intro = token('--hero-intro');
-    if (intro === 'peek' || intro === 'assemble') playing = root.dataset.brand;
+    if (intro === 'assemble') playing = root.dataset.brand;
     if (intro === 'peek') peekIntro();
     else if (intro === 'assemble') assembleIntro();
     else settle();
