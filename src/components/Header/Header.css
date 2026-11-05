@@ -39,13 +39,14 @@
     }
   }
 
-  /* With the nav folded, or on touch, the home link is at least a control square (a narrow mark gets a wider
-     target), the mark at its start edge. */
+  /* With the nav folded, or on touch, the home link is a control square (a narrow mark gets a wider target), the
+     mark at its start edge. Its extra width is the first thing to give when large text crowds the bar. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
   @media (max-width: 63.99rem), (pointer: coarse) {
     .mark {
+      flex: 0 1 var(--_control-h);
       min-block-size: var(--_control-h);
-      min-inline-size: var(--_control-h);
+      min-inline-size: max-content;
     }
   }
 
