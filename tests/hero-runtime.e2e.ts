@@ -2,9 +2,10 @@
  * pnpm check:hero-runtime — the home page's hero runtime (src/components/Hero/runtime.ts) and the intro-arming
  * script (src/components/Hero/intro-arm.js, inlined in index.astro), on the built page.
  *
- * The first three tests pin what a visitor sees today: the intro, Peek, reduced motion. The last two pin what the
- * runtime must also do for the Storybook hero story: follow inline token overrides on <html>, and survive the
- * arming script running again before its 4 s failsafe fires.
+ * The first tests pin what a visitor sees: the intro, Peek, reduced motion. Two pin what the runtime must also do for
+ * the Storybook hero story: follow inline token overrides on <html>, and survive the arming script running again
+ * before its 4 s failsafe fires. Then Remix: a live brand switch for every brand pair (at rest, mid-intro, mid-Peek)
+ * must land like a fresh load, and each brand's intro plays once per tab. Last, the plotter ground keeps off the text.
  */
 import { expect, test, type Page } from '@playwright/test';
 
