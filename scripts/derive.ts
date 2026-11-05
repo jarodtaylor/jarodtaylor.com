@@ -130,7 +130,8 @@ type FluidBand = (typeof FLUID_BANDS)[number];
 /** `beat` is the unit sequenced motion (the Peek choreography) is written in: every delay is a multiple of it. */
 export const DURATIONS = ['beat', 'fast', 'base', 'slow'] as const;
 type DurationStep = (typeof DURATIONS)[number];
-export const EASINGS = ['out', 'in', 'draw', 'pop'] as const;
+/** in-out is for fades out and retracts (an exit on an out curve reads as a pop); draw is each brand's curve for lines; pop is reserved for spec marks struck by the pen, never UI. */
+export const EASINGS = ['out', 'in-out', 'draw', 'pop'] as const;
 type EasingName = (typeof EASINGS)[number];
 
 type FontFamily = string | string[];

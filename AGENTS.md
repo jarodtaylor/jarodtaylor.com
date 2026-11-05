@@ -22,7 +22,7 @@ This file is the canonical instructions for every agent, in any harness. It is s
 | `pnpm check:astro` | `.astro` rules (`scripts/astro-rules.ts`): no `client:*` outside `CLIENT_ALLOWLIST`, no scoped `<style>` |
 | `pnpm check:stories` | Every `src/components/<Name>/` has `<Name>.stories.tsx` with a named story (`scripts/stories.ts`; `COVERED_BY` for directories shown inside another story) |
 | `pnpm check:slop` | `impeccable detect --no-design-system src/` |
-| `pnpm check:markup-invariance` / `check:a11y` / `check:hero-runtime` | Playwright + axe on every page × brand in `dist/`, and the hero runtime's intro, Peek and restart contracts (`tests/*.e2e.ts`). Needs `pnpm build` and `pnpm exec playwright install chromium` |
+| `pnpm check:markup-invariance` / `check:a11y` / `check:hero-runtime` | Playwright + axe on every page × brand in `dist/`, and the hero runtime's intro, Peek, restart and live brand-switch contracts (`tests/*.e2e.ts`). Needs `pnpm build` and `pnpm exec playwright install chromium` |
 | `pnpm lighthouse` | Lighthouse CI on `dist/` (`lighthouserc.json`), local only: no upload (CI uploads to temporary public storage). Budgets warn; only a11y < 0.9 or CLS > 0.1 fail. PR label `perf-tradeoff` downgrades those too |
 
 Run `pnpm test && pnpm typecheck && pnpm check` before committing.

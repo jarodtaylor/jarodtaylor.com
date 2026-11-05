@@ -156,21 +156,21 @@ describe('decorator order', () => {
 });
 
 describe('site session state', () => {
-  it('leaves the site\'s jt-intro flag as it found it after the hero story unmounts', async () => {
-    sessionStorage.setItem('jt-intro', '1');
+  it('leaves the site\'s jt-intro:<brand> flag as it found it after the hero story unmounts', async () => {
+    sessionStorage.setItem('jt-intro:backstage', '1');
     const Hero = hero('backstage');
     show(<Hero />);
     expect(html.classList.contains('intro')).toBe(true); // cleared for the mount, so the intro plays
     await expect.poll(() => html.classList.contains('intro'), { timeout: 15_000 }).toBe(false);
     act(() => root.unmount());
     root = createRoot(host);
-    expect(sessionStorage.getItem('jt-intro')).toBe('1');
+    expect(sessionStorage.getItem('jt-intro:backstage')).toBe('1');
 
-    sessionStorage.removeItem('jt-intro');
+    sessionStorage.removeItem('jt-intro:backstage');
     show(<Hero />);
     await expect.poll(() => html.classList.contains('intro'), { timeout: 15_000 }).toBe(false); // the runtime marks it seen
     act(() => root.unmount());
     root = createRoot(host);
-    expect(sessionStorage.getItem('jt-intro')).toBeNull();
+    expect(sessionStorage.getItem('jt-intro:backstage')).toBeNull();
   });
 });

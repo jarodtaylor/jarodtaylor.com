@@ -4,7 +4,7 @@
  * canvas (the lattice figure, or the plotter ground). It reads the brand's choices from tokens (--hero-intro, --hero-figure), so a brand switch
  * (html[data-brand] changing) just re-reads them. Nothing here adds or removes elements in <body>.
  *
- * The intro is decided before first paint by the inline script in index.astro (once per session, never under
+ * The intro is decided before first paint by the inline script in index.astro (once per brand per tab, never under
  * reduced motion, ?intro forces it). That script arms every intro; this module runs the one the brand names.
  *
  * Nothing runs on import: init() wires the page and returns a disposer that undoes it, so the Storybook hero story
@@ -102,10 +102,15 @@ function readouts() {
 
 // Intros ----------------------------------------------------------------------------------------------------------
 
+/** The brand whose intro is playing, kept from when it started: seen() marks that brand only, never a brand without
+ *  an intro, nor one switched to live mid-intro (data-brand has already changed by the time settle() runs). */
+let playing: string | undefined;
 const seen = () => {
+  if (!playing) return;
   try {
-    sessionStorage.setItem('jt-intro', '1');
+    sessionStorage.setItem(`jt-intro:${playing}`, '1');
   } catch {}
+  playing = undefined;
 };
 const SKIP_ON = ['keydown', 'pointerdown', 'wheel', 'touchmove', 'scroll'] as const;
 let skip: () => void = () => {};
@@ -113,16 +118,23 @@ const onSkip = () => skip();
 const listen = (on: boolean) =>
   SKIP_ON.forEach((t) => (on ? addEventListener : removeEventListener)(t, onSkip, { capture: true, passive: true } as AddEventListenerOptions));
 
-/** Land on the resting state at once: one frame without transitions. */
+/** One frame without transitions, so whatever changes now lands at once instead of animating to it. A later call
+ *  restarts the window: an earlier call's frames never end it. */
+let quieting = 0;
+function quiet() {
+  const run = ++quieting;
+  root.classList.add('settling');
+  requestAnimationFrame(() => requestAnimationFrame(() => run === quieting && root.classList.remove('settling')));
+}
+
 function settle() {
   stop();
   listen(false);
   seen();
-  root.classList.add('settling');
+  quiet();
   setState(null);
   root.classList.remove('intro', 'building');
   toggle.setAttribute('aria-pressed', 'false');
-  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('settling')));
 }
 
 /** peek: the Peek layer played once on arrival (on, hold, leave). Any key, click, wheel, touch or scroll skips it. */
@@ -132,6 +144,7 @@ function peekIntro() {
   const run = generation;
   const go = () => {
     if (run !== generation || root.dataset.peekState !== 'arm') return;
+    playing = root.dataset.brand; // only now: a switch while the fonts load leaves this brand's intro unplayed
     show();
     listen(true);
     later(ms('--_peek-settled') + ms('--_peek-hold'), () => {
@@ -311,7 +324,7 @@ function lattice(canvas: HTMLCanvasElement): () => void {
 // The plotter: the hero's real column grid, faint, with a plotter head walking it --------------------------------
 // Every vertical is a gutter of the 4 / 12 column grid and every row one module (column + gutter) down, read from
 // the hero's computed layout. The head, a registration target in the mark's colour, walks gutter to gutter along
-// the lines only, keeps to the figure's side of the sheet, leaves a fading trail and reads out where it stops.
+// the lines only, keeps clear of the text block, leaves a fading trail and reads out where it stops.
 // Paused off-screen and in hidden tabs; one still frame (grid and parked head) under reduced motion.
 
 function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
@@ -320,14 +333,20 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
   const SPEED = 0.07; // px per ms: unhurried, like a pen plotter
   const PAUSE = 1400;
   const TRAIL = 7000; // ms for a stroke of trail to fade out
+  const REACH = 10; // px: the target's arms
+  const readoutText = (c: number, r: number) => `g${String(c).padStart(2, '0')} · m${String(r).padStart(2, '0')}`;
   type Stop = { c: number; r: number; x: number; y: number };
+  type Box = { l: number; t: number; r: number; b: number };
+  const hits = (a: Box, b: Box) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
   let w = 0;
   let h = 0;
   let xs: number[] = [];
   let ys: number[] = [];
   let ink = { grid: '', pen: '', head: '' };
   let font = '';
+  let label = { w: 0, h: 0 };
   let head = { c: 0, r: 0 };
+  let hidden = false;
   let path: Stop[] = [];
   let seg = 0;
   let segAt = 0;
@@ -354,23 +373,63 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
     for (let y = top; y <= h - top + 1; y += p) ys.push(y);
     ink = { grid: token('--spec-guide'), pen: token('--figure-guide-ink'), head: token('--figure-mark') };
     font = `${getComputedStyle($('.info')!).fontSize} ${token('--spec-font-family')}`;
+    ctx!.font = font;
+    label = { w: ctx!.measureText(readoutText(0, 0)).width, h: parseFloat(font) };
     head = { c: xs.length - 2, r: 0 };
     path = [];
     trail = [];
   }
 
-  // The next stop favours the figure's side of the sheet, away from the text block (bottom left).
+  /** Where the readout's baseline starts: right of the head, or left of it where the right edge would clip it. */
+  const readoutAt = (x: number, y: number) => ({ x: x + 14 + label.w > w ? x - 14 - label.w : x + 14, y: y - 10 });
+
+  // The next stop: any grid point the head can reach along the lines (via one corner) with its target, trail and
+  // readout clear of the text, measured now because the text reflows (fonts, resize). The text's own boxes, not
+  // .stack's: the stack spans the whole grid. A phone's text can leave no such stop; then the head holds where it is
+  // for a pause and looks again. If it sits on the text itself (its start point on a short screen, or after a reflow),
+  // it moves to any clear point at once, or stays out of sight until there is one.
   function plan(now: number) {
-    const n = xs.length;
-    const m = ys.length;
-    let c: number;
-    let r: number;
-    do {
-      c = Math.floor(Math.random() * n);
-      r = Math.floor(Math.random() * m);
-    } while ((c < n * 0.5 && r > m * 0.35) || (c === head.c && r === head.r));
-    const turn = Math.random() < 0.5 ? { c, r: head.r } : { c: head.c, r };
-    path = [head, turn, { c, r }].map((q) => ({ ...q, x: xs[q.c]!, y: ys[q.r]! }));
+    const o = canvas.getBoundingClientRect();
+    const text = $$('.name-block, .roles, .tagline, .bio, .social').map((el): Box => {
+      const s = el.getBoundingClientRect();
+      return { l: s.left - o.left, t: s.top - o.top, r: s.right - o.left, b: s.bottom - o.top };
+    });
+    const clear = (box: Box) => !text.some((t) => hits(box, t));
+    const at = (c: number, r: number): Stop => ({ c, r, x: xs[c]!, y: ys[r]! });
+    // The readout shows wherever the head sits on a grid point, the turn included, so each one must clear the text.
+    const readClear = (s: Stop) => {
+      const read = readoutAt(s.x, s.y);
+      return clear({ l: read.x, t: read.y - label.h, r: read.x + label.w, b: read.y + label.h * 0.3 });
+    };
+    const run = (a: Stop, b: Stop): Box => ({
+      l: Math.min(a.x, b.x) - REACH,
+      t: Math.min(a.y, b.y) - REACH,
+      r: Math.max(a.x, b.x) + REACH,
+      b: Math.max(a.y, b.y) + REACH,
+    });
+    const free = (s: Stop) => readClear(s) && clear(run(s, s));
+    let from = at(head.c, head.r);
+    if (!free(from)) {
+      const spots = xs.flatMap((_, c) => ys.map((_, r) => at(c, r))).filter(free);
+      const spot = spots[Math.floor(Math.random() * spots.length)];
+      hidden = !spot;
+      if (spot) {
+        head = spot;
+        from = spot;
+        trail = [];
+      }
+    } else hidden = false;
+    const routes: Stop[][] = [];
+    xs.forEach((_, c) =>
+      ys.forEach((_, r) => {
+        if (c === head.c && r === head.r) return;
+        const to = at(c, r);
+        if (!readClear(to)) return;
+        for (const turn of [at(c, head.r), at(head.c, r)])
+          if (readClear(turn) && clear(run(from, turn)) && clear(run(turn, to))) routes.push([from, turn, to]);
+      }),
+    );
+    path = (!hidden && routes[Math.floor(Math.random() * routes.length)]) || [from, from];
     seg = 0;
     segAt = now + PAUSE;
   }
@@ -398,6 +457,11 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
     xs.forEach((x) => ys.forEach((y) => cross(x, y, 5)));
     c2.stroke();
 
+    // The still frame (reduced motion) never walks, but its parked head must clear the text too.
+    if (now == null) {
+      plan(0);
+      path = [];
+    }
     let pos = { x: xs[head.c]!, y: ys[head.r]! };
     if (now != null) {
       if (!path.length) plan(now);
@@ -431,6 +495,7 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
         c2.stroke();
       }
     }
+    if (hidden) return;
     // The head: a registration target, and where it sits on the grid.
     c2.globalAlpha = 0.9;
     c2.strokeStyle = ink.head;
@@ -444,7 +509,8 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
       c2.globalAlpha = 0.7;
       c2.fillStyle = ink.pen;
       c2.font = font;
-      c2.fillText(`g${String(c).padStart(2, '0')} · m${String(r).padStart(2, '0')}`, pos.x + 14, pos.y - 10);
+      const read = readoutAt(pos.x, pos.y);
+      c2.fillText(readoutText(c, r), read.x, read.y);
     }
   }
 
@@ -517,11 +583,21 @@ const onKeydown = (e: KeyboardEvent) => {
 };
 const onSkipClick = () => skip();
 
-// A brand switch: whatever intro was running lands at rest, and the new brand's figure starts. An inline style
-// change restarts the figure only if it changed which one runs, and never interrupts an intro.
+// A brand switch: whatever intro was running lands at rest, and the new brand's figure starts. The switch itself
+// lands in one frame: otherwise the colour transitions tween to the new brand while everything else cuts, and a Peek
+// mid-build would keep drawing in the old brand's timing. An inline style change restarts the figure only if it
+// changed which one runs, and never interrupts an intro.
 const onRootChange = (records: MutationRecord[]) => {
   if (records.some((r) => r.attributeName === 'data-brand')) {
     if (root.classList.contains('intro')) settle();
+    else {
+      quiet();
+      // A Peek still leaving lands at rest too, rather than holding the old brand's state until its timer ends.
+      if (root.dataset.peekState === 'leaving') {
+        stop();
+        setState(null);
+      }
+    }
     start();
   } else if (token('--hero-figure') !== figure || token('--hero-ground') !== ground) start();
 };
@@ -542,6 +618,7 @@ export function init(): () => void {
   start();
   if (root.classList.contains('intro')) {
     const intro = token('--hero-intro');
+    if (intro === 'assemble') playing = root.dataset.brand;
     if (intro === 'peek') peekIntro();
     else if (intro === 'assemble') assembleIntro();
     else settle();
@@ -555,6 +632,7 @@ export function init(): () => void {
     stop();
     listen(false);
     skip = () => {};
+    playing = undefined;
     toggle.removeEventListener('click', onToggle);
     removeEventListener('keydown', onKeydown);
     skipButton?.removeEventListener('click', onSkipClick);

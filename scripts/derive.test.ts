@@ -77,6 +77,7 @@ describe.each(brands)('derive(%s knobs)', (brand) => {
     expect(tokens.fluid.$extensions).toEqual({ 'com.jarodtaylor.export': { figma: false } });
     expect(tokens.duration.base.$value).toEqual({ value: Math.round(knobs.motion.duration.base.$value.value * 1000), unit: 'ms' });
     expect(tokens.easing.out.$value.join(', ')).toBe(knobs.motion.easing.out.$value);
+    expect(tokens.easing['in-out'].$value.join(', ')).toBe(knobs.motion.easing['in-out'].$value);
     expect(tokens.color.role.bg!.$value).toBe(`{color.${knobs.color.role.bg!.$value}}`);
   });
 });

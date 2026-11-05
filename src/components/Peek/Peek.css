@@ -64,7 +64,7 @@
   :root[data-peek-state="leaving"] {
     --_layer: calc(0);
 
-    transition: --_layer var(--_peek-leave) var(--figure-draw-easing) calc(var(--_beat) * 0.6);
+    transition: --_layer var(--_peek-leave) var(--motion-easing-in-out) calc(var(--_beat) * 0.6);
   }
 
   /* 1. Columns: each one's edges draw down the whole stage, left to right. */
@@ -206,10 +206,10 @@
     --_lab: calc(1);
   }
 
-  /* Leaving, the labels retract into their box edges first (an ease-in, quick), then the lines fade. Text never
+  /* Leaving, the labels retract into their box edges first (in-out, quick), then the lines fade. Text never
      fades through its own background: a half-transparent label reads as mud. */
   :root[data-peek-state="leaving"] [data-peek]::after {
-    transition: --_lab calc(var(--_peek-leave) * 0.5) var(--motion-easing-in);
+    transition: --_lab calc(var(--_peek-leave) * 0.5) var(--motion-easing-in-out);
   }
 
   :root[data-peek-state="on"] [data-peek]::before {
@@ -390,7 +390,7 @@
 
   :root[data-peek-state="leaving"] .dim b {
     opacity: 0;
-    transition: opacity calc(var(--_peek-leave) * 0.4) var(--motion-easing-in);
+    transition: opacity calc(var(--_peek-leave) * 0.4) var(--motion-easing-in-out);
   }
 
   :root[data-peek-state="on"] .dim b {
@@ -510,12 +510,15 @@
     transition: clip-path calc(var(--_peek-leave) * 0.5) steps(10, end);
   }
 
-  /* Arm: no transitions, so every part snaps back to undrawn before it draws again. */
+  /* Arm: no transitions, so every part snaps back to undrawn before it draws again. :root too: a re-press during
+     the leave must cancel the --_layer fade still running there, or the new build draws at the old fade's opacity. */
+  :root[data-peek-state="arm"],
   :root[data-peek-state="arm"] :is(.cols i, .dim, .dim b, .spec div, [data-peek]::before, [data-peek]::after) {
     transition: none;
   }
 
-  /* The intro's skip button: only while the intro plays. */
+  /* The intro's skip button: only while the intro plays. Once it leaves, the page is already coming back and keys
+     and pointer no longer skip either: skipping then would cut the leave's fade into a pop. */
   .skip-intro {
     background: var(--surface-default-bg);
     border: var(--shape-border-width-default) solid var(--header-control-border);
@@ -553,13 +556,14 @@
        Phones have no room beside the socials; there a tap anywhere skips, as does any key or scroll everywhere. */
     /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
     @media (min-width: 48rem) {
-      :root.intro .skip-intro {
+      :root.intro:not([data-peek-state="leaving"]) .skip-intro {
         display: block;
       }
     }
   }
 
   /* One frame without transitions, so a skip lands on the resting state instead of animating to it. */
+  :root.settling,
   :root.settling *,
   :root.settling *::before,
   :root.settling *::after {
