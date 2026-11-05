@@ -510,7 +510,9 @@
     transition: clip-path calc(var(--_peek-leave) * 0.5) steps(10, end);
   }
 
-  /* Arm: no transitions, so every part snaps back to undrawn before it draws again. */
+  /* Arm: no transitions, so every part snaps back to undrawn before it draws again. :root too: a re-press during
+     the leave must cancel the --_layer fade still running there, or the new build draws at the old fade's opacity. */
+  :root[data-peek-state="arm"],
   :root[data-peek-state="arm"] :is(.cols i, .dim, .dim b, .spec div, [data-peek]::before, [data-peek]::after) {
     transition: none;
   }
@@ -560,6 +562,7 @@
   }
 
   /* One frame without transitions, so a skip lands on the resting state instead of animating to it. */
+  :root.settling,
   :root.settling *,
   :root.settling *::before,
   :root.settling *::after {

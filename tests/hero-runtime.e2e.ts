@@ -54,6 +54,28 @@ test('clean: no intro, and the Peek toggle opens and closes Peek', async ({ page
   await expect(html(page)).not.toHaveAttribute('data-peek-state', { timeout: 5_000 });
 });
 
+test('Peek pressed again while it leaves redraws at full strength', async ({ page }) => {
+  await page.goto('/?brand=backstage');
+  const toggle = page.locator('[data-peek-toggle]');
+  await toggle.click();
+  await expect(html(page)).toHaveAttribute('data-peek-state', 'on');
+  await page.waitForTimeout(2_000); // let the build land
+  // The two timed presses run in the page, so test-runner latency can't push the re-press past the leave.
+  const { was, layer } = await page.evaluate(async () => {
+    const root = document.documentElement;
+    const button = document.querySelector<HTMLElement>('[data-peek-toggle]')!;
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    button.click(); // start leaving
+    await wait(150); // mid-fade
+    const was = root.dataset.peekState;
+    button.click(); // press again
+    await wait(300); // where the bug read 0.06
+    return { was, layer: Number(getComputedStyle(root).getPropertyValue('--_layer')) };
+  });
+  expect(was).toBe('leaving');
+  expect(layer).toBeGreaterThan(0.99);
+});
+
 test('reduced motion: no intro classes are ever added, and Peek still works', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   // Record every class <html> ever has, from before the first script runs.
