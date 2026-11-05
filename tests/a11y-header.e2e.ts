@@ -36,6 +36,17 @@ for (const brand of brands) {
     expect(await page.evaluate(() => document.querySelector('#nav-list')!.contains(document.activeElement))).toBe(false);
   });
 
+  test(`a press on the open menu's padding keeps it open as ${brand}`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/?brand=${brand}`);
+    const menu = page.locator('#nav-list');
+    await page.locator('.nav-toggle').click();
+    await menu.locator('a').first().focus();
+    const box = (await menu.boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height - 4); // the panel's empty lower edge
+    await expect(menu).toBeVisible();
+  });
+
   test(`touch tablet nav links are at least ${TARGET}px tall as ${brand}`, async ({ browser }) => {
     const { baseURL } = test.info().project.use;
     const context = await browser.newContext({ baseURL, viewport: { width: 1180, height: 820 }, hasTouch: true });

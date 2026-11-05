@@ -33,7 +33,7 @@
   }
 
   /* Touch screens keep the phone's control height at any width, so every target stays a fingertip wide. */
-  @media (pointer: coarse) {
+  @media (any-pointer: coarse) {
     .masthead {
       --_control-h: var(--layout-control-h-phone);
     }
@@ -48,7 +48,7 @@
   /* With the nav folded, or on touch, the home link is a control square (a narrow mark gets a wider target), the
      mark at its start edge. Its extra width is the first thing to give when large text crowds the bar. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-  @media (max-width: 63.99rem), (pointer: coarse) {
+  @media (max-width: 63.99rem), (any-pointer: coarse) {
     .mark {
       flex: 0 1 var(--_control-h);
       min-block-size: var(--_control-h);

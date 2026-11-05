@@ -189,7 +189,7 @@
 
   /* On phones and touch screens each link is a full control tall. */
   /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
-  @media (max-width: 47.99rem), (pointer: coarse) {
+  @media (max-width: 47.99rem), (any-pointer: coarse) {
     .social a {
       min-block-size: var(--layout-control-h-phone);
     }
