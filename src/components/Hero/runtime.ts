@@ -124,7 +124,6 @@ function quiet() {
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('settling')));
 }
 
-/** Land on the resting state at once. */
 function settle() {
   stop();
   listen(false);
@@ -331,6 +330,7 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
   const PAUSE = 1400;
   const TRAIL = 7000; // ms for a stroke of trail to fade out
   const REACH = 10; // px: the target's arms
+  const readoutText = (c: number, r: number) => `g${String(c).padStart(2, '0')} · m${String(r).padStart(2, '0')}`;
   type Stop = { c: number; r: number; x: number; y: number };
   type Box = { l: number; t: number; r: number; b: number };
   const hits = (a: Box, b: Box) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
@@ -369,7 +369,7 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
     ink = { grid: token('--spec-guide'), pen: token('--figure-guide-ink'), head: token('--figure-mark') };
     font = `${getComputedStyle($('.info')!).fontSize} ${token('--spec-font-family')}`;
     ctx!.font = font;
-    label = { w: ctx!.measureText('g00 · m00').width, h: parseFloat(font) };
+    label = { w: ctx!.measureText(readoutText(0, 0)).width, h: parseFloat(font) };
     head = { c: xs.length - 2, r: 0 };
     path = [];
     trail = [];
@@ -408,7 +408,6 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
           if (clear(run(from, turn)) && clear(run(turn, to))) routes.push([from, turn, to]);
       }),
     );
-    // No route: a zero-length move, so the head waits out one pause and plans again.
     path = routes[Math.floor(Math.random() * routes.length)] ?? [from, from];
     seg = 0;
     segAt = now + PAUSE;
@@ -484,7 +483,7 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
       c2.fillStyle = ink.pen;
       c2.font = font;
       const read = readoutAt(pos.x, pos.y);
-      c2.fillText(`g${String(c).padStart(2, '0')} · m${String(r).padStart(2, '0')}`, read.x, read.y);
+      c2.fillText(readoutText(c, r), read.x, read.y);
     }
   }
 
