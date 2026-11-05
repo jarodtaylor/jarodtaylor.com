@@ -39,6 +39,24 @@ test('backstage ?intro: the intro plays, then the page settles', async ({ page }
   await expect(html(page)).not.toHaveAttribute('data-peek-state');
 });
 
+test('backstage ?intro: once the intro leaves, the Skip button goes with it, as keys and pointer stop skipping', async ({ page }) => {
+  await page.goto('/?brand=backstage&intro');
+  const skip = page.locator('[data-skip-intro]');
+  await expect(html(page)).toHaveAttribute('data-peek-state', 'on');
+  await expect(skip).toBeVisible();
+  // Read in the page, on the first frame of the leave: a retrying assertion would pass once the leave had ended.
+  const leaving = await page.waitForFunction(
+    () => {
+      const root = document.documentElement;
+      if (root.dataset.peekState !== 'leaving') return false;
+      return { intro: root.classList.contains('intro'), skip: getComputedStyle(document.querySelector('[data-skip-intro]')!).display };
+    },
+    null,
+    { polling: 'raf', timeout: 15_000 },
+  );
+  expect(await leaving.jsonValue()).toEqual({ intro: true, skip: 'none' });
+});
+
 test('clean: no intro, and the Peek toggle opens and closes Peek', async ({ page }) => {
   await page.goto('/?brand=clean');
   const toggle = page.locator('[data-peek-toggle]');

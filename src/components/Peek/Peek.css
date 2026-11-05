@@ -517,7 +517,8 @@
     transition: none;
   }
 
-  /* The intro's skip button: only while the intro plays. */
+  /* The intro's skip button: only while the intro plays. Once it leaves, the page is already coming back and keys
+     and pointer no longer skip either: skipping then would cut the leave's fade into a pop. */
   .skip-intro {
     background: var(--surface-default-bg);
     border: var(--shape-border-width-default) solid var(--header-control-border);
@@ -555,7 +556,7 @@
        Phones have no room beside the socials; there a tap anywhere skips, as does any key or scroll everywhere. */
     /* stylelint-disable-next-line unit-allowed-list -- shared breakpoint: media queries can't read tokens */
     @media (min-width: 48rem) {
-      :root.intro .skip-intro {
+      :root.intro:not([data-peek-state="leaving"]) .skip-intro {
         display: block;
       }
     }
