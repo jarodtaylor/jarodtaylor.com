@@ -457,6 +457,11 @@ function plotter(canvas: HTMLCanvasElement, hero: HTMLElement): () => void {
     xs.forEach((x) => ys.forEach((y) => cross(x, y, 5)));
     c2.stroke();
 
+    // The still frame (reduced motion) never walks, but its parked head must clear the text too.
+    if (now == null) {
+      plan(0);
+      path = [];
+    }
     let pos = { x: xs[head.c]!, y: ys[head.r]! };
     if (now != null) {
       if (!path.length) plan(now);

@@ -290,6 +290,36 @@ test('a live switch never consumes the new brand\'s intro, at rest or mid-intro'
 
 // The plotter ground (backstage) ----------------------------------------------------------------------------------
 
+test('plotter under reduced motion on a short phone: the parked head and readout keep off the text', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 560 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?brand=backstage');
+  await page.waitForTimeout(500); // fonts settle and the still frame paints
+  const foreign = await page.evaluate(() => {
+    const canvas = document.querySelector<HTMLCanvasElement>('canvas.field')!;
+    const swatch = document.createElement('canvas').getContext('2d')!;
+    swatch.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--spec-guide');
+    swatch.fillRect(0, 0, 1, 1);
+    const sheet = swatch.getImageData(0, 0, 1, 1).data;
+    const o = canvas.getBoundingClientRect();
+    const k = canvas.width / canvas.clientWidth;
+    let n = 0;
+    for (const el of document.querySelectorAll('.name-block, .roles, .tagline, .bio, .social')) {
+      const s = el.getBoundingClientRect();
+      const x = Math.max(0, Math.floor((s.left - o.left) * k));
+      const y = Math.max(0, Math.floor((s.top - o.top) * k));
+      const w = Math.min(canvas.width - x, Math.ceil(s.width * k));
+      const h = Math.min(canvas.height - y, Math.ceil(s.height * k));
+      if (w <= 0 || h <= 0) continue;
+      const { data } = canvas.getContext('2d')!.getImageData(x, y, w, h);
+      for (let i = 0; i < data.length; i += 4)
+        if (data[i + 3]! > 40 && [0, 1, 2].some((c) => Math.abs(data[i + c]! - sheet[c]!) > 24)) n++;
+    }
+    return n;
+  });
+  expect(foreign, 'pixels of the parked head or readout under the text').toBe(0);
+});
+
 // 390×560: a short phone, where the head's start point sits on the text.
 for (const [width, height] of [[390, 844], [1440, 844], [390, 560]] as const) {
   test(`plotter at ${width}×${height}: the head, its trail and its readout never cross the text block`, async ({ page }) => {
