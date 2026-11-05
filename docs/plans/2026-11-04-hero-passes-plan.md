@@ -103,7 +103,7 @@ Works: reduced motion (no intro, still canvases, Peek lands), reflow at 320 and 
 ## Follow-ups found while building the fixes
 
 - **Clean header at 200% text on a 390 screen** cuts Menu off (header 408px; blocks 469px, which goes to the Blocks rethink). Already true on `main`. **Decided 2026-11-05: handled in the polish pass (step 5).**
-- **A3: decided 2026-11-05, px accepted.** Small PR: `derive.ts` fluid-length check accepts px; backstage's name and lead become `calc(<today's value> + 1rem - 16px)` (identical at 16px, follows the font everywhere, keeps the `svh` cap). #15's rem floors were reverted after review.
+- **A3: decided 2026-11-05, px accepted.** Small PR: `derive.ts` fluid-length check accepts px; backstage's name and lead become `calc(<today's value> + 1rem - 16px)` (identical at 16px, follows the font everywhere; the `svh` cap holds at the default text size and rises with enlarged text, see `docs/DECISIONS.md`). #15's rem floors were reverted after review.
 - **B6** (a wider name clips from 48rem) skipped: wrapping would break the one-line name. **B7** partial: a 120-character tagline wraps but still reaches the figure (measure ≈ 1020px in backstage at 1440).
 - **`check:hero-runtime` takes ~1.6 min** (was ~20 s): the plotter pixel scans and the live-switch matrix's extra page loads. Caching `restingCue` per brand would cut it without weakening the tests.
 - **C1b** (Peek and Remix also in the phone menu) after both fixes PRs merge.
