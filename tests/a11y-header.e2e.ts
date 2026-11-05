@@ -35,4 +35,15 @@ for (const brand of brands) {
     await expect(menu).toBeHidden();
     expect(await page.evaluate(() => document.querySelector('#nav-list')!.contains(document.activeElement))).toBe(false);
   });
+
+  test(`touch tablet nav links are at least ${TARGET}px tall as ${brand}`, async ({ browser }) => {
+    const { baseURL } = test.info().project.use;
+    const context = await browser.newContext({ baseURL, viewport: { width: 1180, height: 820 }, hasTouch: true });
+    const page = await context.newPage();
+    await page.goto(`/?brand=${brand}`);
+    const heights = await page.evaluate(() => [...document.querySelectorAll('#nav-list a')].map((a) => a.getBoundingClientRect().height));
+    expect(heights.length).toBeGreaterThan(0);
+    expect(heights.filter((h) => h < 44), 'inline nav links under 44px on a touch screen').toEqual([]);
+    await context.close();
+  });
 }

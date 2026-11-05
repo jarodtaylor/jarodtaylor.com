@@ -37,6 +37,12 @@
     .masthead {
       --_control-h: var(--layout-control-h-phone);
     }
+
+    .nav-list a {
+      align-items: center;
+      display: inline-flex;
+      min-block-size: var(--_control-h);
+    }
   }
 
   /* With the nav folded, or on touch, the home link is a control square (a narrow mark gets a wider target), the
