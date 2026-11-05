@@ -192,12 +192,12 @@
       "wide": { "$type": "string", "$value": "44ch" }
     },
     "hero-display": {
-      "phone": { "$type": "string", "$value": "max(35vw, 5rem)" },
-      "wide": { "$type": "string", "$value": "max(min(12.5vw, 21svh), 8rem)" }
+      "phone": { "$type": "string", "$value": "35vw" },
+      "wide": { "$type": "string", "$value": "min(12.5vw, 21svh)" }
     },
     "hero-lead": {
       "phone": { "$type": "string", "$value": "clamp(1.625rem, 7vw, 2.25rem)" },
-      "wide": { "$type": "string", "$value": "max(min(2.6vw, 4.4svh), 1.75rem)" }
+      "wide": { "$type": "string", "$value": "min(2.6vw, 4.4svh)" }
     },
     "hero-figure": {
       "phone": { "$type": "string", "$value": "78vw" },

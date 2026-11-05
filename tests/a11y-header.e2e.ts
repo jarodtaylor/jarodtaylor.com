@@ -53,3 +53,8 @@ test('the header nav on a missing page leads back to the homepage', async ({ pag
   await page.locator('#nav-list a', { hasText: 'Work' }).evaluate((a: HTMLAnchorElement) => a.click());
   await expect(page).toHaveURL(/\/#work$/);
 });
+
+test('the 404 page shows no Peek button: nothing there runs Peek', async ({ page }) => {
+  await page.goto('/no-such-page/');
+  await expect(page.locator('.peek-toggle')).toBeHidden();
+});
