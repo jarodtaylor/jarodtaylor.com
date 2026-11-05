@@ -2234,10 +2234,10 @@
     },
     "hero-display": {
       "phone": {
-        "$value": "35vw"
+        "$value": "calc(0.5rem + 33vw)"
       },
       "wide": {
-        "$value": "min(12.5vw, 21svh)"
+        "$value": "calc(1rem + min(11.4vw, 19.2svh))"
       }
     },
     "hero-lead": {
@@ -2245,7 +2245,7 @@
         "$value": "clamp(1.625rem, 7vw, 2.25rem)"
       },
       "wide": {
-        "$value": "min(2.6vw, 4.4svh)"
+        "$value": "calc(1rem + min(1.5vw, 2.6svh))"
       }
     },
     "hero-figure": {
